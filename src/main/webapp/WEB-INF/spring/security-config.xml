@@ -1,0 +1,30 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <http auto-config="true" use-expressions="true">
+        <form-login login-processing-url="/j_spring_security_check"
+                    default-target-url="/interviews"
+                    login-page="/login"
+                    authentication-failure-url="/login?auth_error"
+                    username-parameter="j_username"
+                    password-parameter="j_username"/>
+        <logout logout-success-url="/login"
+                logout-url="/j_spring_security_logout"
+                invalidate-session="true"/>
+        <csrf disabled="true"/>
+        <access-denied-handler error-page="/403"/>
+    </http>
+
+    <global-method-security secured-annotations="enabled"/>
+
+    <beans:bean id="userService" class="by.gstu.interviewstreet.service.impl.UserServiceImpl"/>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="userService"/>
+    </authentication-manager>
+</beans:beans>

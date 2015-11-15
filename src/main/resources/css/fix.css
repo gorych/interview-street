@@ -1,0 +1,80 @@
+main {
+    flex: 1 0 auto;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+nav .brand-logo-color-fix {
+	color: #444;
+}
+
+nav ul a {
+	color: #444;
+}
+
+.button-collapse-fix {
+	color: #26A69A;
+}
+
+i.right {
+	margin-left: 5px;
+}
+
+.card .card-action a {
+	width: 100%;
+}
+
+img.responsive-img {
+	height: 100%;
+}
+
+.row-fix {
+	padding-top: 20px;
+}
+
+.height-fix {
+	height: 100%;
+}
+
+
+.fixed-action-btn-fix {
+	position: relative;
+}
+
+.fixed-delete-question-btn, .fixed-action-btn-location-fix {
+	position: absolute;
+	display: inline-block;
+	bottom: 30px;
+	right: 0;
+}
+
+.fixed-delete-question-btn {
+	bottom: 0;
+}
+
+.page-footer-fix{
+	padding-top: 0;
+	margin: 0;
+}
+
+.footer-copyright-fix {
+	height: 65px;
+	line-height: 65px;
+}
+
+.box-padding-fix {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.divider-margin-fix {
+	margin-top: 10px;
+}
+
+.question .row {
+	margin-bottom: 10px;
+}

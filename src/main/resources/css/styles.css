@@ -1,0 +1,28 @@
+html, body {
+	height: 100%;
+}
+
+.question {
+	margin-top: 30px;
+	padding: 0 15px;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #009688;
+	border-radius: 5px;
+}
+
+.question .answers {
+	margin: 20px 0;
+}
+
+.answers label {
+	color: #757575;
+}
+
+.box {
+	padding: 1.0rem 0.75rem 0;
+}
+
+.box h4{
+	margin: 0.5rem 0;
+}

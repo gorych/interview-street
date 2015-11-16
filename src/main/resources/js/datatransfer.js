@@ -21,8 +21,10 @@ $(document).ready(function () {
                     id: answersBoxId
                 }).appendTo(questionCssId);
 
+                var answerBtnId = "addAnswerBtn"+questionId;
+
                 $('<a/>', {
-                    id: "addAnswerBtn",
+                    id: answerBtnId,
                     class: 'btn-floating btn-middle waves-effect waves-light green'
                 }).appendTo(questionCssId).click(function () {
                     $.ajax({
@@ -35,7 +37,7 @@ $(document).ready(function () {
                     });
                 });
 
-                $("#addAnswerBtn").append("<i class='material-icons'>add</i>");
+                $("#"+answerBtnId).append("<i class='material-icons'>add</i>");
 
                 $('<div/>', {
                     class: 'divider divider-margin-fix'

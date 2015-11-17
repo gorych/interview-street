@@ -78,3 +78,11 @@ img.responsive-img {
 .question .row {
 	margin-bottom: 0;
 }
+
+.input-field-margin-fix {
+	margin-top: 0;
+}
+
+.delete-answer-lotion-btn-fix {
+	margin-left: 15px;
+}

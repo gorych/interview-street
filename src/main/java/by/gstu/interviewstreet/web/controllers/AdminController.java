@@ -19,7 +19,7 @@ public class AdminController {
     AnswerService answerService;
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
-    public String goToInterviews() {
+    public String goToInterviewList() {
         return "interview-list";
     }
 
@@ -37,6 +37,12 @@ public class AdminController {
     @RequestMapping(value = {"/create-answer"}, method = RequestMethod.GET)
     @ResponseBody
     public long createNewAnswer() {
+        return answerService.insertAnswer();
+    }
+
+    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.GET)
+    @ResponseBody
+    public long createNewInterview() {
         return answerService.insertAnswer();
     }
 }

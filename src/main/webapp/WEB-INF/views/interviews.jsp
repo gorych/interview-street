@@ -12,17 +12,13 @@
 <main class="container">
     <div class="row">
         <div class="box">
-            <div class="chip">
-                Здравствуйте, Егор Сергеевич, Вы вошли под правами респондента.
-                <i class="material-icons">close</i>
-            </div>
             <h4 class="header teal-text text-lighten-1">Анонимные анкеты</h4>
             <h6>Все нижеперечисленные анкеты являются исключительно анонимными. Мы гарантируем конфиденциальность Ваших
                 ответов.</h6>
 
             <div class="fixed-action-btn-fix">
                 <div class="fixed-action-btn-location-fix">
-                    <a class="btn-floating btn-middle waves-effect waves-light red" title="Показать неанонимные анкеты"><i
+                    <a class="btn-floating btn waves-effect waves-light red" title="Показать неанонимные анкеты"><i
                             class="material-icons">visibility</i></a>
                 </div>
             </div>

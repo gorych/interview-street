@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,8 +40,8 @@
                         <div class="row">
                             <div class="col s12">
                                 <p>
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember">Запомнить меня</label>
+                                    <input type="checkbox" id="remember_me" name="j_spring_security_remember_me">
+                                    <label for="remember_me">Запомнить меня</label>
                                 </p>
                             </div>
                         </div>

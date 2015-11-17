@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,8 @@
     <div class="row">
         <div class="box">
             <div class="chip">
-                Здравствуйте, Егор Сергеевич, Вы вошли под правами администратора.
+                Здравствуйте, ${user_initials}, Вы вошли под правами администратора.
+
                 <i class="material-icons">close</i>
             </div>
         </div>
@@ -66,7 +68,7 @@
 
     <!-- Modal Structure -->
     <div id="addInterviewModal" class="modal">
-        <form class="col s12" action="<c:url value="#"/>" method="POST">
+        <sf:form class="col s12" method="POST" modelAttribute="interview">
             <div class="modal-content">
                 <h4>Добавление новой анкеты</h4>
 
@@ -92,7 +94,7 @@
                 <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Отмена</a>
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Сохранить</a>
             </div>
-        </form>
+        </sf:form>
     </div>
 </main>
 <%@include file="fragments/small_footer.html" %>

@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red" id="addQuestionBtn">
+        <a class="btn-floating btn-large brown" id="addQuestionBtn">
             <i class="large material-icons" title="Добавить вопрос">add</i>
         </a>
     </div>

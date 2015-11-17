@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.IUserDAO;
 import by.gstu.interviewstreet.security.UserPosition;
+import by.gstu.interviewstreet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,14 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     IUserDAO userDAO;
 
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
-        System.out.println(j_username);
         by.gstu.interviewstreet.domain.User user= userDAO.getUserByPassportData(j_username.toUpperCase());
 
         if (user == null) {
@@ -40,4 +40,9 @@ public class UserServiceImpl implements UserDetailsService {
         return new User(j_username, j_username, userRoles);
     }
 
+    @Override
+    @Transactional
+    public by.gstu.interviewstreet.domain.User getUserByPassportData(String passportData) {
+        return userDAO.getUserByPassportData(passportData.toUpperCase());
+    }
 }

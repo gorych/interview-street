@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    $('select').material_select();
+
     $('#addQuestionBtn').click(function () {
         $.ajax({
             url: '/create-question',
@@ -21,7 +24,7 @@ $(document).ready(function () {
                     id: answersBoxId
                 }).appendTo(questionCssId);
 
-                var answerBtnId = "addAnswerBtn"+questionId;
+                var answerBtnId = "addAnswerBtn" + questionId;
 
                 $('<a/>', {
                     id: answerBtnId,
@@ -37,7 +40,7 @@ $(document).ready(function () {
                     });
                 });
 
-                $("#"+answerBtnId).append("<i class='material-icons'>add</i>");
+                $("#" + answerBtnId).append("<i class='material-icons'>add</i>");
 
                 $('<div/>', {
                     class: 'divider divider-margin-fix'
@@ -45,7 +48,7 @@ $(document).ready(function () {
 
                 $('<div/>', {
                     class: 'right-align'
-                }).appendTo(questionCssId).append("" +
+                }).appendTo(questionCssId).append(
                     "<a href='#' class='modal-action modal-close waves-effect waves-green btn-flat'>Save</a>" +
                     "<a href='#' class='modal-action modal-close waves-effect waves-red btn-flat'>Delete</a>");
             }
@@ -58,19 +61,34 @@ function addAnswer(answerId, parentId) {
     var typeId = "type" + answerId;
     var textId = "text" + answerId;
 
-    $(parentCssId).append("<div id='" + answerId + "' class='row'><div class='input-field col l5 m5'>" +
-        "<input id='" + textId + "' type='text'>" +
-        "<label for='" + textId + "'>Answer type</label>" +
-        "</div><div class='input-field col l6 m6'>" +
-        "<input id='" + typeId + "' type='text'>" +
-        "<label for='" + typeId + "'>Answer text</label>" +
-        "</div></div>");
+    $('<div/>', {
+        id: answerId,
+        class: 'row'
+    }).appendTo(parentCssId);
 
     var elementCssId = "#" + answerId;
+
+    $('<div/>', {
+        class: 'input-field col l5 input-field-margin-fix'
+    }).appendTo(elementCssId).append("<select><option value='' disabled selected>Choose answer type</option>" +
+        "<option value='1'>Text field</option>" +
+        "<option value='2'>Radio Button</option>" +
+        "<option value='3'>Checkbox</option>" +
+        "<option value='4'>Slider</option></select>");
+
+    $('<div/>', {
+        class: 'input-field col l6 input-field-margin-fix'
+    }).appendTo(elementCssId).append("<input id='" + textId + "' type='text'>" +
+        "<label for='" + textId + "'>Answer text</label>" +
+        "</div>");
+
     $('<a/>', {
-        class: 'btn-floating btn-large waves-effect amber darken-3',
-        href:"#"
+        class: 'btn-floating btn waves-effect red delete-answer-lotion-btn-fix',
+        href: "#"
     }).appendTo(elementCssId).append("<i class='material-icons'>delete</i>").click(function () {
         $(elementCssId).remove();
     });
+
+    $('select').material_select();
 }
+

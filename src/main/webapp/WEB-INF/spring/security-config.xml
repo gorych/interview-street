@@ -8,7 +8,7 @@
 
     <http auto-config="true" use-expressions="true">
         <form-login login-processing-url="/j_spring_security_check"
-                    default-target-url="/interviews"
+                    default-target-url="/gateway"
                     login-page="/login"
                     authentication-failure-url="/login?auth_error"
                     username-parameter="j_username"
@@ -17,6 +17,7 @@
                 logout-url="/j_spring_security_logout"
                 invalidate-session="true"/>
         <csrf disabled="true"/>
+
         <access-denied-handler error-page="/403"/>
     </http>
 

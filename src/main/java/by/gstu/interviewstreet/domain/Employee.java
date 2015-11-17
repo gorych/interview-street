@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "employees")
-public class Employee implements Serializable{
+public class Employee implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -79,6 +79,10 @@ public class Employee implements Serializable{
 
     public void setSubdivision(Subdivision subdivision) {
         this.subdivision = subdivision;
+    }
+
+    public String getInitials() {
+        return secondname + " " + lastname;
     }
 
     @Override

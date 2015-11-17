@@ -7,9 +7,9 @@
     <div class="nav-wrapper container">
         <a href=""><img class="brand-logo brand-logo-color-fix responsive-img fix" src="/resources/img/logo.png"></a>
         <ul class="right hide-on-med-and-down">
-            <li><a href="#">Мои анкеты</a></li>
+            <li><a href="<c:url value="/interviews"/>">Мои анкеты</a></li>
             <sec:authorize access="hasRole('ROLE_EDITOR')">
-                <li><a href="#">Список анкет</a></li>
+                <li><a href="<c:url value="/interview-list"/>">Список анкет</a></li>
                 <li><a href="#">Статистика</a></li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">

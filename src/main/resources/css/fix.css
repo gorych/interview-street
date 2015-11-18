@@ -86,3 +86,8 @@ img.responsive-img {
 .delete-answer-lotion-btn-fix {
 	margin-left: 15px;
 }
+
+[type="checkbox"]+label:before {
+	margin-top: -2px;
+}
+

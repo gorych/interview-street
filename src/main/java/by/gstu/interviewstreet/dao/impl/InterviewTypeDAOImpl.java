@@ -17,7 +17,7 @@ public class InterviewTypeDAOImpl implements IInterviewTypeDAO {
     @Override
     public InterviewType getTypeById(int id) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM AnswerType WHERE id = :id");
+        Query query = session.createQuery("FROM InterviewType WHERE id = :id");
         query.setInteger("id", id);
 
         return (InterviewType) query.uniqueResult();

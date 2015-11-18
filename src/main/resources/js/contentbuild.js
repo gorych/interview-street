@@ -91,4 +91,3 @@ function addAnswer(answerId, parentId) {
 
     $('select').material_select();
 }
-

@@ -33,7 +33,7 @@ public class InterviewType implements Serializable{
 
     @Override
     public String toString() {
-        return "AnswerType{" +
+        return "InterviewType{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

@@ -17,10 +17,14 @@ public class AnswerTypeDAOImpl implements IAnswerTypeDAO {
     @Override
     public AnswerType getDefaultAnswerType() {
         final int DEFAULT_ID = 1;
+        return getAnswerTypeById(DEFAULT_ID);
+    }
 
+    @Override
+    public AnswerType getAnswerTypeById(int id) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("FROM AnswerType WHERE id = :id");
-        query.setInteger("id", DEFAULT_ID);
+        query.setInteger("id", id);
 
         return (AnswerType) query.uniqueResult();
     }

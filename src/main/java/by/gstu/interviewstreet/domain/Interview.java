@@ -14,6 +14,9 @@ public class Interview implements Serializable {
     @GeneratedValue
     private int id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "description")
     private String description;
 
@@ -34,6 +37,14 @@ public class Interview implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -72,6 +83,7 @@ public class Interview implements Serializable {
     public String toString() {
         return "Interview{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", hide=" + hide +
                 ", placementDate=" + placementDate +

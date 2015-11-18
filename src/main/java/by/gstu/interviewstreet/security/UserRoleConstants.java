@@ -7,5 +7,4 @@ public final class UserRoleConstants {
     public static final String EDITOR = "ROLE_EDITOR";
 
     private UserRoleConstants(){ }
-
 }

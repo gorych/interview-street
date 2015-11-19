@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IEmployeeDAO {
 
-    List<Employee> getEmployeesBySubdivision(int subdivisionId);
+    List<Employee> getEmployeesBySubdivision(Object[] subdivisionIds);
 
 }

@@ -17,9 +17,10 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Employee> getEmployeesBySubdivision(int subdivisionId) {
-        Query query = sessionFactory.getCurrentSession().createQuery("FROM Employee WHERE subdivision.id=:subdivision");
-        query.setInteger("subdivision", subdivisionId);
+    public List<Employee> getEmployeesBySubdivision(Object[] subdivisionIds) {
+        Query query = sessionFactory.getCurrentSession().createQuery("FROM Employee WHERE subdivision.id IN (:subdivisionIds) " +
+                "GROUP BY post.id");
+        query.setParameterList("subdivisionIds", subdivisionIds);
         return query.list();
     }
 }

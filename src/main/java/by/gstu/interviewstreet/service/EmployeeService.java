@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    List<Employee> getEmployeesBySubdivision(int subdivisionId);
+    List<Employee> getEmployeesBySubdivision(Object[] subdivisionIds);
+
+    String getJsonString(List<Employee> activities);
 
 }

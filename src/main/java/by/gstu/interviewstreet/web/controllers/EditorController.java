@@ -46,7 +46,7 @@ public class EditorController {
         final int RECTORATE_ID = 1;
 
         List<Subdivision> subdivisions = subdivisionService.getAllSubdivisions();
-        List<Employee> employees = employeeService.getEmployeesBySubdivision(RECTORATE_ID);
+        List<Employee> employees = employeeService.getEmployeesBySubdivision(new Integer[]{RECTORATE_ID});
 
         model.addAttribute(AttributeConstants.INTERVIEW, new Interview());
         model.addAttribute(AttributeConstants.SUBDIVISIONS, subdivisions);
@@ -93,11 +93,16 @@ public class EditorController {
         return "interview-list";
     }
 
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST)
-    public void loadPosts(@RequestParam(value = "ids") int[] ids) {
-        System.out.println("YES");
-        for (int id : ids) {
-            System.out.println(id);
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET)
+    @ResponseBody
+    public String loadPosts(@RequestParam String data) {
+        String[] strValues = data.split(",");
+        Object[] ids = new Object[strValues.length];
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = Integer.parseInt(strValues[i]);
         }
+
+        List<Employee> employees = employeeService.getEmployeesBySubdivision(ids);
+        return employeeService.getJsonString(employees);
     }
 }

@@ -20,7 +20,7 @@ public class IndexController {
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String goToLogin(@RequestParam(value = "auth_error", required = false) String error, Model model) {
         if (error != null) {
-            model.addAttribute("auth_error", "Пользователь с такими паспортными данными не найден.");
+            model.addAttribute("auth_error", "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРјРё РїР°СЃРїРѕСЂС‚РЅС‹РјРё РґР°РЅРЅС‹РјРё РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.");
         }
         return "login";
 

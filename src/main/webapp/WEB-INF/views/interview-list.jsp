@@ -84,7 +84,7 @@
                         <label for="name">Наименование</label>
                     </div>
                     <div class="input-field col s6">
-                        <select multiple onchange="getSelectValues(this)">
+                        <select multiple onchange='loadEmployeePosts(this)'>
                             <option value="${subdivisions[0].id}" disabled selected>${subdivisions[0].name}</option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
@@ -93,7 +93,7 @@
                         <label>Подразделения</label>
                     </div>
                     <div class="input-field col s6">
-                        <select multiple>
+                        <select multiple id="selectId">
                             <option value="${employees[0].post.id}" disabled selected>${employees[0].post.name}</option>
                             <c:forEach var="employee" items="${employees}">
                                 <option value="${employee.post.id}">${employee.post.name}</option>

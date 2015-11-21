@@ -1,27 +1,27 @@
 package by.gstu.interviewstreet.web.controllers;
 
 
-import by.gstu.interviewstreet.domain.Employee;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.InterviewType;
-import by.gstu.interviewstreet.domain.Subdivision;
+import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.helpers.UserInterviewHelper;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class EditorController {
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     QuestionService questionService;
@@ -41,16 +41,23 @@ public class EditorController {
     @Autowired
     EmployeeService employeeService;
 
+    @ModelAttribute(AttributeConstants.USER_INTERVIEW_HELPER)
+    public UserInterviewHelper loadEmptyUserInterviewBean() {
+        return new UserInterviewHelper();
+    }
+
+    @ModelAttribute(AttributeConstants.INTERVIEWS)
+    public List<Interview> loadInterviews() {
+        return interviewService.getAllInterviews();
+    }
+
+    @ModelAttribute(AttributeConstants.SUBDIVISIONS)
+    public List<Subdivision> loadSubdivisions() {
+        return subdivisionService.getAllSubdivisions();
+    }
+
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
-    public String goToInterviewList(Model model) {
-        final int RECTORATE_ID = 1;
-
-        List<Subdivision> subdivisions = subdivisionService.getAllSubdivisions();
-        List<Employee> employees = employeeService.getEmployeesBySubdivision(new Integer[]{RECTORATE_ID});
-
-        model.addAttribute(AttributeConstants.INTERVIEW, new Interview());
-        model.addAttribute(AttributeConstants.SUBDIVISIONS, subdivisions);
-        model.addAttribute(AttributeConstants.EMPLOYEES, employees);
+    public String goToInterviewList() {
         return "interview-list";
     }
 
@@ -71,15 +78,23 @@ public class EditorController {
         return answerService.insertAnswer();
     }
 
-    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.GET)
-    public String createInterview() {
-        return "interview-list";
-    }
-
     @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST)
-    public String createInterview(@Valid Interview interview) {
-        Calendar cal = Calendar.getInstance();
-        java.util.Date utilDate = cal.getTime();
+    public String createInterview(UserInterviewHelper helper) {
+        Set<Post> posts = helper.getPosts();
+        if (posts == null) {
+            return "redirect:/interview-list";
+        }
+
+        List<Integer> ids = new ArrayList<>();
+        for (Post post : posts) {
+            ids.add(post.getId());
+        }
+
+        List<User> users = userService.getUsersByPosts(ids);
+        Interview interview = helper.getInterview();
+
+        Calendar calender = Calendar.getInstance();
+        java.util.Date utilDate = calender.getTime();
         Date currentDate = new Date(utilDate.getTime());
 
         int answerTypeId = interview.getType().getId();
@@ -88,9 +103,9 @@ public class EditorController {
         interview.setPlacementDate(currentDate);
         interview.setType(type);
 
-        interviewService.insertInterview(interview);
+        interviewService.insertInterview(interview, users);
 
-        return "interview-list";
+        return "redirect:/interview-list";
     }
 
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET)
@@ -104,5 +119,24 @@ public class EditorController {
 
         List<Employee> employees = employeeService.getEmployeesBySubdivision(ids);
         return employeeService.getJsonString(employees);
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Set.class, AttributeConstants.POSTS, new CustomCollectionEditor(Set.class) {
+            Post post = null;
+
+            @Override
+            protected Object convertElement(Object element) {
+                try {
+                    int id = Integer.parseInt((String) element);
+                    post = new Post(id);
+                } catch (NumberFormatException e) {
+                    System.out.println("Element " + element + " is incorrect.");
+                    e.printStackTrace();
+                }
+                return post;
+            }
+        });
     }
 }

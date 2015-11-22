@@ -85,6 +85,8 @@ public class EditorController {
             return "redirect:/interview-list";
         }
 
+        System.out.println(helper);
+
         List<Integer> ids = new ArrayList<>();
         for (Post post : posts) {
             ids.add(post.getId());

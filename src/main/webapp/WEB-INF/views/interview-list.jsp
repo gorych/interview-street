@@ -73,7 +73,7 @@
         </ul>
     </div>
 
-    <div id="addInterviewModal" class="modal">
+    <div id="addInterviewModal" class="modal modal-fixed-footer">
         <sf:form id="interviewForm" class="col s12" method="POST" modelAttribute="user_interview_helper"
                  action="/create-interview">
             <div class="modal-content">
@@ -82,14 +82,13 @@
                 <div class="row">
                     <div class="input-field col s6">
                         <sf:select path="interview.type.id">
-                            <option value="1" disabled selected>Открытый</option>
+                            <option value="-1" disabled selected>Тип опроса</option>
                             <option value="1">Открытый</option>
                             <option value="2">Скрытый</option>
                         </sf:select>
-                        <label>Тип опроса</label>
                     </div>
                     <div class="input-field col s6">
-                        <sf:input type="text" path="interview.name" length="50"/>
+                        <sf:input type="text" path="interview.name" length="50" id="iname"/>
                         <label for="interview.name">Наименование</label>
                     </div>
                     <div class="input-field col s6">

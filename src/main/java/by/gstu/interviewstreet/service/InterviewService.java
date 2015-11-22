@@ -9,8 +9,13 @@ public interface InterviewService {
 
     List<Interview> getAllInterviews();
 
+    String getJsonString(int interviewId);
+
     void insertInterview(Interview interview);
 
     void insertInterview(Interview interview, List<User> users);
 
+    void removeInterviews(int[] ids);
+
+    void hideInterview(int id);
 }

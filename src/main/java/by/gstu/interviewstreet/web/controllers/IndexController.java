@@ -38,4 +38,9 @@ public class IndexController {
                 "redirect:/interviews";
     }
 
+    @RequestMapping(value = {"/interviews"}, method = RequestMethod.GET)
+    public String goToInterviews() {
+        return "interviews";
+    }
+
 }

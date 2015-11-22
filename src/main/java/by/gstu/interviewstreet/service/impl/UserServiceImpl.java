@@ -12,7 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,10 +25,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
-        by.gstu.interviewstreet.domain.User user= userDAO.getUserByPassportData(j_username.toUpperCase());
+        String username = j_username.toUpperCase();
+        by.gstu.interviewstreet.domain.User user= userDAO.getUserByPassportData(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("Пользователь с такими паспортными данными не найден.");
+            throw new UsernameNotFoundException("User not found.");
         }
 
         int roleIndex = user.getRole().getId();
@@ -37,12 +40,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             userRoles.add(new SimpleGrantedAuthority(role));
         }
 
-        return new User(j_username, j_username, userRoles);
+        return new User(username, username, userRoles);
     }
 
     @Override
     @Transactional
     public by.gstu.interviewstreet.domain.User getUserByPassportData(String passportData) {
         return userDAO.getUserByPassportData(passportData.toUpperCase());
+    }
+
+    @Override
+    @Transactional
+    public List<by.gstu.interviewstreet.domain.User> getUsersByPosts(Collection postIds) {
+        return userDAO.getUsersByPosts(postIds);
     }
 }

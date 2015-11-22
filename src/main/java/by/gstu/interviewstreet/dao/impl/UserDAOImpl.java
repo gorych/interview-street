@@ -8,6 +8,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
+
 @Repository
 public class UserDAOImpl implements IUserDAO {
 
@@ -21,5 +24,14 @@ public class UserDAOImpl implements IUserDAO {
         query.setString("passportData", passportData);
 
         return (User) query.uniqueResult();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> getUsersByPosts(Collection postIds) {
+        Query query = sessionFactory.getCurrentSession().createQuery("FROM User WHERE employee.post.id IN (:posts) " +
+                "GROUP BY employee.id");
+        query.setParameterList("posts", postIds);
+        return query.list();
     }
 }

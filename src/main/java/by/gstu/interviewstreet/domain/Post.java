@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import javafx.geometry.Pos;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +16,13 @@ public class Post implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    public Post(){
+    }
+
+    public Post(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;

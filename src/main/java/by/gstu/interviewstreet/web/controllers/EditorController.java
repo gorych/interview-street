@@ -56,6 +56,25 @@ public class EditorController {
         return subdivisionService.getAllSubdivisions();
     }
 
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Set.class, AttributeConstants.POSTS, new CustomCollectionEditor(Set.class) {
+            Post post = null;
+
+            @Override
+            protected Object convertElement(Object element) {
+                try {
+                    int id = Integer.parseInt((String) element);
+                    post = new Post(id);
+                } catch (NumberFormatException e) {
+                    System.out.println("Element " + element + " is incorrect.");
+                    e.printStackTrace();
+                }
+                return post;
+            }
+        });
+    }
+
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String goToInterviewList() {
         return "interview-list";
@@ -110,7 +129,7 @@ public class EditorController {
         return "redirect:/interview-list";
     }
 
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
     @ResponseBody
     public String loadPosts(@RequestParam String data) {
         String[] strValues = data.split(",");
@@ -123,22 +142,29 @@ public class EditorController {
         return employeeService.getJsonString(employees);
     }
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Set.class, AttributeConstants.POSTS, new CustomCollectionEditor(Set.class) {
-            Post post = null;
+    @RequestMapping(value = {"/delete-hide-interview"}, method = RequestMethod.GET)
+    public String deleteInterview(@RequestParam(value = "id", required = false) int[] ids,
+                                  @RequestParam(value = "interviewId", required = false) int id,
+                                  @RequestParam(value = "operation", required = true) String operation) {
+        switch (operation) {
+            case "delete":
+                interviewService.removeInterviews(ids);
+                break;
+            case "hide":
+                interviewService.hideInterview(id);
+                break;
+            default:
+                //NOP
+                break;
+        }
 
-            @Override
-            protected Object convertElement(Object element) {
-                try {
-                    int id = Integer.parseInt((String) element);
-                    post = new Post(id);
-                } catch (NumberFormatException e) {
-                    System.out.println("Element " + element + " is incorrect.");
-                    e.printStackTrace();
-                }
-                return post;
-            }
-        });
+        return "redirect:/interview-list";
     }
+
+    @RequestMapping(value = {"/edit-interview"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+    @ResponseBody
+    public String editInterviewModal(@RequestParam(value = "interviewId") int interviewId) {
+        return interviewService.getJsonString(interviewId);
+    }
+
 }

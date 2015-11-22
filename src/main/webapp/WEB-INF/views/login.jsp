@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
@@ -30,19 +30,21 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <input id="passportSeries" placeholder="Серия и номер паспорта(слитно)"
-                                       name="j_username" type="text" pattern="[0-9]{7}"
+                                       name="j_username" type="text" pattern="[А-я]{2}[0-9]{7}"
                                        oninvalid="invalidPassportData(this);"
-                                       oninput="invalidPassportData(this);"/>
+                                       oninput="invalidPassportData(this);" data-error="Юзер не существует"/>
                                 <label for="passportSeries">Паспортные данные</label>
                             </div>
-                            <c:out value="${auth_error}"/>
                         </div>
+                        <c:if test="${not empty auth_error}">
+                            <div class="error-alert form-alert-error-fix">
+                                <c:out value="${auth_error}"/>
+                            </div>
+                        </c:if>
                         <div class="row">
-                            <div class="col s12">
-                                <p>
-                                    <input type="checkbox" id="remember_me" name="j_spring_security_remember_me">
-                                    <label for="remember_me">Запомнить меня</label>
-                                </p>
+                            <div class="col s12" class="remember-me-checkbox-fix">
+                                <input type="checkbox" id="remember_me" name="j_spring_security_remember_me">
+                                <label for="remember_me">Запомнить меня</label>
                             </div>
                         </div>
                         <div class="divider"></div>

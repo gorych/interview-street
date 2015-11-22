@@ -16,21 +16,109 @@ function loadEmployeePosts(select) {
     }).done(function (data) {
         var employees = JSON.parse(data);
         if (data.length > 0) {
-            $('#employeePostsId')
+            $('#posts')
                 .find('option')
                 .remove()
                 .end();
             $.each(employees, function (index, element) {
                 if (index == 0) {
-                    $("#employeePostsId").append("<option value='" + element["post_id"] + "' disabled selected>Должности сотрудников</option>");
+                    $("#posts").append("<option value='" + element["post_id"] + "' disabled selected>Должности сотрудников</option>");
                 }
 
-                $("#employeePostsId").append("<option value='" + element["post_id"] + "'>" + element["post_name"] + "</option>");
+                $("#posts").append("<option value='" + element["post_id"] + "'>" + element["post_name"] + "</option>");
             });
 
-            $('#employeePostsId').material_select();
+            $('#posts').material_select();
         }
     });
+}
+
+function checkCbForDelete() {
+    var nodes = document.getElementsByTagName("input");
+    var flag = isCheckedValues(nodes);
+    if (flag == true) {
+        $('#deleteModal').openModal();
+    } else {
+        Materialize.toast("Не выбрана анкета для удаления.", 2000)
+    }
+}
+
+function isCheckedValues(nodes) {
+    var flag = false;
+    for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].type == "checkbox" && nodes[i].checked == true) {
+            flag = true;
+            break;
+        }
+    }
+    return flag;
+}
+
+function showEditInterviewModal() {
+    var nodes = document.getElementsByTagName("input");
+    var id = -1;
+    for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].type == "checkbox" && nodes[i].checked == true) {
+            id = nodes[i].value;
+            break;
+        }
+    }
+
+    if (id > 0) {
+        $.ajax({
+            url: '/edit-interview',
+            method: 'GET',
+            data: {"interviewId": id}
+        }).done(function (data) {
+            var values = JSON.parse(data);
+            if (data.length > 1) {
+                $.each(values, function (index, value) {
+                    $('#name').addClass("active").val(value["name"]);
+                    $('#description').addClass("active").val(value["description"]);
+
+                    $("label[for='name']").addClass("active");
+                    $("label[for='description']").addClass("active");
+
+                    $('#type').val(value["type"]).material_select();
+
+                    /*var subdivisionIds = value['subdivisions'].split(",");
+                    $.each(value['subdivisions'].split(","), function(i,e){
+                        $('#subdivisions').val([1,2]);
+                    });
+                    $('#subdivisions').material_select();*/
+                });
+
+                $('#addInterviewModal').openModal();
+            }
+        });
+    } else {
+        Materialize.toast("Не выбрана анкета для редактирования.", 2000)
+    }
+
+}
+
+var isChecked = true;
+function selectAll(formId) {
+    var form = document.getElementById(formId);
+    var nodes = form.getElementsByTagName("input");
+    for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].type == "checkbox")
+            nodes[i].checked = isChecked;
+    }
+    isChecked = !isChecked;
+}
+
+function submitForm(formId, op) {
+    var form = document.getElementById(formId);
+    form.operation.value = op;
+    form.submit();
+}
+
+function hideInterview(formId, id) {
+    var form = document.getElementById(formId);
+    form.operation.value = "hide";
+    form.interviewId.value = id;
+    form.submit();
 }
 
 function clearForm(formID) {

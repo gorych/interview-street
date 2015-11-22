@@ -1,10 +1,11 @@
 function loadEmployeePosts(select) {
     var result = [];
-    var options = select && select.options;
 
+    var options = select.options;
     for (var i = 1; i < options.length; i++) {
         if (options[i].selected) {
             result.push(options[i].value);
+            options[i].selected = true;
         }
     }
 
@@ -15,19 +16,24 @@ function loadEmployeePosts(select) {
     }).done(function (data) {
         var employees = JSON.parse(data);
         if (data.length > 0) {
-            $('#selectId')
+            $('#employeePostsId')
                 .find('option')
                 .remove()
                 .end();
             $.each(employees, function (index, element) {
+                alert(element["post_name"]);
                 if (index == 0) {
-                    $("#selectId").append("<option value='" + element["post_id"] + "' disabled selected>" + element["post_name"] + "</option>");
+                    $("#employeePostsId").append("<option value='" + element["post_id"] + "' disabled selected>Должности сотрудников</option>");
                 }
 
-                $("#selectId").append("<option value='" + element["post_id"] + "'>" + element["post_name"] + "</option>");
+                $("#employeePostsId").append("<option value='" + element["post_id"] + "'>" + element["post_name"] + "</option>");
             });
 
-            $('#selectId').material_select();
+            $('#employeePostsId').material_select();
         }
     });
+}
+
+function clearForm(formID) {
+    $('#'+formID)[0].reset();
 }

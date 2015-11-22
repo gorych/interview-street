@@ -9,18 +9,6 @@ function invalidPassportData(textbox) {
     return true;
 }
 
-function submitForm() {
-    $.ajax({
-        url: '/load-posts',
-        method: 'GET',
-        data: {"data": result.join()}
-    }).done(function (data) {
-        var employees = JSON.parse(data);
-        if (data.length > 0) {
-        }
-    });
-}
-
 function submitInterviewForm() {
     var SUBDIVISIONS_SELECT_DEFAULT_VALUE = "Подразделения";
     var POSTS_SELECT_DEFAULT_VALUE = "Должности сотрудников";

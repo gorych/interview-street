@@ -10,8 +10,14 @@ public interface IInterviewDAO {
 
     List<Interview> getAllInterviews();
 
+    Interview getInterviewById(int id);
+
     int insertInterview(Interview interview);
 
     void insertInterview(Interview interview, List<User> users);
+
+    void removeInterviews(int[] interviewIds);
+
+    void hideInterview(int interviewId);
 
 }

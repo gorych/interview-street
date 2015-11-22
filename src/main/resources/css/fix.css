@@ -87,7 +87,23 @@ img.responsive-img {
 	margin-left: 15px;
 }
 
-[type="checkbox"]+label:before {
+li span [type="checkbox"]+label:before {
 	margin-top: -2px;
+}
+.table-checkbox-fix {
+	margin-top: 12px;
+}
+
+.remember-me-checkbox-fix {
+	line-height: 15px;
+}
+
+.form-alert-error-fix {
+	margin-top: -20px;
+	margin-bottom: 20px;
+}
+
+.modal-alert-error-fix {
+	margin-top: -20px;
 }
 

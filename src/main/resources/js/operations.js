@@ -21,7 +21,6 @@ function loadEmployeePosts(select) {
                 .remove()
                 .end();
             $.each(employees, function (index, element) {
-                alert(element["post_name"]);
                 if (index == 0) {
                     $("#employeePostsId").append("<option value='" + element["post_id"] + "' disabled selected>Должности сотрудников</option>");
                 }
@@ -35,5 +34,10 @@ function loadEmployeePosts(select) {
 }
 
 function clearForm(formID) {
-    $('#'+formID)[0].reset();
+    var form = document.getElementById(formID);
+    var errors = form.getElementsByClassName("error-alert modal-alert-error-fix");
+    for (var i = 0; i < errors.length; i++) {
+        errors[i].remove();
+    }
+    form.reset();
 }

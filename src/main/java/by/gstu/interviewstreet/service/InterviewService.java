@@ -11,6 +11,8 @@ public interface InterviewService {
 
     String getJsonString(int interviewId);
 
+    Interview getInterviewById(int interviewId);
+
     void insertInterview(Interview interview);
 
     void insertInterview(Interview interview, List<User> users);

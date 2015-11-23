@@ -73,6 +73,12 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
+    public Interview getInterviewById(int interviewId) {
+        return interviewDAO.getInterviewById(interviewId);
+    }
+
+    @Override
+    @Transactional
     public void insertInterview(Interview interview) {
         interviewDAO.insertInterview(interview);
     }

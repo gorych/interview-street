@@ -8,6 +8,7 @@ import by.gstu.interviewstreet.web.AttributeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,9 @@ import java.util.Set;
 
 @Controller
 public class EditorController {
+
+    @Autowired
+    FormService formService;
 
     @Autowired
     UserService userService;
@@ -67,7 +71,7 @@ public class EditorController {
                     int id = Integer.parseInt((String) element);
                     post = new Post(id);
                 } catch (NumberFormatException e) {
-                    System.out.println("Element " + element + " is incorrect.");
+                    System.err.println("Element " + element + " is incorrect.");
                     e.printStackTrace();
                 }
                 return post;
@@ -80,8 +84,9 @@ public class EditorController {
         return "interview-list";
     }
 
-    @RequestMapping(value = {"/questions-editor"}, method = RequestMethod.GET)
-    public String goToQuestionsEditor() {
+    @RequestMapping(value = {"/questions-editor/{interviewId}"}, method = RequestMethod.GET)
+    public String goToQuestionsEditor(@PathVariable int interviewId, Model model) {
+        model.addAttribute(AttributeConstants.INTERVIEW_ID, interviewId);
         return "questions-editor";
     }
 
@@ -91,10 +96,14 @@ public class EditorController {
         return questionService.insertQuestion();
     }
 
-    @RequestMapping(value = {"/create-answer"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/create-answer/{interviewId}/{questionId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public long createNewAnswer() {
-        return answerService.insertAnswer();
+    public long createNewAnswer(@PathVariable int interviewId, @PathVariable int questionId) {
+        Interview interview = interviewService.getInterviewById(interviewId);
+        Question question = questionService.getQuestionById(questionId);
+        Form form = new Form(question, interview);
+
+        return answerService.insertAnswer(form);
     }
 
     @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST)
@@ -103,8 +112,6 @@ public class EditorController {
         if (posts == null) {
             return "redirect:/interview-list";
         }
-
-        System.out.println(helper);
 
         List<Integer> ids = new ArrayList<>();
         for (Post post : posts) {
@@ -143,9 +150,9 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/delete-hide-interview"}, method = RequestMethod.GET)
-    public String deleteInterview(@RequestParam(value = "id", required = false) int[] ids,
-                                  @RequestParam(value = "interviewId", required = false) int id,
-                                  @RequestParam(value = "operation", required = true) String operation) {
+    public String deleteAndHideInterview(@RequestParam(value = "id", required = false) int[] ids,
+                                         @RequestParam(value = "interviewId", required = false) int id,
+                                         @RequestParam(value = "operation", required = true) String operation) {
         switch (operation) {
             case "delete":
                 interviewService.removeInterviews(ids);
@@ -167,4 +174,25 @@ public class EditorController {
         return interviewService.getJsonString(interviewId);
     }
 
+    @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.GET)
+    public String createNewForm(@RequestParam(value = "questionName") String questionText,
+                                @RequestParam(value = "answerText") String[] texts,
+                                @RequestParam(value = "answerType") Integer[] answerTypeIds,
+                                @RequestParam(value = "questionId") int questionId,
+                                @RequestParam(value = "answerId") Integer[] answerIds) {
+
+        Question question = questionService.getQuestionById(questionId);
+        List<Answer> answers = answerService.getAnswersByIds(answerIds);
+        List<AnswerType> answerTypes = answerService.getAnswerTypesByIds(answerTypeIds);
+
+        question.setText(questionText);
+        for (int i = 0; i < answers.size(); i++) {
+            answers.get(i).setText(texts[i]);
+            answers.get(i).setType(answerTypes.get(i));
+        }
+
+        formService.saveForm(answers, question);
+
+        return "questions-editor";
+    }
 }

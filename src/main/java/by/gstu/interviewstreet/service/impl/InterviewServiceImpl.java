@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.impl.InterviewDAOImpl;
 import by.gstu.interviewstreet.dao.impl.UserInterviewDAOImpl;
+import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
@@ -30,6 +31,18 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public List<Interview> getAllInterviews() {
         return interviewDAO.getAllInterviews();
+    }
+
+    @Override
+    @Transactional
+    public List<Form> getInterviewQuestions(int interviewId) {
+        return interviewDAO.getInterviewQuestions(interviewId);
+    }
+
+    @Override
+    @Transactional
+    public List<List<Form>> getInterviewAnswers(List<Form> questionForm) {
+        return interviewDAO.getInterviewAnswers(questionForm);
     }
 
     @Override

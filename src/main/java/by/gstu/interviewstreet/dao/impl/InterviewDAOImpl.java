@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewDAO;
+import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -22,9 +24,35 @@ public class InterviewDAOImpl implements IInterviewDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Interview> getAllInterviews() {
-        return sessionFactory.getCurrentSession().createQuery("from Interview")
+        return sessionFactory.getCurrentSession().createQuery("FROM Interview")
                 .list();
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Form> getInterviewQuestions(int interviewId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM Form WHERE interview.id = :id GROUP BY question.id");
+        query.setInteger("id", interviewId);
+
+        return query.list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<List<Form>> getInterviewAnswers(List<Form> questionForm) {
+        List<List<Form>> answers = new ArrayList<>();
+
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM Form WHERE question.id = :id");
+        for (Form form : questionForm) {
+            query.setInteger("id", form.getQuestion().getId());
+            answers.add(query.list());
+        }
+
+        return answers;
+    }
+
 
     @Override
     public Interview getInterviewById(int id) {

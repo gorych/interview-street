@@ -6,6 +6,7 @@ public final class AttributeConstants {
 
 
     public static final String INTERVIEW = "interview";
+    public static final String INTERVIEW_ID = "interview_id";
     public static final String USER_INTERVIEW_HELPER = "user_interview_helper";
     public static final String USER_INTERVIEW = "user_interview";
 

@@ -175,6 +175,7 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.GET)
+    @ResponseBody
     public String createNewForm(@RequestParam(value = "questionName") String questionText,
                                 @RequestParam(value = "answerText") String[] texts,
                                 @RequestParam(value = "answerType") Integer[] answerTypeIds,

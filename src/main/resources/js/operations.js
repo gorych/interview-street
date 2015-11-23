@@ -82,10 +82,10 @@ function showEditInterviewModal() {
                     $('#type').val(value["type"]).material_select();
 
                     /*var subdivisionIds = value['subdivisions'].split(",");
-                    $.each(value['subdivisions'].split(","), function(i,e){
-                        $('#subdivisions').val([1,2]);
-                    });
-                    $('#subdivisions').material_select();*/
+                     $.each(value['subdivisions'].split(","), function(i,e){
+                     $('#subdivisions').val([1,2]);
+                     });
+                     $('#subdivisions').material_select();*/
                 });
 
                 $('#addInterviewModal').openModal();
@@ -128,4 +128,16 @@ function clearForm(formID) {
         errors[i].remove();
     }
     form.reset();
+}
+
+function deleteQuestion(questionId) {
+    $.ajax({
+        url: "/delete-question/" + questionId,
+        method: 'GET'
+    }).done(function (answer) {
+        if (answer > 0) {
+            $("#" + questionId).remove();
+            console.log("Remove question");
+        }
+    });
 }

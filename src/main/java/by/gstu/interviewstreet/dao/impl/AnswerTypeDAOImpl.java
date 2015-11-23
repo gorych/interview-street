@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AnswerTypeDAOImpl implements IAnswerTypeDAO {
 
@@ -27,5 +29,13 @@ public class AnswerTypeDAOImpl implements IAnswerTypeDAO {
         query.setInteger("id", id);
 
         return (AnswerType) query.uniqueResult();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<AnswerType> getAnswerTypesByIds(Integer[] ids) {
+        Query query = sessionFactory.getCurrentSession().createQuery("FROM AnswerType WHERE id IN (:ids)");
+        query.setParameterList("ids", ids);
+        return query.list();
     }
 }

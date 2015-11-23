@@ -10,7 +10,7 @@ function buildForm(interviewId) {
             $('<form/>', {
                 id: questionId,
                 class: 'question',
-                method: 'get',
+                method: 'POST',
                 action: '/create-new-form'
             }).appendTo('#interview_questions');
 
@@ -38,11 +38,13 @@ function buildForm(interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(questionCssId);
 
+            var str = "JavaScript:deleteQuestion('" + questionId + "')";
+
             $('<div/>', {
                 class: 'right-align'
             }).appendTo(questionCssId).append(
                 "<input type='submit' class='waves-effect waves-green btn-flat' value='Save'/>" +
-                "<a href='#' class='waves-effect waves-red btn-flat'>Delete</a>");
+                '<a href="' + str + '" class="waves-effect waves-red btn-flat">Delete</a>');
         }
     });
 }
@@ -85,6 +87,14 @@ function addAnswer(parentId, interviewId, questionId) {
                 href: "#"
             }).appendTo(elementCssId).append("<i class='material-icons'>delete</i>").click(function () {
                 $(elementCssId).remove();
+                $.ajax({
+                    url: "/delete-answer/" + answerId,
+                    method: 'GET'
+                }).done(function (answer) {
+                    if (answer > 0) {
+                        console.log("Remove answer");
+                    }
+                });
             });
 
             $('select').material_select();

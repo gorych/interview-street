@@ -14,6 +14,8 @@ public interface AnswerService {
 
     public List<AnswerType> getAnswerTypesByIds(Integer[] ids);
 
+    void removeAnswer(int id);
+
 }
 
 

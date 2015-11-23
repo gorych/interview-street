@@ -48,4 +48,10 @@ public class AnswerServiceImpl implements AnswerService {
     public List<AnswerType> getAnswerTypesByIds(Integer[] ids) {
         return answerTypeDAO.getAnswerTypesByIds(ids);
     }
+
+    @Override
+    @Transactional
+    public void removeAnswer(int id) {
+        answerDAO.removeAnswer(id);
+    }
 }

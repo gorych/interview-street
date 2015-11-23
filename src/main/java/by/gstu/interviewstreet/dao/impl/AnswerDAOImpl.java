@@ -4,6 +4,7 @@ import by.gstu.interviewstreet.dao.IAnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,5 +30,14 @@ public class AnswerDAOImpl implements IAnswerDAO {
         Query query = sessionFactory.getCurrentSession().createQuery("FROM Answer WHERE id IN (:ids)");
         query.setParameterList("ids", ids);
         return query.list();
+    }
+
+    @Override
+    public void removeAnswer(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Answer answer = (Answer) session.load(Answer.class, id);
+        if (answer != null) {
+            session.delete(answer);
+        }
     }
 }

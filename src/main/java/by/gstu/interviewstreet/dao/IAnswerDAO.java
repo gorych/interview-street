@@ -11,4 +11,6 @@ public interface IAnswerDAO {
 
     List<Answer> getAnswersByIds(Integer[] ids);
 
+    void removeAnswer(int id);
+
 }

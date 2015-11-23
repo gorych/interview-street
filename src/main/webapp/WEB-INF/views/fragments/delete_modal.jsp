@@ -7,7 +7,7 @@
     </div>
     <div class="modal-footer">
         <a class="waves-effect waves-red btn-flat modal-action modal-close">Нет</a>
-        <button onclick="submitForm('tableInterviewForm')"
+        <button onclick="submitForm('tableInterviewForm','delete')"
                 class="waves-effect waves-green btn-flat modal-action">Да</button>
     </div>
 </div>

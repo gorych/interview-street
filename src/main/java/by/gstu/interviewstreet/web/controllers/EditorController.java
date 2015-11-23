@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,9 +86,21 @@ public class EditorController {
         return "interview-list";
     }
 
+    //TODO Слишком много данных!
     @RequestMapping(value = {"/questions-editor/{interviewId}"}, method = RequestMethod.GET)
-    public String goToQuestionsEditor(@PathVariable int interviewId, Model model) {
-        model.addAttribute(AttributeConstants.INTERVIEW_ID, interviewId);
+    public String goToQuestionsEditor(@PathVariable int interviewId, Model model, HttpServletRequest req) {
+        List<Form> questionForms = interviewService.getInterviewQuestions(interviewId);
+        if (questionForms != null) {
+            List<List<Form>> answerForms = interviewService.getInterviewAnswers(questionForms);
+            model.addAttribute(AttributeConstants.QUESTION_FORMS, questionForms);
+            model.addAttribute(AttributeConstants.ANSWER_FORMS, answerForms);
+        }
+
+        HttpSession session = req.getSession(true);
+        Interview interview = interviewService.getInterviewById(interviewId);
+        session.setAttribute("interviewId", interviewId);
+        session.setAttribute("interview", interview);
+
         return "questions-editor";
     }
 
@@ -150,15 +164,14 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/delete-hide-interview"}, method = RequestMethod.GET)
-    public String deleteAndHideInterview(@RequestParam(value = "id", required = false) int[] ids,
-                                         @RequestParam(value = "interviewId", required = false) int id,
-                                         @RequestParam(value = "operation", required = true) String operation) {
+    public String deleteAndHideInterview(@RequestParam(value = "id") int[] ids,
+                                         @RequestParam(value = "operation") String operation) {
         switch (operation) {
             case "delete":
                 interviewService.removeInterviews(ids);
                 break;
             case "hide":
-                interviewService.hideInterview(id);
+                //interviewService.hideInterview(id);
                 break;
             default:
                 //NOP
@@ -174,13 +187,13 @@ public class EditorController {
         return interviewService.getJsonString(interviewId);
     }
 
-    @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.GET)
-    @ResponseBody
+    @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.POST)
     public String createNewForm(@RequestParam(value = "questionName") String questionText,
                                 @RequestParam(value = "answerText") String[] texts,
                                 @RequestParam(value = "answerType") Integer[] answerTypeIds,
                                 @RequestParam(value = "questionId") int questionId,
-                                @RequestParam(value = "answerId") Integer[] answerIds) {
+                                @RequestParam(value = "answerId") Integer[] answerIds,
+                                HttpSession session) {
 
         Question question = questionService.getQuestionById(questionId);
         List<Answer> answers = answerService.getAnswersByIds(answerIds);
@@ -193,7 +206,22 @@ public class EditorController {
         }
 
         formService.saveForm(answers, question);
+        Integer id = (Integer) session.getAttribute("interviewId");
 
-        return "questions-editor";
+        return "redirect:/questions-editor/" + id;
+    }
+
+    @RequestMapping(value = {"/delete-answer/{answerId}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public int deleteAnswer(@PathVariable(value = "answerId") int answerId){
+        answerService.removeAnswer(answerId);
+        return 1;
+    }
+
+    @RequestMapping(value = {"/delete-question/{questionId}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public int deleteQuestion(@PathVariable(value = "questionId") int questionId){
+        //TODO Удаление вопросов и ответов
+        return 1;
     }
 }

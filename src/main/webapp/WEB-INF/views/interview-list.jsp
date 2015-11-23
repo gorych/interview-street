@@ -55,7 +55,7 @@
                             </c:otherwise>
                         </c:choose>
                         <td>
-                            <a href="<c:url value="/questions-editor"/>" class="btn-floating cyan darken-1"><i
+                            <a href="<c:url value="/questions-editor/${interview.id}"/>" class="btn-floating cyan darken-1"><i
                                     class="material-icons" title="Список вопросов">subject</i></a>
                         </td>
                         <td>
@@ -124,8 +124,7 @@
             <div class="modal-footer">
                 <a href="JavaScript:clearForm('interviewForm')"
                    class="modal-action modal-close waves-effect waves-red btn-flat ">Отмена</a>
-                <a href="JavaScript:submitInterviewForm()" class="btn-flat waves-effect waves-green modal-action"
-                   type="submit" name="action">
+                <a href="JavaScript:submitInterviewForm()" class="btn-flat waves-effect waves-green modal-action">
                     Сохранить
                 </a>
             </div>

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -34,8 +35,13 @@ public class AnswerTypeDAOImpl implements IAnswerTypeDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<AnswerType> getAnswerTypesByIds(Integer[] ids) {
-        Query query = sessionFactory.getCurrentSession().createQuery("FROM AnswerType WHERE id IN (:ids)");
-        query.setParameterList("ids", ids);
-        return query.list();
+        List<AnswerType> answerTypes = new ArrayList<>();
+        Query query = sessionFactory.getCurrentSession().createQuery("FROM AnswerType WHERE id = :id");
+        for (Integer id : ids) {
+            query.setInteger("id", id);
+            answerTypes.add((AnswerType) query.uniqueResult());
+        }
+
+        return answerTypes;
     }
 }

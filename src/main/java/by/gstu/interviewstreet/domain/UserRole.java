@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class UserRole implements Serializable{
 
     @Id
-    @Column(name = "int")
+    @Column(name = "id")
     @GeneratedValue
     private int id;
 

@@ -54,6 +54,30 @@ function isCheckedValues(nodes) {
     return flag;
 }
 
+function deleteInterview() {
+    var form = document.getElementById("tableInterviewForm");
+    form.submit();
+}
+
+function submitInterviewForm() {
+    $.ajax({
+        url: "/create-interview",
+        data: $('#interviewForm').serialize(),
+        type: "POST",
+        success: function (result) {
+            if (result.length < 0) {
+                alert("OK");
+                $(".error-alert").append(result);
+            } else {
+                location.reload();
+            }
+        },
+        error: function () {
+            location.reload();
+        }
+    });
+}
+
 function showEditInterviewModal() {
     var nodes = document.getElementsByTagName("input");
     var id = -1;
@@ -108,17 +132,15 @@ function selectAll(formId) {
     isChecked = !isChecked;
 }
 
-function submitForm(formId, op) {
-    var form = document.getElementById(formId);
-    form.operation.value = op;
-    form.submit();
-}
-
-function hideInterview(formId, id) {
-    var form = document.getElementById(formId);
-    form.operation.value = "hide";
-    form.interviewId.value = id;
-    form.submit();
+function hideInterview(interviewId) {
+    $.ajax({
+        url: "/hide-interview/" + interviewId,
+        method: 'GET'
+    }).done(function (answer) {
+        if (answer > 0) {
+            location.reload();
+        }
+    });
 }
 
 function clearForm(formID) {

@@ -109,6 +109,7 @@ li span [type="checkbox"] + label:before {
 
 .table-material-icons-fix {
     color: black;
+    margin-top: 2px;
 }
 
 .material-icons {

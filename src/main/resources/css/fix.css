@@ -1,6 +1,6 @@
 main {
-    flex: 1 0 auto;
-}
+     flex: 1 0 auto;
+ }
 
 body {
     display: flex;
@@ -109,10 +109,9 @@ li span [type="checkbox"] + label:before {
 
 .table-material-icons-fix {
     color: black;
-    margin-top: 2px;
+    margin-top: 4px;
 }
 
 .material-icons {
     line-height: none;
 }
-

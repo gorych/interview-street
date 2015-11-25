@@ -1,7 +1,10 @@
 package by.gstu.interviewstreet.domain;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -14,9 +17,13 @@ public class Interview implements Serializable {
     @GeneratedValue
     private int id;
 
+    @Size(min = 5, max = 50,
+            message = "Название анкеты должно быть от 5 до 50 символов")
     @Column(name = "name")
     private String name;
 
+    @Size(min = 5, max = 100,
+            message = "Описание анкеты должно быть от 5 до 100 символов")
     @Column(name = "description")
     private String description;
 

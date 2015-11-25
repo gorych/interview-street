@@ -14,13 +14,12 @@ public class UserInterview implements Serializable {
     @GeneratedValue
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "user_id")
     private User user;
 

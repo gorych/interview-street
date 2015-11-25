@@ -60,16 +60,22 @@ function deleteInterview() {
 }
 
 function submitInterviewForm() {
+    var form = $('#interviewForm');
     $.ajax({
         url: "/create-interview",
-        data: $('#interviewForm').serialize(),
+        data: form.serialize(),
         type: "POST",
-        success: function (result) {
-            if (result.length < 0) {
-                alert("OK");
-                $(".error-alert").append(result);
-            } else {
+        success: function (response) {
+            if (response == "success") {
                 location.reload();
+            } else {
+                var errors = $(".error-alert");
+                if (errors.length == 0) {
+                    var content = $(form).find(".modal-content");
+                    $(content).append("<div class = 'error-alert modal-alert-error-fix'>" + response + "</div>");
+                } else {
+                    $(errors[0]).replaceWith("<div class = 'error-alert modal-alert-error-fix'>" + response + "</div>")
+                }
             }
         },
         error: function () {
@@ -136,8 +142,8 @@ function hideInterview(interviewId) {
     $.ajax({
         url: "/hide-interview/" + interviewId,
         method: 'GET'
-    }).done(function (answer) {
-        if (answer > 0) {
+    }).done(function (response) {
+        if (response == "success") {
             location.reload();
         }
     });

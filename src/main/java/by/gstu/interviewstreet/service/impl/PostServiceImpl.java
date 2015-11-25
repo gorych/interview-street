@@ -17,7 +17,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public List<Post> getAllPosts() {
+    public List<Post> getAll() {
         return postDAO.getAllPosts();
     }
 }

@@ -1,28 +1,26 @@
 package by.gstu.interviewstreet.service;
 
+import by.gstu.interviewstreet.domain.ExtendUserInterview;
 import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.User;
 
 import java.util.List;
 
 public interface InterviewService {
 
-    List<Interview> getAllInterviews();
+    List<Interview> getAll();
 
-    List<Form> getInterviewQuestions(int interviewId);
+    List<Form> getQuestions(int interviewId);
 
-    List<List<Form>> getInterviewAnswers(List<Form> questionForm);
+    List<List<Form>> getAnswers(List<Form> questionForm);
 
     String getJsonString(int interviewId);
 
-    Interview getInterviewById(int interviewId);
+    Interview get(int interviewId);
 
-    void insertInterview(Interview interview);
+    void insert(ExtendUserInterview userInterview);
 
-    void insertInterview(Interview interview, List<User> users);
+    void remove(int[] ids);
 
-    void removeInterviews(int[] ids);
-
-    void hideInterview(int id);
+    void hide(int id);
 }

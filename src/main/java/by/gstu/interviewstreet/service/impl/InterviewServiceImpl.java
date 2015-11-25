@@ -1,11 +1,10 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.impl.InterviewDAOImpl;
-import by.gstu.interviewstreet.dao.impl.UserInterviewDAOImpl;
-import by.gstu.interviewstreet.domain.Form;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.dao.IInterviewDAO;
+import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
+import by.gstu.interviewstreet.dao.IUserDAO;
+import by.gstu.interviewstreet.dao.IUserInterviewDAO;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,35 +12,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
-    private InterviewDAOImpl interviewDAO;
+    private IUserDAO userDAO;
 
     @Autowired
-    private UserInterviewDAOImpl userInterviewDAO;
+    private IInterviewDAO interviewDAO;
+
+    @Autowired
+    IInterviewTypeDAO interviewTypeDAO;
+
+    @Autowired
+    private IUserInterviewDAO userInterviewDAO;
 
     @Override
     @Transactional
-    public List<Interview> getAllInterviews() {
+    public List<Interview> getAll() {
         return interviewDAO.getAllInterviews();
     }
 
     @Override
     @Transactional
-    public List<Form> getInterviewQuestions(int interviewId) {
-        return interviewDAO.getInterviewQuestions(interviewId);
+    public List<Form> getQuestions(int interviewId) {
+        List<Form> forms = interviewDAO.getInterviewQuestions(interviewId);
+        if (forms == null) {
+            return new ArrayList<>();
+        }
+
+        return forms;
     }
 
     @Override
     @Transactional
-    public List<List<Form>> getInterviewAnswers(List<Form> questionForm) {
+    public List<List<Form>> getAnswers(List<Form> questionForm) {
         return interviewDAO.getInterviewAnswers(questionForm);
     }
 
@@ -86,31 +93,45 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview getInterviewById(int interviewId) {
+    public Interview get(int interviewId) {
         return interviewDAO.getInterviewById(interviewId);
     }
 
     @Override
     @Transactional
-    public void insertInterview(Interview interview) {
-        interviewDAO.insertInterview(interview);
-    }
+    public void insert(ExtendUserInterview userInterview) {
+        Set<Post> posts = userInterview.getPosts();
 
-    @Override
-    @Transactional
-    public void insertInterview(Interview interview, List<User> users) {
+        List<Integer> ids = new ArrayList<>();
+        for (Post post : posts) {
+            ids.add(post.getId());
+        }
+
+        List<User> users = userDAO.getUsersByPosts(ids);
+        Interview interview = userInterview.getInterview();
+
+        Calendar calender = Calendar.getInstance();
+        java.util.Date utilDate = calender.getTime();
+        java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
+
+        int answerTypeId = interview.getType().getId();
+        InterviewType type = interviewTypeDAO.getTypeById(answerTypeId);
+
+        interview.setPlacementDate(currentDate);
+        interview.setType(type);
+
         interviewDAO.insertInterview(interview, users);
     }
 
     @Override
     @Transactional
-    public void removeInterviews(int[] ids) {
+    public void remove(int[] ids) {
         interviewDAO.removeInterviews(ids);
     }
 
     @Override
     @Transactional
-    public void hideInterview(int id) {
+    public void hide(int id) {
         interviewDAO.hideInterview(id);
     }
 }

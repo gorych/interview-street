@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface FormService {
 
-    void saveForm(List<Answer> answers, Question question);
+    void save(List<Answer> answers, Question question);
 
 }

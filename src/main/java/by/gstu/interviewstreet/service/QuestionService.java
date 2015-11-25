@@ -5,7 +5,7 @@ import by.gstu.interviewstreet.domain.Question;
 
 public interface QuestionService {
 
-    long insertQuestion();
+    long insert();
 
-    Question getQuestionById(int id);
+    Question get(int id);
 }

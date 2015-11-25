@@ -98,7 +98,7 @@ public class InterviewDAOImpl implements IInterviewDAO {
     public void hideInterview(int interviewId) {
         Session session = sessionFactory.getCurrentSession();
         Interview interview = (Interview) session.load(Interview.class, interviewId);
-        if (null != interview) {
+        if (interview != null) {
             boolean hidden = !interview.isHide();
             interview.setHide(hidden);
             session.save(interview);

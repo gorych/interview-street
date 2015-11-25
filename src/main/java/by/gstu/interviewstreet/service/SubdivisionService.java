@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface SubdivisionService {
 
-    List<Subdivision> getAllSubdivisions();
+    List<Subdivision> getAll();
 
 }

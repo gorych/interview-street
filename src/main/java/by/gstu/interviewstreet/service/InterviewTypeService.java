@@ -4,7 +4,6 @@ import by.gstu.interviewstreet.domain.InterviewType;
 
 public interface InterviewTypeService {
 
-    InterviewType getInterviewTypeById(int id);
-
+    InterviewType get(int id);
 
 }

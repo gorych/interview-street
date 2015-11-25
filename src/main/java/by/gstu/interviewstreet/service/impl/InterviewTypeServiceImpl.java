@@ -15,7 +15,7 @@ public class InterviewTypeServiceImpl implements InterviewTypeService {
 
     @Override
     @Transactional
-    public InterviewType getInterviewTypeById(int id) {
+    public InterviewType get(int id) {
         return interviewTypeDAO.getTypeById(id);
     }
 }

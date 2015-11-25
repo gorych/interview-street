@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UserService {
 
-    User getUserByPassportData(String passportData);
+    User get(String passportData);
 
-    List<User> getUsersByPosts(Collection postIds);
+    List<User> getUsers(Collection postIds);
 
 }

@@ -27,7 +27,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public long insertAnswer(Form form) {
+    public long insert(Form form) {
         AnswerType answerType = answerTypeDAO.getDefaultAnswerType();
         Answer answer = answerDAO.insertAnswer(answerType);
 
@@ -39,19 +39,19 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public List<Answer> getAnswersByIds(Integer[] ids) {
+    public List<Answer> get(Integer[] ids) {
         return answerDAO.getAnswersByIds(ids);
     }
 
     @Override
     @Transactional
-    public List<AnswerType> getAnswerTypesByIds(Integer[] ids) {
+    public List<AnswerType> getAnswerTypes(Integer[] ids) {
         return answerTypeDAO.getAnswerTypesByIds(ids);
     }
 
     @Override
     @Transactional
-    public void removeAnswer(int id) {
+    public void remove(int id) {
         answerDAO.removeAnswer(id);
     }
 }

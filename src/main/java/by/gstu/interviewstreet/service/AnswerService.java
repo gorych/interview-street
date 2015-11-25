@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface AnswerService {
 
-    long insertAnswer(Form form);
+    long insert(Form form);
 
-    List<Answer> getAnswersByIds(Integer[] ids);
+    List<Answer> get(Integer[] ids);
 
-    public List<AnswerType> getAnswerTypesByIds(Integer[] ids);
+    List<AnswerType> getAnswerTypes(Integer[] ids);
 
-    void removeAnswer(int id);
+    void remove(int id);
 
 }
 

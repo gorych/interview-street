@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public List<Employee> getEmployeesBySubdivision(Object[] subdivisionIds) {
+    public List<Employee> getBySubdivisions(Object[] subdivisionIds) {
         return employeeDAO.getEmployeesBySubdivision(subdivisionIds);
     }
 

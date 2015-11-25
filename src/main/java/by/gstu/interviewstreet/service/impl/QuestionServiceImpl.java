@@ -15,13 +15,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public long insertQuestion() {
+    public long insert() {
         return questionDAO.insertQuestion();
     }
 
     @Override
     @Transactional
-    public Question getQuestionById(int id) {
+    public Question get(int id) {
         return questionDAO.qetQuestionById(id);
     }
 }

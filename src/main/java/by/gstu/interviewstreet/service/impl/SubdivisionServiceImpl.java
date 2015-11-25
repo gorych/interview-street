@@ -17,7 +17,7 @@ public class SubdivisionServiceImpl implements SubdivisionService{
 
     @Override
     @Transactional
-    public List<Subdivision> getAllSubdivisions() {
+    public List<Subdivision> getAll() {
         return subdivisionDAO.getAllSubdivisions();
     }
 }

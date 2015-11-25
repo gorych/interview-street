@@ -18,7 +18,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     @Transactional
-    public void saveForm(List<Answer> answers, Question question) {
+    public void save(List<Answer> answers, Question question) {
         formDAO.saveForm(answers, question);
     }
 }

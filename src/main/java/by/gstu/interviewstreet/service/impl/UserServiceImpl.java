@@ -45,13 +45,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public by.gstu.interviewstreet.domain.User getUserByPassportData(String passportData) {
+    public by.gstu.interviewstreet.domain.User get(String passportData) {
         return userDAO.getUserByPassportData(passportData.toUpperCase());
     }
 
     @Override
     @Transactional
-    public List<by.gstu.interviewstreet.domain.User> getUsersByPosts(Collection postIds) {
+    public List<by.gstu.interviewstreet.domain.User> getUsers(Collection postIds) {
         return userDAO.getUsersByPosts(postIds);
     }
 }

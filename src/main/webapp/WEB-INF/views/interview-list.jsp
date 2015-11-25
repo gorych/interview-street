@@ -19,8 +19,7 @@
             </div>
         </div>
         <form method="GET" id="tableInterviewForm" name="tableInterviewForm"
-              action="<c:url value="/delete-hide-interview"/>">
-            <input type="hidden" value="" name="operation"/>
+              action="<c:url value="/delete-interview"/>">
             <input type="hidden" value="" name="interviewId"/>
             <table class="centered highlight">
                 <thead>
@@ -46,16 +45,19 @@
                         <td>${interview.placementDate}</td>
                         <c:choose>
                             <c:when test="${interview.hide}">
-                                <td><a href="JavaScript:hideInterview('tableInterviewForm', '${interview.id}')"><i
-                                        class="material-icons table-material-icons-fix" title="Открыта">visibility</i></a></td>
+                                <td><a href="JavaScript:hideInterview('${interview.id}')"><i
+                                        class="material-icons table-material-icons-fix"
+                                        title="Открыта">visibility</i></a></td>
                             </c:when>
                             <c:otherwise>
-                                <td><a href="JavaScript:hideInterview('tableInterviewForm', '${interview.id}')"><i
-                                        class="material-icons table-material-icons-fix" title="Скрыта">visibility_off</i></a></td>
+                                <td><a href="JavaScript:hideInterview('${interview.id}')"><i
+                                        class="material-icons table-material-icons-fix"
+                                        title="Скрыта">visibility_off</i></a></td>
                             </c:otherwise>
                         </c:choose>
                         <td>
-                            <a href="<c:url value="/questions-editor/${interview.id}"/>" class="btn-floating cyan darken-1"><i
+                            <a href="<c:url value="/questions-editor/${interview.id}"/>"
+                               class="btn-floating cyan darken-1"><i
                                     class="material-icons" title="Список вопросов">subject</i></a>
                         </td>
                         <td>
@@ -74,7 +76,8 @@
         <ul>
             <li><a href="JavaScript:checkCbForDelete()" class="btn-floating red"><i class="material-icons"
                                                                                     title="Удалить">delete</i></a></li>
-            <li><a href="JavaScript:showEditInterviewModal()" class="btn-floating yellow darken-1"><i class="material-icons" title="Редактировать">edit</i></a>
+            <li><a href="JavaScript:showEditInterviewModal()" class="btn-floating yellow darken-1"><i
+                    class="material-icons" title="Редактировать">edit</i></a>
             </li>
             <li><a href="#addInterviewModal" class="btn-floating green modal-trigger"><i class="material-icons"
                                                                                          title="Добавить">add</i></a>
@@ -84,8 +87,7 @@
     </div>
 
     <div id="addInterviewModal" class="modal modal-fixed-footer">
-        <sf:form id="interviewForm" class="col s12" method="POST" modelAttribute="user_interview_helper"
-                 action="/create-interview">
+        <sf:form id="interviewForm" class="col s12" method="POST" modelAttribute="extendUserInterview">
             <div class="modal-content">
                 <h4>Добавление новой анкеты</h4>
 

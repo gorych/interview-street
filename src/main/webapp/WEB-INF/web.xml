@@ -59,4 +59,11 @@
             <page-encoding>UTF-8</page-encoding>
         </jsp-property-group>
     </jsp-config>
+
+    <locale-encoding-mapping-list>
+        <locale-encoding-mapping>
+            <locale>en</locale>
+            <encoding>UTF-8</encoding>
+        </locale-encoding-mapping>
+    </locale-encoding-mapping-list>
 </web-app>

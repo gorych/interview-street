@@ -16,7 +16,18 @@
 
     <mvc:resources mapping="/resources/**" location="classpath:"/>
 
-    <mvc:annotation-driven/>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="fileEncodings" value="UTF-8" />
+    </bean>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <mvc:annotation-driven validator="validator"/>
 
     <import resource="../hibernate/hibernate-context.xml"/>
 

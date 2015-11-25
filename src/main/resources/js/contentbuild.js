@@ -90,9 +90,9 @@ function addAnswer(parentId, interviewId, questionId) {
                 $.ajax({
                     url: "/delete-answer/" + answerId,
                     method: 'GET'
-                }).done(function (answer) {
-                    if (answer > 0) {
-                        console.log("Remove answer");
+                }).done(function (response) {
+                    if (response == "success") {
+                        console.log("The answer successfully removed.");
                     }
                 });
             });

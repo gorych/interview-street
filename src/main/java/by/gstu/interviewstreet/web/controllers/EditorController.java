@@ -7,8 +7,7 @@ import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.utils.MessageUtils;
 import by.gstu.interviewstreet.web.utils.ParamsValidator;
 import by.gstu.interviewstreet.web.utils.Parser;
-import by.gstu.interviewstreet.web.utils.exceptions.ValidationParamException;
-import by.gstu.interviewstreet.web.utils.exceptions.InvalidRequestParamException;
+import by.gstu.interviewstreet.web.utils.exceptions.FormParamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -57,7 +56,7 @@ public class EditorController {
                     int id = Integer.parseInt((String) element);
                     post = new Post(id);
                 } catch (NumberFormatException e) {
-                    System.err.println("Element " + element + " is incorrect.");
+                    System.err.println("Элемент " + element + " не может быть преобразован к числу.");
                     e.printStackTrace();
                 }
                 return post;
@@ -160,24 +159,20 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.POST)
-    public String createForm(@RequestParam(value = "questionText") String questionText,
-                             @RequestParam(value = "answerText") String[] answerTexts,
-                             @RequestParam(value = "typeId") String typeId,
-                             @RequestParam(value = "questionId") String questionId,
-                             @RequestParam(value = "answerId") String[] ansIds,
+    public String createForm(@RequestParam(value = "questionText", required = false) String questionText,
+                             @RequestParam(value = "answerText", required = false) String[] answerTexts,
+                             @RequestParam(value = "typeId", required = false) Integer typeId,
+                             @RequestParam(value = "questionId", required = false) Integer questionId,
+                             @RequestParam(value = "answerId", required = false) Integer[] ansIds,
                              HttpSession session) {
         Integer id = (Integer) session.getAttribute(AttributeConstants.INTERVIEW_ID);
         try {
             ParamsValidator.checkQuestion(questionText);
             ParamsValidator.checkAnswers(answerTexts);
 
-            int answerTypeId = ParamsValidator.checkAnswerType(typeId);
-            int questId = ParamsValidator.checkId(questionId);
-            Integer[] answerIds = ParamsValidator.checkIds(ansIds, "идентификаторы вопросов");
-
-            Question question = questionService.get(questId);
-            List<Answer> answers = answerService.get(answerIds);
-            AnswerType answerType = answerService.getAnswerType(answerTypeId);
+            Question question = questionService.get(questionId);
+            List<Answer> answers = answerService.get(ansIds);
+            AnswerType answerType = answerService.getAnswerType(typeId);
 
             question.setText(questionText);
             for (int i = 0; i < answers.size(); i++) {
@@ -187,10 +182,10 @@ public class EditorController {
             formService.save(answers, question);
 
             return "redirect:/questions-editor/" + id;
-        } catch (InvalidRequestParamException e) {
-            return "redirect:/questions-editor/" + id;
-        } catch (ValidationParamException | RuntimeException e) {
+        } catch (FormParamException e) {
             return e.getMessage();
+        } catch (RuntimeException e) {
+            return "redirect:/questions-editor/" + id;
         }
     }
 
@@ -207,8 +202,13 @@ public class EditorController {
 
     @RequestMapping(value = {"/delete-question/{questionId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public int deleteQuestion(@PathVariable(value = "questionId") int questionId) {
-        //TODO Удаление вопросов и ответов
-        return 1;
+    public String deleteQuestion(@PathVariable(value = "questionId") int questionId) {
+        try {
+            Question question = questionService.get(questionId);
+            formService.remove(question);
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
+        return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }
 }

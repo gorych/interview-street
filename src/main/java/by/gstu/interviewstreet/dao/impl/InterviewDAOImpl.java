@@ -88,7 +88,7 @@ public class InterviewDAOImpl implements IInterviewDAO {
         Session session = sessionFactory.getCurrentSession();
         for (int id : interviewIds) {
             Interview interview = (Interview) session.load(Interview.class, id);
-            if (null != interview) {
+            if (interview != null) {
                 session.delete(interview);
             }
         }

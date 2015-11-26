@@ -39,7 +39,7 @@ function checkCbForDelete() {
     if (flag == true) {
         $('#deleteModal').openModal();
     } else {
-        Materialize.toast("Не выбрана анкета для удаления.", 2000)
+        Materialize.toast("Не выбрана анкета для удаления", 2000)
     }
 }
 
@@ -111,18 +111,25 @@ function showEditInterviewModal() {
 
                     $('#type').val(value["type"]).material_select();
 
-                    /*var subdivisionIds = value['subdivisions'].split(",");
-                     $.each(value['subdivisions'].split(","), function(i,e){
-                     $('#subdivisions').val([1,2]);
-                     });
-                     $('#subdivisions').material_select();*/
+                    var subdivisionIds = value['subdivisions'].split(",");
+                    var subSel = document.getElementById("subdivisions");
+
+                    /*var options = subSel.options;
+                    for (var k = 0; k < subdivisionIds.length; k++) {
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].value == subdivisionIds[k]) {
+                                $(options[i]).attr("selected", true);
+                            }
+                        }
+                    }*/
+                    $('#subdivisions').material_select();
                 });
 
                 $('#addInterviewModal').openModal();
             }
         });
     } else {
-        Materialize.toast("Не выбрана анкета для редактирования.", 2000)
+        Materialize.toast("Не выбрана анкета для редактирования", 2000)
     }
 
 }
@@ -162,10 +169,12 @@ function deleteQuestion(questionId) {
     $.ajax({
         url: "/delete-question/" + questionId,
         method: 'GET'
-    }).done(function (answer) {
-        if (answer > 0) {
+    }).done(function (response) {
+        if (response == "success") {
             $("#" + questionId).remove();
-            console.log("Remove question");
+            Materialize.toast("Вопрос успешно удален", 2000)
+        }else{
+            location.reload();
         }
     });
 }

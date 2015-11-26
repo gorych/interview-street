@@ -15,10 +15,9 @@ public class QuestionDAOImpl implements IQuestionDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-
     @Override
     public long insertQuestion() {
-        Question question = new Question("New question");
+        Question question = new Question("Новый вопрос");
         Serializable result = sessionFactory.getCurrentSession().save(question);
         if (result != null) {
             return (Integer) result;
@@ -33,5 +32,13 @@ public class QuestionDAOImpl implements IQuestionDAO {
         query.setInteger("id", id);
 
         return (Question) query.uniqueResult();
+    }
+
+    @Override
+    public void remove(Question question) {
+        Session session = sessionFactory.getCurrentSession();
+        if (question != null) {
+            session.delete(question);
+        }
     }
 }

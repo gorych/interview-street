@@ -8,4 +8,5 @@ public interface IQuestionDAO {
 
     Question qetQuestionById(int id);
 
+    void remove(Question question);
 }

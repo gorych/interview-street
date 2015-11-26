@@ -5,7 +5,10 @@ import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.utils.MessageUtils;
+import by.gstu.interviewstreet.web.utils.ParamsValidator;
 import by.gstu.interviewstreet.web.utils.Parser;
+import by.gstu.interviewstreet.web.utils.exceptions.ValidationParamException;
+import by.gstu.interviewstreet.web.utils.exceptions.InvalidRequestParamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -157,27 +160,38 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.POST)
-    public String createForm(@RequestParam(value = "questionName") String questionText,
-                             @RequestParam(value = "answerText") String[] texts,
-                             @RequestParam(value = "answerType") Integer[] answerTypeIds,
-                             @RequestParam(value = "questionId") int questionId,
-                             @RequestParam(value = "answerId") Integer[] answerIds,
+    public String createForm(@RequestParam(value = "questionText") String questionText,
+                             @RequestParam(value = "answerText") String[] answerTexts,
+                             @RequestParam(value = "typeId") String typeId,
+                             @RequestParam(value = "questionId") String questionId,
+                             @RequestParam(value = "answerId") String[] ansIds,
                              HttpSession session) {
+        Integer id = (Integer) session.getAttribute(AttributeConstants.INTERVIEW_ID);
+        try {
+            ParamsValidator.checkQuestion(questionText);
+            ParamsValidator.checkAnswers(answerTexts);
 
-        Question question = questionService.get(questionId);
-        List<Answer> answers = answerService.get(answerIds);
-        List<AnswerType> answerTypes = answerService.getAnswerTypes(answerTypeIds);
+            int answerTypeId = ParamsValidator.checkAnswerType(typeId);
+            int questId = ParamsValidator.checkId(questionId);
+            Integer[] answerIds = ParamsValidator.checkIds(ansIds, "идентификаторы вопросов");
 
-        question.setText(questionText);
-        for (int i = 0; i < answers.size(); i++) {
-            answers.get(i).setText(texts[i]);
-            answers.get(i).setType(answerTypes.get(i));
+            Question question = questionService.get(questId);
+            List<Answer> answers = answerService.get(answerIds);
+            AnswerType answerType = answerService.getAnswerType(answerTypeId);
+
+            question.setText(questionText);
+            for (int i = 0; i < answers.size(); i++) {
+                answers.get(i).setText(answerTexts[i]);
+                answers.get(i).setType(answerType);
+            }
+            formService.save(answers, question);
+
+            return "redirect:/questions-editor/" + id;
+        } catch (InvalidRequestParamException e) {
+            return "redirect:/questions-editor/" + id;
+        } catch (ValidationParamException | RuntimeException e) {
+            return e.getMessage();
         }
-
-        formService.save(answers, question);
-        Integer id = (Integer) session.getAttribute("interviewId");
-
-        return "redirect:/questions-editor/" + id;
     }
 
     @RequestMapping(value = {"/delete-answer/{answerId}"}, method = RequestMethod.GET)

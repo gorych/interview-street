@@ -4,6 +4,8 @@ function buildForm(interviewId) {
         method: 'GET'
     }).done(function (questionId) {
         if (questionId > -1) {
+            $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+
             var answersBoxId = "answers" + questionId;
             var questionCssId = "#" + questionId;
 
@@ -14,13 +16,24 @@ function buildForm(interviewId) {
                 action: '/create-new-form'
             }).appendTo('#interview_questions');
 
-            $(questionCssId).append("<div class='row'><div class='input-field col s12'>" +
-                "<input id='questionText' type='text' length='200' name='questionName'>" +
-                "<label for='questionText'>Question</label></div></div>").
+            $(questionCssId).prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
+                "<input id='questionText' type='text' name='questionText' length='200'/>" +
+                "<label for='questionText'>Текст вопроса</label></div>" +
+                "<div class='input-field col l4 m4 s12'>" +
+                "<select name='typeId'>" +
+                "<option value='' disabled selected>Тип ответов</option>" +
+                "<option value='1'>Текстовое поле</option>" +
+                "<option value='2'>Только один вариант верный</option>" +
+                "<option value='3'>Несколько верных вариантов</option>" +
+                "<option value='4'>Диапозон значений</option>" +
+                "</select></div></div>").
                 append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
 
+            $('select').material_select();
+
             $('<div/>', {
-                id: answersBoxId
+                id: answersBoxId,
+                class: "row"
             }).appendTo(questionCssId);
 
             var answerBtnId = "addAnswerBtn" + questionId;
@@ -38,15 +51,21 @@ function buildForm(interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(questionCssId);
 
-            var str = "JavaScript:deleteQuestion('" + questionId + "')";
+            var del = "JavaScript:deleteQuestion('" + questionId + "')";
+            var submit = "JavaScript:submitQuestionForm('" + questionId + "')";
 
             $('<div/>', {
                 class: 'right-align'
             }).appendTo(questionCssId).append(
-                "<input type='submit' class='waves-effect waves-green btn-flat' value='Save'/>" +
-                '<a href="' + str + '" class="waves-effect waves-red btn-flat">Delete</a>');
+                '<a href="' + submit + '" class="waves-effect waves-green btn-flat">Сохранить</a>' +
+                '<a href="' + del + '" class="waves-effect waves-red btn-flat">Удалить</a>');
         }
     });
+}
+
+function submitQuestionForm(formId) {
+    var form = document.getElementById(formId);
+    form.submit();
 }
 
 function addAnswer(parentId, interviewId, questionId) {
@@ -57,29 +76,19 @@ function addAnswer(parentId, interviewId, questionId) {
         method: 'GET'
     }).done(function (answerId) {
         if (answerId > -1) {
-            var typeId = "type" + answerId;
             var textId = "text" + answerId;
 
             $('<div/>', {
                 id: answerId,
-                class: 'row'
+                class: 'input-field col l6 m6 s12 input-field-margin-fix'
             }).appendTo(parentCssId);
 
             var elementCssId = "#" + answerId;
 
             $('<div/>', {
-                class: 'input-field col l5 input-field-margin-fix'
-            }).appendTo(elementCssId).append("<select name='answerType' id='" + typeId + "'>" +
-                "<option value='' disabled selected>Choose answer type</option>" +
-                "<option value='1'>Text field</option>" +
-                "<option value='2'>Radio Button</option>" +
-                "<option value='3'>Checkbox</option>" +
-                "<option value='4'>Slider</option></select>");
-
-            $('<div/>', {
-                class: 'input-field col l6 input-field-margin-fix'
+                class: 'col l10 m10 s10 col-fix'
             }).appendTo(elementCssId).append("<input id='" + textId + "' type='text' name='answerText'>" +
-                "<label for='" + textId + "'>Answer text</label></div>")
+                "<label for='" + textId + "'>Текст ответа</label></div>")
                 .append("<input type='hidden' name='answerId' value='" + answerId + "'/>");
 
             $('<a/>', {
@@ -96,8 +105,6 @@ function addAnswer(parentId, interviewId, questionId) {
                     }
                 });
             });
-
-            $('select').material_select();
         }
     });
 }

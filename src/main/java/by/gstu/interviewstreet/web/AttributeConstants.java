@@ -6,7 +6,9 @@ public final class AttributeConstants {
 
 
     public static final String INTERVIEW = "interview";
+    public static final String INTERVIEW_ID = "interviewId";
     public static final String USER_INTERVIEW = "extendUserInterview";
+    public static final String EXTEND_FORM = "extendForm";
 
 
     public static final String POSTS = "posts";

@@ -10,4 +10,6 @@ public interface FormService {
 
     void save(List<Answer> answers, Question question);
 
+    void remove(Question question);
+
 }

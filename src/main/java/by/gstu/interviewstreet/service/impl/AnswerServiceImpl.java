@@ -1,8 +1,8 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.impl.AnswerDAOImpl;
-import by.gstu.interviewstreet.dao.impl.AnswerTypeDAOImpl;
-import by.gstu.interviewstreet.dao.impl.FormDAOImpl;
+import by.gstu.interviewstreet.dao.IAnswerDAO;
+import by.gstu.interviewstreet.dao.IAnswerTypeDAO;
+import by.gstu.interviewstreet.dao.IFormDAO;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
 import by.gstu.interviewstreet.domain.Form;
@@ -17,19 +17,19 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
 
     @Autowired
-    private AnswerDAOImpl answerDAO;
+    private IAnswerDAO answerDAO;
 
     @Autowired
-    private AnswerTypeDAOImpl answerTypeDAO;
+    private IAnswerTypeDAO answerTypeDAO;
 
     @Autowired
-    private FormDAOImpl formDAO;
+    private IFormDAO formDAO;
 
     @Override
     @Transactional
     public long insert(Form form) {
         AnswerType answerType = answerTypeDAO.getDefaultAnswerType();
-        Answer answer = answerDAO.insertAnswer(answerType);
+        Answer answer = answerDAO.insert(answerType);
 
         form.setAnswer(answer);
         formDAO.insertForm(form);
@@ -40,18 +40,18 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     @Transactional
     public List<Answer> get(Integer[] ids) {
-        return answerDAO.getAnswersByIds(ids);
+        return answerDAO.getByIds(ids);
     }
 
     @Override
     @Transactional
-    public List<AnswerType> getAnswerTypes(Integer[] ids) {
-        return answerTypeDAO.getAnswerTypesByIds(ids);
+    public AnswerType getAnswerType(int id) {
+        return answerTypeDAO.getAnswerTypeById(id);
     }
 
     @Override
     @Transactional
     public void remove(int id) {
-        answerDAO.removeAnswer(id);
+        answerDAO.remove(id);
     }
 }

@@ -2,15 +2,18 @@ package by.gstu.interviewstreet.dao;
 
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
+import by.gstu.interviewstreet.domain.Form;
 
 import java.util.List;
 
 public interface IAnswerDAO {
 
-    Answer insertAnswer(AnswerType type);
+    Answer insert(AnswerType type);
 
-    List<Answer> getAnswersByIds(Integer[] ids);
+    List<Answer> getByIds(Integer[] ids);
 
-    void removeAnswer(int id);
+    void remove(int id);
+
+    void remove(List<Form> forms);
 
 }

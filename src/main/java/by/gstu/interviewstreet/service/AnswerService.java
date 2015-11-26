@@ -12,7 +12,7 @@ public interface AnswerService {
 
     List<Answer> get(Integer[] ids);
 
-    List<AnswerType> getAnswerTypes(Integer[] ids);
+    AnswerType getAnswerType(int id);
 
     void remove(int id);
 

@@ -115,3 +115,12 @@ li span [type="checkbox"] + label:before {
 .material-icons {
     line-height: none;
 }
+
+.row .col .col-fix {
+    padding: 0 0.2rem;
+}
+
+#toast-container {
+    top: 10%;
+    right: 24px;
+}

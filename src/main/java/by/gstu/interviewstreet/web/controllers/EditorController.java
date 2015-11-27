@@ -131,6 +131,17 @@ public class EditorController {
         return employeeService.getJsonString(employees);
     }
 
+    @RequestMapping(value = {"/load-question/{questionId}"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
+    @ResponseBody
+    public String loadQuestion(@PathVariable(value = "questionId") Integer questionId) {
+        try {
+            return formService.getJsonString(questionId);
+        } catch (RuntimeException e) {
+            System.out.println("123");
+            return AttributeConstants.EMPTY_BODY;
+        }
+    }
+
     @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.GET)
     public String deleteInterview(@RequestParam(value = "id") int[] ids) {
         try {
@@ -146,6 +157,17 @@ public class EditorController {
     public String hideInterview(@PathVariable(value = "interviewId") int id) {
         try {
             interviewService.hide(id);
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
+    @ResponseBody
+    public String hideChip(HttpSession session) {
+        try {
+            session.setAttribute(AttributeConstants.CHIP, false);
             return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
             return e.getMessage();

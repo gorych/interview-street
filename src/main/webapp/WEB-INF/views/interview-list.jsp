@@ -13,10 +13,12 @@
 <main class="container">
     <div class="row">
         <div class="box">
-            <div class="chip">
-                Здравствуйте, ${user_initials}, Вы вошли под правами редактора.
-                <i class="material-icons">close</i>
-            </div>
+            <c:if test="${empty chip || (chip eq true)}">
+                <div class="chip">
+                    Здравствуйте, ${user_initials}, Вы вошли под правами редактора.
+                    <i class="material-icons" onclick="hideChip()">close</i>
+                </div>
+            </c:if>
         </div>
         <form method="GET" id="tableInterviewForm" name="tableInterviewForm"
               action="<c:url value="/delete-interview"/>">

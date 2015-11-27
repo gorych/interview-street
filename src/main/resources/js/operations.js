@@ -115,13 +115,13 @@ function showEditInterviewModal() {
                     var subSel = document.getElementById("subdivisions");
 
                     /*var options = subSel.options;
-                    for (var k = 0; k < subdivisionIds.length; k++) {
-                        for (var i = 0; i < options.length; i++) {
-                            if (options[i].value == subdivisionIds[k]) {
-                                $(options[i]).attr("selected", true);
-                            }
-                        }
-                    }*/
+                     for (var k = 0; k < subdivisionIds.length; k++) {
+                     for (var i = 0; i < options.length; i++) {
+                     if (options[i].value == subdivisionIds[k]) {
+                     $(options[i]).attr("selected", true);
+                     }
+                     }
+                     }*/
                     $('#subdivisions').material_select();
                 });
 
@@ -173,8 +173,23 @@ function deleteQuestion(questionId) {
         if (response == "success") {
             $("#" + questionId).remove();
             Materialize.toast("Вопрос успешно удален", 2000)
-        }else{
+        } else {
             location.reload();
         }
+    });
+}
+
+function hideChip() {
+    $.ajax({
+        url: "/hide-chip",
+        method: 'GET',
+        success: (function (response) {
+            if (response != "success") {
+                location.reload();
+            }
+        }),
+        error: (function () {
+            location.reload();
+        })
     });
 }

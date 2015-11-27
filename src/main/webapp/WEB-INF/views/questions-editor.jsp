@@ -22,14 +22,17 @@
                         <h6>В данной анкете пока нет ни одного вопроса.</h6>
                     </c:when>
                     <c:otherwise>
+                        <h6>Тип: ${forms[0].interview.type.name}</h6>
                         <h6>Вопросов: ${forms.size()}</h6>
                     </c:otherwise>
                 </c:choose>
             </div>
 
             <c:forEach var="form" items="${forms}" varStatus="cur">
-                <section id="${form.question.id}">
-                    <div class="question">
+                <section>
+                    <div class="question" id="${form.question.id}">
+                        <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
+
                         <h5 class="header black-text">${form.question.text}</h5>
 
                         <div class="answers">
@@ -66,7 +69,7 @@
                         </div>
                         <div class="divider"></div>
                         <div class="right-align">
-                            <a href="#" class="waves-effect waves-orange btn-flat">Изменить</a>
+                            <a href="JavaScript:editForm('${form.question.id}','${interview.id}')" class="waves-effect waves-orange btn-flat">Изменить</a>
                             <a href="JavaScript:deleteQuestion('${form.question.id}')"
                                class="waves-effect waves-red btn-flat">Удалить</a>
                         </div>

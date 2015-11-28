@@ -124,3 +124,9 @@ li span [type="checkbox"] + label:before {
     top: 10%;
     right: 24px;
 }
+
+.card .card-content .card-title-fix {
+    white-space: normal;
+    line-height: 28px;
+    font-weight: inherit;
+}

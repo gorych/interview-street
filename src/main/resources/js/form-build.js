@@ -21,11 +21,11 @@ function buildForm(interviewId) {
                 "<label for='questionText'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
                 "<select name='typeId'>" +
-                "<option value='' disabled selected>Тип ответов</option>" +
+                "<option value='' disabled selected>Тип вопроса</option>" +
                 "<option value='1'>Текстовое поле</option>" +
-                "<option value='2'>Только один вариант верный</option>" +
-                "<option value='3'>Несколько верных вариантов</option>" +
-                "<option value='4'>Диапозон значений</option>" +
+                "<option value='2'>Один из списка</option>" +
+                "<option value='3'>Несколько из списка</option>" +
+                "<option value='4'>Шкала</option>" +
                 "</select></div></div>").
                 append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
 
@@ -84,11 +84,11 @@ function editForm(questionId, interviewId) {
                 "<label for='questionText'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
                 "<select name='typeId' id='type'>" +
-                "<option value='' disabled selected>Тип ответов</option>" +
+                "<option value='' disabled selected>Тип вопроса</option>" +
                 "<option value='1'>Текстовое поле</option>" +
-                "<option value='2'>Только один вариант верный</option>" +
-                "<option value='3'>Несколько верных вариантов</option>" +
-                "<option value='4'>Диапозон значений</option>" +
+                "<option value='2'>Один из списка</option>" +
+                "<option value='3'>Несколько из списка</option>" +
+                "<option value='4'>Шкала</option>" +
                 "</select></div></div>").
                 append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
 
@@ -103,8 +103,8 @@ function editForm(questionId, interviewId) {
 
                 $("label[for='questionText']").addClass("active");
 
-                var answers = value["answers"].split(",");
-                var ids = value["answer_ids"].split(",");
+                var answers = value["answers"].split("\n");
+                var ids = value["answer_ids"].split("\n");
 
                 $.each(answers, function (i, val) {
                     var answerId = ids[i];
@@ -113,7 +113,7 @@ function editForm(questionId, interviewId) {
                     $('<div/>', {
                         id: answerId,
                         class: 'input-field col l6 m6 s12 input-field-margin-fix'
-                    }).appendTo(answersBoxId);
+                    }).appendTo("#" + answersBoxId);
 
                     var elementCssId = "#" + answerId;
 
@@ -158,7 +158,7 @@ function editForm(questionId, interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(formCssId);
 
-            var submit = "JavaScript:submitQuestionForm('" + questionId + "')";
+            var submit = "JavaScript:submitQuestionForm('" + formId + "')";
 
             $('<div/>', {
                 class: 'right-align'

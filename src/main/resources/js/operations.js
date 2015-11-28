@@ -165,17 +165,27 @@ function clearForm(formID) {
     form.reset();
 }
 
+$.fn.redraw = function(){
+    $(this).each(function(){
+        var redraw = this.offsetHeight;
+    });
+};
+
 function deleteQuestion(questionId) {
     $.ajax({
         url: "/delete-question/" + questionId,
-        method: 'GET'
-    }).done(function (response) {
-        if (response == "success") {
-            $("#" + questionId).remove();
-            Materialize.toast("Вопрос успешно удален", 2000)
-        } else {
+        method: 'GET',
+        success: (function (response) {
+            if (response == "success") {
+                $("#" + questionId).parent('section').remove();
+                Materialize.toast("Вопрос успешно удален", 2000)
+            } else {
+                location.reload();
+            }
+        }),
+        error: (function () {
             location.reload();
-        }
+        })
     });
 }
 

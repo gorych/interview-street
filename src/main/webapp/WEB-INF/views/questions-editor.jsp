@@ -14,7 +14,6 @@
 <main class="container">
     <div class="row">
         <div class="col l12 m12 s12">
-
             <div class="box box-padding-fix">
                 <h4 class="header teal-text">${interview.name}</h4>
                 <c:choose>
@@ -30,8 +29,8 @@
 
             <c:forEach var="form" items="${forms}" varStatus="cur">
                 <section>
+                    <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
                     <div class="question" id="${form.question.id}">
-                        <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
 
                         <h5 class="header black-text">${form.question.text}</h5>
 
@@ -69,7 +68,7 @@
                         </div>
                         <div class="divider"></div>
                         <div class="right-align">
-                            <a href="JavaScript:editForm('${form.question.id}','${interview.id}')" class="waves-effect waves-orange btn-flat">Изменить</a>
+                            <a href="JavaScript:editForm('${form.question.id}','${interview.id}')" class="waves-effect waves-green btn-flat">Изменить</a>
                             <a href="JavaScript:deleteQuestion('${form.question.id}')"
                                class="waves-effect waves-red btn-flat">Удалить</a>
                         </div>

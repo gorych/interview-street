@@ -3,154 +3,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <%@include file="fragments/css_imports.html" %>
-  <title>Редактор анкет</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <%@include file="fragments/css_imports.html" %>
+    <title>Редактор анкет</title>
 </head>
 <body>
-<div class="navbar-fixed">
-  <nav class="white">
-    <div class="nav-wrapper container">
-      <a href="#" class="brand-logo brand-logo-color-fix center">Название анкеты</a>
-      <ul class="right hide-on-med-and-down">
-        <a class="waves-effect waves-light btn">Выход</a>
-      </ul>
-    </div>
-  </nav>
-</div>
+<%@include file="fragments/header.jsp" %>
 <main class="container">
-  <div class="row">
-    <div class="col">
-      <div class="box box-padding-fix ">
-        <h6>Юзер Юзерович,<br/> потратьте, пожалуйста, несколько минут своего времени на заполнение
-          следующей анкеты.</h6>
-      </div>
-      <section>
-        <div class="question">
-          <h5 class="header black-text">Как часто Вы ходите в кафе?</h5>
-
-          <div class="answers">
-            <form action="#">
-              <p>
-                <input name="group1" type="radio" id="test1"/>
-                <label for="test1">Каждый день</label>
-              </p>
-
-              <p>
-                <input name="group1" type="radio" id="test2"/>
-                <label for="test2">Несколько раз в неделю</label>
-              </p>
-
-              <p>
-                <input name="group1" type="radio" id="test3"/>
-                <label for="test3">Один раз в месяц</label>
-              </p>
-
-              <p>
-                <input name="group1" type="radio" id="test4"/>
-                <label for="test4">Несколько раз в месяц</label>
-              </p>
-
-              <p>
-                <input name="group1" type="radio" id="test5"/>
-                <label for="test5">Несколько раз в год</label>
-              </p>
-
-              <p>
-                <input name="group1" type="radio" id="test6"/>
-                <label for="test6">Никогда</label>
-              </p>
-            </form>
-          </div>
+    <div class="row">
+        <div class="box box-padding-fix ">
+            <h6>${user_initials},<br/><br/> потратьте, пожалуйста, несколько минут своего времени на заполнение
+                следующей анкеты.</h6>
         </div>
-      </section>
-      <section>
-        <div class="question">
-          <h5 class="header black-text">В какую возрастную группу Вы входите?</h5>
+        <form method="POST" action="<c:url value="/send-interview/${interview.id}"/>">
+            <c:forEach var="form" items="${forms}" varStatus="cur">
+                <section>
+                    <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
+                    <div class="question" id="${form.question.id}">
 
-          <div class="answers">
-            <form action="#">
-              <p>
-                <input type="checkbox" id="test8" checked="checked"/>
-                <label for="test8"><20</label>
-              </p>
+                        <h5 class="header black-text">${form.question.text}</h5>
 
-              <p>
-                <input type="checkbox" id="test9" checked="checked"/>
-                <label for="test9">21-30</label>
-              </p>
-
-              <p>
-                <input type="checkbox" id="test10" checked="checked"/>
-                <label for="test10">31-40</label>
-              </p>
-
-              <p>
-                <input type="checkbox" id="test11" checked="checked"/>
-                <label for="test11">41-50</label>
-              </p>
-
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="email" type="email">
-                  <label for="email" data-error="wrong" data-success="right">Ваш вариант
-                    ответа</label>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="question">
-          <h5 class="header black-text">Ваши предложения</h5>
-
-          <div class="answers">
-            <form action="#">
-              <div class="row">
-                <div class="input-field col s6">
-                  <input id="first_name" type="text" class="validate">
-                  <label for="first_name">Имя</label>
-                </div>
-                <div class="input-field col s6">
-                  <input id="last_name" type="text" class="validate">
-                  <label for="last_name">Фамилия</label>
-                </div>
-                <div class="input-field col s12">
-                  <input id="password" type="password" class="validate">
-                  <label for="password">Ваши предложения</label>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="question">
-          <h5 class="header black-text">Выберите из диапазона от 1 до 100 насколько эффективно работает наше
-            предприятие</h5>
-
-          <div class="answers">
-            <p class="range-field">
-              <input type="range" id="test11" min="1" max="100"/>
-              <label for="test11">Оцените по шкале от 1 до 100</label>
-            </p>
-          </div>
-        </div>
-      </section>
+                        <div class="answers">
+                            <c:forEach var="el" items="${answer_forms[cur.index]}">
+                                <c:choose>
+                                    <c:when test="${el.answer.type.type eq 'slider'}">
+                                        <p class="range-field">
+                                            <input name="${form.question.id}" type="range" id="${el.answer.id}" min="1"
+                                                   max="100"/>
+                                            <label for="${el.answer.id}">${el.answer.text}</label>
+                                        </p>
+                                    </c:when>
+                                    <c:when test="${el.answer.type.type eq 'radiobutton'}">
+                                        <p>
+                                            <input type="radio" name="${form.question.id}" value="${el.answer.text}"
+                                                   id="${el.answer.id}"/>
+                                            <label for="${el.answer.id}">${el.answer.text}</label>
+                                        </p>
+                                    </c:when>
+                                    <c:when test="${el.answer.type.type eq 'checkbox'}">
+                                        <p>
+                                            <input type="checkbox" name="${form.question.id}" value="${el.answer.text}"
+                                                   id="${el.answer.id}"/>
+                                            <label for="${el.answer.id}">${el.answer.text}</label>
+                                        </p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="row">
+                                            <div class="input-field col l12 s12 m12">
+                                                <input name="${form.question.id}" id="${el.answer.id}" type="text"
+                                                       class="validate">
+                                                <label for="${el.answer.id}">${el.answer.text}</label>
+                                            </div>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </section>
+            </c:forEach>
+            <input type="submit" value="Submit">
+        </form>
     </div>
-  </div>
-  <div class="row">
-    <div class="hide-on-large-only">
-      <div class="col s12 m12">
-        <a class="waves-effect waves-light teal white-text btn">Отправить анкету</a>
-      </div>
+    <div class="row">
+        <div class="hide-on-large-only">
+            <div class="col s12 m12">
+                <a class="waves-effect waves-light teal white-text btn">Отправить анкету</a>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
 
-<%@include file="fragments/footer.html" %>
+<%@include file="fragments/small_footer.jsp" %>
 <%@include file="fragments/js_imports.html" %>
 </body>
 </html>

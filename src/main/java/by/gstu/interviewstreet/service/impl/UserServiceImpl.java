@@ -1,6 +1,8 @@
 package by.gstu.interviewstreet.service.impl;
 
+import by.gstu.interviewstreet.dao.IInterviewDAO;
 import by.gstu.interviewstreet.dao.IUserDAO;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserPosition;
 import by.gstu.interviewstreet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -23,13 +22,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     IUserDAO userDAO;
 
+    @Autowired
+    IInterviewDAO interviewDAO;
+
+
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
         String username = j_username.toUpperCase();
-        by.gstu.interviewstreet.domain.User user= userDAO.getUserByPassportData(username);
+        by.gstu.interviewstreet.domain.User user = userDAO.getUserByPassportData(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found.");
+            throw new UsernameNotFoundException("Пользователь с такими паспортными данными не найден.");
         }
 
         int roleIndex = user.getRole().getId();
@@ -53,5 +56,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public List<by.gstu.interviewstreet.domain.User> getUsers(Collection postIds) {
         return userDAO.getUsersByPosts(postIds);
+    }
+
+    @Override
+    @Transactional
+    public List<UserInterview> getInterviews(String passportData) {
+        by.gstu.interviewstreet.domain.User user = userDAO.getUserByPassportData(passportData);
+        if (user == null) {
+            return new ArrayList<>();
+        }
+        return interviewDAO.getUserInterviews(user);
     }
 }

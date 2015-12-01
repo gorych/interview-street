@@ -74,7 +74,7 @@
     </div>
 </main>
 
-<%@include file="fragments/small_footer.jsp" %>
+<%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/js_imports.html" %>
 </body>
 </html>

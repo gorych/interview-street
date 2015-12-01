@@ -55,19 +55,24 @@ function buildForm(interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(questionCssId);
 
+            var rightBox = 'rightBox' + questionId;
+            var addQuestion = 'addQuestion' + questionId;
+            var delQuestion = 'delQuestion' + questionId;
+
             $('<div/>', {
-                class: 'right-align'
+                class: 'right-align',
+                id: rightBox
             }).appendTo(questionCssId);
 
-            $(".right-align")
-                .append("<a id='addQuestion' class='waves-effect waves-green btn-flat'>Сохранить</a>")
-                .append("<a id='delQuestion' class='waves-effect waves-green btn-flat'>Удалить</a>");
+            $("#" + rightBox)
+                .append("<a id='" + addQuestion + "' class='waves-effect waves-green btn-flat'>Сохранить</a>")
+                .append("<a id='" + delQuestion + "' class='waves-effect waves-green btn-flat'>Удалить</a>");
 
-            $("#addQuestion").click(function () {
+            $("#" + addQuestion).click(function () {
                 submitQuestionForm(questionId);
             });
 
-            $("#delQuestion").click(function () {
+            $("#" + delQuestion).click(function () {
                 deleteQuestion(questionId);
             });
         }

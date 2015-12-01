@@ -38,8 +38,10 @@ public class FormServiceImpl implements FormService {
     @Transactional
     public void remove(Question question) {
         List<Form> forms = formDAO.getByQuestion(question);
-        answerDAO.remove(forms);
-        questionDAO.remove(question);
+        if (forms != null) {
+            answerDAO.remove(forms);
+            questionDAO.remove(question);
+        }
     }
 
     @Override
@@ -57,8 +59,8 @@ public class FormServiceImpl implements FormService {
             String text = form.getAnswer().getText();
             int id = form.getAnswer().getId();
 
-            answerTexts.append(text).append(",");
-            answerIds.append(id).append(",");
+            answerTexts.append(text).append("\n");
+            answerIds.append(id).append("\n");
         }
         answerTexts.deleteCharAt(answerTexts.length() - 1);
         answerIds.deleteCharAt(answerIds.length() - 1);

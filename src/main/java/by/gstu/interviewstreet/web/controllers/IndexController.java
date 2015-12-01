@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.web.controllers;
 
 
 import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.AttributeConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -11,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 
 @Controller
@@ -38,9 +41,15 @@ public class IndexController {
                 "redirect:/interviews";
     }
 
-    @RequestMapping(value = {"/interviews"}, method = RequestMethod.GET)
-    public String goToInterviews() {
-        return "interviews";
+    @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
+    @ResponseBody
+    public String hideChip(HttpSession session) {
+        try {
+            session.setAttribute(AttributeConstants.CHIP, false);
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
     }
 
 }

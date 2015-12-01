@@ -30,6 +30,16 @@ public class InterviewDAOImpl implements IInterviewDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<UserInterview> getUserInterviews(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false");
+        query.setInteger("id",user.getId());
+
+        return query.list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Form> getInterviewQuestions(int interviewId) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("FROM Form WHERE interview.id = :id GROUP BY question.id");

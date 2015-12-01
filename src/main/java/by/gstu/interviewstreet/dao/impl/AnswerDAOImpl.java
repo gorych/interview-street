@@ -4,6 +4,7 @@ import by.gstu.interviewstreet.dao.IAnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
 import by.gstu.interviewstreet.domain.Form;
+import by.gstu.interviewstreet.domain.UserAnswer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,6 +24,11 @@ public class AnswerDAOImpl implements IAnswerDAO {
         Answer answer = new Answer("New answer", type);
         sessionFactory.getCurrentSession().save(answer);
         return answer;
+    }
+
+    @Override
+    public void insertUserAnswer(UserAnswer userAnswer) {
+        sessionFactory.getCurrentSession().save(userAnswer);
     }
 
     @Override

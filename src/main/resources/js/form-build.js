@@ -21,13 +21,16 @@ function buildForm(interviewId) {
                 "<label for='questionText'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
                 "<select name='typeId'>" +
-                "<option value='' disabled selected>Тип вопроса</option>" +
                 "<option value='1'>Текстовое поле</option>" +
                 "<option value='2'>Один из списка</option>" +
                 "<option value='3'>Несколько из списка</option>" +
                 "<option value='4'>Шкала</option>" +
-                "</select></div></div>").
+                "</select><label>Тип вопроса</label></div></div>").
                 append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
+
+            $("label[for='questionText']").addClass("active");
+            $("#questionText").val('Новый вопрос');
+            $("#typeId").val('1');
 
             $('select').material_select();
 
@@ -41,24 +44,32 @@ function buildForm(interviewId) {
             $('<a/>', {
                 id: answerBtnId,
                 class: 'btn-floating btn-middle waves-effect waves-light green'
-            }).appendTo(questionCssId);
+            }).appendTo(questionCssId).click(function () {
+                addAnswer(answersBoxId, interviewId, questionId)
+            });
 
             $("#" + answerBtnId)
-                .attr("href", "JavaScript:addAnswer('" + answersBoxId + "','" + interviewId + "','" + questionId + "')")
                 .append("<i class='material-icons'>add</i>");
 
             $('<div/>', {
                 class: 'divider divider-margin-fix'
             }).appendTo(questionCssId);
 
-            var del = "JavaScript:deleteQuestion('" + questionId + "')";
-            var submit = "JavaScript:submitQuestionForm('" + questionId + "')";
-
             $('<div/>', {
                 class: 'right-align'
-            }).appendTo(questionCssId).append(
-                '<a href="' + submit + '" class="waves-effect waves-green btn-flat">Сохранить</a>' +
-                '<a href="' + del + '" class="waves-effect waves-red btn-flat">Удалить</a>');
+            }).appendTo(questionCssId);
+
+            $(".right-align")
+                .append("<a id='addQuestion' class='waves-effect waves-green btn-flat'>Сохранить</a>")
+                .append("<a id='delQuestion' class='waves-effect waves-green btn-flat'>Удалить</a>");
+
+            $("#addQuestion").click(function () {
+                submitQuestionForm(questionId);
+            });
+
+            $("#delQuestion").click(function () {
+                deleteQuestion(questionId);
+            });
         }
     });
 }

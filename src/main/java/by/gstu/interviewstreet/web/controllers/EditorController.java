@@ -137,7 +137,6 @@ public class EditorController {
         try {
             return formService.getJsonString(questionId);
         } catch (RuntimeException e) {
-            System.out.println("123");
             return AttributeConstants.EMPTY_BODY;
         }
     }
@@ -157,17 +156,6 @@ public class EditorController {
     public String hideInterview(@PathVariable(value = "interviewId") int id) {
         try {
             interviewService.hide(id);
-            return AttributeConstants.SUCCESS_RESPONSE_BODY;
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
-    }
-
-    @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
-    @ResponseBody
-    public String hideChip(HttpSession session) {
-        try {
-            session.setAttribute(AttributeConstants.CHIP, false);
             return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
             return e.getMessage();
@@ -228,9 +216,9 @@ public class EditorController {
         try {
             Question question = questionService.get(questionId);
             formService.remove(question);
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
             return e.getMessage();
         }
-        return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }
 }

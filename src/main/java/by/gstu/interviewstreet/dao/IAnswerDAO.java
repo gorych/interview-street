@@ -13,7 +13,7 @@ public interface IAnswerDAO {
 
     void insertUserAnswer(UserAnswer userAnswer);
 
-    List<Answer> getByIds(Integer[] ids);
+    List<Answer> getByIds(List<Integer> ids);
 
     void remove(int id);
 

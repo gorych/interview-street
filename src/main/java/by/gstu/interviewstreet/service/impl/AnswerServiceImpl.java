@@ -61,7 +61,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public List<Answer> get(Integer[] ids) {
+    public List<Answer> get(List<Integer> ids) {
         return answerDAO.getByIds(ids);
     }
 

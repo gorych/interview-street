@@ -11,7 +11,7 @@ public interface AnswerService {
 
     void insertUserAnswers(Interview interview, List<Integer> questions, Map<Integer, String[]> answers, User user);
 
-    List<Answer> get(Integer[] ids);
+    List<Answer> get(List<Integer> ids);
 
     AnswerType getAnswerType(int id);
 

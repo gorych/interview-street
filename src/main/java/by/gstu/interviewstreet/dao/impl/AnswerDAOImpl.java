@@ -21,7 +21,7 @@ public class AnswerDAOImpl implements IAnswerDAO {
 
     @Override
     public Answer insert(AnswerType type) {
-        Answer answer = new Answer("New answer", type);
+        Answer answer = new Answer("Новый ответ", type);
         sessionFactory.getCurrentSession().save(answer);
         return answer;
     }
@@ -33,7 +33,7 @@ public class AnswerDAOImpl implements IAnswerDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Answer> getByIds(Integer[] ids) {
+    public List<Answer> getByIds(List<Integer> ids) {
         Query query = sessionFactory.getCurrentSession().createQuery("FROM Answer WHERE id IN (:ids)");
         query.setParameterList("ids", ids);
         return query.list();

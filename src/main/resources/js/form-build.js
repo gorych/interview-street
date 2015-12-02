@@ -27,7 +27,8 @@ function buildForm(interviewId) {
                 "<option value='3'>Несколько из списка</option>" +
                 "<option value='4'>Шкала</option>" +
                 "</select><label>Тип вопроса</label></div></div>")
-                .append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
+                .append("<input type='hidden' name='questionId' value='" + questionId + "'/>")
+                .append("<input type='hidden' name='interviewId' value='" + interviewId + "'/>");
 
             $("label[for='questionText']").addClass("active");
             $("#questionText").val('Новый вопрос');
@@ -189,36 +190,6 @@ function editForm(questionId, interviewId) {
     });
 }
 
-function submitQuestionForm(formId) {
-    if (!isValidQuestionForm(formId)) {
-        return;
-    }
-
-    var data = $("#" + formId).serialize();
-    alert(data);
-    $.ajax({
-        url: "/send-form",
-        method: 'POST',
-        data: data,
-        success: (function (response) {
-            if (response == "success") {
-                alert("Added");
-                return;
-            }
-            if (response == "error") {
-                if (!isValidQuestionForm(formId)) {
-                    return;
-                }
-
-                location.reload();
-            }
-        }),
-        error: (function () {
-            location.reload();
-        })
-    });
-}
-
 function addAnswer(parentId, interviewId, questionId) {
     var parentCssId = "#" + parentId;
     var url = "/create-answer/" + interviewId + "/" + questionId;
@@ -260,5 +231,66 @@ function addAnswer(parentId, interviewId, questionId) {
                 });
             });
         }
+    });
+}
+
+function showQuestionSection(formId, formData) {
+    $("#" + formId).remove();
+    var questionId = formData["questionId"];
+    var questionCssId = "#" + questionId;
+
+    $(".col").append("<section>" +
+        "<div class='question' id=" + questionId + ">" +
+        "<h5 class='header black-text'>" + formData["questionText"] + "</h5></div></section>");
+
+    var answerTexts = formData["answerText"];
+    var answerIds = formData["answerId"];
+
+    if (!$.isArray(answerTexts)) {
+        return;
+    }
+
+    var answers = [];
+    var type = formData["typeId"];
+    for (var i = 0; i < answerTexts.length; i++) {
+        switch (type) {
+            case "1":
+                answers.push("<div class='input-field input-field-fix col l6 s12 m6'>" +
+                    "<input id='" + answerIds[i] + "' type='text'><label for='" + answerIds[i] + "'>" + answerTexts[i] +
+                    "</label></div>");
+                break;
+            case "2":
+                answers.push("<p><input name='1' type='radio' id='" + answerIds[i] + "'/>" +
+                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                break;
+            case "3":
+                answers.push("<p><input type='checkbox' id='" + answerIds[i] + "'/>" +
+                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                break;
+            case "4":
+                answers.push("<p class='range-field'><input type='range' id='" + answerIds[i] + "'/>" +
+                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                break;
+        }
+    }
+    $(questionCssId)
+        .append("<div class='answers'>" + answers.join("") + "</div>")
+        .append("<div class='divider'></div><div class='right-align'>");
+
+    var rightAlign = $(questionCssId).find(".right-align");
+
+    $('<a/>', {
+        class: 'waves-effect waves-green btn-flat',
+        html: 'Изменить'
+    }).appendTo(rightAlign).click(function () {
+        var interviewId = formData["interviewId"];
+        editForm(questionId, interviewId);
+    });
+
+    $('<a/>', {
+        class: 'waves-effect waves-red btn-flat',
+        html: 'Удалить'
+    }).appendTo(rightAlign).click(function () {
+        deleteQuestion(questionId);
     });
 }

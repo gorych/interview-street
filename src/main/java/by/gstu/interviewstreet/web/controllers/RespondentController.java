@@ -40,7 +40,7 @@ public class RespondentController {
         return "interviews";
     }
 
-    @RequestMapping(value = {"/interview-questions/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/user-interviews/{id}"}, method = RequestMethod.GET)
     public String showInterviewQuestions(@PathVariable Integer id, Model model) {
         List<Form> questionForms = interviewService.getQuestions(id);
         List<List<Form>> answerForms = interviewService.getAnswers(questionForms);
@@ -51,7 +51,7 @@ public class RespondentController {
         Interview interview = interviewService.get(id);
         model.addAttribute(AttributeConstants.INTERVIEW, interview);
 
-        return "interview-questions";
+        return "user-interviews";
     }
 
     @RequestMapping(value = {"/send-interview/{id}"}, method = RequestMethod.POST)

@@ -58,7 +58,7 @@
                             </c:otherwise>
                         </c:choose>
                         <td>
-                            <a href="<c:url value="/questions-editor/${interview.id}"/>"
+                            <a href="<c:url value="/designer/${interview.id}"/>"
                                class="btn-floating cyan darken-1"><i
                                     class="material-icons" title="Список вопросов">subject</i></a>
                         </td>

@@ -11,12 +11,13 @@ function buildForm(interviewId) {
 
             $('<form/>', {
                 id: questionId,
-                class: 'question',
+                class: 'question add-question-form',
                 method: 'POST',
-                action: '/create-new-form'
+                action: '/send-form'
             }).appendTo('#interview_questions');
 
-            $(questionCssId).prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
+            $(questionCssId)
+                .prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
                 "<input id='questionText' type='text' name='questionText' length='200'/>" +
                 "<label for='questionText'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
@@ -25,8 +26,8 @@ function buildForm(interviewId) {
                 "<option value='2'>Один из списка</option>" +
                 "<option value='3'>Несколько из списка</option>" +
                 "<option value='4'>Шкала</option>" +
-                "</select><label>Тип вопроса</label></div></div>").
-                append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
+                "</select><label>Тип вопроса</label></div></div>")
+                .append("<input type='hidden' name='questionId' value='" + questionId + "'/>");
 
             $("label[for='questionText']").addClass("active");
             $("#questionText").val('Новый вопрос');
@@ -93,7 +94,7 @@ function editForm(questionId, interviewId) {
             var formCssId = "#" + formId;
             var answersBoxId = "answers" + questionId;
 
-            $("#" + questionId).html("<form method='POST' action='/create-new-form' id='" + formId + "'></form>");
+            $("#" + questionId).html("<form method='POST' action='/send-form' id='" + formId + "'></form>");
 
             $(formCssId).prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
                 "<input id='questionText' type='text' name='questionText' length='200'/>" +
@@ -174,7 +175,7 @@ function editForm(questionId, interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(formCssId);
 
-            var submit = "JavaScript:submitQuestionForm('" + formId + "')";
+            var submit = "JavaScript:submitQuestionForm('" + formCssId + "')";
 
             $('<div/>', {
                 class: 'right-align'
@@ -188,9 +189,34 @@ function editForm(questionId, interviewId) {
     });
 }
 
-function submitQuestionForm(formCssId) {
-    var form = document.getElementById(formCssId);
-    form.submit();
+function submitQuestionForm(formId) {
+    if (!isValidQuestionForm(formId)) {
+        return;
+    }
+
+    var data = $("#" + formId).serialize();
+    alert(data);
+    $.ajax({
+        url: "/send-form",
+        method: 'POST',
+        data: data,
+        success: (function (response) {
+            if (response == "success") {
+                alert("Added");
+                return;
+            }
+            if (response == "error") {
+                if (!isValidQuestionForm(formId)) {
+                    return;
+                }
+
+                location.reload();
+            }
+        }),
+        error: (function () {
+            location.reload();
+        })
+    });
 }
 
 function addAnswer(parentId, interviewId, questionId) {
@@ -212,9 +238,12 @@ function addAnswer(parentId, interviewId, questionId) {
 
             $('<div/>', {
                 class: 'col l10 m10 s10 col-fix'
-            }).appendTo(elementCssId).append("<input id='" + textId + "' type='text' name='answerText'>" +
-                "<label for='" + textId + "'>Текст ответа</label></div>")
+            }).appendTo(elementCssId)
+                .append("<input id='" + textId + "' type='text' name='answerText'><label for='" + textId + "'>Текст ответа</label></div>")
                 .append("<input type='hidden' name='answerId' value='" + answerId + "'/>");
+
+            $("#" + textId).val('Новый ответ');
+            $("label[for='" + textId + "']").addClass("active");
 
             $('<a/>', {
                 class: 'btn-floating btn waves-effect red delete-answer-lotion-btn-fix',

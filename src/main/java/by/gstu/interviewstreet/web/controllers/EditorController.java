@@ -4,10 +4,13 @@ package by.gstu.interviewstreet.web.controllers;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
+import by.gstu.interviewstreet.web.ParameterConstants;
+import by.gstu.interviewstreet.web.params.ReqParam;
+import by.gstu.interviewstreet.web.params.RequestIdParam;
+import by.gstu.interviewstreet.web.params.RequestTextParam;
+import by.gstu.interviewstreet.web.params.exceptions.RequestParamException;
 import by.gstu.interviewstreet.web.utils.MessageUtils;
-import by.gstu.interviewstreet.web.utils.ParamsValidator;
 import by.gstu.interviewstreet.web.utils.Parser;
-import by.gstu.interviewstreet.web.utils.exceptions.FormParamException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -16,8 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +84,7 @@ public class EditorController {
         return "interview-list";
     }
 
-    @RequestMapping(value = {"/questions-editor/{interviewId}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/designer/{interviewId}"}, method = RequestMethod.GET)
     public String showQuestionsEditor(@PathVariable int interviewId, Model model) {
         List<Form> questionForms = interviewService.getQuestions(interviewId);
         List<List<Form>> answerForms = interviewService.getAnswers(questionForms);
@@ -90,7 +95,7 @@ public class EditorController {
         Interview interview = interviewService.get(interviewId);
         model.addAttribute(AttributeConstants.INTERVIEW, interview);
 
-        return "questions-editor";
+        return "designer";
     }
 
     @RequestMapping(value = {"/create-question"}, method = RequestMethod.GET)
@@ -101,7 +106,7 @@ public class EditorController {
 
     @RequestMapping(value = {"/create-answer/{interviewId}/{questionId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public long createNewAnswer(@PathVariable int interviewId, @PathVariable int questionId) {
+    public long createAnswer(@PathVariable int interviewId, @PathVariable int questionId) {
         Interview interview = interviewService.get(interviewId);
         Question question = questionService.get(questionId);
         Form form = new Form(question, interview);
@@ -168,34 +173,42 @@ public class EditorController {
         return interviewService.getJsonString(interviewId);
     }
 
-    @RequestMapping(value = {"/create-new-form"}, method = RequestMethod.POST)
-    public String createForm(@RequestParam(value = "questionText", required = false) String questionText,
-                             @RequestParam(value = "answerText", required = false) String[] answerTexts,
-                             @RequestParam(value = "typeId", required = false) Integer typeId,
-                             @RequestParam(value = "questionId", required = false) Integer questionId,
-                             @RequestParam(value = "answerId", required = false) Integer[] ansIds,
-                             HttpSession session) {
-        Integer id = (Integer) session.getAttribute(AttributeConstants.INTERVIEW_ID);
+    @RequestMapping(value = {"/send-form"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String sendForm(HttpServletRequest req, HttpServletResponse res) {
         try {
-            ParamsValidator.checkQuestion(questionText);
-            ParamsValidator.checkAnswers(answerTexts);
+            ReqParam questionTextParam = new RequestTextParam(req.getParameter(ParameterConstants.QUESTION_TEXT));
+            ReqParam questionIdParam = new RequestIdParam(req.getParameter(ParameterConstants.QUESTION_ID));
+            ReqParam answerTypeParam = new RequestIdParam(req.getParameter(ParameterConstants.ANSWER_TYPE_ID));
 
-            Question question = questionService.get(questionId);
-            List<Answer> answers = answerService.get(ansIds);
-            AnswerType answerType = answerService.getAnswerType(typeId);
+            String[] answerIdValues = req.getParameterValues(ParameterConstants.ANSWER_ID);
+            String[] answerTextValues = req.getParameterValues(ParameterConstants.ANSWER_TEXT);
+            if (answerIdValues.length != answerTextValues.length) {
+                return "";
+            }
 
-            question.setText(questionText);
+            List<Integer> answerIds = new ArrayList<>();
+            List<ReqParam> answerTexts = new ArrayList<>();
+
+            for (int i = 0; i < answerIdValues.length; i++) {
+                answerIds.add(new RequestIdParam(answerIdValues[i]).intValue());
+                answerTexts.add(new RequestTextParam(answerTextValues[i]));
+            }
+
+            Question question = questionService.get(questionIdParam.intValue());
+            List<Answer> answers = answerService.get(answerIds);
+            AnswerType answerType = answerService.getAnswerType(answerTypeParam.intValue());
+
+            question.setText(questionTextParam.stringValue());
             for (int i = 0; i < answers.size(); i++) {
-                answers.get(i).setText(answerTexts[i]);
+                answers.get(i).setText(answerTexts.get(i).stringValue());
                 answers.get(i).setType(answerType);
             }
             formService.save(answers, question);
 
-            return "redirect:/questions-editor/" + id;
-        } catch (FormParamException e) {
-            return e.getMessage();
-        } catch (RuntimeException e) {
-            return "redirect:/questions-editor/" + id;
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RequestParamException | RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
         }
     }
 

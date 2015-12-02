@@ -20,8 +20,9 @@ public final class AttributeConstants {
 
 
     public static final String SUCCESS_RESPONSE_BODY = "success";
+    public static final String REQUEST_PARAM_ERROR = "requestParamError";
+    public static final String ERROR_RESPONSE_BODY = "error";
     public static final String EMPTY_BODY = "";
-    public static final int ERROR_BODY = -1;
 
 
     private AttributeConstants() {

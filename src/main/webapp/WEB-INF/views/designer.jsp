@@ -39,7 +39,7 @@
                                 <c:choose>
                                     <c:when test="${el.answer.type.type eq 'slider'}">
                                         <p class="range-field">
-                                            <input type="range" id="${el.answer.id}" min="1" max="100"/>
+                                            <input type="range" id="${el.answer.id}"/>
                                             <label for="${el.answer.id}">${el.answer.text}</label>
                                         </p>
                                     </c:when>
@@ -56,11 +56,9 @@
                                         </p>
                                     </c:when>
                                     <c:otherwise>
-                                        <div class="row">
-                                            <div class="input-field col l12 s12 m12">
-                                                <input id="${el.answer.id}" type="text" class="validate">
-                                                <label for="${el.answer.id}">${el.answer.text}</label>
-                                            </div>
+                                        <div class="input-field input-field-fix col l6 s12 m6">
+                                            <input id="${el.answer.id}" type="text" class="validate">
+                                            <label for="${el.answer.id}">${el.answer.text}</label>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -68,7 +66,8 @@
                         </div>
                         <div class="divider"></div>
                         <div class="right-align">
-                            <a href="JavaScript:editForm('${form.question.id}','${interview.id}')" class="waves-effect waves-green btn-flat">Изменить</a>
+                            <a href="JavaScript:editForm('${form.question.id}','${interview.id}')"
+                               class="waves-effect waves-green btn-flat">Изменить</a>
                             <a href="JavaScript:deleteQuestion('${form.question.id}')"
                                class="waves-effect waves-red btn-flat">Удалить</a>
                         </div>
@@ -87,7 +86,7 @@
         </a>
     </div>
 </main>
-<%@include file="fragments/small_footer.jsp" %>
+<%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/js_imports.html" %>
 </body>
 </html>

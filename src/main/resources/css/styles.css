@@ -53,6 +53,10 @@ section .badge {
     padding: 10px 5px;
 }
 
-.error-alert ul {
+.error-alert li {
     list-style-type: disc;
+}
+
+.add-question-form {
+    margin-bottom: 20px;
 }

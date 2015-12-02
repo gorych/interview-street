@@ -107,6 +107,11 @@ li span [type="checkbox"] + label:before {
     margin-top: -20px;
 }
 
+.alert-position-fix {
+    margin-top: -43px;
+    margin-left: 45px;
+}
+
 .table-material-icons-fix {
     color: black;
     margin-top: 4px;
@@ -129,4 +134,8 @@ li span [type="checkbox"] + label:before {
     white-space: normal;
     line-height: 28px;
     font-weight: inherit;
+}
+
+.input-field-fix {
+    margin-top: 0;
 }

@@ -1,8 +1,10 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IQuestionDAO;
+import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,6 +58,8 @@ public class QuestionDAOImpl implements IQuestionDAO {
     @Override
     public Number count(Interview interview) {
         Session session = sessionFactory.getCurrentSession();
+        Criteria c = session.createCriteria(Form.class);
+
         Query query = session.createQuery("SELECT COUNT (*) FROM Form WHERE interview.id = :id GROUP BY question.id");
         query.setInteger("id", interview.getId());
         return (Number) query.uniqueResult();

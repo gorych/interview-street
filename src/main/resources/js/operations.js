@@ -203,6 +203,7 @@ function deleteQuestion(questionId) {
             if (response == "success") {
                 $("#" + questionId).parent('section').remove();
                 $("#" + questionId).remove();
+                updateBadges();
                 Materialize.toast("Вопрос успешно удален", 2000)
             } else {
                 location.reload();

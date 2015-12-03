@@ -14,12 +14,15 @@ function buildForm(interviewId) {
                 class: 'question add-question-form',
                 method: 'POST',
                 action: '/send-form'
-            }).appendTo('#interview_questions');
+            }).appendTo('#interview-questions');
+
+            var questionTextId = "questionText" + questionId;
+            var questionTextCssId = "#" + questionTextId;
 
             $(questionCssId)
                 .prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
-                "<input id='questionText' type='text' name='questionText' length='200'/>" +
-                "<label for='questionText'>Текст вопроса</label></div>" +
+                "<input id='" + questionTextId + "' type='text' name='questionText' length='200'/>" +
+                "<label for='" + questionTextId + "'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
                 "<select name='typeId'>" +
                 "<option value='1'>Текстовое поле</option>" +
@@ -30,8 +33,8 @@ function buildForm(interviewId) {
                 .append("<input type='hidden' name='questionId' value='" + questionId + "'/>")
                 .append("<input type='hidden' name='interviewId' value='" + interviewId + "'/>");
 
-            $("label[for='questionText']").addClass("active");
-            $("#questionText").val('Новый вопрос');
+            $("label[for='" + questionTextId + "']").addClass("active");
+            $(questionTextCssId).val('Новый вопрос');
             $("#typeId").val('1');
 
             $('select').material_select();
@@ -234,43 +237,85 @@ function addAnswer(parentId, interviewId, questionId) {
     });
 }
 
+function updateBadges() {
+    var badges = $(".badge");
+
+    if (badges.length > 0) {
+        $(badges).each(function (i, element) {
+            $(element).find(".text").html(i + 1);
+        });
+        $(".box h6:last-child").html("Вопросов: " + badges.length);
+    } else {
+        $(".box h6:last-child").html("В данной анкете пока нет ни одного вопроса.");
+    }
+
+
+}
+
 function showQuestionSection(formId, formData) {
     $("#" + formId).remove();
     var questionId = formData["questionId"];
     var questionCssId = "#" + questionId;
 
-    $(".col").append("<section>" +
+    $("<section><div class='badge teal valign-wrapper'><h6 class='valig text'></h6></div>" +
         "<div class='question' id=" + questionId + ">" +
-        "<h5 class='header black-text'>" + formData["questionText"] + "</h5></div></section>");
+        "<h5 class='header black-text'>" + formData["questionText"] + "</h5></div></section>")
+        .insertBefore("#interview-questions");
+
+    updateBadges();
 
     var answerTexts = formData["answerText"];
     var answerIds = formData["answerId"];
-
-    if (!$.isArray(answerTexts)) {
-        return;
-    }
-
     var answers = [];
     var type = formData["typeId"];
-    for (var i = 0; i < answerTexts.length; i++) {
+
+    if (!$.isArray(answerTexts)) {
         switch (type) {
             case "1":
-                answers.push("<div class='input-field input-field-fix col l6 s12 m6'>" +
-                    "<input id='" + answerIds[i] + "' type='text'><label for='" + answerIds[i] + "'>" + answerTexts[i] +
+                answers.push("<div class='input-field input-field-fix col empty-padding l12 s12 m12'>" +
+                    "<input id='" + answerIds + "' type='text'><label for='" + answerIds + "'>" + answerTexts +
                     "</label></div>");
                 break;
             case "2":
-                answers.push("<p><input name='1' type='radio' id='" + answerIds[i] + "'/>" +
-                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                answers.push("<p><input name='1' type='radio' id='" + answerIds + "'/>" +
+                    "<label for='" + answerIds + "'>" + answerTexts + "</label></p>");
                 break;
             case "3":
-                answers.push("<p><input type='checkbox' id='" + answerIds[i] + "'/>" +
-                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                answers.push("<p><input type='checkbox' id='" + answerIds + "'/>" +
+                    "<label for='" + answerIds + "'>" + answerTexts + "</label></p>");
                 break;
             case "4":
-                answers.push("<p class='range-field'><input type='range' id='" + answerIds[i] + "'/>" +
-                    "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                answers.push("<p class='range-field'><input type='range' id='" + answerIds + "'/>" +
+                    "<label for='" + answerIds + "'>" + answerTexts + "</label></p>");
                 break;
+        }
+    } else {
+        for (var i = 0; i < answerTexts.length; i++) {
+            switch (type) {
+                case "1":
+                    if (i == answerTexts.length - 1 && i % 2 == 0) {
+                        answers.push("<div class='input-field input-field-fix col empty-padding l12 s12 m12'>" +
+                            "<input id='" + answerIds[i] + "' type='text'><label for='" + answerIds[i] + "'>" + answerTexts[i] +
+                            "</label></div>");
+                        break;
+                    }
+                    answers.push("<div class='input-field input-field-fix col empty-padding l6 s12 m6'>" +
+                        "<input id='" + answerIds[i] + "' type='text'><label for='" + answerIds[i] + "'>" + answerTexts[i] +
+                        "</label></div>");
+                    break;
+                case "2":
+                    answers.push("<p><input name='1' type='radio' id='" + answerIds[i] + "'/>" +
+                        "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                    break;
+                case "3":
+                    answers.push("<p><input type='checkbox' id='" + answerIds[i] + "'/>" +
+                        "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                    break;
+                case "4":
+                    answers.push("<p class='range-field'><input type='range' id='" + answerIds[i] + "'/>" +
+                        "<label for='" + answerIds[i] + "'>" + answerTexts[i] + "</label></p>");
+                    break;
+            }
         }
     }
     $(questionCssId)

@@ -11,7 +11,7 @@ function invalidPassportData(textbox) {
 
 function isValidQuestionForm(formId) {
     var form = document.getElementById(formId);
-    var question = document.getElementById('questionText');
+    var question = document.getElementById('questionText' + formId);
     var type = document.getElementsByName('typeId')[0];
     var answers = $("input[name='answerText']");
 
@@ -19,7 +19,7 @@ function isValidQuestionForm(formId) {
     if (questionText == "undefined" || type == "undefined" || answers == "undefined") {
         location.reload();
     }
-    var errors =[];
+    var errors = [];
     if (questionText.length < 1 || questionText.length > 100) {
         errors.push("<li>Длина вопроса должна быть от 1 до 100 символов</li>");
     }
@@ -37,12 +37,18 @@ function isValidQuestionForm(formId) {
         }
     }
 
-    if(errors.length > 0){
-        var errorBlocks = $(".error-alert");
+    var errorId = "error" + formId;
+    var errorCssId = "#error" + formId;
+
+    if (errors.length > 0) {
+        var errorBlocks = $(errorCssId);
         if (errorBlocks.length == 0) {
-            $('.divider').before("<div class = 'error-alert alert-position-fix'>" + errors.join("")+ "</div>");
+            $("#" + formId)
+                .find(".divider")
+                .before("<div id='" + errorId + "' class = 'error-alert alert-position-fix'>" + errors.join("") + "</div>");
         } else {
-            $(errorBlocks[0]).replaceWith("<div class = 'error-alert alert-position-fix'>" + errors.join("") + "</div>")
+            $(errorBlocks[0])
+                .replaceWith("<div id='" + errorId + "' class = 'error-alert alert-position-fix'>" + errors.join("") + "</div>")
         }
         return false;
     }

@@ -125,6 +125,18 @@ li span [type="checkbox"] + label:before {
     padding: 0 0.2rem;
 }
 
+.row .col .empty-padding:nth-child(odd) {
+    padding: 0;
+}
+
+.row .col .empty-padding:nth-child(even){
+    padding-right: 0;
+}
+
+.empty-padding:nth-child(odd) label {
+    left: 0;
+}
+
 #toast-container {
     top: 10%;
     right: 24px;
@@ -139,3 +151,9 @@ li span [type="checkbox"] + label:before {
 .input-field-fix {
     margin-top: 0;
 }
+
+.input-field-fix {
+    margin-top: 0;
+}
+
+

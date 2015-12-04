@@ -2,7 +2,7 @@
 <div class="page-footer page-footer-fix teal">
     <div class="footer-copyright footer-copyright-fix">
         <div class="container white-text text-lighten-3">
-            &copy; ГГТУ, 2015<a class="brown-text text-lighten-3" href="#"></a>
+            &copy;Егор Семенченя, ГГТУ 2015<a class="brown-text text-lighten-3" href="#"></a>
         </div>
     </div>
 </div>

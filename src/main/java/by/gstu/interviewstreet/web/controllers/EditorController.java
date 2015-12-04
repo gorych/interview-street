@@ -114,18 +114,18 @@ public class EditorController {
         return answerService.insert(form);
     }
 
-    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     @ResponseBody
     public String createInterview(@Valid ExtendUserInterview userInterview, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return messenger.getMessageFromBindingResult(bindingResult);
         }
         try {
-            interviewService.insert(userInterview);
+            Interview interview = interviewService.insert(userInterview);
+            return interviewService.getJSON(interview);
         } catch (RuntimeException e) {
-            return e.getMessage();
+            return AttributeConstants.ERROR_RESPONSE_BODY;
         }
-        return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }
 
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
@@ -138,7 +138,7 @@ public class EditorController {
 
     @RequestMapping(value = {"/load-question/{questionId}"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
     @ResponseBody
-    public String loadQuestion(@PathVariable(value = "questionId") Integer questionId) {
+    public String loadQuestion(@PathVariable Integer questionId) {
         try {
             return formService.getJsonString(questionId);
         } catch (RuntimeException e) {
@@ -147,20 +147,28 @@ public class EditorController {
     }
 
     @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.GET)
-    public String deleteInterview(@RequestParam(value = "id") int[] ids) {
+    @ResponseBody
+    public String deleteInterview(HttpServletRequest req) {
         try {
+            String[] strIds = req.getParameterValues("id");
+
+            List<Integer> ids = new ArrayList<>();
+            for (String strId : strIds) {
+                ids.add(new RequestIdParam(strId).intValue());
+            }
             interviewService.remove(ids);
-            return "redirect:/interview-list";
-        } catch (RuntimeException e) {
-            return "redirect:/interview-list";
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RequestParamException | RuntimeException e) {
+            System.out.println("error");
+            return e.getMessage();
         }
     }
 
     @RequestMapping(value = {"/hide-interview/{interviewId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public String hideInterview(@PathVariable(value = "interviewId") int id) {
+    public String hideInterview(@PathVariable int interviewId) {
         try {
-            interviewService.hide(id);
+            interviewService.hide(interviewId);
             return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
             return e.getMessage();
@@ -169,8 +177,13 @@ public class EditorController {
 
     @RequestMapping(value = {"/edit-interview"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String editInterviewModal(@RequestParam(value = "interviewId") int interviewId) {
-        return interviewService.getJsonString(interviewId);
+    public String editInterviewModal(@RequestParam int interviewId) {
+        try {
+            Interview interview = interviewService.get(interviewId);
+            return interviewService.getJSON(interview);
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
     }
 
     @RequestMapping(value = {"/send-form"}, method = RequestMethod.POST)
@@ -184,7 +197,7 @@ public class EditorController {
             String[] answerIdValues = req.getParameterValues(ParameterConstants.ANSWER_ID);
             String[] answerTextValues = req.getParameterValues(ParameterConstants.ANSWER_TEXT);
             if (answerIdValues.length != answerTextValues.length) {
-                return "";
+                return AttributeConstants.ERROR_RESPONSE_BODY;
             }
 
             List<Integer> answerIds = new ArrayList<>();
@@ -214,7 +227,7 @@ public class EditorController {
 
     @RequestMapping(value = {"/delete-answer/{answerId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public String deleteAnswer(@PathVariable(value = "answerId") int answerId) {
+    public String deleteAnswer(@PathVariable int answerId) {
         try {
             answerService.remove(answerId);
         } catch (RuntimeException e) {
@@ -225,7 +238,7 @@ public class EditorController {
 
     @RequestMapping(value = {"/delete-question/{questionId}"}, method = RequestMethod.GET)
     @ResponseBody
-    public String deleteQuestion(@PathVariable(value = "questionId") int questionId) {
+    public String deleteQuestion(@PathVariable int questionId) {
         try {
             Question question = questionService.get(questionId);
             formService.remove(question);

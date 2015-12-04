@@ -20,13 +20,11 @@
                 </div>
             </c:if>
         </div>
-        <form method="GET" id="tableInterviewForm" name="tableInterviewForm"
-              action="<c:url value="/delete-interview"/>">
-            <input type="hidden" value="" name="interviewId"/>
+        <form name="tableInterviewForm">
             <table class="centered highlight">
                 <thead>
                 <tr>
-                    <th data-field="id"><a href="JavaScript: selectAll('tableInterviewForm')">
+                    <th data-field="id"><a href="JavaScript: selectAll()">
                         <i class="material-icons" title="Выбрать все">done_all</i></a>
                     </th>
                     <th data-field="name">Название анкеты</th>
@@ -47,12 +45,12 @@
                         <td>${interview.placementDate}</td>
                         <c:choose>
                             <c:when test="${interview.hide}">
-                                <td><a href="JavaScript:hideInterview('${interview.id}')"><i
+                                <td><a onclick="hideInterview(${interview.id}, this)"><i
                                         class="material-icons table-material-icons-fix"
                                         title="Открыта">visibility</i></a></td>
                             </c:when>
                             <c:otherwise>
-                                <td><a href="JavaScript:hideInterview('${interview.id}')"><i
+                                <td><a onclick="hideInterview(${interview.id}, this)"><i
                                         class="material-icons table-material-icons-fix"
                                         title="Скрыта">visibility_off</i></a></td>
                             </c:otherwise>
@@ -76,8 +74,8 @@
             <i class="large material-icons">dashboard</i>
         </a>
         <ul>
-            <li><a href="JavaScript:checkCbForDelete()" class="btn-floating red"><i class="material-icons"
-                                                                                    title="Удалить">delete</i></a></li>
+            <li><a id="deleteInterviewBtn" href="#" class="btn-floating red"><i class="material-icons"
+                                                                                title="Удалить">delete</i></a></li>
             <li><a href="JavaScript:showEditInterviewModal()" class="btn-floating yellow darken-1"><i
                     class="material-icons" title="Редактировать">edit</i></a>
             </li>
@@ -95,7 +93,7 @@
 
                 <div class="row">
                     <div class="input-field col s6">
-                        <sf:select path="interview.type.id" id="type">
+                        <sf:select onchange="hideElements()" path="interview.type.id" id="type">
                             <option value="-1" disabled selected>Выбирите тип опроса</option>
                             <option value="1">Открытый</option>
                             <option value="2">Скрытый</option>
@@ -103,25 +101,28 @@
                         <label>Тип опроса</label>
                     </div>
                     <div class="input-field col s6">
-                        <sf:input type="text" path="interview.name" length="50" id="name"/>
-                        <label for="name">Наименование</label>
+                        <sf:input id="name" type="text" path="interview.name" value="Новая анкета" length="50"/>
+                        <label for="name" class="active">Наименование</label>
                     </div>
                     <div class="input-field col s6">
-                        <select multiple="true" onchange='loadEmployeePosts(this)' id="subdivisions">
-                            <option value="-1" disabled selected>Подразделения</option>
+                        <select id="subdivisions" multiple="true" onchange='loadEmployeePosts(this)'>
+                            <option value="-1" disabled selected>Выберите подразделения</option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
                             </c:forEach>
                         </select>
+                        <label>Подразделение</label>
                     </div>
                     <div class="input-field col s6">
                         <sf:select multiple="true" id="posts" path="posts">
-                            <option value="-1" disabled selected>Должности сотрудников</option>
+                            <option value="-1" disabled selected>Сначала выберите подразделения</option>
                         </sf:select>
+                        <label class="active">Должности</label>
                     </div>
                     <div class="input-field col s12">
-                        <sf:input type="text" path="interview.description" length="100" id="description"/>
-                        <label for="description">Описание</label>
+                        <sf:input id="description" type="text" path="interview.description" value="Пустая анкета"
+                                  length="100"/>
+                        <label for="description" class="active">Описание</label>
                     </div>
                 </div>
             </div>
@@ -134,7 +135,18 @@
             </div>
         </sf:form>
     </div>
-    <%@include file="fragments/delete_modal.jsp" %>
+
+    <div id="deleteInterviewModal" class="modal">
+        <div class="modal-content">
+            <h4>Удаление анкеты</h4>
+
+            <p> Вы действительно хотите удалить анкету(ы)?</p>
+        </div>
+        <div class="modal-footer">
+            <a class="waves-effect waves-red btn-flat modal-action modal-close">Нет</a>
+            <button class="waves-effect waves-green btn-flat modal-action">Да</button>
+        </div>
+    </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/js_imports.html" %>

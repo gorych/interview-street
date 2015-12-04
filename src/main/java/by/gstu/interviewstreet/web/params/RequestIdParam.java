@@ -14,7 +14,7 @@ public class RequestIdParam extends ReqParam {
         try {
             int id = Integer.parseInt(value.toString());
             if (id <= 0) {
-                throw new RequestParamException();
+                throw new RequestParamException("Value " + value + " is incorrect for ID.");
             }
             super.setValue(id);
         } catch (NumberFormatException e) {

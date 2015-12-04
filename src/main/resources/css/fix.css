@@ -103,7 +103,7 @@ li span [type="checkbox"] + label:before {
     margin-bottom: 20px;
 }
 
-.modal-alert-error-fix {
+.modal-alert-fix {
     margin-top: -20px;
 }
 

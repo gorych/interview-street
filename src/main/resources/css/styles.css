@@ -45,11 +45,15 @@ section .badge {
     margin: 0.5rem 0;
 }
 
+.info-alert {
+    color: #333;
+    background-color: #d9edf7;
+    padding: 15px;
+}
+
 .error-alert {
     color: #a94442;
     background-color: #f2dede;
-    border: 1px solid #ebccd1;
-    border-radius: 2px;
     padding: 10px 5px;
 }
 
@@ -59,4 +63,8 @@ section .badge {
 
 .add-question-form {
     margin-bottom: 20px;
+}
+
+td a i{
+    cursor: pointer;
 }

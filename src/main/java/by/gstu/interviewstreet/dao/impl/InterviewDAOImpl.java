@@ -94,7 +94,7 @@ public class InterviewDAOImpl implements IInterviewDAO {
     }
 
     @Override
-    public void removeInterviews(int[] interviewIds) {
+    public void removeInterviews(List<Integer> interviewIds) {
         Session session = sessionFactory.getCurrentSession();
         for (int id : interviewIds) {
             Interview interview = (Interview) session.load(Interview.class, id);

@@ -14,13 +14,13 @@ public interface InterviewService {
 
     List<List<Form>> getAnswers(List<Form> questionForm);
 
-    String getJsonString(int interviewId);
+    String getJSON(Interview interview);
 
     Interview get(int interviewId);
 
-    void insert(ExtendUserInterview userInterview);
+    Interview insert(ExtendUserInterview userInterview);
 
-    void remove(int[] ids);
+    void remove(List<Integer> ids);
 
     void hide(int id);
 }

@@ -54,9 +54,8 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public String getJsonString(int interviewId) {
-        Interview interview = interviewDAO.getInterviewById(interviewId);
-        List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interviewId);
+    public String getJSON(Interview interview) {
+        List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interview.getId());
 
         StringBuilder posts = new StringBuilder();
         StringBuilder subdivisions = new StringBuilder();
@@ -73,22 +72,25 @@ public class InterviewServiceImpl implements InterviewService {
         List<Map<String, String>> jsonList = new ArrayList<>();
         Map<String, String> jsonObject = new HashMap<>();
 
-        jsonObject.put("type", interview.getType().getId() + "");
+        jsonObject.put("id", interview.getId() + "");
         jsonObject.put("name", interview.getName());
+        jsonObject.put("date", interview.getPlacementDate() + "");
+        jsonObject.put("type", interview.getType().getId() + "");
+        jsonObject.put("hide", interview.isHide() ? "visibility" : "visibility_off");
         jsonObject.put("description", interview.getDescription());
         jsonObject.put("subdivisions", subdivisions.toString());
         jsonObject.put("posts", posts.toString());
+        jsonObject.put("interview_id", interview.getId() + "");
+
 
         jsonList.add(jsonObject);
 
-        String jsonString = "";
         ObjectMapper mapper = new ObjectMapper();
         try {
-            jsonString = mapper.writeValueAsString(jsonList);
+            return mapper.writeValueAsString(jsonList);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            return "";
         }
-        return jsonString;
     }
 
     @Override
@@ -99,7 +101,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public void insert(ExtendUserInterview userInterview) {
+    public Interview insert(ExtendUserInterview userInterview) {
         Set<Post> posts = userInterview.getPosts();
 
         List<Integer> ids = new ArrayList<>();
@@ -121,11 +123,12 @@ public class InterviewServiceImpl implements InterviewService {
         interview.setType(type);
 
         interviewDAO.insertInterview(interview, users);
+        return interview;
     }
 
     @Override
     @Transactional
-    public void remove(int[] ids) {
+    public void remove(List<Integer> ids) {
         interviewDAO.removeInterviews(ids);
     }
 

@@ -24,7 +24,7 @@ public interface IInterviewDAO {
 
     void insertInterview(Interview interview, List<User> users);
 
-    void removeInterviews(int[] interviewIds);
+    void removeInterviews(List<Integer> interviewIds);
 
     void hideInterview(int interviewId);
 

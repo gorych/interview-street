@@ -8,22 +8,37 @@
     <title>Редактор анкет</title>
 </head>
 <body>
-<%@include file="fragments/header.jsp" %>
+<nav class="white">
+    <div class="nav-wrapper container">
+        <a href=""><img class="brand-logo right brand-logo-color-fix responsive-img fix" src="/resources/img/logo.png"></a>
+    </div>
+</nav>
 <main class="container">
     <div class="row">
         <div class="box box-padding-fix ">
-            <h6>${user_initials},<br/><br/> потратьте, пожалуйста, несколько минут своего времени на заполнение
-                следующей анкеты.</h6>
+            <h4 class="header teal-text">${interview.name}</h4>
+            <c:choose>
+                <c:when test="${forms.size() < 1}">
+                    <h6>В данной анкете пока нет ни одного вопроса.</h6>
+                </c:when>
+                <c:otherwise>
+                    <div class="preview">${user_initials},<br/> потратьте, пожалуйста, несколько минут своего времени на
+                        заполнение
+                        следующей анкеты.
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
-        <form method="POST" action="<c:url value="/send-interview/${interview.id}"/>">
+        <form method="POST">
+            <input type="hidden" name="interviewId" value="${interview.id}">
             <c:forEach var="form" items="${forms}" varStatus="cur">
                 <section>
                     <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
-                    <div class="question" id="${form.question.id}">
+                    <div class="question question-padding-fix" id="${form.question.id}">
 
                         <h5 class="header black-text">${form.question.text}</h5>
 
-                        <div class="answers">
+                        <div class="answers answer-margin-fix">
                             <c:forEach var="el" items="${answer_forms[cur.index]}">
                                 <c:choose>
                                     <c:when test="${el.answer.type.type eq 'slider'}">
@@ -62,19 +77,23 @@
                     </div>
                 </section>
             </c:forEach>
-            <input type="submit" value="Submit">
+            <br/>
+            <c:if test="${forms.size() >= 1}">
+                <a id="sendInterview" class="btn-large waves-effect waves-light right">
+                    Отправить анкету
+                    <i class="material-icons right">send</i>
+                </a>
+            </c:if>
         </form>
     </div>
-    <div class="row">
-        <div class="hide-on-large-only">
-            <div class="col s12 m12">
-                <a class="waves-effect waves-light teal white-text btn">Отправить анкету</a>
-            </div>
+</main>
+<div class="page-footer page-footer-fix white">
+    <div class="footer-copyright footer-copyright-fix">
+        <div class="container black-text text-lighten-3">
+            &copy;Егор Семенченя, ГГТУ 2015<a class="brown-text text-lighten-3" href="#"></a>
         </div>
     </div>
-</main>
-
-<%@include file="fragments/footer.jsp" %>
+</div>
 <%@include file="fragments/js_imports.html" %>
 </body>
 </html>

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IUserInterviewDAO {
 
-    List<UserInterview> getUserInterviewsById(int interviewId);
+    List<UserInterview> getById(int interviewId);
 
 }

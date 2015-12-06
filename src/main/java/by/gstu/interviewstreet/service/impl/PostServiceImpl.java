@@ -18,6 +18,6 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public List<Post> getAll() {
-        return postDAO.getAllPosts();
+        return postDAO.getAll();
     }
 }

@@ -44,7 +44,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     @Transactional
     public void insertUserAnswers(Interview interview, List<Integer> questionIds, Map<Integer, String[]> answers, User user) {
-        List<Question> questions = questionDAO.qetQuestions(questionIds);
+        List<Question> questions = questionDAO.qet(questionIds);
 
         Calendar calender = Calendar.getInstance();
         java.util.Date utilDate = calender.getTime();
@@ -56,7 +56,7 @@ public class AnswerServiceImpl implements AnswerService {
                 answerDAO.insertUserAnswer(new UserAnswer(user, question, interview, answer, currentDate));
             }
         }
-        interviewDAO.passUserInterview(interview.getId());
+        interviewDAO.pass(interview.getId());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     @Transactional
     public AnswerType getAnswerType(int id) {
-        return answerTypeDAO.getAnswerTypeById(id);
+        return answerTypeDAO.getById(id);
     }
 
     @Override

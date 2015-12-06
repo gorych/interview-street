@@ -1,29 +1,19 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IQuestionDAO;
-import by.gstu.interviewstreet.domain.Form;
-import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Repository
-public class QuestionDAOImpl implements IQuestionDAO {
-
-    @Autowired
-    private SessionFactory sessionFactory;
+public class QuestionDAOImpl extends AbstractDbDAO implements IQuestionDAO {
 
     @Override
-    public long insertQuestion() {
+    public long insert() {
         Question question = new Question("Новый вопрос");
-        Serializable result = sessionFactory.getCurrentSession().save(question);
+        Serializable result = getSession().save(question);
         if (result != null) {
             return (Integer) result;
         }
@@ -31,37 +21,27 @@ public class QuestionDAOImpl implements IQuestionDAO {
     }
 
     @Override
-    public Question qetQuestionById(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        org.hibernate.Query query = session.createQuery("FROM Question WHERE id = :id");
-        query.setInteger("id", id);
-
-        return (Question) query.uniqueResult();
+    public Question qetById(int id) {
+        return (Question) getSession()
+                .createQuery("FROM Question WHERE id = :id")
+                .setInteger("id", id)
+                .uniqueResult();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Question> qetQuestions(List<Integer> ids) {
-        Query query = sessionFactory.getCurrentSession().createQuery("FROM Question WHERE id IN (:ids) ");
-        query.setParameterList("ids", ids);
-        return query.list();
+    public List<Question> qet(List<Integer> ids) {
+        return getSession()
+                .createQuery("FROM Question WHERE id IN (:ids) ")
+                .setParameterList("ids", ids)
+                .list();
     }
 
     @Override
     public void remove(Question question) {
-        Session session = sessionFactory.getCurrentSession();
         if (question != null) {
-            session.delete(question);
+            getSession().delete(question);
         }
     }
 
-    @Override
-    public Number count(Interview interview) {
-        Session session = sessionFactory.getCurrentSession();
-        Criteria c = session.createCriteria(Form.class);
-
-        Query query = session.createQuery("SELECT COUNT (*) FROM Form WHERE interview.id = :id GROUP BY question.id");
-        query.setInteger("id", interview.getId());
-        return (Number) query.uniqueResult();
-    }
 }

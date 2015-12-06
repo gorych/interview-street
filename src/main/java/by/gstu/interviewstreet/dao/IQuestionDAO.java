@@ -1,19 +1,17 @@
 package by.gstu.interviewstreet.dao;
 
-import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 
 import java.util.List;
 
 public interface IQuestionDAO {
 
-    long insertQuestion();
+    long insert();
 
-    Question qetQuestionById(int id);
+    Question qetById(int id);
 
-    List<Question> qetQuestions(List<Integer> ids);
+    List<Question> qet(List<Integer> ids);
 
     void remove(Question question);
 
-    Number count(Interview interview);
 }

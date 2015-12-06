@@ -6,6 +6,6 @@ public interface IAnswerTypeDAO {
 
     AnswerType getDefaultAnswerType();
 
-    AnswerType getAnswerTypeById(int id);
+    AnswerType getById(int id);
 
 }

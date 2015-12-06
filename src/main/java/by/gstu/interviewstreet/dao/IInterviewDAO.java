@@ -10,24 +10,28 @@ import java.util.List;
 
 public interface IInterviewDAO {
 
-    List<Interview> getAllInterviews();
+    List<Interview> getAll();
 
     List<UserInterview> getUserInterviews(User user);
 
     List<Form> getInterviewQuestions(int interviewId);
 
+    List<Form> getInterviewQuestions(long hash);
+
     List<List<Form>> getInterviewAnswers(List<Form> questionForm);
 
-    Interview getInterviewById(int id);
+    Interview getById(int id);
 
-    int insertInterview(Interview interview);
+    Interview getByHash(long hash);
 
-    void insertInterview(Interview interview, List<User> users);
+    int insert(Interview interview);
 
-    void removeInterviews(List<Integer> interviewIds);
+    void insert(Interview interview, List<User> users);
 
-    void hideInterview(int interviewId);
+    void remove(List<Integer> interviewIds);
 
-    void passUserInterview(int interviewId);
+    void hide(int interviewId);
+
+    void pass(int interviewId);
 
 }

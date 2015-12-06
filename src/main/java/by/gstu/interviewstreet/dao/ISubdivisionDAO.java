@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ISubdivisionDAO {
 
-    List<Subdivision> getAllSubdivisions();
+    List<Subdivision> getAll();
 
 }

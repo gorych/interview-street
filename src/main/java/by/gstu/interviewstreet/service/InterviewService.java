@@ -13,11 +13,15 @@ public interface InterviewService {
 
     List<Form> getQuestions(int interviewId);
 
+    List<Form> getQuestions(long hash);
+
     List<List<Form>> getAnswers(List<Form> questionForm);
 
     String getJSON(Interview interview);
 
     Interview get(int interviewId);
+
+    Interview get(long hash);
 
     Interview insert(ExtendUserInterview userInterview) throws RequestParamException;
 

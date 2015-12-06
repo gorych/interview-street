@@ -14,5 +14,4 @@ public interface UserService {
     List<User> getUsers(Collection postIds);
 
     List<UserInterview> getInterviews(String username);
-
 }

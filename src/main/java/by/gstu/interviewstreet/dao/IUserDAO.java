@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface IUserDAO {
 
-    User getUserByPassportData(String passportData);
+    User getByPassportData(String passportData);
 
-    List<User> getUsersByPosts(Collection postIds);
+    List<User> getByPosts(Collection postIds);
 
 }

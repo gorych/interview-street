@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IPostDAO {
 
-    List<Post> getAllPosts();
+    List<Post> getAll();
 
 }

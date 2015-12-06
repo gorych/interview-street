@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
         String username = j_username.toUpperCase();
-        by.gstu.interviewstreet.domain.User user = userDAO.getUserByPassportData(username);
+        by.gstu.interviewstreet.domain.User user = userDAO.getByPassportData(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Пользователь с такими паспортными данными не найден.");
@@ -49,19 +49,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public by.gstu.interviewstreet.domain.User get(String passportData) {
-        return userDAO.getUserByPassportData(passportData.toUpperCase());
+        return userDAO.getByPassportData(passportData.toUpperCase());
     }
 
     @Override
     @Transactional
     public List<by.gstu.interviewstreet.domain.User> getUsers(Collection postIds) {
-        return userDAO.getUsersByPosts(postIds);
+        return userDAO.getByPosts(postIds);
     }
 
     @Override
     @Transactional
     public List<UserInterview> getInterviews(String passportData) {
-        by.gstu.interviewstreet.domain.User user = userDAO.getUserByPassportData(passportData);
+        by.gstu.interviewstreet.domain.User user = userDAO.getByPassportData(passportData);
         if (user == null) {
             return new ArrayList<>();
         }

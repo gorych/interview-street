@@ -34,13 +34,24 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public List<Interview> getAll() {
-        return interviewDAO.getAllInterviews();
+        return interviewDAO.getAll();
     }
 
     @Override
     @Transactional
     public List<Form> getQuestions(int interviewId) {
         List<Form> forms = interviewDAO.getInterviewQuestions(interviewId);
+        if (forms == null) {
+            return new ArrayList<>();
+        }
+
+        return forms;
+    }
+
+    @Override
+    @Transactional
+    public List<Form> getQuestions(long hash) {
+        List<Form> forms = interviewDAO.getInterviewQuestions(hash);
         if (forms == null) {
             return new ArrayList<>();
         }
@@ -62,7 +73,7 @@ public class InterviewServiceImpl implements InterviewService {
         StringBuilder posts = new StringBuilder();
         StringBuilder subdivisions = new StringBuilder();
 
-        List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interview.getId());
+        List<UserInterview> userInterviews = userInterviewDAO.getById(interview.getId());
         if (userInterviews != null && userInterviews.size() != 0) {
             for (UserInterview ui : userInterviews) {
                 int postName = ui.getUser().getEmployee().getPost().getId();
@@ -101,7 +112,13 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public Interview get(int interviewId) {
-        return interviewDAO.getInterviewById(interviewId);
+        return interviewDAO.getById(interviewId);
+    }
+
+    @Override
+    @Transactional
+    public Interview get(long hash) {
+            return interviewDAO.getByHash(hash);
     }
 
     @Override
@@ -114,15 +131,16 @@ public class InterviewServiceImpl implements InterviewService {
         java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
 
         int interviewType = interview.getType().getId();
-        InterviewType type = interviewTypeDAO.getTypeById(interviewType);
+        InterviewType type = interviewTypeDAO.getById(interviewType);
 
         interview.setPlacementDate(currentDate);
         interview.setType(type);
         interview.setHide(true);
+        interview.setHash(interview.hashCode());
 
         Set<Post> posts = userInterview.getPosts();
         if (interviewType == 2)/*so it is necessary*/ {
-            interviewDAO.insertInterview(interview);
+            interviewDAO.insert(interview);
             return interview;
         }
         List<Integer> ids = new ArrayList<>();
@@ -130,8 +148,8 @@ public class InterviewServiceImpl implements InterviewService {
             ids.add(new RequestIdParam(post.getId()).intValue());
         }
 
-        List<User> users = userDAO.getUsersByPosts(ids);
-        interviewDAO.insertInterview(interview, users);
+        List<User> users = userDAO.getByPosts(ids);
+        interviewDAO.insert(interview, users);
 
         return interview;
     }
@@ -139,12 +157,12 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public void remove(List<Integer> ids) {
-        interviewDAO.removeInterviews(ids);
+        interviewDAO.remove(ids);
     }
 
     @Override
     @Transactional
     public void hide(int id) {
-        interviewDAO.hideInterview(id);
+        interviewDAO.hide(id);
     }
 }

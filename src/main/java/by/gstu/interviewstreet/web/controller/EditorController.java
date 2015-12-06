@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,12 +110,10 @@ public class EditorController {
 
     @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String createInterview(@Valid ExtendUserInterview userInterview, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
-        }
+    public String createInterview(@Valid ExtendUserInterview userInterview) {
         try {
             Interview interview = interviewService.insert(userInterview);
+
             if (interview == null) {
                 return AttributeConstants.ERROR_RESPONSE_BODY;
             }

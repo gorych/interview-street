@@ -5,55 +5,48 @@ import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
 import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.UserAnswer;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class AnswerDAOImpl implements IAnswerDAO {
+public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
 
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @Override
     public Answer insert(AnswerType type) {
         Answer answer = new Answer("Новый ответ", type);
-        sessionFactory.getCurrentSession().save(answer);
+        getSession().save(answer);
         return answer;
     }
 
     @Override
     public void insertUserAnswer(UserAnswer userAnswer) {
-        sessionFactory.getCurrentSession().save(userAnswer);
+        getSession().save(userAnswer);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Answer> getByIds(List<Integer> ids) {
-        Query query = sessionFactory.getCurrentSession().createQuery("FROM Answer WHERE id IN (:ids)");
-        query.setParameterList("ids", ids);
-        return query.list();
+        return getSession()
+                .createQuery("FROM Answer WHERE id IN (:ids)")
+                .setParameterList("ids", ids)
+                .list();
     }
 
     @Override
     public void remove(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Answer answer = (Answer) session.load(Answer.class, id);
+        Answer answer = (Answer) getSession().load(Answer.class, id);
         if (answer != null) {
-            session.delete(answer);
+            getSession().delete(answer);
         }
     }
 
     @Override
     public void remove(List<Form> forms) {
-        Session session = sessionFactory.getCurrentSession();
         for (Form form : forms) {
             if (form != null) {
-                session.delete(form.getAnswer());
+                getSession().delete(form.getAnswer());
             }
         }
     }

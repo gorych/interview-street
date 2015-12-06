@@ -2,24 +2,16 @@ package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.domain.InterviewType;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InterviewTypeDAOImpl implements IInterviewTypeDAO {
-
-    @Autowired
-    private SessionFactory sessionFactory;
+public class InterviewTypeDAOImpl extends AbstractDbDAO implements IInterviewTypeDAO {
 
     @Override
-    public InterviewType getTypeById(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM InterviewType WHERE id = :id");
-        query.setInteger("id", id);
-
-        return (InterviewType) query.uniqueResult();
+    public InterviewType getById(int id) {
+        return (InterviewType) getSession()
+                .createQuery("FROM InterviewType WHERE id = :id")
+                .setInteger("id", id)
+                .uniqueResult();
     }
 }

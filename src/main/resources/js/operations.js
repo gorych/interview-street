@@ -39,6 +39,34 @@ $(document).ready(function () {
             })
         });
     });
+
+    $("#sendInterview").click(function () {
+        if (!isValidUserAnswers()) {
+            return;
+        }
+        var form = $(this).parent('form');
+        var data = $(form).serialize();
+        var interviewId = $(form).find('input[name="interviewId"]').val();
+        $.ajax({
+            url: "/send-interview/" + interviewId,
+            method: 'POST',
+            data: data,
+            success: (function (response) {
+                if (response == "success") {
+                    location.href = "/interviews";
+                    return;
+                }
+                if (response == "error") {
+                    if (isValidUserAnswers()) {
+                        location.reload();
+                    }
+                }
+            }),
+            error: (function () {
+                location.reload();
+            })
+        });
+    });
 });
 
 function loadEmployeePosts(select) {
@@ -146,9 +174,10 @@ function submitInterviewForm() {
                         "<tr class='brown lighten-5'>" +
                         "<td><input type='checkbox' value='" + id + "' id='" + id + "' name='id'/><label for='" + id + "' class='table-checkbox-fix'></label></td>" +
                         "<td>" + value["name"] + "</td>" +
+                        "<td><i class='material-icons table-material-icons-fix'>" + value["type"] + "</i></td>" +
                         "<td>" + value["description"] + "</td>" +
                         "<td>" + value["date"] + "</td>" +
-                        "<td><a onclick='hideInterview(" + value["interview_id"] + "," + 'this' + ")'><i class='material-icons table-material-icons-fix' title='Открыта'>" + value["hide"] + "</i></a></td>" +
+                        "<td><a onclick='hideInterview(" + value["interview_id"] + "," + 'this' + ")'><i class='material-icons table-material-icons-fix' title='Скрыта для прохождения'>" + value["hide"] + "</i></a></td>" +
                         "<td><a href='" + url + "' class='btn-floating cyan darken-1'><i class='material-icons' title='Список вопросов'>subject</i></a></td>" +
                         "<td><a class='btn-floating teal accent-4'><i class='material-icons' title='Список респондентов'>supervisor_account</i></a></td>" +
                         "</tr>");
@@ -156,6 +185,9 @@ function submitInterviewForm() {
                 $("#addInterviewModal").closeModal();
                 clearForm('interviewForm');
             } else {
+                if (!isValidInterviewForm()) {
+                    return;
+                }
                 location.reload();
             }
         }),
@@ -174,7 +206,6 @@ function showEditInterviewModal() {
             break;
         }
     }
-
     if (id > 0) {
         $.ajax({
             url: '/edit-interview',
@@ -193,20 +224,13 @@ function showEditInterviewModal() {
                     $('#type').val(value["type"]).material_select();
 
                     var subdivisionIds = value['subdivisions'].split(",");
-                    var subSel = document.getElementById("subdivisions");
 
-                    /*var options = subSel.options;
-                     for (var k = 0; k < subdivisionIds.length; k++) {
-                     for (var i = 0; i < options.length; i++) {
-                     if (options[i].value == subdivisionIds[k]) {
-                     $(options[i]).attr("selected", true);
-                     }
-                     }
-                     }*/
-                    $('#subdivisions').material_select();
+                    $('#addInterviewModal').openModal();
+                    $("#subdivisions").val(["Ректорат", "Информационные технологии"]);
+                    $("#subdivisions").material_select();
+
+
                 });
-
-                $('#addInterviewModal').openModal();
             }
         });
     } else {
@@ -234,11 +258,11 @@ function hideInterview(interviewId, element) {
             if (response == "success") {
                 var icon = $(element).find("i");
                 var text = $(icon).text();
-                if (text == "visibility") {
-                    $(icon).html("visibility_off");
+                if (text == "lock_open") {
+                    $(icon).html("lock");
                     Materialize.toast("Анкета скрыта", 2000)
                 } else {
-                    $(icon).html("visibility");
+                    $(icon).html("lock_open");
                     Materialize.toast("Акета открыта", 2000)
                 }
             }
@@ -312,7 +336,7 @@ function hideElements() {
             .find(".error-alert")
             .remove();
         $(modalContent)
-            .append("<div class = 'info-alert modal-alert-fix'>Данная анкета будет доступна только анонимным пользователям</div>");
+            .append("<div class = 'info-alert modal-alert-fix'>Данная анкета будет доступна только для анонимных пользователей</div>");
     }
 }
 

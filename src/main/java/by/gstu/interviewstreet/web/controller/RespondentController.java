@@ -1,11 +1,15 @@
-package by.gstu.interviewstreet.web.controllers;
+package by.gstu.interviewstreet.web.controller;
 
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.domain.Form;
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.User;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.UserService;
 import by.gstu.interviewstreet.web.AttributeConstants;
+import by.gstu.interviewstreet.web.ParameterConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -55,29 +60,34 @@ public class RespondentController {
     }
 
     @RequestMapping(value = {"/send-interview/{id}"}, method = RequestMethod.POST)
+    @ResponseBody
     public String sendUserForm(@PathVariable Integer id, HttpServletRequest req) {
-        Interview interview = interviewService.get(id);
+        try {
+            List<Integer> questionIds = new ArrayList<>();
+            Map<Integer, String[]> map = new HashMap<>();
 
-        List<Integer> questionIds = new ArrayList<>();
-        Map<Integer, String[]> map = new HashMap<>();
+            Interview interview = interviewService.get(id);
+            Enumeration params = req.getParameterNames();
 
-        Enumeration params = req.getParameterNames();
-        while (params.hasMoreElements()) {
-            String param = params.nextElement().toString();
-            String[] values = req.getParameterValues(param);
+            while (params.hasMoreElements()) {
+                String param = params.nextElement().toString();
+                if (ParameterConstants.INTERVIEW_ID.equals(param)) {
+                    continue;
+                }
+                String[] values = req.getParameterValues(param);
+                Integer curId = Integer.parseInt(param);
 
-            Integer curId = Integer.parseInt(param);
+                questionIds.add(curId);
+                map.put(curId, values);
+            }
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.get(username);
 
-            questionIds.add(curId);
-            map.put(curId, values);
+            answerService.insertUserAnswers(interview, questionIds, map, user);
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
         }
-
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.get(username);
-
-        answerService.insertUserAnswers(interview, questionIds, map, user);
-
-        return "redirect:/interviews";
     }
 
 }

@@ -1,16 +1,15 @@
-package by.gstu.interviewstreet.web.controllers;
+package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.ParameterConstants;
-import by.gstu.interviewstreet.web.params.ReqParam;
-import by.gstu.interviewstreet.web.params.RequestIdParam;
-import by.gstu.interviewstreet.web.params.RequestTextParam;
-import by.gstu.interviewstreet.web.params.exceptions.RequestParamException;
-import by.gstu.interviewstreet.web.utils.MessageUtils;
-import by.gstu.interviewstreet.web.utils.Parser;
+import by.gstu.interviewstreet.web.param.ReqParam;
+import by.gstu.interviewstreet.web.param.RequestIdParam;
+import by.gstu.interviewstreet.web.param.RequestParamException;
+import by.gstu.interviewstreet.web.param.RequestTextParam;
+import by.gstu.interviewstreet.web.util.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -28,9 +27,6 @@ import java.util.Set;
 
 @Controller
 public class EditorController {
-
-    @Autowired
-    MessageUtils messenger;
 
     @Autowired
     FormService formService;
@@ -61,8 +57,7 @@ public class EditorController {
                     int id = Integer.parseInt((String) element);
                     post = new Post(id);
                 } catch (NumberFormatException e) {
-                    System.err.println("Элемент " + element + " не может быть преобразован к числу.");
-                    e.printStackTrace();
+                    return post;
                 }
                 return post;
             }
@@ -118,10 +113,13 @@ public class EditorController {
     @ResponseBody
     public String createInterview(@Valid ExtendUserInterview userInterview, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return messenger.getMessageFromBindingResult(bindingResult);
+            return AttributeConstants.ERROR_RESPONSE_BODY;
         }
         try {
             Interview interview = interviewService.insert(userInterview);
+            if (interview == null) {
+                return AttributeConstants.ERROR_RESPONSE_BODY;
+            }
             return interviewService.getJSON(interview);
         } catch (RuntimeException e) {
             return AttributeConstants.ERROR_RESPONSE_BODY;

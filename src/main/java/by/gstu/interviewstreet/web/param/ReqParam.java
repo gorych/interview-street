@@ -1,6 +1,4 @@
-package by.gstu.interviewstreet.web.params;
-
-import by.gstu.interviewstreet.web.params.exceptions.RequestParamException;
+package by.gstu.interviewstreet.web.param;
 
 import java.io.Serializable;
 

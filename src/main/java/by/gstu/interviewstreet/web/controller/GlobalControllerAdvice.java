@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.controllers;
+package by.gstu.interviewstreet.web.controller;
 
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.ExtendUserInterview;

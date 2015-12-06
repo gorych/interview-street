@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.filters;
+package by.gstu.interviewstreet.web.filter;
 
 import javax.servlet.*;
 import java.io.IOException;

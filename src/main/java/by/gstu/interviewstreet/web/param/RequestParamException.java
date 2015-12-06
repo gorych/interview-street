@@ -1,4 +1,5 @@
-package by.gstu.interviewstreet.web.params.exceptions;
+package by.gstu.interviewstreet.web.param;
+
 
 public class RequestParamException extends Exception{
 

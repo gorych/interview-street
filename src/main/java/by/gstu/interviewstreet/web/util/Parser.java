@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.utils;
+package by.gstu.interviewstreet.web.util;
 
 public class Parser {
 

@@ -1,7 +1,5 @@
-package by.gstu.interviewstreet.web.params;
+package by.gstu.interviewstreet.web.param;
 
-
-import by.gstu.interviewstreet.web.params.exceptions.RequestParamException;
 
 public class RequestIdParam extends ReqParam {
 

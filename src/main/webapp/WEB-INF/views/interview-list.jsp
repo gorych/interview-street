@@ -28,6 +28,7 @@
                         <i class="material-icons" title="Выбрать все">done_all</i></a>
                     </th>
                     <th data-field="name">Название анкеты</th>
+                    <th data-field="description">Тип</th>
                     <th data-field="description">Описание</th>
                     <th data-field="date_created">Дата создания</th>
                     <th data-field="state">Состояние</th>
@@ -41,18 +42,30 @@
                             <label for="${interview.id}" class="table-checkbox-fix "></label>
                         </td>
                         <td>${interview.name}</td>
+                        <c:choose>
+                            <c:when test="${interview.type.id <= 1}">
+                                <td><i
+                                        class="material-icons table-material-icons-fix"
+                                        title="Неанонимная">visibility</i></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td><i
+                                        class="material-icons table-material-icons-fix"
+                                        title="Анонимная">visibility_off</i></td>
+                            </c:otherwise>
+                        </c:choose>
                         <td>${interview.description}</td>
                         <td>${interview.placementDate}</td>
                         <c:choose>
                             <c:when test="${interview.hide}">
                                 <td><a onclick="hideInterview(${interview.id}, this)"><i
                                         class="material-icons table-material-icons-fix"
-                                        title="Открыта">visibility</i></a></td>
+                                        title="Закрыта для прохождения">lock</i></a></td>
                             </c:when>
                             <c:otherwise>
                                 <td><a onclick="hideInterview(${interview.id}, this)"><i
                                         class="material-icons table-material-icons-fix"
-                                        title="Скрыта">visibility_off</i></a></td>
+                                        title="Открыта для прохождения">lock_open</i></a></td>
                             </c:otherwise>
                         </c:choose>
                         <td>

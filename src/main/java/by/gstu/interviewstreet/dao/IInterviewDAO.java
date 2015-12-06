@@ -28,4 +28,6 @@ public interface IInterviewDAO {
 
     void hideInterview(int interviewId);
 
+    void passUserInterview(int interviewId);
+
 }

@@ -24,7 +24,8 @@ public class InterviewDAOImpl implements IInterviewDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Interview> getAllInterviews() {
-        return sessionFactory.getCurrentSession().createQuery("FROM Interview")
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM Interview ORDER BY placementDate DESC")
                 .list();
     }
 
@@ -32,8 +33,9 @@ public class InterviewDAOImpl implements IInterviewDAO {
     @SuppressWarnings("unchecked")
     public List<UserInterview> getUserInterviews(User user) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false");
-        query.setInteger("id",user.getId());
+        Query query = session.createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false " +
+                "AND isPassed != true AND interview.type.id = 1");
+        query.setInteger("id", user.getId());
 
         return query.list();
     }
@@ -107,11 +109,28 @@ public class InterviewDAOImpl implements IInterviewDAO {
     @Override
     public void hideInterview(int interviewId) {
         Session session = sessionFactory.getCurrentSession();
-        Interview interview = (Interview) session.load(Interview.class, interviewId);
-        if (interview != null) {
+        Query query = session.createQuery("FROM UserInterview WHERE interview.id = :id");
+        query.setInteger("id", interviewId);
+
+        UserInterview userInterview = (UserInterview) query.uniqueResult();
+        if (userInterview != null) {
+            Interview interview = userInterview.getInterview();
             boolean hidden = !interview.isHide();
+            if (!hidden) {
+                userInterview.setIsPassed(false);
+            }
             interview.setHide(hidden);
             session.save(interview);
         }
+    }
+
+    @Override
+    public void passUserInterview(int interviewId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("FROM UserInterview WHERE interview.id = :id");
+        query.setInteger("id", interviewId);
+
+        UserInterview interview = (UserInterview) query.uniqueResult();
+        interview.setIsPassed(true);
     }
 }

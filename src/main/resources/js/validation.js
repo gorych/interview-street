@@ -110,3 +110,83 @@ function isValidInterviewForm() {
     return true;
 }
 
+function isValidUserAnswers() {
+    var sections = $(document)
+        .find('form')
+        .find('section');
+
+    var errors = [];
+    $.each(sections, function (i, section) {
+        var inputs = $(section)
+            .find('.answers')
+            .find('input');
+        var type = $(inputs[0]).attr('type');
+        var questionId = $(section).find(".question").attr("id");
+
+        var isValid = true;
+        switch (type) {
+            case "text":
+                isValid = isValidInputs(inputs);
+                break;
+            case "radio":
+            case "checkbox":
+                isValid = isValidRadioAndCheckboxes(inputs);
+                break;
+            case "range":
+                isValid = isValidRange(inputs);
+                break;
+        }
+        var errorBlocks = $(section).find(".danger-alert");
+        if (!isValid) {
+            errors.push("error");
+            if (errorBlocks.length == 0) {
+                $(section).find(".answers").append("<div class = 'danger-alert z-depth-1'>" +
+                    "Вы не ответили на этот вопрос или на его часть. " +
+                    "Посмотрите вопрос снова и завершите свой ответ, пожалуйста.</div>");
+            } else {
+                $(errorBlocks[0])
+                    .replaceWith("<div class = 'danger-alert z-depth-1'>" +
+                    "Вы не ответили на этот вопрос или на его часть. " +
+                    "Посмотрите вопрос снова и завершите свой ответ, пожалуйста.</div>")
+            }
+        } else {
+            errorBlocks.remove().end();
+        }
+    });
+
+    return errors.length <= 0;
+}
+
+function isValidInputs(inputs) {
+    var isError = false;
+    $.each(inputs, function (i, input) {
+        var text = input.value;
+        if (text.length < 1) {
+            isError = true;
+            return false;
+        }
+    });
+    return !isError;
+}
+
+function isValidRadioAndCheckboxes(element) {
+    var isError = true;
+    $.each(element, function (i, el) {
+        if (el.checked == true) {
+            isError = false;
+            return false;
+        }
+    });
+    return !isError;
+}
+
+function isValidRange(element) {
+    var isError = false;
+    $.each(element, function (i, el) {
+        if (el.value == "" || el <= 0) {
+            isError = true;
+            return false;
+        }
+    });
+    return !isError;
+}

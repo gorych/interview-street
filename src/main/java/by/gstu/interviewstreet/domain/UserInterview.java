@@ -23,6 +23,9 @@ public class UserInterview implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "isPassed")
+    private boolean isPassed;
+
     public UserInterview(){
     }
 
@@ -53,6 +56,14 @@ public class UserInterview implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean getPassed() {
+        return isPassed;
+    }
+
+    public void setIsPassed(boolean isPassed) {
+        this.isPassed = isPassed;
     }
 
     @Override

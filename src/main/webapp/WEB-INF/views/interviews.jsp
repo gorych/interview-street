@@ -34,11 +34,11 @@
         <c:forEach var="item" items="${userInterviews}">
             <div class="col s6 m6 l4">
                 <div class="card teal darken-1 z-depth-2">
-                    <div class="card-content white-text">
+                    <div class="card-content card-content-fix white-text">
                         <span class="card-title card-title-fix">${item.interview.name}</span>
                         <h6>Дата размещения:<br/> ${item.interview.placementDate}</h6>
 
-                        <p>${item.interview.description}. А может и не для всех. Это как пойдет</p>
+                        <p>${item.interview.description}</p>
                     </div>
                     <div class="card-action">
                         <a href="/user-interviews/${item.interview.id}"

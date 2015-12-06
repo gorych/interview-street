@@ -17,13 +17,11 @@ public class Interview implements Serializable {
     @GeneratedValue
     private int id;
 
-    @Size(min = 5, max = 50,
-            message = "Название анкеты должно быть от 5 до 50 символов")
+    @Size(min = 1, max = 50)
     @Column(name = "name")
     private String name;
 
-    @Size(min = 5, max = 100,
-            message = "Описание анкеты должно быть от 5 до 100 символов")
+    @Size(min = 1, max = 100)
     @Column(name = "description")
     private String description;
 

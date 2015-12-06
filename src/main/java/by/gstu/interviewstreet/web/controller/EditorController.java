@@ -121,7 +121,7 @@ public class EditorController {
                 return AttributeConstants.ERROR_RESPONSE_BODY;
             }
             return interviewService.getJSON(interview);
-        } catch (RuntimeException e) {
+        } catch (RequestParamException | RuntimeException e) {
             return AttributeConstants.ERROR_RESPONSE_BODY;
         }
     }

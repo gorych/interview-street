@@ -6,6 +6,8 @@ import by.gstu.interviewstreet.dao.IUserDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.web.param.RequestIdParam;
+import by.gstu.interviewstreet.web.param.RequestParamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +63,7 @@ public class InterviewServiceImpl implements InterviewService {
         StringBuilder subdivisions = new StringBuilder();
 
         List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interview.getId());
-        if (userInterviews != null) {
+        if (userInterviews != null && userInterviews.size() != 0) {
             for (UserInterview ui : userInterviews) {
                 int postName = ui.getUser().getEmployee().getPost().getId();
                 int subdivisionName = ui.getUser().getEmployee().getSubdivision().getId();
@@ -104,29 +106,28 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview insert(ExtendUserInterview userInterview) {
+    public Interview insert(ExtendUserInterview userInterview) throws RequestParamException {
         Interview interview = userInterview.getInterview();
 
         Calendar calender = Calendar.getInstance();
         java.util.Date utilDate = calender.getTime();
         java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
 
-        int answerTypeId = interview.getType().getId();
-        InterviewType type = interviewTypeDAO.getTypeById(answerTypeId);
+        int interviewType = interview.getType().getId();
+        InterviewType type = interviewTypeDAO.getTypeById(interviewType);
 
         interview.setPlacementDate(currentDate);
         interview.setType(type);
         interview.setHide(true);
 
         Set<Post> posts = userInterview.getPosts();
-        if (posts == null) {
+        if (interviewType == 2)/*so it is necessary*/ {
             interviewDAO.insertInterview(interview);
             return interview;
         }
-
         List<Integer> ids = new ArrayList<>();
         for (Post post : posts) {
-            ids.add(post.getId());
+            ids.add(new RequestIdParam(post.getId()).intValue());
         }
 
         List<User> users = userDAO.getUsersByPosts(ids);

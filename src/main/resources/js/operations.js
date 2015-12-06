@@ -94,9 +94,7 @@ function loadEmployeePosts(select) {
             $.each(employees, function (index, element) {
                 if (index == 0) {
                     $("#posts").append("<option value='" + -1 + "' disabled selected>Выберите должности</option>");
-                    $("#posts").append("<option value='" + 0 + "'>Вcе</option>");
                 }
-
                 $("#posts").append("<option value='" + element["post_id"] + "'>" + element["post_name"] + "</option>");
             });
 
@@ -147,9 +145,9 @@ function submitQuestionForm(formId) {
 }
 
 function submitInterviewForm() {
-    if (!isValidInterviewForm()) {
+    /*if (!isValidInterviewForm()) {
         return;
-    }
+    }*/
     $.ajax({
         url: "/create-interview",
         data: $('#interviewForm').serialize(),

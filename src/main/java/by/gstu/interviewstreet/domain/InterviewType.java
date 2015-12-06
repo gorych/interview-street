@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -13,6 +14,7 @@ public class InterviewType implements Serializable{
     private int id;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     public int getId() {

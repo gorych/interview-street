@@ -57,19 +57,19 @@
                             </c:when>
                             <c:otherwise>
                             <c:choose>
-                                <c:when test="${loop.last && loop.index%2==0}">
-                                    <div class="input-field input-field-fix empty-padding col l12 m12 s12">
+                            <c:when test="${loop.last && loop.index%2==0}">
+                            <div class="input-field input-field-fix empty-padding col l12 m12 s12">
                                 </c:when>
                                 <c:otherwise>
-                                    <div class="input-field input-field-fix empty-padding col l6 m6 s12">
-                                        </c:otherwise>
-                                        </c:choose>
-                                        <input id="${el.answer.id}" type="text" class="validate">
-                                        <label for="${el.answer.id}">${el.answer.text}</label>
-                                    </div>
+                                <div class="input-field input-field-fix empty-padding col l6 m6 s12">
+                                    </c:otherwise>
+                                    </c:choose>
+                                    <input id="${el.answer.id}" type="text" class="validate">
+                                    <label for="${el.answer.id}">${el.answer.text}</label>
+                                </div>
                                 </c:otherwise>
-                            </c:choose>
-                            </c:forEach>
+                                </c:choose>
+                                </c:forEach>
                             </div>
                             <div class="divider"></div>
                             <div class="right-align">
@@ -79,6 +79,7 @@
                                    class="waves-effect waves-red btn-flat">Удалить</a>
                             </div>
                         </div>
+                        <!--This is bug, but it works so-->
                 </section>
             </c:forEach>
             <div id="interview-questions">

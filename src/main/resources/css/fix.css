@@ -1,6 +1,6 @@
 main {
-     flex: 1 0 auto;
- }
+    flex: 1 0 auto;
+}
 
 body {
     display: flex;
@@ -129,7 +129,7 @@ li span [type="checkbox"] + label:before {
     padding: 0;
 }
 
-.row .col .empty-padding:nth-child(even){
+.row .col .empty-padding:nth-child(even) {
     padding-right: 0;
 }
 
@@ -154,6 +154,18 @@ li span [type="checkbox"] + label:before {
 
 .input-field-fix {
     margin-top: 0;
+}
+
+.question .answer-margin-fix {
+    margin: 15px 0 10px;
+}
+
+.question-padding-fix {
+    padding-top: 0;
+}
+
+.card-content-fix {
+    height: 11em;
 }
 
 

@@ -55,19 +55,23 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public String getJSON(Interview interview) {
-        List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interview.getId());
+        final int OPEN_INTERVIEW = 1;
 
         StringBuilder posts = new StringBuilder();
         StringBuilder subdivisions = new StringBuilder();
-        for (UserInterview ui : userInterviews) {
-            int postName = ui.getUser().getEmployee().getPost().getId();
-            int subdivisionName = ui.getUser().getEmployee().getSubdivision().getId();
 
-            posts.append(postName).append(",");
-            subdivisions.append(subdivisionName).append(",");
+        List<UserInterview> userInterviews = userInterviewDAO.getUserInterviewsById(interview.getId());
+        if (userInterviews != null) {
+            for (UserInterview ui : userInterviews) {
+                int postName = ui.getUser().getEmployee().getPost().getId();
+                int subdivisionName = ui.getUser().getEmployee().getSubdivision().getId();
+
+                posts.append(postName).append(",");
+                subdivisions.append(subdivisionName).append(",");
+            }
+            posts.deleteCharAt(posts.length() - 1);
+            subdivisions.deleteCharAt(subdivisions.length() - 1);
         }
-        posts.deleteCharAt(posts.length() - 1);
-        subdivisions.deleteCharAt(subdivisions.length() - 1);
 
         List<Map<String, String>> jsonList = new ArrayList<>();
         Map<String, String> jsonObject = new HashMap<>();
@@ -75,16 +79,15 @@ public class InterviewServiceImpl implements InterviewService {
         jsonObject.put("id", interview.getId() + "");
         jsonObject.put("name", interview.getName());
         jsonObject.put("date", interview.getPlacementDate() + "");
-        jsonObject.put("type", interview.getType().getId() + "");
-        jsonObject.put("hide", interview.isHide() ? "visibility" : "visibility_off");
+        jsonObject.put("type_id", interview.getType().getId() + "");
+        jsonObject.put("type", interview.getType().getId() <= OPEN_INTERVIEW ? "visibility" : "visibility_off");
+        jsonObject.put("hide", interview.isHide() ? "lock" : "lock_open");
         jsonObject.put("description", interview.getDescription());
         jsonObject.put("subdivisions", subdivisions.toString());
         jsonObject.put("posts", posts.toString());
         jsonObject.put("interview_id", interview.getId() + "");
 
-
         jsonList.add(jsonObject);
-
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(jsonList);
@@ -102,14 +105,6 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public Interview insert(ExtendUserInterview userInterview) {
-        Set<Post> posts = userInterview.getPosts();
-
-        List<Integer> ids = new ArrayList<>();
-        for (Post post : posts) {
-            ids.add(post.getId());
-        }
-
-        List<User> users = userDAO.getUsersByPosts(ids);
         Interview interview = userInterview.getInterview();
 
         Calendar calender = Calendar.getInstance();
@@ -121,8 +116,22 @@ public class InterviewServiceImpl implements InterviewService {
 
         interview.setPlacementDate(currentDate);
         interview.setType(type);
+        interview.setHide(true);
 
+        Set<Post> posts = userInterview.getPosts();
+        if (posts == null) {
+            interviewDAO.insertInterview(interview);
+            return interview;
+        }
+
+        List<Integer> ids = new ArrayList<>();
+        for (Post post : posts) {
+            ids.add(post.getId());
+        }
+
+        List<User> users = userDAO.getUsersByPosts(ids);
         interviewDAO.insertInterview(interview, users);
+
         return interview;
     }
 

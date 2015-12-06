@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class ExtendUserInterview extends UserInterview {
 
-    @NotNull
     private Set<Post> posts;
 
     public Set<Post> getPosts() {

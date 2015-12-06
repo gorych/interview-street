@@ -7,5 +7,6 @@ public class ParameterConstants {
     public static final String ANSWER_TYPE_ID = "typeId";
     public static final String ANSWER_TEXT = "answerText";
     public static final String ANSWER_ID = "answerId";
+    public static final String INTERVIEW_ID = "interviewId";
 
 }

@@ -145,9 +145,9 @@ function submitQuestionForm(formId) {
 }
 
 function submitInterviewForm() {
-    /*if (!isValidInterviewForm()) {
+    if (!isValidInterviewForm()) {
         return;
-    }*/
+    }
     $.ajax({
         url: "/create-interview",
         data: $('#interviewForm').serialize(),

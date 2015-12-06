@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <%@include file="fragments/css_imports.html" %>
-    <title>Редактор анкет</title>
+    <title>Interview Street - Редактор анкет</title>
 </head>
 <body>
 <%@include file="fragments/header.jsp" %>

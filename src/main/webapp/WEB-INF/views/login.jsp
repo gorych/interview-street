@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Вход</title>
+    <title>Interview Street - Вход</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <%@include file="fragments/css_imports.html" %>
 </head>

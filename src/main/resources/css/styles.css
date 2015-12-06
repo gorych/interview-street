@@ -57,6 +57,12 @@ section .badge {
     padding: 10px 5px;
 }
 
+.danger-alert {
+    color: #fff;
+    background-color: #e22d3a;
+    padding: 10px 5px;
+}
+
 .error-alert li {
     list-style-type: disc;
 }
@@ -65,6 +71,14 @@ section .badge {
     margin-bottom: 20px;
 }
 
+td i{
+    cursor: default;
+}
+
 td a i{
     cursor: pointer;
+}
+
+.preview {
+    line-height: 20px;
 }

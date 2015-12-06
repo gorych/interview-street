@@ -1,9 +1,6 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IAnswerDAO;
-import by.gstu.interviewstreet.dao.IAnswerTypeDAO;
-import by.gstu.interviewstreet.dao.IFormDAO;
-import by.gstu.interviewstreet.dao.IQuestionDAO;
+import by.gstu.interviewstreet.dao.*;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +22,9 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Autowired
     private IAnswerTypeDAO answerTypeDAO;
+
+    @Autowired
+    private IInterviewDAO interviewDAO;
 
     @Autowired
     private IFormDAO formDAO;
@@ -56,7 +56,7 @@ public class AnswerServiceImpl implements AnswerService {
                 answerDAO.insertUserAnswer(new UserAnswer(user, question, interview, answer, currentDate));
             }
         }
-
+        interviewDAO.passUserInterview(interview.getId());
     }
 
     @Override

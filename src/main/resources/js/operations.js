@@ -114,12 +114,13 @@ function isCheckedValues(nodes) {
     return flag;
 }
 
-function submitQuestionForm(formId) {
-    if (!isValidQuestionForm(formId)) {
+function submitQuestionForm(questionId) {
+    if (!isValidQuestionForm(questionId)) {
         return;
     }
-
-    var data = $("#" + formId).serialize();
+    var formId = "form" + questionId;
+    var formCssId = "#form" + questionId;
+    var data = $(formCssId).serialize();
     $.ajax({
         url: "/send-form",
         method: 'POST',
@@ -131,7 +132,7 @@ function submitQuestionForm(formId) {
                 return;
             }
             if (response == "error") {
-                if (!isValidQuestionForm(formId)) {
+                if (!isValidQuestionForm(questionId)) {
                     return;
                 }
 
@@ -284,8 +285,14 @@ function deleteQuestion(questionId) {
         method: 'GET',
         success: (function (response) {
             if (response == "success") {
-                $("#" + questionId).parent('section').remove();
-                $("#" + questionId).remove();
+                var form = $("#form" + questionId);
+                if (form != null && form.length > 0) {
+                    $(form).remove();
+                } else {
+                    $("#" + questionId)
+                        .parent('section')
+                        .remove();
+                }
                 updateBadges();
                 Materialize.toast("Вопрос успешно удален", 2000)
             } else {

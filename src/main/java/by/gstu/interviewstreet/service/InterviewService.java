@@ -11,6 +11,8 @@ public interface InterviewService {
 
     List<Interview> getAll();
 
+    List<Interview> getByType(int typeId);
+
     List<Form> getQuestions(int interviewId);
 
     List<Form> getQuestions(long hash);
@@ -18,6 +20,8 @@ public interface InterviewService {
     List<List<Form>> getAnswers(List<Form> questionForm);
 
     String getJSON(Interview interview);
+
+    String getLightJSON(List<Interview> interview);
 
     Interview get(int interviewId);
 

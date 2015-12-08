@@ -15,7 +15,6 @@ public class UserAnswer implements Serializable {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "user_id")
     private User user;
 

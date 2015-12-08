@@ -39,6 +39,15 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
+    public List<Interview> getByType(int typeId) {
+        if(typeId < 1 || typeId > 2){
+            return interviewDAO.getAll();
+        }
+        return interviewDAO.getByType(typeId);
+    }
+
+    @Override
+    @Transactional
     public List<Form> getQuestions(int interviewId) {
         List<Form> forms = interviewDAO.getInterviewQuestions(interviewId);
         if (forms == null) {
@@ -72,18 +81,22 @@ public class InterviewServiceImpl implements InterviewService {
 
         StringBuilder posts = new StringBuilder();
         StringBuilder subdivisions = new StringBuilder();
+        StringBuilder subdivisionNames = new StringBuilder();
 
         List<UserInterview> userInterviews = userInterviewDAO.getById(interview.getId());
         if (userInterviews != null && userInterviews.size() != 0) {
             for (UserInterview ui : userInterviews) {
-                int postName = ui.getUser().getEmployee().getPost().getId();
-                int subdivisionName = ui.getUser().getEmployee().getSubdivision().getId();
+                int postId = ui.getUser().getEmployee().getPost().getId();
+                int subdivisionId = ui.getUser().getEmployee().getSubdivision().getId();
+                String subdivisionName = ui.getUser().getEmployee().getSubdivision().getName();
 
-                posts.append(postName).append(",");
-                subdivisions.append(subdivisionName).append(",");
+                posts.append(postId).append(",");
+                subdivisions.append(subdivisionId).append(",");
+                subdivisionNames.append(subdivisionName).append(",");
             }
             posts.deleteCharAt(posts.length() - 1);
             subdivisions.deleteCharAt(subdivisions.length() - 1);
+            subdivisionNames.deleteCharAt(subdivisionNames.length() - 1);
         }
 
         List<Map<String, String>> jsonList = new ArrayList<>();
@@ -97,10 +110,31 @@ public class InterviewServiceImpl implements InterviewService {
         jsonObject.put("hide", interview.isHide() ? "lock" : "lock_open");
         jsonObject.put("description", interview.getDescription());
         jsonObject.put("subdivisions", subdivisions.toString());
+        jsonObject.put("subdvsn_names", subdivisionNames.toString());
         jsonObject.put("posts", posts.toString());
         jsonObject.put("interview_id", interview.getId() + "");
 
         jsonList.add(jsonObject);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(jsonList);
+        } catch (JsonProcessingException e) {
+            return "";
+        }
+    }
+
+    @Override
+    public String getLightJSON(List<Interview> interviews) {
+
+        List<Map<String, String>> jsonList = new ArrayList<>();
+
+        for (Interview interview:interviews){
+            Map<String, String> jsonObject = new HashMap<>();
+            jsonObject.put("id", interview.getId() + "");
+            jsonObject.put("name", interview.getName());
+            jsonList.add(jsonObject);
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(jsonList);

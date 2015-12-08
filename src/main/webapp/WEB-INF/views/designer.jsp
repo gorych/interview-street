@@ -16,6 +16,10 @@
         <div class="main-col col l12 m12 s12">
             <div class="box box-padding-fix">
                 <h4 class="header teal-text">${interview.name}</h4>
+                <c:if test="${interview.type.id eq 2}">
+                    <h6><a href="localhost:8080/interview-street/${interview.hash}/anonymous">Ссылка:</a>
+                        localhost:8080/interview-street/${interview.hash}/anonymous</h6>
+                </c:if>
                 <h6>Тип: ${interview.type.name}</h6>
                 <c:choose>
                     <c:when test="${forms.size() < 1}">
@@ -26,7 +30,6 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-
             <c:forEach var="form" items="${forms}" varStatus="cur">
                 <section>
                     <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
@@ -79,7 +82,7 @@
                                    class="waves-effect waves-red btn-flat">Удалить</a>
                             </div>
                         </div>
-                        <!--This is bug, but it works so-->
+                        <!--This is a bug, but it works so. Don't change!:)-->
                 </section>
             </c:forEach>
             <div id="interview-questions">

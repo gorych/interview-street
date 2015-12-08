@@ -7,10 +7,11 @@ function buildForm(interviewId) {
             $('html, body').animate({scrollTop: $(document).height()}, 'slow');
 
             var answersBoxId = "answers" + questionId;
-            var questionCssId = "#" + questionId;
+            var formId = "form" + questionId;
+            var formCssId = "#form" + questionId;
 
             $('<form/>', {
-                id: questionId,
+                id: formId,
                 class: 'question add-question-form',
                 method: 'POST',
                 action: '/send-form'
@@ -19,7 +20,7 @@ function buildForm(interviewId) {
             var questionTextId = "questionText" + questionId;
             var questionTextCssId = "#" + questionTextId;
 
-            $(questionCssId)
+            $(formCssId)
                 .prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
                 "<input id='" + questionTextId + "' type='text' name='questionText' length='200'/>" +
                 "<label for='" + questionTextId + "'>Текст вопроса</label></div>" +
@@ -42,14 +43,14 @@ function buildForm(interviewId) {
             $('<div/>', {
                 id: answersBoxId,
                 class: "row"
-            }).appendTo(questionCssId);
+            }).appendTo(formCssId);
 
             var answerBtnId = "addAnswerBtn" + questionId;
 
             $('<a/>', {
                 id: answerBtnId,
                 class: 'btn-floating btn-middle waves-effect waves-light green'
-            }).appendTo(questionCssId).click(function () {
+            }).appendTo(formCssId).click(function () {
                 addAnswer(answersBoxId, interviewId, questionId)
             });
 
@@ -58,7 +59,7 @@ function buildForm(interviewId) {
 
             $('<div/>', {
                 class: 'divider divider-margin-fix'
-            }).appendTo(questionCssId);
+            }).appendTo(formCssId);
 
             var rightBox = 'rightBox' + questionId;
             var addQuestion = 'addQuestion' + questionId;
@@ -67,7 +68,7 @@ function buildForm(interviewId) {
             $('<div/>', {
                 class: 'right-align',
                 id: rightBox
-            }).appendTo(questionCssId);
+            }).appendTo(formCssId);
 
             $("#" + rightBox)
                 .append("<a id='" + addQuestion + "' class='waves-effect waves-green btn-flat'>Сохранить</a>")
@@ -89,7 +90,7 @@ function editForm(questionId, interviewId) {
         url: "/load-question/" + questionId,
         method: 'GET',
         success: function (response) {
-            if (response == "") {
+            if (response == "error") {
                 location.reload();
                 return false;
             }
@@ -100,9 +101,12 @@ function editForm(questionId, interviewId) {
 
             $("#" + questionId).html("<form method='POST' action='/send-form' id='" + formId + "'></form>");
 
+            var questionTextId = "questionText" + questionId;
+            var questionTextCssId = "#" + questionTextId;
+
             $(formCssId).prepend("<div class='row'><div class='input-field col l8 m8 s12'>" +
-                "<input id='questionText' type='text' name='questionText' length='200'/>" +
-                "<label for='questionText'>Текст вопроса</label></div>" +
+                "<input id='" + questionTextId + "' type='text' name='questionText' length='200'/>" +
+                "<label for='" + questionTextId + "'>Текст вопроса</label></div>" +
                 "<div class='input-field col l4 m4 s12'>" +
                 "<select name='typeId' id='type'>" +
                 "<option value='' disabled selected>Тип вопроса</option>" +
@@ -119,10 +123,10 @@ function editForm(questionId, interviewId) {
             }).appendTo(formCssId);
 
             $.each(values, function (index, value) {
-                $('#questionText').val(value["question"]);
+                $(questionTextCssId).val(value["question"]);
                 $('#type').val(value["type"]);
 
-                $("label[for='questionText']").addClass("active");
+                $("label[for='" + questionTextId + "']").addClass("active");
 
                 var answers = value["answers"].split("\n");
                 var ids = value["answer_ids"].split("\n");
@@ -179,7 +183,7 @@ function editForm(questionId, interviewId) {
                 class: 'divider divider-margin-fix'
             }).appendTo(formCssId);
 
-            var submit = "JavaScript:submitQuestionForm('" + formCssId + "')";
+            var submit = "JavaScript:submitQuestionForm('" + questionId + "')";
 
             $('<div/>', {
                 class: 'right-align'
@@ -201,6 +205,8 @@ function addAnswer(parentId, interviewId, questionId) {
         method: 'GET'
     }).done(function (answerId) {
         if (answerId > -1) {
+            $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+
             var textId = "text" + answerId;
 
             $('<div/>', {
@@ -253,15 +259,25 @@ function updateBadges() {
 }
 
 function showQuestionSection(formId, formData) {
-    $("#" + formId).remove();
+    var formCssId = "#" + formId;
+    var question = $(formCssId).parent('.question');
+    var section = $(question).parent('section');
+
+    $(question).remove();
+    $(formCssId).remove();
+
     var questionId = formData["questionId"];
     var questionCssId = "#" + questionId;
 
-    $("<section><div class='badge teal valign-wrapper'><h6 class='valig text'></h6></div>" +
+    if (section != null && section.length > 0) {
+        section = $(section).empty();
+    } else {
+        section = $("<section></section>")
+            .insertBefore("#interview-questions");
+    }
+    $(section).append("<div class='badge teal valign-wrapper'><h6 class='valig text'></h6></div>" +
         "<div class='question' id=" + questionId + ">" +
-        "<h5 class='header black-text'>" + formData["questionText"] + "</h5></div></section>")
-        .insertBefore("#interview-questions");
-
+        "<h5 class='header black-text'>" + formData["questionText"] + "</h5></div>")
     updateBadges();
 
     var answerTexts = formData["answerText"];

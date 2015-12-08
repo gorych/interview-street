@@ -153,7 +153,7 @@
         <div class="modal-content">
             <h4>Удаление анкеты</h4>
 
-            <p> Вы действительно хотите удалить анкету(ы)?</p>
+            <p> Вы действительно хотите удалить анкету(ы)? После удаления Вы потеряете все данные.</p>
         </div>
         <div class="modal-footer">
             <a class="waves-effect waves-red btn-flat modal-action modal-close">Нет</a>

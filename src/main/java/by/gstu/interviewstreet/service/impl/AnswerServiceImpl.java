@@ -56,7 +56,9 @@ public class AnswerServiceImpl implements AnswerService {
                 answerDAO.insertUserAnswer(new UserAnswer(user, question, interview, answer, currentDate));
             }
         }
-        interviewDAO.pass(interview.getId());
+        if (user != null) {
+            interviewDAO.pass(interview.getId(), user.getId());
+        }
     }
 
     @Override

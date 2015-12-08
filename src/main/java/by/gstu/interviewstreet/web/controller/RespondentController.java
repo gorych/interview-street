@@ -91,8 +91,11 @@ public class RespondentController {
                 questionIds.add(curId);
                 map.put(curId, values);
             }
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            User user = userService.get(username);
+            User user = null;
+            if(interview.getType().getId() == 1) {
+                String username = SecurityContextHolder.getContext().getAuthentication().getName();
+                user = userService.get(username);
+            }
 
             answerService.insertUserAnswers(interview, questionIds, map, user);
             return AttributeConstants.SUCCESS_RESPONSE_BODY;

@@ -22,6 +22,8 @@ public interface IInterviewDAO {
 
     Interview getById(int id);
 
+    List<Interview> getByType(int typeId);
+
     Interview getByHash(long hash);
 
     int insert(Interview interview);
@@ -32,6 +34,6 @@ public interface IInterviewDAO {
 
     void hide(int interviewId);
 
-    void pass(int interviewId);
+    void pass(int interviewId, int userId);
 
 }

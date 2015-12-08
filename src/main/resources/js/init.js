@@ -99,6 +99,5 @@
         $('.datepicker').pickadate({selectYears: 20});
         $('select').not('.disabled').material_select();
 
-
     }); // end of document ready
 })(jQuery); // end of jQuery name space

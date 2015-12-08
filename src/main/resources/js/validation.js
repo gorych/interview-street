@@ -9,9 +9,9 @@ function invalidPassportData(textbox) {
     return true;
 }
 
-function isValidQuestionForm(formId) {
-    var form = document.getElementById(formId);
-    var question = document.getElementById('questionText' + formId);
+function isValidQuestionForm(questionId) {
+    var form = document.getElementById("form" + questionId);
+    var question = document.getElementById('questionText' + questionId);
     var type = document.getElementsByName('typeId')[0];
     var answers = $("input[name='answerText']");
 
@@ -37,13 +37,13 @@ function isValidQuestionForm(formId) {
         }
     }
 
-    var errorId = "error" + formId;
-    var errorCssId = "#error" + formId;
+    var errorId = "error" + questionId;
+    var errorCssId = "#error" + questionId;
 
     if (errors.length > 0) {
         var errorBlocks = $(errorCssId);
         if (errorBlocks.length == 0) {
-            $("#" + formId)
+            $("#form" + questionId)
                 .find(".divider")
                 .before("<div id='" + errorId + "' class = 'error-alert alert-position-fix'>" + errors.join("") + "</div>");
         } else {
@@ -80,9 +80,10 @@ function isValidInterviewForm() {
     var typeValue = $(type).val();
     if (typeValue == null || typeValue < 1) {
         errors.push("<li>Выберите тип опроса</li>");
-    } else if (typeValue != 2) {
+    }
+    if (typeValue != 2) {
         var postValues = $(posts).val();
-        if (postValues.length < 1) {
+        if (postValues == null || postValues.length < 1) {
             errors.push("<li>Выберите должности сотрудников</li>");
         } else {
             $.each(postValues, function (i, elem) {

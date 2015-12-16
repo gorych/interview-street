@@ -22,6 +22,12 @@ function loadInterviews(select) {
                 });
 
                 $("#interviews").material_select();
+
+                if (type == 2) {
+                    $("#subdivisions").attr("disabled", true).material_select();
+                } else {
+                    $("#subdivisions").removeAttr("disabled").material_select();
+                }
             }
         }),
         error: function () {
@@ -40,12 +46,17 @@ function loadInterviewQuestions(select) {
                 return;
             }
             var questions = JSON.parse(response);
-            $("#questions").empty();
+            /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+            $("#questions").removeClass("l2").addClass("l3").empty();
+            $(".l10").removeClass("l10").addClass("l9");
             if (questions.length > 0) {
                 $.each(questions, function (index, question) {
-                    $("#questions").append("<p><input name='questions' type='radio' id='" + question["id"] + "' " +
-                        "value='" + question["id"] + "'/>" +
-                        "<label for= '" + question["id"] + "'>" + question["text"] + "</label></p>");
+                    var questionId = question["id"];
+                    $("#questions").append("<p><input name='questions' id='" + questionId + "' type='radio'/>" +
+                        "<label for= '" + questionId + "'>" + question["text"] + "</label></p>");
+                    $("#" + questionId).click(function () {
+                        loadAnswers(questionId);
+                    });
                 });
             } else {
                 $("#questions").append("В данной анкете нет вопросов");
@@ -59,8 +70,9 @@ function loadInterviewQuestions(select) {
 }
 
 function loadSubdivisions(select) {
+    var val = select.value;
     $.ajax({
-        url: "/load-subdivisions/" + select.value,
+        url: "/load-subdivisions/" + val,
         method: 'GET',
         success: (function (response) {
             if (response == "error") {
@@ -94,4 +106,40 @@ function loadSubdivisions(select) {
             location.reload();
         }
     });
+}
+function loadAnswers(questionId) {
+    $.ajax({
+        url: "/load-answers/" + questionId,
+        method: 'GET',
+        success: (function (response) {
+            if (response != "error") {
+                var values = JSON.parse(response);
+                if (response.length > 1) {
+                    var arr = [['Да', 'Hours per Day']];
+                    $.each(values, function (index, value) {
+                        var answers = value['answer'].split(";");
+                        var counts = value['counts'].split(";");
+
+                        for (var i = 0; i < answers.length; i++) {
+                            var p = [answers[i], parseInt(counts[i])];
+                            arr.push(p);
+                        }
+
+                        drawChart(arr);
+                    });
+                }
+            } else {
+                location.reload();
+            }
+        }),
+        error: (function () {
+            location.reload();
+        })
+    });
+}
+
+function drawChart(arr) {
+    var data = google.visualization.arrayToDataTable(arr);
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data);
 }

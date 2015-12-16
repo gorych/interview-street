@@ -46,7 +46,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     @Transactional
-    public String getJsonString(int questionId) {
+    public String getJSON(int questionId) {
         Question question = questionDAO.qetById(questionId);
         List<Form> forms = formDAO.getByQuestion(question);
         if (forms == null) {

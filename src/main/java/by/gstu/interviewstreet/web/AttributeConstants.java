@@ -6,7 +6,8 @@ public final class AttributeConstants {
 
 
     public static final String INTERVIEW = "interview";
-    public static final String INTERVIEW_ID = "interviewId";
+    public static final String SUBDIVISION = "subdivision";
+    public static final String TYPE = "type";
     public static final String USER_INTERVIEW = "extendUserInterview";
     public static final String CHIP = "chip";
 
@@ -20,7 +21,6 @@ public final class AttributeConstants {
 
 
     public static final String SUCCESS_RESPONSE_BODY = "success";
-    public static final String REQUEST_PARAM_ERROR = "requestParamError";
     public static final String ERROR_RESPONSE_BODY = "error";
     public static final String EMPTY_BODY = "";
 

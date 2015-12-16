@@ -125,7 +125,6 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public String getLightJSON(List<Interview> interviews) {
-
         List<Map<String, String>> jsonList = new ArrayList<>();
 
         for (Interview interview:interviews){

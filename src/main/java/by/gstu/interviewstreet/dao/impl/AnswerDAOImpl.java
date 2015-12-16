@@ -35,6 +35,24 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public List<UserAnswer> getUserAnswers(int questionId) {
+        return getSession()
+                .createQuery("FROM UserAnswer WHERE question.id = :id GROUP BY answer")
+                .setInteger("id", questionId)
+                .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Integer> getAnswerCount(int questionId) {
+        return getSession()
+                .createQuery("SELECT COUNT(*) FROM UserAnswer WHERE question.id = :id GROUP BY answer")
+                .setInteger("id", questionId)
+                .list();
+    }
+
+    @Override
     public void remove(int id) {
         Answer answer = (Answer) getSession().load(Answer.class, id);
         if (answer != null) {

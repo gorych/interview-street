@@ -12,6 +12,6 @@ public interface FormService {
 
     void remove(Question question);
 
-    String getJsonString(int questionId);
+    String getJSON(int questionId);
 
 }

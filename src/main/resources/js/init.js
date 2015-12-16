@@ -98,6 +98,7 @@
         $('.button-collapse').sideNav({'edge': 'left'});
         $('.datepicker').pickadate({selectYears: 20});
         $('select').not('.disabled').material_select();
+        $('.tabs-wrapper .visualization').pushpin({top: $('.tabs-wrapper').offset().top});
 
     }); // end of document ready
 })(jQuery); // end of jQuery name space

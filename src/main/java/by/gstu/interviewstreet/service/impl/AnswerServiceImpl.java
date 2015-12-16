@@ -3,13 +3,13 @@ package by.gstu.interviewstreet.service.impl;
 import by.gstu.interviewstreet.dao.*;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.AnswerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -71,6 +71,36 @@ public class AnswerServiceImpl implements AnswerService {
     @Transactional
     public AnswerType getAnswerType(int id) {
         return answerTypeDAO.getById(id);
+    }
+
+    @Override
+    @Transactional
+    public String getJSON(int questionId) {
+        List<UserAnswer> answers = answerDAO.getUserAnswers(questionId);
+        List<Integer> count = answerDAO.getAnswerCount(questionId);
+
+        List<Map<String, String>> jsonList = new ArrayList<>();
+
+        Map<String, String> jsonObject = new HashMap<>();
+        StringBuilder res = new StringBuilder();
+        StringBuilder counts = new StringBuilder();
+
+        for (int i = 0; i < answers.size(); i++) {
+            UserAnswer answer = answers.get(i);
+            res.append(answer.getAnswer()).append(";");
+            counts.append(count.get(i)).append(";");
+        }
+
+        jsonObject.put("answer", res.deleteCharAt(res.length() - 1).toString());
+        jsonObject.put("counts", counts.deleteCharAt(counts.length() - 1).toString());
+        jsonObject.put("allNumber", count.size() + "");
+        jsonList.add(jsonObject);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(jsonList);
+        } catch (JsonProcessingException e) {
+            return "";
+        }
     }
 
     @Override

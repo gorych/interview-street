@@ -135,7 +135,7 @@ public class EditorController {
     @ResponseBody
     public String loadQuestion(@PathVariable Integer questionId) {
         try {
-            return formService.getJsonString(questionId);
+            return formService.getJSON(questionId);
         } catch (RuntimeException e) {
             return AttributeConstants.EMPTY_BODY;
         }

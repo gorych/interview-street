@@ -15,6 +15,10 @@ public interface IAnswerDAO {
 
     List<Answer> getByIds(List<Integer> ids);
 
+    List<UserAnswer> getUserAnswers(int questionId);
+
+    List<Integer> getAnswerCount(int questionId);
+
     void remove(int id);
 
     void remove(List<Form> forms);

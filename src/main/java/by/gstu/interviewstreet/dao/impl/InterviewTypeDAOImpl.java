@@ -1,8 +1,8 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
-import by.gstu.interviewstreet.domain.InterviewType;
-import org.springframework.stereotype.Repository;
+        import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
+        import by.gstu.interviewstreet.domain.InterviewType;
+        import org.springframework.stereotype.Repository;
 
 @Repository
 public class InterviewTypeDAOImpl extends AbstractDbDAO implements IInterviewTypeDAO {

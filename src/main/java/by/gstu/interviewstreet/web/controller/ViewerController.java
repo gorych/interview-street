@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.web.controller;
 
 import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.web.AttributeConstants;
@@ -23,6 +24,9 @@ public class ViewerController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    AnswerService answerService;
+
     @RequestMapping(value = {"/statistics"}, method = RequestMethod.GET)
     public String showStatistics() {
         return "statistics";
@@ -39,6 +43,17 @@ public class ViewerController {
         }
     }
 
+    @RequestMapping(value = {"/load-subdivisions/{interviewId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+    @ResponseBody
+    public String loadSubdivisions(@PathVariable int interviewId) {
+        try {
+            Interview interview = interviewService.get(interviewId);
+            return interviewService.getJSON(interview);
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+    }
+
     @RequestMapping(value = {"/load-questions/{interviewId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     @ResponseBody
     public String loadQuestions(@PathVariable int interviewId) {
@@ -50,12 +65,11 @@ public class ViewerController {
         }
     }
 
-    @RequestMapping(value = {"/load-subdivisions/{interviewId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/load-answers/{questionId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String loadSubdivisions(@PathVariable int interviewId) {
+    public String loadAnswers(@PathVariable int questionId) {
         try {
-            Interview interview = interviewService.get(interviewId);
-            return interviewService.getJSON(interview);
+            return answerService.getJSON(questionId);
         } catch (RuntimeException e) {
             return AttributeConstants.ERROR_RESPONSE_BODY;
         }

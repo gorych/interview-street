@@ -15,6 +15,9 @@ public interface AnswerService {
 
     AnswerType getAnswerType(int id);
 
+    //get user answers
+    String getJSON(int questionId);
+
     void remove(int id);
 
 }

@@ -31,59 +31,68 @@
                 </c:choose>
             </div>
             <c:forEach var="form" items="${forms}" varStatus="cur">
-                <section>
-                    <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
-                    <div class="question" id="${form.question.id}">
+                <div class="row valign-wrapper">
+                    <section class="col s11">
 
-                        <h5 class="header black-text">${form.question.text}</h5>
+                        <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
+                        <div class="question" id="${form.question.id}">
 
-                        <div class="answers">
-                            <c:forEach var="el" items="${answer_forms[cur.index]}" varStatus="loop">
-                            <c:choose>
-                            <c:when test="${el.answer.type.type eq 'slider'}">
-                                <p class="range-field">
-                                    <input type="range" id="${el.answer.id}"/>
-                                    <label for="${el.answer.id}">${el.answer.text}</label>
-                                </p>
-                            </c:when>
-                            <c:when test="${el.answer.type.type eq 'radiobutton'}">
-                                <p>
-                                    <input name="${cur.index}" type="radio" id="${el.answer.id}"/>
-                                    <label for="${el.answer.id}">${el.answer.text}</label>
-                                </p>
-                            </c:when>
-                            <c:when test="${el.answer.type.type eq 'checkbox'}">
-                                <p>
-                                    <input type="checkbox" id="${el.answer.id}"/>
-                                    <label for="${el.answer.id}">${el.answer.text}</label>
-                                </p>
-                            </c:when>
-                            <c:otherwise>
-                            <c:choose>
-                            <c:when test="${loop.last && loop.index%2==0}">
-                            <div class="input-field input-field-fix empty-padding col l12 m12 s12">
+                            <h5 class="header black-text">${form.question.text}</h5>
+
+                            <div class="answers">
+                                <c:forEach var="el" items="${answer_forms[cur.index]}" varStatus="loop">
+                                <c:choose>
+                                <c:when test="${el.answer.type.type eq 'slider'}">
+                                    <p class="range-field">
+                                        <input type="range" id="${el.answer.id}"/>
+                                        <label for="${el.answer.id}">${el.answer.text}</label>
+                                    </p>
+                                </c:when>
+                                <c:when test="${el.answer.type.type eq 'radiobutton'}">
+                                    <p>
+                                        <input name="${cur.index}" type="radio" id="${el.answer.id}"/>
+                                        <label for="${el.answer.id}">${el.answer.text}</label>
+                                    </p>
+                                </c:when>
+                                <c:when test="${el.answer.type.type eq 'checkbox'}">
+                                    <p>
+                                        <input type="checkbox" id="${el.answer.id}"/>
+                                        <label for="${el.answer.id}">${el.answer.text}</label>
+                                    </p>
                                 </c:when>
                                 <c:otherwise>
-                                <div class="input-field input-field-fix empty-padding col l6 m6 s12">
+                                <c:choose>
+                                <c:when test="${loop.last && loop.index%2==0}">
+                                <div class="input-field input-field-fix empty-padding col l12 m12 s12">
+                                    </c:when>
+                                    <c:otherwise>
+                                    <div class="input-field input-field-fix empty-padding col l6 m6 s12">
+                                        </c:otherwise>
+                                        </c:choose>
+                                        <input id="${el.answer.id}" type="text" class="validate">
+                                        <label for="${el.answer.id}">${el.answer.text}</label>
+                                    </div>
                                     </c:otherwise>
                                     </c:choose>
-                                    <input id="${el.answer.id}" type="text" class="validate">
-                                    <label for="${el.answer.id}">${el.answer.text}</label>
+                                    </c:forEach>
                                 </div>
-                                </c:otherwise>
-                                </c:choose>
-                                </c:forEach>
+                                <div class="divider"></div>
+                                <div class="right-align">
+                                    <a href="JavaScript:editForm('${form.question.id}','${interview.id}')"
+                                       class="waves-effect waves-green btn-flat">Изменить</a>
+                                    <a href="JavaScript:deleteQuestion('${form.question.id}')"
+                                       class="waves-effect waves-red btn-flat">Удалить</a>
+                                </div>
                             </div>
-                            <div class="divider"></div>
-                            <div class="right-align">
-                                <a href="JavaScript:editForm('${form.question.id}','${interview.id}')"
-                                   class="waves-effect waves-green btn-flat">Изменить</a>
-                                <a href="JavaScript:deleteQuestion('${form.question.id}')"
-                                   class="waves-effect waves-red btn-flat">Удалить</a>
-                            </div>
-                        </div>
-                        <!--This is a bug, but it works so. Don't change!:)-->
-                </section>
+                            <!--This is a bug, but it works so. Don't change!-->
+                    </section>
+                    <div class="col s1 valign">
+                        <div class="triangle triangle-up tooltipped" data-position="right" data-delay="50"
+                             data-tooltip="Переместить вверх"></div>
+                        <div class="triangle triangle-down tooltipped" data-position="right" data-delay="50"
+                             data-tooltip="Переместить вниз"></div>
+                    </div>
+                </div>
             </c:forEach>
             <div id="interview-questions">
                 <div class="row"></div>

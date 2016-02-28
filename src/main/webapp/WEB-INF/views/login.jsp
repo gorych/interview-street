@@ -3,26 +3,26 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
-<html>
+<html class="full-height">
 <head>
     <title>Interview Street - Вход</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <%@include file="fragments/meta.html" %>
     <%@include file="fragments/css_imports.html" %>
 </head>
-<body>
+<body class="full-height">
+<%@include file="fragments/mobile/header.html" %>
 <div class="valign-wrapper height-fix">
     <div class="container">
         <div class="row">
-            <div class="col m6 s12 hide-on-small-only">
+            <div class="col m6 l6 hide-on-small-only">
                 <h2>Interview Street</h2>
-
                 <p>Это бесплатный онлайн-опросник, который позволяет создать анкету с профессиональным оформлением и
                     содержанием несколькими кликами мыши. Вы можете просматривать данные ответов в реальном времени в
                     форме графиков, таблиц и файлов данных в самых распространенных форматах. Вам не нужно что-либо
                     скачивать или устанавливать. Interview Street доступен из любого браузера. Кроме того, Вы можете
                     отвечать на анкеты и просматривать данные ответов на своих мобильных устройствах.</p>
             </div>
-            <div class="col m6 s12">
+            <div class="col m6 l6 s12">
                 <h2 class="center-align">Вход</h2>
 
                 <div class="row">
@@ -32,8 +32,8 @@
                                 <input id="passportSeries" placeholder="Серия и номер паспорта(слитно)"
                                        name="j_username" type="text" pattern="[А-я]{2}[0-9]{7}"
                                        oninvalid="invalidPassportData(this);"
-                                       oninput="invalidPassportData(this);" data-error="Юзер не существует"/>
-                                <label for="passportSeries">Паспортные данные</label>
+                                       oninput="invalidPassportData(this);" data-error="Пользователь не существует"/>
+                                <label class="activate" for="passportSeries">Паспортные данные</label>
                             </div>
                         </div>
                         <c:if test="${not empty auth_error}">

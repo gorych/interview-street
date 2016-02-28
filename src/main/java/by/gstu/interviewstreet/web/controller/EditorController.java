@@ -154,7 +154,6 @@ public class EditorController {
             interviewService.remove(ids);
             return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RequestParamException | RuntimeException e) {
-            System.out.println("error");
             return e.getMessage();
         }
     }

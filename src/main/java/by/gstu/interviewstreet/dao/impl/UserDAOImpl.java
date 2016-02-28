@@ -13,7 +13,7 @@ public class UserDAOImpl extends AbstractDbDAO implements IUserDAO {
     @Override
     public User getByPassportData(String passportData) {
         return (User) getSession()
-                .createQuery("FROM User WHERE passportData = :passportData")
+                .createQuery("FROM User WHERE passportData LIKE :passportData")
                 .setString("passportData", passportData)
                 .uniqueResult();
     }

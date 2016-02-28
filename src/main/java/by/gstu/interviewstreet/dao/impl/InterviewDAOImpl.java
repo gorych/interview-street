@@ -28,8 +28,9 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     public List<UserInterview> getUserInterviews(User user) {
         return getSession()
                 .createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false AND isPassed != true " +
-                        "AND interview.type.id = 1")
+                        "AND interview.type.id = :interviewId")
                 .setInteger("id", user.getId())
+                .setInteger("interviewId", 1)
                 .list();
     }
 
@@ -129,7 +130,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
             if (!hidden) {
                 userInterview.setIsPassed(false);
             }
-
             interview.setHide(hidden);
             getSession().save(interview);
         }

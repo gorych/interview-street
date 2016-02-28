@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     IInterviewDAO interviewDAO;
 
-
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
         String username = j_username.toUpperCase();

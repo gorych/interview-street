@@ -1,7 +1,3 @@
-html, body {
-    height: 100%;
-}
-
 .question {
     padding: 10px 15px 0;
     width: 100%;
@@ -18,8 +14,8 @@ html, body {
     color: #757575;
 }
 
-section {
-    margin-top: 30px;
+.top-margin {
+   margin-top: 35px;
 }
 
 section .badge {

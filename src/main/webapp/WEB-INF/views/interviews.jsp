@@ -4,6 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
     <%@include file="fragments/css_imports.html" %>
     <title>Interview Street - Мои анкеты</title>
 </head>
@@ -32,13 +33,12 @@
             </c:choose>
         </div>
         <c:forEach var="item" items="${userInterviews}">
-            <div class="col s6 m6 l4">
+            <div class="col s12 m6 l4">
                 <div class="card teal darken-1 z-depth-2">
-                    <div class="card-content card-content-fix white-text">
-                        <span class="card-title card-title-fix">${item.interview.name}</span>
-                        <h6>Дата размещения:<br/> ${item.interview.placementDate}</h6>
-
-                        <p>${item.interview.description}</p>
+                    <div class="card-content white-text">
+                        <span class="card-title card-title-fix truncate">${item.interview.name}</span>
+                        <h6>Дата размещения: ${item.interview.placementDate}</h6>
+                        <h6>Вопросов: 10</h6>
                     </div>
                     <div class="card-action">
                         <a href="/user-interviews/${item.interview.id}"

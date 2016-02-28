@@ -31,9 +31,8 @@
                 </c:choose>
             </div>
             <c:forEach var="form" items="${forms}" varStatus="cur">
-                <div class="row valign-wrapper">
-                    <section class="col s11">
-
+                <div class="row">
+                    <section class="col s12">
                         <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
                         <div class="question" id="${form.question.id}">
 
@@ -86,12 +85,6 @@
                             </div>
                             <!--This is a bug, but it works so. Don't change!-->
                     </section>
-                    <div class="col s1 valign">
-                        <div class="triangle triangle-up tooltipped" data-position="right" data-delay="50"
-                             data-tooltip="Переместить вверх"></div>
-                        <div class="triangle triangle-down tooltipped" data-position="right" data-delay="50"
-                             data-tooltip="Переместить вниз"></div>
-                    </div>
                 </div>
             </c:forEach>
             <div id="interview-questions">

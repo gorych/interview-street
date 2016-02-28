@@ -1,3 +1,7 @@
+.full-height {
+    height: 100%;
+}
+
 .question {
     padding: 10px 15px 0;
     width: 100%;
@@ -15,7 +19,7 @@
 }
 
 .top-margin {
-   margin-top: 35px;
+    margin-top: 35px;
 }
 
 section .badge {
@@ -67,11 +71,11 @@ section .badge {
     margin-bottom: 20px;
 }
 
-td i{
+td i {
     cursor: default;
 }
 
-td a i{
+td a i {
     cursor: pointer;
 }
 

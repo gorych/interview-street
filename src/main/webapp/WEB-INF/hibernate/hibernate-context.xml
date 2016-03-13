@@ -23,7 +23,7 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           p:driverClassName="com.mysql.jdbc.Driver"
-          p:url="jdbc:mysql://localhost/interview_db?useEncoding=true&amp;characterEncoding=UTF-8"
+          p:url="jdbc:mysql://localhost/interview_db?useEncoding=true"
           p:username="interview_admin"
           p:password="admin"
           p:initialSize="5"

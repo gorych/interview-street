@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.ParameterConstants;
@@ -12,6 +13,7 @@ import by.gstu.interviewstreet.web.param.RequestTextParam;
 import by.gstu.interviewstreet.web.util.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
+@Secured(UserRoleConstants.EDITOR)
 public class EditorController {
 
     @Autowired

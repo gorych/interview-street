@@ -26,7 +26,6 @@ public class IndexController {
             model.addAttribute("auth_error", "Пользователь с такими паспортными данными не существует.");
         }
         return "login";
-
     }
 
     @RequestMapping(value = {"/gateway"}, method = RequestMethod.GET)
@@ -50,6 +49,11 @@ public class IndexController {
         } catch (RuntimeException e) {
             return e.getMessage();
         }
+    }
+
+    @RequestMapping(value = {"/403"}, method = RequestMethod.GET)
+    public String accessDenied(){
+        return "403";
     }
 
 }

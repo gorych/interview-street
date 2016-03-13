@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
+@Secured(UserRoleConstants.RESPONDENT)
 public class RespondentController {
 
     @Autowired

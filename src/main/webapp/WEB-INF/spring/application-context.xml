@@ -16,11 +16,6 @@
 
     <mvc:resources mapping="/resources/**" location="classpath:"/>
 
-    <bean id="messageSource"
-          class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="defaultEncoding" value="UTF-8"/>
-    </bean>
-
     <mvc:annotation-driven/>
 
     <import resource="../hibernate/hibernate-context.xml"/>

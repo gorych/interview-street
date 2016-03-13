@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewDAO;
 import by.gstu.interviewstreet.dao.IUserDAO;
+import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserPosition;
 import by.gstu.interviewstreet.service.UserService;
@@ -64,6 +65,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (user == null) {
             return new ArrayList<>();
         }
-        return interviewDAO.getUserInterviews(user);
+
+        List<UserInterview> interviews = interviewDAO.getUserInterviews(user);
+        for (UserInterview userInterview : interviews) {
+            Interview interview = userInterview.getInterview();
+            long questionCount = interviewDAO.getQuestionCount(interview.getId());
+            interview.setQuestionCount(questionCount);
+        }
+
+        return interviews;
     }
 }

@@ -20,6 +20,8 @@ public interface IInterviewDAO {
 
     List<List<Form>> getInterviewAnswers(List<Form> questionForm);
 
+    long getQuestionCount(int interviewId);
+
     Interview getById(int id);
 
     List<Interview> getByType(int typeId);

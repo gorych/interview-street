@@ -28,9 +28,9 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     public List<UserInterview> getUserInterviews(User user) {
         return getSession()
                 .createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false AND isPassed != true " +
-                        "AND interview.type.id = :interviewId")
+                        "AND interview.type.id = :typeId")
                 .setInteger("id", user.getId())
-                .setInteger("interviewId", 1)
+                .setInteger("typeId", 1)
                 .list();
     }
 
@@ -40,6 +40,15 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
         return getSession().createQuery("FROM Form WHERE interview.id = :id GROUP BY question.id")
                 .setInteger("id", interviewId)
                 .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public long getQuestionCount(int interviewId) {
+        Query query = getSession()
+                .createQuery("SELECT COUNT (*) FROM Form WHERE interview.id = :id GROUP BY question.id")
+                .setInteger("id", interviewId);
+        return query.list().size();
     }
 
     @Override

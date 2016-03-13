@@ -85,6 +85,8 @@ function loadEmployeePosts(select) {
         method: 'GET',
         data: {"data": result.join()}
     }).done(function (data) {
+        var a = $("#interviewForm").serialize();
+        alert(a);
         var employees = JSON.parse(data);
         if (data.length > 0) {
             $('#posts')

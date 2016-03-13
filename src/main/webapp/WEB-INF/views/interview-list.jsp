@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <%@include file="fragments/meta.html" %>
     <%@include file="fragments/css_imports.html" %>
     <title>Interview Street - Список анкет</title>
 </head>
@@ -21,7 +21,7 @@
             </c:if>
         </div>
         <form name="tableInterviewForm">
-            <table class="centered highlight">
+            <table class="centered highlight responsive-table">
                 <thead>
                 <tr>
                     <th data-field="id"><a href="JavaScript: selectAll()">

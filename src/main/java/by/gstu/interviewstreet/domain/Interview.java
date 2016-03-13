@@ -1,7 +1,5 @@
 package by.gstu.interviewstreet.domain;
 
-import org.hibernate.validator.constraints.Range;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,6 +31,9 @@ public class Interview implements Serializable {
 
     @Column(name = "placement_date")
     private Date placementDate;
+
+    @Column(name = "question_count")
+    private long questionCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
@@ -69,6 +70,14 @@ public class Interview implements Serializable {
 
     public void setHide(boolean hide) {
         this.hide = hide;
+    }
+
+    public long getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(long questionCount) {
+        this.questionCount = questionCount;
     }
 
     public Date getPlacementDate() {

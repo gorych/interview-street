@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <%@include file="fragments/meta.html" %>
     <%@include file="fragments/css_imports.html" %>
     <title>Interview Street - ${interview.name}</title>
 </head>

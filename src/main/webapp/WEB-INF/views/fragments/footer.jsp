@@ -7,8 +7,8 @@
                 <p class="grey-text text-lighten-4">Это бесплатный онлайн-опросник, который позволяет создать, редактировать и проходить анкеты с профессиональным оформлением и
                     содержанием.</p>
             </div>
-            <div class="col l3 s12">
-                <h5 class="white-text">Ссылки</h5>
+            <div class="col l3 s12 white-text">
+                <h5>Ссылки</h5>
                 <ul>
                     <li><a class="white-text" href="#!">Сайт университета</a></li>
                     <li><a class="white-text" href="#!">Учебный портал</a></li>

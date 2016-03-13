@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <%@include file="fragments/meta.html" %>
     <%@include file="fragments/css_imports.html" %>
     <title>Interview Street - ${interview.name}</title>
 </head>
@@ -32,10 +32,9 @@
         <form method="POST">
             <input type="hidden" name="interviewId" value="${interview.id}">
             <c:forEach var="form" items="${forms}" varStatus="cur">
-                <section>
+                <section class="top-margin">
                     <div class="badge teal valign-wrapper"><h6 class="valig text">${cur.index + 1}</h6></div>
-                    <div class="question question-padding-fix" id="${form.question.id}">
-
+                    <div class="question" id="${form.question.id}">
                         <h5 class="header black-text">${form.question.text}</h5>
 
                         <div class="answers answer-margin-fix">

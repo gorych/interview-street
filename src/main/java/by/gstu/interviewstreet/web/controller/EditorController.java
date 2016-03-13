@@ -18,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +112,6 @@ public class EditorController {
     public String createInterview(@Valid ExtendUserInterview userInterview) {
         try {
             Interview interview = interviewService.insert(userInterview);
-
             if (interview == null) {
                 return AttributeConstants.ERROR_RESPONSE_BODY;
             }
@@ -182,7 +180,7 @@ public class EditorController {
 
     @RequestMapping(value = {"/send-form"}, method = RequestMethod.POST)
     @ResponseBody
-    public String sendForm(HttpServletRequest req, HttpServletResponse res) {
+    public String sendForm(HttpServletRequest req) {
         try {
             ReqParam questionTextParam = new RequestTextParam(req.getParameter(ParameterConstants.QUESTION_TEXT));
             ReqParam questionIdParam = new RequestIdParam(req.getParameter(ParameterConstants.QUESTION_ID));

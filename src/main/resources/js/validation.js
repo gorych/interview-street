@@ -5,7 +5,6 @@ function invalidPassportData(textbox) {
     else {
         textbox.setCustomValidity('');
     }
-
     return true;
 }
 

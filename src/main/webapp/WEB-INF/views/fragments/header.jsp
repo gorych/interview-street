@@ -5,7 +5,8 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <nav class="white">
     <div class="nav-wrapper container">
-        <a href=""><img class="brand-logo brand-logo-color-fix responsive-img fix" src="/resources/img/logo.png"></a>
+        <a href=""><img class="brand-logo brand-logo-color-fix responsive-img fix" src="<c:url value="/resources/img/logo.png"/>"></a>
+        <a href="#" data-activates="mobile-menu" class="teal-text button-collapse"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
             <li><a href="<c:url value="/interviews"/>">Мои анкеты</a></li>
             <sec:authorize access="hasRole('ROLE_EDITOR')">
@@ -16,5 +17,6 @@
                 <a href="<c:url value="/j_spring_security_logout"/>" class="waves-effect waves-light btn">Выход</a>
             </sec:authorize>
         </ul>
+        <%@include file="mobile/menu.html" %>
     </div>
 </nav>

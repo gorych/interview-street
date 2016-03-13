@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html class="full-height">
 <head>
@@ -26,7 +27,7 @@
                 <h2 class="center-align">Вход</h2>
 
                 <div class="row">
-                    <form class="col s12" action="<c:url value="/j_spring_security_check"/>" method="POST">
+                    <sf:form class="col s12" action="/j_spring_security_check" method="POST">
                         <div class="row">
                             <div class="input-field col s12">
                                 <input id="passportSeries" placeholder="Серия и номер паспорта(слитно)"
@@ -57,7 +58,7 @@
                                 </p>
                             </div>
                         </div>
-                    </form>
+                    </sf:form>
                 </div>
             </div>
         </div>

@@ -16,15 +16,15 @@
             <c:if test="${empty chip || (chip eq true)}">
                 <div class="chip">
                     Здравствуйте, ${user_initials}, Вы вошли под правами редактора.
-                    <i class="material-icons" onclick="hideChip()">close</i>
+                    <i class="material-icons" id="hide-chip-btn">close</i>
                 </div>
             </c:if>
         </div>
-        <form name="tableInterviewForm">
-            <table class="centered highlight responsive-table">
+        <form id="interview-form">
+            <table id="interview-table" class="centered highlight responsive-table">
                 <thead>
                 <tr>
-                    <th data-field="id"><a href="JavaScript: selectAll()">
+                    <th data-field="id"><a id="select-all" href="#">
                         <i class="material-icons" title="Выбрать все">done_all</i></a>
                     </th>
                     <th data-field="name">Название анкеты</th>
@@ -58,12 +58,12 @@
                         <td>${interview.placementDate}</td>
                         <c:choose>
                             <c:when test="${interview.hide}">
-                                <td><a onclick="hideInterview(${interview.id}, this)"><i
+                                <td><a data-interview-id="${interview.id}"><i
                                         class="material-icons table-material-icons-fix"
                                         title="Закрыта для прохождения">lock</i></a></td>
                             </c:when>
                             <c:otherwise>
-                                <td><a onclick="hideInterview(${interview.id}, this)"><i
+                                <td><a data-interview-id="${interview.id}"><i
                                         class="material-icons table-material-icons-fix"
                                         title="Открыта для прохождения">lock_open</i></a></td>
                             </c:otherwise>
@@ -74,7 +74,9 @@
                                     class="material-icons" title="Список вопросов">subject</i></a>
                         </td>
                         <td>
-                            <a class="btn-floating teal accent-4"><i class="material-icons" title="Список респондентов">supervisor_account</i></a>
+                            <a class="btn-floating teal accent-4">
+                                <i class="material-icons" title="Список респондентов">supervisor_account</i>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -82,34 +84,41 @@
             </table>
         </form>
     </div>
-    <div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a class="btn-floating btn-large red">
             <i class="large material-icons">dashboard</i>
         </a>
         <ul>
-            <li><a id="deleteInterviewBtn" href="#" class="btn-floating red"><i class="material-icons"
-                                                                                title="Удалить">delete</i></a></li>
-            <li><a href="JavaScript:showEditInterviewModal()" class="btn-floating yellow darken-1"><i
-                    class="material-icons" title="Редактировать">edit</i></a>
+            <li>
+                <a id="delete-btn" href="#" class="btn-floating red">
+                    <i class="material-icons" title="Удалить">delete</i>
+                </a>
             </li>
-            <li><a href="#addInterviewModal" class="btn-floating green modal-trigger"><i class="material-icons"
-                                                                                         title="Добавить">add</i></a>
+            <li>
+                <a id="edit-interview-btn" href="#" class="btn-floating orange darken-1">
+                    <i class="material-icons" title="Редактировать">edit</i>
+                </a>
+            </li>
+            <li>
+                <a href="#add-interview-modal" class="btn-floating green modal-trigger">
+                    <i class="material-icons" title="Добавить">add</i>
+                </a>
             </li>
 
         </ul>
     </div>
 
-    <div id="addInterviewModal" class="modal modal-fixed-footer">
-        <sf:form id="interviewForm" class="col s12" method="POST" modelAttribute="extendUserInterview">
+    <div id="add-interview-modal" class="modal modal-fixed-footer">
+        <sf:form id="add-interview-form" class="col s12" method="POST" modelAttribute="extendUserInterview">
             <div class="modal-content">
                 <h4>Добавление новой анкеты</h4>
 
                 <div class="row">
                     <div class="input-field col s6">
-                        <sf:select onchange="hideElements()" path="interview.type.id" id="type">
+                        <sf:select id="type" path="interview.type.id">
                             <option value="-1" disabled selected>Выбирите тип опроса</option>
                             <option value="1">Открытый</option>
-                            <option value="2">Скрытый</option>
+                            <option value="2">Анонимный</option>
                         </sf:select>
                         <label>Тип опроса</label>
                     </div>
@@ -118,8 +127,9 @@
                         <label for="name" class="active">Наименование</label>
                     </div>
                     <div class="input-field col s6">
-                        <select id="subdivisions" multiple="true" onchange='loadEmployeePosts(this)'>
-                            <option value="-1" disabled selected>Выберите подразделения</option>
+                        <select id="subdivisions" multiple>
+                            <option value="-1" disabled selected>Выберите подразделения
+                            </option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
                             </c:forEach>
@@ -127,7 +137,7 @@
                         <label>Подразделение</label>
                     </div>
                     <div class="input-field col s6">
-                        <sf:select multiple="true" id="posts" path="posts">
+                        <sf:select id="posts" path="posts" multiple="true">
                             <option value="-1" disabled selected>Сначала выберите подразделения</option>
                         </sf:select>
                         <label class="active">Должности</label>
@@ -140,28 +150,29 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="JavaScript:clearForm('interviewForm')"
+                <a id="reset-form-btn" href="#"
                    class="modal-action modal-close waves-effect waves-red btn-flat ">Отмена</a>
-                <a href="JavaScript:submitInterviewForm()" class="btn-flat waves-effect waves-green modal-action">
+                <a id="save-interview" href="#" class="btn-flat waves-effect waves-green modal-action">
                     Сохранить
                 </a>
             </div>
         </sf:form>
     </div>
 
-    <div id="deleteInterviewModal" class="modal">
+    <div id="delete-interview-modal" class="modal">
         <div class="modal-content">
             <h4>Удаление анкеты</h4>
-
-            <p> Вы действительно хотите удалить анкету(ы)? После удаления Вы потеряете все данные.</p>
+            <p> Вы действительно хотите удалить выбранные анкеты? Все собранные ответы по данным анкетам будут
+                безвозвратно удалены.</p>
         </div>
         <div class="modal-footer">
-            <a class="waves-effect waves-red btn-flat modal-action modal-close">Нет</a>
-            <button class="waves-effect waves-green btn-flat modal-action">Да</button>
+            <a class="waves-effect waves-red btn-flat modal-action modal-close" href="#">Нет</a>
+            <a id="submit-delete-btn" class="waves-effect waves-green btn-flat modal-action" href="#">Да</a>
         </div>
     </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/js_imports.html" %>
+<script src="/resources/js/interview-list.js"></script>
 </body>
 </html>

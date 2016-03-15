@@ -6,6 +6,6 @@
         });
         $('.button-collapse').sideNav();
         $('.datepicker').pickadate({selectYears: 20});
-        $('select').not('.disabled').material_select();
+        $('select').material_select();
     });
 })(jQuery);

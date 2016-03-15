@@ -16,7 +16,7 @@
                 <c:if test="${empty chip || (chip eq true)}">
                     <div class="chip">
                         Здравствуйте, ${user_initials}, Вы вошли под правами респондента.
-                        <i class="material-icons" onclick="hideChip()">close</i>
+                        <i class="material-icons" onclick="addHideChipEvent()">close</i>
                     </div>
                 </c:if>
             </sec:authorize>

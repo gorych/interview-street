@@ -10,6 +10,8 @@ import by.gstu.interviewstreet.web.param.RequestIdParam;
 import by.gstu.interviewstreet.web.param.RequestParamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +42,7 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public List<Interview> getByType(int typeId) {
-        if(typeId < 1 || typeId > 2){
+        if (typeId < 1 || typeId > 2) {
             return interviewDAO.getAll();
         }
         return interviewDAO.getByType(typeId);
@@ -53,7 +55,6 @@ public class InterviewServiceImpl implements InterviewService {
         if (forms == null) {
             return new ArrayList<>();
         }
-
         return forms;
     }
 
@@ -64,7 +65,6 @@ public class InterviewServiceImpl implements InterviewService {
         if (forms == null) {
             return new ArrayList<>();
         }
-
         return forms;
     }
 
@@ -124,10 +124,33 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
+    @Transactional
+    public String getJson(int interviewId) {
+        List<UserInterview> userInterviews = userInterviewDAO.getById(interviewId);
+
+        JSONArray jsonPosts = new JSONArray();
+        JSONArray jsonSubdivisions = new JSONArray();
+        for (int i = 0; i < userInterviews.size(); i++) {
+            UserInterview interview = userInterviews.get(i);
+
+            int postId = interview.getUser().getEmployee().getPost().getId();
+            int subdivisionId = interview.getUser().getEmployee().getSubdivision().getId();
+
+            jsonPosts.put(i, postId);
+            jsonSubdivisions.put(i, subdivisionId);
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("posts", jsonPosts);
+        json.put("subdivisions", jsonSubdivisions);
+        return json.toString();
+    }
+
+    @Override
     public String getLightJSON(List<Interview> interviews) {
         List<Map<String, String>> jsonList = new ArrayList<>();
 
-        for (Interview interview:interviews){
+        for (Interview interview : interviews) {
             Map<String, String> jsonObject = new HashMap<>();
             jsonObject.put("id", interview.getId() + "");
             jsonObject.put("name", interview.getName());
@@ -151,7 +174,7 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public Interview get(long hash) {
-            return interviewDAO.getByHash(hash);
+        return interviewDAO.getByHash(hash);
     }
 
     @Override

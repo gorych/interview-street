@@ -23,6 +23,8 @@ public interface InterviewService {
 
     String getLightJSON(List<Interview> interview);
 
+    String getJson(int interviewId);
+
     Interview get(int interviewId);
 
     Interview get(long hash);

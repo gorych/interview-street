@@ -55,61 +55,6 @@ function isValidQuestionForm(questionId) {
     return true;
 }
 
-function isValidInterviewForm() {
-    var form = $('#interviewForm');
-    var type = $(form).find("#type");
-    var name = $(form).find("#name");
-    var posts = $(form).find("#posts");
-    var description = $(form).find("#description");
-
-    if (form == "undefined" || type == "undefined" || name == "undefined"
-        || posts == "undefined" || description == "undefined") {
-        location.reload();
-    }
-
-    var errors = [];
-    if (name.length < 1 || name.length > 50) {
-        errors.push("<li>Наименование должно быть от 1 до 50 символов</li>");
-    }
-
-    if (description.length < 1 || description.length > 50) {
-        errors.push("<li>Описание должна быть от 1 до 50 символов</li>");
-    }
-
-    var typeValue = $(type).val();
-    if (typeValue == null || typeValue < 1) {
-        errors.push("<li>Выберите тип опроса</li>");
-    }
-    if (typeValue != 2) {
-        var postValues = $(posts).val();
-        if (postValues == null || postValues.length < 1) {
-            errors.push("<li>Выберите должности сотрудников</li>");
-        } else {
-            $.each(postValues, function (i, elem) {
-                if ($(elem).val() < 0) {
-                    errors.push("<li>Выберите должности сотрудников</li>");
-                    return false;
-                }
-            });
-        }
-    }
-
-    if (errors.length > 0) {
-        var errorBlocks = $(".error-alert");
-        if (errorBlocks.length == 0) {
-            $(form)
-                .find(".modal-content")
-                .append("<div class = 'error-alert modal-alert-fix'>" + errors.join("") + "</div>");
-        } else {
-            $(errorBlocks[0])
-                .replaceWith("<div class = 'error-alert modal-alert-fix'>" + errors.join("") + "</div>")
-        }
-        return false;
-    }
-
-    return true;
-}
-
 function isValidUserAnswers() {
     var sections = $(document)
         .find('form')

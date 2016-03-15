@@ -30,10 +30,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String getJsonString(List<Employee> employees) {
         List<Map<String, String>> jsonList = new ArrayList<>();
         for (Employee employee : employees) {
-            Map<String, String> jsonObject = new HashMap<>();
-            jsonObject.put("post_id", employee.getPost().getId()+"");
-            jsonObject.put("post_name", employee.getPost().getName());
-            jsonList.add(jsonObject);
+                Map<String, String> jsonObject = new HashMap<>();
+                jsonObject.put("id", employee.getPost().getId()+"");
+                jsonObject.put("name", employee.getPost().getName());
+                jsonList.add(jsonObject);
         }
 
         String jsonString = "";

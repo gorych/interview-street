@@ -173,12 +173,7 @@ public class EditorController {
     @RequestMapping(value = {"/edit-interview"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     @ResponseBody
     public String editInterviewModal(@RequestParam int interviewId) {
-        try {
-            Interview interview = interviewService.get(interviewId);
-            return interviewService.getJSON(interview);
-        } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
-        }
+        return interviewService.getJson(interviewId);
     }
 
     @RequestMapping(value = {"/send-form"}, method = RequestMethod.POST)

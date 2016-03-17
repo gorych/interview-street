@@ -10,6 +10,12 @@ import java.sql.Date;
 @Table(name = "interviews")
 public class Interview implements Serializable {
 
+    private static final String LOCK_ICON = "lock";
+    private static final String LOCK_OPEN_ICON = "lock_open";
+
+    private static final String LOCK_ICON_TITLE = "Анкета закрыта для прохождения";
+    private static final String LOCK_OPEN_ICON_TITLE = "Анкета открыта для прохождения";
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -35,8 +41,8 @@ public class Interview implements Serializable {
     @Column(name = "question_count")
     private long questionCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ManyToOne()
     @JoinColumn(name = "type_id")
     private InterviewType type;
 
@@ -102,6 +108,14 @@ public class Interview implements Serializable {
 
     public void setHash(long hash) {
         this.hash = hash;
+    }
+
+    public String getLockIcon() {
+        return hide ? LOCK_ICON : LOCK_OPEN_ICON;
+    }
+
+    public String getTitle() {
+        return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
     }
 
     @Override

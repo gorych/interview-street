@@ -4,7 +4,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
     <title>Interview Street - ${interview.name}</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
 </nav>
 <main class="container">
     <div class="row">
-        <div class="box box-padding-fix ">
+        <div class="chip-wrapper box-padding-fix ">
             <h4 class="header teal-text">${interview.name}</h4>
             <c:choose>
                 <c:when test="${forms.size() < 1}">
@@ -93,6 +93,6 @@
         </div>
     </div>
 </div>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 </body>
 </html>

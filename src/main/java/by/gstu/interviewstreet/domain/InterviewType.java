@@ -6,7 +6,15 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "interview_types")
-public class InterviewType implements Serializable{
+public class InterviewType implements Serializable {
+
+    private static final String OPEN_INTERVIEW_TYPE_NAME = "open";
+
+    private static final String VISIBILITY_ICON = "visibility";
+    private static final String VISIBILITY_OFF_ICON = "visibility_off";
+
+    private static final String VISIBILITY_ICON_TITLE = "Открытая анкета";
+    private static final String VISIBILITY_OFF_ICON_TITLE = "Анонимная анкета";
 
     @Id
     @Column(name = "id")
@@ -31,6 +39,14 @@ public class InterviewType implements Serializable{
 
     public void setType(String name) {
         this.name = name;
+    }
+
+    public String getVisibilityIcon() {
+        return name.equals(OPEN_INTERVIEW_TYPE_NAME) ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
+    }
+
+    public String getTitle() {
+        return name.equals(OPEN_INTERVIEW_TYPE_NAME) ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
     }
 
     @Override

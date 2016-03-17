@@ -10,6 +10,8 @@ import by.gstu.interviewstreet.web.param.RequestIdParam;
 import by.gstu.interviewstreet.web.param.RequestParamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,15 +128,16 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public String getJson(int interviewId) {
+        Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getById(interviewId);
 
         JSONArray jsonPosts = new JSONArray();
         JSONArray jsonSubdivisions = new JSONArray();
         for (int i = 0; i < userInterviews.size(); i++) {
-            UserInterview interview = userInterviews.get(i);
+            UserInterview userInterview = userInterviews.get(i);
 
-            int postId = interview.getUser().getEmployee().getPost().getId();
-            int subdivisionId = interview.getUser().getEmployee().getSubdivision().getId();
+            int postId = userInterview.getUser().getEmployee().getPost().getId();
+            int subdivisionId = userInterview.getUser().getEmployee().getSubdivision().getId();
 
             jsonPosts.put(i, postId);
             jsonSubdivisions.put(i, subdivisionId);
@@ -143,6 +146,8 @@ public class InterviewServiceImpl implements InterviewService {
         JSONObject json = new JSONObject();
         json.put("posts", jsonPosts);
         json.put("subdivisions", jsonSubdivisions);
+        json.put("interview", new JSONObject(interview));
+
         return json.toString();
     }
 

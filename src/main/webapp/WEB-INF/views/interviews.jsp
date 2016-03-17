@@ -4,14 +4,14 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
     <title>Interview Street - Мои анкеты</title>
 </head>
 <body>
 <%@include file="fragments/header.jsp" %>
 <main class="container">
     <div class="row">
-        <div class="box">
+        <div class="chip-wrapper">
             <sec:authorize access="not hasRole('ROLE_EDITOR')">
                 <c:if test="${empty chip || (chip eq true)}">
                     <div class="chip">
@@ -49,6 +49,6 @@
     </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 </body>
 </html>

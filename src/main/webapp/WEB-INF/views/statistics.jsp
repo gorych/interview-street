@@ -5,7 +5,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
     <title>Interview Street - Статистика</title>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 </head>
@@ -13,7 +13,7 @@
 <%@include file="fragments/header.jsp" %>
 <main class="container">
     <div class="row">
-        <div class="box box-padding-fix">
+        <div class="chip-wrapper box-padding-fix">
             <h4 class="col l9 m9 s9 header teal-text">Статистика</h4>
             <!-- Modal Trigger -->
             <a class="col l3 m3 s3 header waves-effect waves-light btn modal-trigger right" style="margin-top:7.5px"
@@ -86,7 +86,7 @@
 
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 <script type="text/javascript">
     google.load("visualization", "1", {packages: ["corechart"]});
     google.setOnLoadCallback(drawChart);

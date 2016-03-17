@@ -5,14 +5,16 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
+    <link href="/resources/css/interview-list.css" rel="stylesheet" type="text/css">
+
     <title>Interview Street - Список анкет</title>
 </head>
-<body>
+<body class="grey lighten-3">
 <%@include file="fragments/header.jsp" %>
 <main class="container">
     <div class="row">
-        <div class="box">
+        <div class="chip-wrapper">
             <c:if test="${empty chip || (chip eq true)}">
                 <div class="chip">
                     Здравствуйте, ${user_initials}, Вы вошли под правами редактора.
@@ -20,69 +22,64 @@
                 </div>
             </c:if>
         </div>
-        <form id="interview-form">
-            <table id="interview-table" class="centered highlight responsive-table">
-                <thead>
-                <tr>
-                    <th data-field="id"><a id="select-all" href="#">
-                        <i class="material-icons" title="Выбрать все">done_all</i></a>
-                    </th>
-                    <th data-field="name">Название анкеты</th>
-                    <th data-field="description">Тип</th>
-                    <th data-field="description">Описание</th>
-                    <th data-field="date_created">Дата создания</th>
-                    <th data-field="state">Состояние</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="interview" items="${interviews}">
-                    <tr>
-                        <td>
-                            <input type="checkbox" value="${interview.id}" id="${interview.id}" name="id"/>
-                            <label for="${interview.id}" class="table-checkbox-fix "></label>
-                        </td>
-                        <td>${interview.name}</td>
-                        <c:choose>
-                            <c:when test="${interview.type.id <= 1}">
-                                <td><i
-                                        class="material-icons table-material-icons-fix"
-                                        title="Неанонимная">visibility</i></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><i
-                                        class="material-icons table-material-icons-fix"
-                                        title="Анонимная">visibility_off</i></td>
-                            </c:otherwise>
-                        </c:choose>
-                        <td>${interview.description}</td>
-                        <td>${interview.placementDate}</td>
-                        <c:choose>
-                            <c:when test="${interview.hide}">
-                                <td><a data-interview-id="${interview.id}"><i
-                                        class="material-icons table-material-icons-fix"
-                                        title="Закрыта для прохождения">lock</i></a></td>
-                            </c:when>
-                            <c:otherwise>
-                                <td><a data-interview-id="${interview.id}"><i
-                                        class="material-icons table-material-icons-fix"
-                                        title="Открыта для прохождения">lock_open</i></a></td>
-                            </c:otherwise>
-                        </c:choose>
-                        <td>
-                            <a href="<c:url value="/designer/${interview.id}"/>"
-                               class="btn-floating cyan darken-1"><i
-                                    class="material-icons" title="Список вопросов">subject</i></a>
-                        </td>
-                        <td>
-                            <a class="btn-floating teal accent-4">
-                                <i class="material-icons" title="Список респондентов">supervisor_account</i>
+        <c:forEach var="interview" items="${interviews}">
+            <div class="col s12 m6 l4">
+                <div class="card darken-1 z-depth-2">
+                    <div class="card-content card-content-wrapper grey lighten-4">
+                        <i class="material-icons visibility-icon black-text" title="${interview.type.title}">
+                        ${interview.type.visibilityIcon}</i>
+                        <span class="new badge"></span>
+                        <span class="block card-title-wrapper">${interview.name}</span>
+                        <div class="divider divider-wrapper teal"></div>
+                        <h6>${interview.placementDate}</h6>
+                        <h6>Срок действия до: 2015-12-12</h6>
+                        <h6 class="card-question">Вопросов: 30
+                            <i class="material-icons center activator activator-wrapper right"
+                               title="Посмотреть описание">more_vert</i>
+                        </h6>
+                    </div>
+                    <div class="card-reveal card-reveal-wrapper">
+                        <span class="card-title"><i class="material-icons right">close</i></span>
+                        <span>${interview.description}</span>
+                    </div>
+                    <div class="card-action card-action-wrapper teal">
+                        <div class="left-block">
+                            <a href="#" data-interview-id="${interview.id}" class="lock-btn btn-floating btn waves-effect white accent-3">
+                                <i class="material-icons black-text" title="${interview.title}">${interview.lockIcon}</i>
                             </a>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </form>
+                        </div>
+                        <div class="right-block">
+                            <div class="fixed-action-btn action-btn-position click-to-toggle">
+                                <a class="btn-floating btn white accent-3">
+                                    <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href="#" data-interview-id="${interview.id}" class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
+                                            <i class="material-icons black-text">mode_edit</i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-interview-id="${interview.id}" class="delete-btn btn-floating red" title="Удалить анкету">
+                                            <i class="material-icons black-text">delete</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="<c:url value="/designer/${interview.id}"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                                <i class="material-icons black-text" title="Список вопросов">subject</i>
+                            </a>
+                            <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                                <i class="material-icons black-text" title="Список респондентов">supervisor_account</i>
+                            </a>
+                            <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                                <i class="material-icons black-text" title="Анализ результатов">equalizer</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
     </div>
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a class="btn-floating btn-large red">
@@ -90,25 +87,25 @@
         </a>
         <ul>
             <li>
-                <a id="delete-btn" href="#" class="btn-floating red">
+                <a href="#" class="btn-floating red">
                     <i class="material-icons" title="Удалить">delete</i>
                 </a>
             </li>
             <li>
-                <a id="edit-interview-btn" href="#" class="btn-floating orange darken-1">
+                <a href="#" class="btn-floating orange darken-1">
                     <i class="material-icons" title="Редактировать">edit</i>
                 </a>
             </li>
             <li>
-                <a href="#add-interview-modal" class="btn-floating green modal-trigger">
+                <a href="#add-edit-interview-modal" class="btn-floating green modal-trigger">
                     <i class="material-icons" title="Добавить">add</i>
                 </a>
             </li>
-
         </ul>
     </div>
 
-    <div id="add-interview-modal" class="modal modal-fixed-footer">
+    <!--Add and edit interview modal-->
+    <div id="add-edit-interview-modal" class="modal">
         <sf:form id="add-interview-form" class="col s12" method="POST" modelAttribute="extendUserInterview">
             <div class="modal-content">
                 <h4>Добавление новой анкеты</h4>
@@ -159,10 +156,11 @@
         </sf:form>
     </div>
 
+    <!--Delete modal-->
     <div id="delete-interview-modal" class="modal">
         <div class="modal-content">
             <h4>Удаление анкеты</h4>
-            <p> Вы действительно хотите удалить выбранные анкеты? Все собранные ответы по данным анкетам будут
+            <p> Вы действительно хотите удалить выбранную анкеты? Все собранные ответы по данной анкетй будут
                 безвозвратно удалены.</p>
         </div>
         <div class="modal-footer">
@@ -172,7 +170,7 @@
     </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 <script src="/resources/js/interview-list.js"></script>
 </body>
 </html>

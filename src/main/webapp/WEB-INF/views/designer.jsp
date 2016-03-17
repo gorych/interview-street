@@ -5,7 +5,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
     <title>Interview Street - Редактор анкет</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
 <main class="container">
     <div class="row">
         <div class="main-col col l12 m12 s12">
-            <div class="box box-padding-fix">
+            <div class="chip-wrapper box-padding-fix">
                 <h4 class="header teal-text">${interview.name}</h4>
                 <c:if test="${interview.type.id eq 2}">
                     <h6><a href="localhost:8080/interview-street/${interview.hash}/anonymous">Ссылка:</a>
@@ -99,6 +99,6 @@
     </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <head>
     <title>Interview Street - Вход</title>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/css_imports.html" %>
+    <%@include file="fragments/general_css.html" %>
 </head>
 <body class="full-height">
 <%@include file="fragments/mobile/header.html" %>
@@ -64,6 +64,6 @@
         </div>
     </div>
 </div>
-<%@include file="fragments/js_imports.html" %>
+<%@include file="fragments/general_js.html" %>
 </body>
 </html>

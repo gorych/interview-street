@@ -37,11 +37,11 @@ section .badge {
     font-weight: bold;
 }
 
-.box {
+.chip-wrapper {
     padding: 1.0rem 0.75rem 0;
 }
 
-.box h4 {
+.chip-wrapper h4 {
     margin: 0.5rem 0;
 }
 

@@ -5,7 +5,17 @@
             dismissible: false
         });
         $('.button-collapse').sideNav();
-        $('.datepicker').pickadate({selectYears: 20});
+
+        /*Default min date for datepicker*/
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        $('.datepicker').pickadate({
+            selectYears: 10,
+            format: 'dd-mmm-yyyy',
+            formatSubmit: 'yyyy/mm/dd',
+            min: tomorrow
+        });
         $('select').material_select();
     });
 })(jQuery);

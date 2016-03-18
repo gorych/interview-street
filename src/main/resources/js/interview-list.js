@@ -86,7 +86,7 @@ function addEventToInterviewTypeSelect() {
             $(modalContent)
                 .find(".error-alert").remove();
             $(modalContent)
-                .append("<div class = 'info-alert modal-alert-fix'>Данная анкета будет доступна только для анонимных пользователей</div>");
+                .append("<div class = 'info-alert '>Данная анкета будет доступна только для анонимных пользователей</div>");
         }
     };
 }
@@ -243,7 +243,8 @@ function addHideInterviewEvent(btn, interviewId) {
 }
 
 function addHideChipEvent() {
-    document.querySelector("#hide-chip-btn").onclick = function () {
+    var chip = document.querySelector("#hide-chip-btn") || {};
+    chip.onclick = function () {
         $.ajax({
             url: "/hide-chip",
             method: 'GET'
@@ -412,10 +413,10 @@ function isValidInterviewForm() {
         if (errorBlocks.length == 0) {
             $(form)
                 .find(".modal-content")
-                .append("<div class = 'error-alert modal-alert-fix'>" + errors.join("") + "</div>");
+                .append("<div class = 'error-alert'>" + errors.join("") + "</div>");
         } else {
             $(errorBlocks[0])
-                .replaceWith("<div class = 'error-alert modal-alert-fix'>" + errors.join("") + "</div>")
+                .replaceWith("<div class = 'error-alert'>" + errors.join("") + "</div>")
         }
         return false;
     }

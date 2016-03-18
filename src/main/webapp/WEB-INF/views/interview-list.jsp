@@ -7,7 +7,6 @@
     <%@include file="fragments/meta.html" %>
     <%@include file="fragments/general_css.html" %>
     <link href="/resources/css/interview-list.css" rel="stylesheet" type="text/css">
-
     <title>Interview Street - Список анкет</title>
 </head>
 <body class="grey lighten-3">
@@ -16,8 +15,8 @@
     <div class="row">
         <div class="chip-wrapper">
             <c:if test="${empty chip || (chip eq true)}">
-                <div class="chip">
-                    Здравствуйте, ${user_initials}, Вы вошли под правами редактора.
+                <div class="chip teal white-text">
+                    Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
                     <i class="material-icons" id="hide-chip-btn">close</i>
                 </div>
             </c:if>
@@ -28,19 +27,21 @@
                     <div class="card-content card-content-wrapper grey lighten-4">
                         <i class="material-icons visibility-icon black-text" title="${interview.type.title}">
                         ${interview.type.visibilityIcon}</i>
-                        <span class="new badge"></span>
-                        <span class="block card-title-wrapper">${interview.name}</span>
+                        <span class="badge new"></span>
+                        <span class="fixed-block card-title-wrapper">${interview.name}</span>
                         <div class="divider divider-wrapper teal"></div>
-                        <h6>${interview.placementDate}</h6>
-                        <h6>Срок действия до: 2015-12-12</h6>
-                        <h6 class="card-question">Вопросов: 30
+                        <h6 class="placement-date">${interview.placementDate}</h6>
+                        <h6 class="end-date">2015-12-12</h6>
+                        <h6 class="card-question">30
                             <i class="material-icons center activator activator-wrapper right"
                                title="Посмотреть описание">more_vert</i>
                         </h6>
                     </div>
                     <div class="card-reveal card-reveal-wrapper">
                         <span class="card-title"><i class="material-icons right">close</i></span>
-                        <span>${interview.description}</span>
+                        <p class="goal">Цель это всего только двадцать</p>
+                        <p class="audience">${interview.description}</p>
+                        <p class="description">${interview.description}</p>
                     </div>
                     <div class="card-action card-action-wrapper teal">
                         <div class="left-block">
@@ -49,23 +50,6 @@
                             </a>
                         </div>
                         <div class="right-block">
-                            <div class="fixed-action-btn action-btn-position click-to-toggle">
-                                <a class="btn-floating btn white accent-3">
-                                    <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
-                                </a>
-                                <ul>
-                                    <li>
-                                        <a href="#" data-interview-id="${interview.id}" class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
-                                            <i class="material-icons black-text">mode_edit</i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a data-interview-id="${interview.id}" class="delete-btn btn-floating red" title="Удалить анкету">
-                                            <i class="material-icons black-text">delete</i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                             <a href="<c:url value="/designer/${interview.id}"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список вопросов">subject</i>
                             </a>
@@ -75,6 +59,23 @@
                             <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Анализ результатов">equalizer</i>
                             </a>
+                        </div>
+                        <div class="fixed-action-btn action-btn-position click-to-toggle">
+                            <a class="btn-floating btn white accent-3">
+                                <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="#" data-interview-id="${interview.id}" class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
+                                        <i class="material-icons black-text">mode_edit</i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-interview-id="${interview.id}" class="delete-btn btn-floating red" title="Удалить анкету">
+                                        <i class="material-icons black-text">delete</i>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -87,16 +88,6 @@
         </a>
         <ul>
             <li>
-                <a href="#" class="btn-floating red">
-                    <i class="material-icons" title="Удалить">delete</i>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="btn-floating orange darken-1">
-                    <i class="material-icons" title="Редактировать">edit</i>
-                </a>
-            </li>
-            <li>
                 <a href="#add-edit-interview-modal" class="btn-floating green modal-trigger">
                     <i class="material-icons" title="Добавить">add</i>
                 </a>
@@ -107,25 +98,31 @@
     <!--Add and edit interview modal-->
     <div id="add-edit-interview-modal" class="modal">
         <sf:form id="add-interview-form" class="col s12" method="POST" modelAttribute="extendUserInterview">
-            <div class="modal-content">
+            <div class="modal-content modal-content-wrapper">
                 <h4>Добавление новой анкеты</h4>
 
-                <div class="row">
-                    <div class="input-field col s6">
+                <div class="row modal-row">
+                    <div class="input-field col l12 m12 s12">
+                        <sf:input id="name" type="text" path="interview.name" value="Новая анкета" length="60"/>
+                        <label for="name" class="active">Наименование</label>
+                    </div>
+                    <div class="input-field col l6 m6 s12">
                         <sf:select id="type" path="interview.type.id">
                             <option value="-1" disabled selected>Выбирите тип опроса</option>
                             <option value="1">Открытый</option>
                             <option value="2">Анонимный</option>
                         </sf:select>
-                        <label>Тип опроса</label>
+                        <label class="info-badge">Тип опроса</label>
                     </div>
-                    <div class="input-field col s6">
-                        <sf:input id="name" type="text" path="interview.name" value="Новая анкета" length="50"/>
-                        <label for="name" class="active">Наименование</label>
+                    <div class="input-field col l6 m6 s12">
+                        <input id="end-date" class="datepicker" type="date" path="interview.dateOff"/>
+                        <label for="end-date">Дата окончания опроса</label>
                     </div>
-                    <div class="input-field col s6">
+
+                    <div class="input-field col l6 m6 s12">
                         <select id="subdivisions" multiple>
                             <option value="-1" disabled selected>Выберите подразделения
+
                             </option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
@@ -133,15 +130,15 @@
                         </select>
                         <label>Подразделение</label>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="input-field col l6 m6 s12">
                         <sf:select id="posts" path="posts" multiple="true">
                             <option value="-1" disabled selected>Сначала выберите подразделения</option>
                         </sf:select>
                         <label class="active">Должности</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col l12 m12 s12">
                         <sf:input id="description" type="text" path="interview.description" value="Пустая анкета"
-                                  length="100"/>
+                                  length="70"/>
                         <label for="description" class="active">Описание</label>
                     </div>
                 </div>

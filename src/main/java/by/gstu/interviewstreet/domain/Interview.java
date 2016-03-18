@@ -38,6 +38,8 @@ public class Interview implements Serializable {
     @Column(name = "placement_date")
     private Date placementDate;
 
+   // private Date dateOff;
+
     @Column(name = "question_count")
     private long questionCount;
 
@@ -78,12 +80,12 @@ public class Interview implements Serializable {
         this.hide = hide;
     }
 
-    public long getQuestionCount() {
-        return questionCount;
+    public long getHash() {
+        return hash;
     }
 
-    public void setQuestionCount(long questionCount) {
-        this.questionCount = questionCount;
+    public void setHash(long hash) {
+        this.hash = hash;
     }
 
     public Date getPlacementDate() {
@@ -94,20 +96,28 @@ public class Interview implements Serializable {
         this.placementDate = placementDate;
     }
 
+   /* public Date getDateOff() {
+        return dateOff;
+    }
+
+    public void setDateOff(Date dateOff) {
+        this.dateOff = dateOff;
+    }*/
+
+    public long getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(long questionCount) {
+        this.questionCount = questionCount;
+    }
+
     public InterviewType getType() {
         return type;
     }
 
     public void setType(InterviewType type) {
         this.type = type;
-    }
-
-    public long getHash() {
-        return hash;
-    }
-
-    public void setHash(long hash) {
-        this.hash = hash;
     }
 
     public String getLockIcon() {
@@ -119,30 +129,21 @@ public class Interview implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Interview{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", hide=" + hide +
-                ", hash=" + hash +
-                ", placementDate=" + placementDate +
-                ", type=" + type +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Interview)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Interview interview = (Interview) o;
 
         if (getId() != interview.getId()) return false;
         if (isHide() != interview.isHide()) return false;
+        if (getHash() != interview.getHash()) return false;
+        if (getQuestionCount() != interview.getQuestionCount()) return false;
         if (!getName().equals(interview.getName())) return false;
-        if (!getDescription().equals(interview.getDescription())) return false;
+        if (getDescription() != null ? !getDescription().equals(interview.getDescription()) : interview.getDescription() != null)
+            return false;
         if (!getPlacementDate().equals(interview.getPlacementDate())) return false;
+       // if (!getDateOff().equals(interview.getDateOff())) return false;
         return getType().equals(interview.getType());
 
     }
@@ -151,10 +152,28 @@ public class Interview implements Serializable {
     public int hashCode() {
         int result = getId();
         result = 31 * result + getName().hashCode();
-        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + (isHide() ? 1 : 0);
+        result = 31 * result + (int) (getHash() ^ (getHash() >>> 32));
         result = 31 * result + getPlacementDate().hashCode();
+      //  result = 31 * result + getDateOff().hashCode();
+        result = 31 * result + (int) (getQuestionCount() ^ (getQuestionCount() >>> 32));
         result = 31 * result + getType().hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Interview{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", hide=" + hide +
+                ", hash=" + hash +
+                ", placementDate=" + placementDate +
+                ", dateOff=" + /*dateOff*/
+                ", questionCount=" + questionCount +
+                ", type=" + type +
+                '}';
     }
 }

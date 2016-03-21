@@ -28,13 +28,11 @@ public interface IInterviewDAO {
 
     Interview getByHash(long hash);
 
-    int insert(Interview interview);
+    void save(Interview interview);
 
-    void insert(Interview interview, List<User> users);
+    void remove(Interview interview);
 
-    void remove(List<Integer> interviewIds);
-
-    void hide(int interviewId);
+    void lock(int interviewId);
 
     void pass(int interviewId, int userId);
 

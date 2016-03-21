@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.ParameterConstants;
@@ -10,23 +9,20 @@ import by.gstu.interviewstreet.web.param.ReqParam;
 import by.gstu.interviewstreet.web.param.RequestIdParam;
 import by.gstu.interviewstreet.web.param.RequestParamException;
 import by.gstu.interviewstreet.web.param.RequestTextParam;
-import by.gstu.interviewstreet.web.util.Parser;
+import by.gstu.interviewstreet.web.util.JSONParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
-@Secured(UserRoleConstants.EDITOR)
+//@Secured(UserRoleConstants.EDITOR)
 public class EditorController {
 
     @Autowired
@@ -47,37 +43,65 @@ public class EditorController {
     @Autowired
     EmployeeService employeeService;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Set.class, AttributeConstants.POSTS, new CustomCollectionEditor(Set.class) {
-            Post post = null;
+    @Autowired
+    UserInterviewService userInterviewService;
 
-            @Override
-            protected Object convertElement(Object element) {
-                try {
-                    int id = Integer.parseInt((String) element);
-                    post = new Post(id);
-                } catch (NumberFormatException e) {
-                    return post;
-                }
-                return post;
-            }
-        });
-    }
-
-    @ModelAttribute(AttributeConstants.INTERVIEWS)
-    public List<Interview> loadInterviews() {
-        return interviewService.getAll();
-    }
-
-    @ModelAttribute(AttributeConstants.SUBDIVISIONS)
-    public List<Subdivision> loadSubdivisions() {
-        return subdivisionService.getAll();
-    }
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
-    public String showInterviewList() {
+    public String showInterviewList(Model model) {
+        model.addAttribute(AttributeConstants.INTERVIEWS, interviewService.getAll());
+        model.addAttribute(AttributeConstants.SUBDIVISIONS, subdivisionService.getAll());
+
         return "interview-list";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String loadPosts(@RequestBody String data) {
+        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
+        Integer[] subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, Integer[].class);
+        List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
+
+        return JSONParser.convertObjectToJsonString(employees);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String processAddInterviewForm(@RequestBody String data) {
+        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
+
+        JsonElement interviewElement = jsonArray.get(0);
+        JsonArray idsArray = jsonArray.get(1).getAsJsonArray();
+
+        Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
+        interview = interviewService.save(interview);
+
+        if (interview.isOpen()) {
+            Integer[] postIds = JSONParser.convertJsonElementToObject(idsArray, Integer[].class);
+            userInterviewService.addInterviewToUserByPost(interview, postIds);
+        }
+
+        return JSONParser.convertObjectToJsonString(interview.getId());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.GET)
+    public String processDeleteQuery(@RequestParam String data) {
+        Interview interview = JSONParser.convertJsonStringToObject(data, Interview.class);
+        interviewService.remove(interview);
+
+        return AttributeConstants.SUCCESS_RESPONSE_BODY;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/hide-interview/{interviewId}"}, method = RequestMethod.GET)
+    public String hideInterview(@PathVariable int interviewId) {
+        try {
+            interviewService.lock(interviewId);
+        } catch (RuntimeException e) {
+            throw new IllegalArgumentException("Incorrect request param 'interviewId' = " + interviewId);
+        }
+        return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }
 
     @RequestMapping(value = {"/designer/{interviewId}"}, method = RequestMethod.GET)
@@ -94,14 +118,14 @@ public class EditorController {
         return "designer";
     }
 
-    @RequestMapping(value = {"/create-question"}, method = RequestMethod.GET)
     @ResponseBody
+    @RequestMapping(value = {"/create-question"}, method = RequestMethod.GET)
     public long createQuestion() {
         return questionService.insert();
     }
 
-    @RequestMapping(value = {"/create-answer/{interviewId}/{questionId}"}, method = RequestMethod.GET)
     @ResponseBody
+    @RequestMapping(value = {"/create-answer/{interviewId}/{questionId}"}, method = RequestMethod.GET)
     public long createAnswer(@PathVariable int interviewId, @PathVariable int questionId) {
         Interview interview = interviewService.get(interviewId);
         Question question = questionService.get(questionId);
@@ -110,30 +134,8 @@ public class EditorController {
         return answerService.insert(form);
     }
 
-    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public String createInterview(@Valid ExtendUserInterview userInterview) {
-        try {
-            Interview interview = interviewService.insert(userInterview);
-            if (interview == null) {
-                return AttributeConstants.ERROR_RESPONSE_BODY;
-            }
-            return interviewService.getJSON(interview);
-        } catch (RequestParamException | RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
-        }
-    }
-
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
-    @ResponseBody
-    public String loadPosts(@RequestParam String data) {
-        Integer[] ids = Parser.parseString(data);
-        List<Employee> employees = employeeService.getBySubdivisions(ids);
-        return employeeService.getJsonString(employees);
-    }
-
     @RequestMapping(value = {"/load-question/{questionId}"}, method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
-    @ResponseBody
     public String loadQuestion(@PathVariable Integer questionId) {
         try {
             return formService.getJSON(questionId);
@@ -142,36 +144,9 @@ public class EditorController {
         }
     }
 
-    @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.GET)
+
     @ResponseBody
-    public String deleteInterview(HttpServletRequest req) {
-        try {
-            String[] strIds = req.getParameterValues("id");
-
-            List<Integer> ids = new ArrayList<>();
-            for (String strId : strIds) {
-                ids.add(new RequestIdParam(strId).intValue());
-            }
-            interviewService.remove(ids);
-            return AttributeConstants.SUCCESS_RESPONSE_BODY;
-        } catch (RequestParamException | RuntimeException e) {
-            return e.getMessage();
-        }
-    }
-
-    @RequestMapping(value = {"/hide-interview/{interviewId}"}, method = RequestMethod.GET)
-    @ResponseBody
-    public String hideInterview(@PathVariable int interviewId) {
-        try {
-            interviewService.hide(interviewId);
-            return AttributeConstants.SUCCESS_RESPONSE_BODY;
-        } catch (RuntimeException e) {
-            return e.getMessage();
-        }
-    }
-
     @RequestMapping(value = {"/edit-interview"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
-    @ResponseBody
     public String editInterviewModal(@RequestParam int interviewId) {
         return interviewService.getJson(interviewId);
     }

@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -19,6 +21,8 @@ public class InterviewType implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue
+    @Expose
+
     private int id;
 
     @Column(name = "name")

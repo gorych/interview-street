@@ -17,4 +17,11 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements IUserIntervie
                 .setInteger("interviewId", interviewId)
                 .list();
     }
+
+    @Override
+    public void save(UserInterview userInterview) {
+        getSession().save(userInterview);
+    }
+
+
 }

@@ -6,12 +6,8 @@ import by.gstu.interviewstreet.dao.IUserDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
-import by.gstu.interviewstreet.web.param.RequestIdParam;
-import by.gstu.interviewstreet.web.param.RequestParamException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +18,6 @@ import java.util.*;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
-
-    @Autowired
-    private IUserDAO userDAO;
 
     @Autowired
     private IInterviewDAO interviewDAO;
@@ -109,7 +102,7 @@ public class InterviewServiceImpl implements InterviewService {
         jsonObject.put("date", interview.getPlacementDate() + "");
         jsonObject.put("type_id", interview.getType().getId() + "");
         jsonObject.put("type", interview.getType().getId() <= OPEN_INTERVIEW ? "visibility" : "visibility_off");
-        jsonObject.put("hide", interview.isHide() ? "lock" : "lock_open");
+        jsonObject.put("lock", interview.getHide() ? "lock" : "lock_open");
         jsonObject.put("description", interview.getDescription());
         jsonObject.put("subdivisions", subdivisions.toString());
         jsonObject.put("subdvsn_names", subdivisionNames.toString());
@@ -184,46 +177,20 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview insert(ExtendUserInterview userInterview) throws RequestParamException {
-        Interview interview = userInterview.getInterview();
-
-        Calendar calender = Calendar.getInstance();
-        java.util.Date utilDate = calender.getTime();
-        java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
-
-        int interviewType = interview.getType().getId();
-        InterviewType type = interviewTypeDAO.getById(interviewType);
-
-        interview.setPlacementDate(currentDate);
-        interview.setType(type);
-        interview.setHide(true);
-        interview.setHash(interview.hashCode());
-
-        Set<Post> posts = userInterview.getPosts();
-        if (interviewType == 2)/*so it is necessary*/ {
-            interviewDAO.insert(interview);
-            return interview;
-        }
-        List<Integer> ids = new ArrayList<>();
-        for (Post post : posts) {
-            ids.add(new RequestIdParam(post.getId()).intValue());
-        }
-
-        List<User> users = userDAO.getByPosts(ids);
-        interviewDAO.insert(interview, users);
-
+    public Interview save(Interview interview) {
+        interviewDAO.save(interview);
         return interview;
     }
 
     @Override
     @Transactional
-    public void remove(List<Integer> ids) {
-        interviewDAO.remove(ids);
+    public void remove(Interview interview) {
+        interviewDAO.remove(interview);
     }
 
     @Override
     @Transactional
-    public void hide(int id) {
-        interviewDAO.hide(id);
+    public void lock(int id) {
+        interviewDAO.lock(id);
     }
 }

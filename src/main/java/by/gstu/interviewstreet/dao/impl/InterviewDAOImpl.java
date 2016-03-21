@@ -6,9 +6,9 @@ import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +18,9 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Interview> getAll() {
+
         return getSession()
-                .createQuery("FROM Interview ORDER BY placementDate DESC")
+                .createQuery("FROM Interview")
                 .list();
     }
 
@@ -27,7 +28,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     @SuppressWarnings("unchecked")
     public List<UserInterview> getUserInterviews(User user) {
         return getSession()
-                .createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false AND isPassed != true " +
+                .createQuery("FROM UserInterview WHERE user.id = :id AND interview.isHide = false AND isPassed != true " +
                         "AND interview.type.id = :typeId")
                 .setInteger("id", user.getId())
                 .setInteger("typeId", 1)
@@ -99,49 +100,35 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    public int insert(Interview interview) {
-        Serializable result = getSession().save(interview);
-        if (result != null) {
-            return (Integer) result;
-        }
-        return -1;
+    public void save(Interview interview) {
+        getSession().save(interview);
     }
 
     @Override
-    public void insert(Interview interview, List<User> users) {
-        int id = insert(interview);
-        interview.setId(id);
-        for (User user : users) {
-            getSession().save(new UserInterview(interview, user));
-        }
+    public void remove(Interview interview) {
+        getSession().delete(interview);
     }
 
     @Override
-    public void remove(List<Integer> interviewIds) {
-        for (int id : interviewIds) {
-            Interview interview = (Interview) getSession().load(Interview.class, id);
-            if (interview != null) {
-                getSession().delete(interview);
-            }
-        }
-    }
+    public void lock(int interviewId) {
+        Session session = getSession();
 
-    @Override
-    public void hide(int interviewId) {
-        UserInterview userInterview = (UserInterview) getSession()
+        UserInterview userInterview = (UserInterview) session
                 .createQuery("FROM UserInterview WHERE interview.id = :id GROUP BY interview.id")
                 .setInteger("id", interviewId)
                 .uniqueResult();
 
-        if (userInterview != null) {
-            Interview interview = userInterview.getInterview();
-            boolean hidden = !interview.isHide();
-            if (!hidden) {
-                userInterview.setIsPassed(false);
-            }
-            interview.setHide(hidden);
-            getSession().save(interview);
+        Interview interview;
+        if(userInterview != null){
+            interview = userInterview.getInterview();
+            userInterview.setPassed(false);
+            session.save(userInterview);
+        }else {
+            interview = getById(interviewId);
         }
+
+        interview.setHide(true);
+        session.save(interview);
     }
 
     @Override
@@ -151,6 +138,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
                 .setInteger("id", interviewId)
                 .setInteger("userId", userId)
                 .uniqueResult();
-        interview.setIsPassed(true);
+        interview.setPassed(true);
     }
 }

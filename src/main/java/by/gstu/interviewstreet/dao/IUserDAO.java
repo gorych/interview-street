@@ -10,6 +10,6 @@ public interface IUserDAO {
 
     User getByPassportData(String passportData);
 
-    List<User> getByPosts(Collection postIds);
+    List<User> getByPosts(Integer[] postIds);
 
 }

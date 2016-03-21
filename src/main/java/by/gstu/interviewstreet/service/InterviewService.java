@@ -1,9 +1,7 @@
 package by.gstu.interviewstreet.service;
 
-import by.gstu.interviewstreet.domain.ExtendUserInterview;
 import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.web.param.RequestParamException;
 
 import java.util.List;
 
@@ -29,9 +27,9 @@ public interface InterviewService {
 
     Interview get(long hash);
 
-    Interview insert(ExtendUserInterview userInterview) throws RequestParamException;
+    Interview save(Interview interview);
 
-    void remove(List<Integer> ids);
+    void remove(Interview interview);
 
-    void hide(int id);
+    void lock(int id);
 }

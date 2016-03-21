@@ -8,4 +8,6 @@ public interface IUserInterviewDAO {
 
     List<UserInterview> getById(int interviewId);
 
+    void save(UserInterview userInterview);
+
 }

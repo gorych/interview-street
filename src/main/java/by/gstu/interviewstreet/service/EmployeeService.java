@@ -8,6 +8,4 @@ public interface EmployeeService {
 
     List<Employee> getBySubdivisions(Object[] subdivisionIds);
 
-    String getJsonString(List<Employee> employees);
-
 }

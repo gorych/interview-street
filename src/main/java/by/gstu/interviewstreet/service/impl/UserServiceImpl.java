@@ -54,12 +54,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public List<by.gstu.interviewstreet.domain.User> getUsers(Collection postIds) {
-        return userDAO.getByPosts(postIds);
-    }
-
-    @Override
-    @Transactional
     public List<UserInterview> getInterviews(String passportData) {
         by.gstu.interviewstreet.domain.User user = userDAO.getByPassportData(passportData);
         if (user == null) {
@@ -70,7 +64,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         for (UserInterview userInterview : interviews) {
             Interview interview = userInterview.getInterview();
             long questionCount = interviewDAO.getQuestionCount(interview.getId());
-            interview.setQuestionCount(questionCount);
+            interview.setQuestionCount((int)questionCount);
         }
 
         return interviews;

@@ -62,7 +62,7 @@ public class UserInterview implements Serializable {
         return isPassed;
     }
 
-    public void setIsPassed(boolean isPassed) {
+    public void setPassed(boolean isPassed) {
         this.isPassed = isPassed;
     }
 

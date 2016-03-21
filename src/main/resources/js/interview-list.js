@@ -14,38 +14,142 @@
 
 }());
 
+/*Constructor for interview*/
+function Interview() {
+    this.id = null;
+    this.name = document.querySelector("#name").value || "Новая анкета";
+    this.description = document.querySelector("#description").value || "Пустая анкета";
+    this.goal = document.querySelector(".goal").text || "";
+    this.audience = document.querySelector(".audience").text || "";
+    this.isHide = true;
+    this.endDate = document.querySelector("#end-date").value || getFormattedDate(new Date);
+    this.type = {
+        id: document.querySelector("#type").value || 1
+    };
+}
+
+function getFormattedDate(date) {
+    var month = date.getMonth() + 1;
+    return date.getFullYear() + "-" + (month < 10 ? "0" : "") + month + "-" + date.getDate();
+}
+
+function addSaveInterviewEvent() {
+    document.querySelector("#save-interview").onclick = function () {
+        if (!isValidInterviewForm()) {
+            console.log("Incorrect input data in the add modal form.");
+            return;
+        }
+
+        var interview = new Interview();
+        var postIds = $("#posts").val();
+
+        var data = JSON.stringify([interview, postIds]);
+
+        $.ajax({
+            url: "/create-interview",
+            data: data,
+            type: "POST"
+        }).done(function (interviewId) {
+            if (interviewId !== null && interviewId > 0) {
+                interview.id = interviewId;
+                buildNewCard(interview);
+
+                $("#add-edit-interview-modal").closeModal();
+                clearForm('#add-interview-form');
+            } else {
+                console.log("Interview is not added to the database. Json string: {}", interview);
+                location.reload();
+            }
+        });
+    };
+}
+
+function buildNewCard(interview) {
+    var cardTemplate = document.querySelector("#card-template");
+    var card = cardTemplate.cloneNode(true);
+
+    var title = card.querySelector(".card-title-wrapper");
+    var placementDate = card.querySelector(".placement-date");
+    var endDate = card.querySelector(".end-date");
+    var goal = card.querySelector(".goal");
+    var audience = card.querySelector(".audience");
+    var visibilityIcon = card.querySelector(".visibility-icon");
+    var description = card.querySelector(".description");
+
+    title.textContent = interview.name;
+    placementDate.textContent = getFormattedDate(new Date());
+    endDate.textContent = interview.endDate;
+
+    /*if interview type is closed*/
+    if (interview.type.id > 1) {
+        goal.textContent = interview.goal;
+        audience.textContent = interview.audience;
+        visibilityIcon.textContent = "visibility_off";
+    } else {
+        goal.classList.add("hide");
+        audience.classList.add("hide");
+        visibilityIcon.textContent = "visibility";
+    }
+    description.textContent = interview.description;
+
+    var dataIds = card.querySelectorAll("[data-interview-id]");
+    var i = 0;
+    var len = dataIds.length;
+    for (; i < len; i++) {
+        dataIds[i] = interview.id;
+    }
+
+    card.classList.remove("hide");
+    card.removeAttribute("id");
+
+    var cardContainer = document.querySelector(".card-container");
+    cardContainer.appendChild(card);
+}
+
+//region Other functions
 function addEventToSubmitDeleteBtn() {
     document.querySelector("#submit-delete-btn").onclick = function () {
+        var btn = this;
         $.ajax({
             url: "/delete-interview",
             method: 'GET',
-            data: {id: this.getAttribute("id")},
+            data: {data: JSON.stringify({id: btn.getAttribute("id") || 0})},
             success: (function (response) {
-                if (response == "success") {
-                    var delRows = $("table").find("input[name='id']:checked").each(function (i, row) {
-                        var td = $(this).parent('td');
-                        $(td).parent('tr').remove();
-                    });
+                if (response === "success") {
+
+                    var parent = btn.parentNode;
+                    $(parent).remove();
 
                     $("#delete-interview-modal").closeModal();
 
-                    var msgHead = delRows > 1 ? "Анкеты" : "Анкета";
-                    var msgBody = " успешно ";
-                    var msgEnd = delRows > 1 ? "удалены" : "удалена";
-
-                    interview.id = -1;
-                    Materialize.toast(msgHead + msgBody + msgEnd, 2000);
-                    console.log("Interviews deleted successfully.");
-
+                    Materialize.toast("Анкета успешно удалена", 2000);
+                    console.log("Interview deleted successfully.");
                 }
             }),
             error: (function () {
                 console.log("Can't delete interviews. Invalid response from server.");
                 location.reload();
-                interview.id = -1;
             })
         });
     };
+}
+
+function addDeleteInterviewEventToAllButtons() {
+    var buttons = document.querySelectorAll('.delete-btn') || [];
+    var i = 0;
+    var len = buttons.length;
+    for (; i < len; i++) {
+        buttons[i].onclick = function () {
+            var interviewId = this.getAttribute("data-interview-id");
+            var submitBtn = $("#submit-delete-btn");
+            var card = $(this).parent(".card");
+
+            $(submitBtn).attr("id", interviewId);
+            submitBtn.parentNode = card;
+
+            $("#delete-interview-modal").openModal();
+        }
+    }
 }
 
 function addEventToSubdivisionSelect() {
@@ -53,13 +157,13 @@ function addEventToSubdivisionSelect() {
         var values = $(this).val() || [];
         $.ajax({
             url: '/load-posts',
-            method: 'GET',
-            data: {"data": values.join()}
+            method: 'POST',
+            data: JSON.stringify(values)
         }).done(function (response) {
-            var posts = JSON.parse(response);
+            var data = JSON.parse(response);
             if (response.length > 0) {
                 var postSelect = document.querySelector("#posts");
-                fillPostSelect(postSelect, posts);
+                fillPostSelect(postSelect, data);
                 $('#posts').material_select();
             }
         });
@@ -75,62 +179,20 @@ function addEventToInterviewTypeSelect() {
         var modalContent = document.querySelector(".modal-content") || {};
 
         if (interviewType == 1) {
-            $(subdvsnSelect).removeAttr('disabled').material_select();
-            $(postSelect).removeAttr('disabled').material_select();
-            $(modalContent)
-                .find(".info-alert").remove();
+            $(subdvsnSelect).removeAttr('disabled');
+            $(postSelect).removeAttr('disabled');
         } else {
-            $(subdvsnSelect).attr('disabled', "").material_select();
-            $(postSelect).attr('disabled', "").material_select();
-
-            $(modalContent)
-                .find(".error-alert").remove();
-            $(modalContent)
-                .append("<div class = 'info-alert '>Данная анкета будет доступна только для анонимных пользователей</div>");
+            $(subdvsnSelect).attr('disabled', "");
+            $(postSelect).attr('disabled', "");
         }
+        $(subdvsnSelect).material_select();
+        $(postSelect).material_select();
     };
 }
 
 function addResetFormEvent() {
     document.querySelector("#reset-form-btn").onclick = function () {
         clearForm("#add-interview-form");
-    };
-}
-
-function addSaveInterviewEvent() {
-    document.querySelector("#save-interview").onclick = function () {
-        if (!isValidInterviewForm()) {
-            console.log("Incorrect input data on the modal form.");
-            return;
-        }
-
-        var form = document.querySelector("#add-interview-form");
-        $.ajax({
-            url: "/create-interview",
-            data: $(form).serialize(),
-            type: "POST"
-        }).done(function (response) {
-            if (response === "error") {
-                console.log("Invalid response from server.");
-                if (!isValidInterviewForm()) {
-                    console.log("Incorrect input data on the modal form.");
-                    return;
-                }
-                location.reload();
-            }
-
-            var values = JSON.parse(response);
-            $.each(values, function (i, value) {
-                var id = value["id"];
-                var url = "/designer/" + value["interview_id"];
-
-                <!--Hide rows if there more than 3-->
-                hideOldRows(3);
-                buildNewRow(id, value.interview_id, value.name, value.type, value.description, value.date, value.hide, url);
-            });
-            $("#add-edit-interview-modal").closeModal();
-            clearForm('#add-interview-form');
-        });
     };
 }
 
@@ -146,6 +208,7 @@ function addEditInterviewEvent(btn, interviewId) {
                 data: {"interviewId": interviewId}
             }).done(function (response) {
                 var data = JSON.parse(response);
+                console.log(JSON.stringify(data));
 
                 var postValues = data.posts;
                 var subdivisionValues = data.subdivisions;
@@ -154,7 +217,7 @@ function addEditInterviewEvent(btn, interviewId) {
                 $.ajax({
                     url: '/load-posts',
                     method: 'GET',
-                    data: {"data": subdivisionValues.join()}
+                    data: {"data": JSON.stringify(subdivisionValues)}
                 }).done(function (response) {
                     var posts = JSON.parse(response);
                     if (response.length > 0) {
@@ -187,23 +250,11 @@ function addEditInterviewEvent(btn, interviewId) {
 
 function addHideInterviewEventToAllButtons() {
     var buttons = document.querySelectorAll('.lock-btn') || [];
-    for (var i = 0; i < buttons.length; i++) {
-        var btn = buttons[i];
-        addHideInterviewEvent(btn, btn.getAttribute("data-interview-id"));
-    }
-}
-
-function addDeleteInterviewEventToAllButtons() {
-    var buttons = document.querySelectorAll('.delete-btn') || [];
     var i = 0;
     var len = buttons.length;
     for (; i < len; i++) {
         var btn = buttons[i];
-        btn.onclick = function () {
-            var interviewId = this.getAttribute("data-interview-id");
-            $("#submit-delete-btn").attr("id", interviewId);
-            $("#delete-interview-modal").openModal();
-        }
+        addHideInterviewEvent(btn, btn.getAttribute("data-interview-id"));
     }
 }
 
@@ -257,114 +308,47 @@ function addHideChipEvent() {
     };
 }
 
-function buildNewRow(elemId, interviewId, name, type, description, date, hideValue, url) {
-    var table = document.querySelector("#interview-table");
-
-    var body = table.tBodies[0] || table.appendChild(document.createElement("body"));
-    var row = body.insertRow(0);
-    row.setAttribute("class", "brown lighten-5");
-
-    var cells = [];
-    var cellCount = 8;
-    for (var j = 0; j < cellCount; j++) {
-        cells[j] = row.insertCell(j);
-    }
-
-    var input = document.createElement("input");
-    $(input).attr({
-        "type": "checkbox",
-        "id": elemId,
-        "value": elemId,
-        "name": "id"
-    });
-
-    var label = document.createElement("label");
-    $(label).attr({
-        "for": elemId,
-        "class": "table-checkbox-fix"
-    });
-
-    var typeIcon = document.createElement("i");
-    $(typeIcon)
-        .attr({
-            "class": "material-icons table-material-icons-fix"
-        })
-        .html(type);
-
-    var linkIcon = document.createElement("i");
-    $(linkIcon)
-        .attr({
-            "title": "Список вопросов",
-            "class": "material-icons"
-        })
-        .html("subject");
-
-    var hideIcon = document.createElement("i");
-    $(hideIcon)
-        .attr({
-            "title": "Скрыта для прохождения",
-            "class": "material-icons table-material-icons-fix"
-        })
-        .html(hideValue);
-
-    var hideLink = document.createElement("a");
-    $(hideLink).append(hideIcon);
-    addHideInterviewEvent(hideLink, interviewId);
-
-    var questLink = document.createElement("a");
-    $(questLink)
-        .attr({
-            "href": url,
-            "class": "btn-floating cyan darken-1"
-        })
-        .click(null)
-        .html(linkIcon);
-
-    cells[0].appendChild(input);
-    cells[0].appendChild(label);
-
-    cells[1].innerHTML = name;
-    cells[2].appendChild(typeIcon);
-    cells[3].innerHTML = description;
-    cells[4].innerHTML = date;
-
-    cells[5].appendChild(hideLink);
-
-    cells[6].appendChild(questLink);
-}
-
-function hideOldRows(rowCount) {
-    var newRows = $("tr.brown");
-    if (newRows.length >= rowCount) {
-        $.each(newRows, function (j, elem) {
-            $(elem).removeAttr("class");
-        });
-    }
-}
-
 function clearForm(formId) {
     var form = document.querySelector(formId) || {};
     $(form).find(".error-alert").remove();
     $(form).find(".info-alert").remove();
+
+    var label = $("label[for='end-date']") || {};
+    $(label).removeClass("active");
+
+    var subdvsnSelect = $("#subdivisions") || {};
+    var postSelect = $("#posts") || {};
+
+    $(subdvsnSelect).find("option:selected").removeAttr("selected");
+    $(postSelect).find("option:selected").removeAttr("selected");
+
+    $(subdvsnSelect).material_select();
+    $(postSelect).material_select();
+
     $(form)[0].reset();
 }
 
-function fillPostSelect(postSelect, posts) {
+function fillPostSelect(postSelect, data) {
     $(postSelect)
         .find('option')
         .remove()
         .end();
-    $.each(posts, function (index, post) {
-        var option = document.createElement("option");
-        if (index == 0) {
-            $(postSelect).append("<option value='-1' disabled selected>Выберите должности</option>");
-        }
-        option.setAttribute("value", post.id);
-        option.innerHTML = post.name;
+    $.each(data, function (index, entry) {
+        $.each(entry, function (j, post) {
+            var p = post;
+            var option = document.createElement("option");
+            if (index == 0) {
+                $(postSelect).append("<option value='-1' disabled selected>Выберите должности</option>");
+            }
+            option.setAttribute("value", post.id);
+            option.textContent = post.name;
 
-        $(postSelect).append(option);
+            $(postSelect).append(option);
+        });
     });
 }
+
+//endregion
 
 /*
  Validation for interview-list page fields

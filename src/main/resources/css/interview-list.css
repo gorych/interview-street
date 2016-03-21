@@ -1,11 +1,10 @@
 .info-badge:after {
     margin-left: 1.0rem;
-    max-width: 229px;
+    padding: 0.1rem 0.3rem;
     text-overflow: ellipsis;
+    border-radius: 1px;
     color: #000;
     background: #bbdefb;
-    border-radius: 1px;
-    padding: 0.1rem 0.3rem;
     content: "Только для анонимных пользователей";
 }
 

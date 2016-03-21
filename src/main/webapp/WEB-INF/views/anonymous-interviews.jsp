@@ -4,7 +4,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general_css.html" %>
+    <%@include file="fragments/general-css.html" %>
     <title>Interview Street - ${interview.name}</title>
 </head>
 <body>
@@ -93,6 +93,6 @@
         </div>
     </div>
 </div>
-<%@include file="fragments/general_js.html" %>
+<%@include file="fragments/general-js.html" %>
 </body>
 </html>

@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
     $("#sendInterview").click(function () {
         if (!isValidUserAnswers()) {
             return;
@@ -59,41 +58,6 @@ function submitQuestionForm(questionId) {
             location.reload();
         })
     });
-}
-
-
-function showEditInterviewModal() {
-    if (id > 0) {
-        $.ajax({
-            url: '/edit-interview',
-            method: 'GET',
-            data: {"interviewId": id}
-        }).done(function (data) {
-            var values = JSON.parse(data);
-            if (data.length > 1) {
-                $.each(values, function (index, value) {
-                    $('#name').addClass("active").val(value["name"]);
-                    $('#description').addClass("active").val(value["description"]);
-
-                    $("label[for='name']").addClass("active");
-                    $("label[for='description']").addClass("active");
-
-                    $('#type').val(value["type"]).material_select();
-
-                    var subdivisionIds = value['subdivisions'].split(",");
-
-                    $('#addInterviewModal').openModal();
-                    $("#subdivisions").val(["Ректорат", "Информационные технологии"]);
-                    $("#subdivisions").material_select();
-
-
-                });
-            }
-        });
-    } else {
-        Materialize.toast("Не выбрана анкета для редактирования", 2000)
-    }
-
 }
 
 function deleteQuestion(questionId) {

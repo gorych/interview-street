@@ -5,7 +5,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general_css.html" %>
+    <%@include file="fragments/general-css.html" %>
     <title>Interview Street - Статистика</title>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 </head>
@@ -86,7 +86,7 @@
 
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/general_js.html" %>
+<%@include file="fragments/general-js.html" %>
 <script type="text/javascript">
     google.load("visualization", "1", {packages: ["corechart"]});
     google.setOnLoadCallback(drawChart);

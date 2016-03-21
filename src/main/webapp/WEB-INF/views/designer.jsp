@@ -5,7 +5,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general_css.html" %>
+    <%@include file="fragments/general-css.html" %>
     <title>Interview Street - Редактор анкет</title>
 </head>
 <body>
@@ -99,6 +99,6 @@
     </div>
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/general_js.html" %>
+<%@include file="fragments/general-js.html" %>
 </body>
 </html>

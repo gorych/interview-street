@@ -1,2 +1,2 @@
 # Interview-Street
-It's a free online interviewer of compamy's employees
+It's a free online interviews for company's employees

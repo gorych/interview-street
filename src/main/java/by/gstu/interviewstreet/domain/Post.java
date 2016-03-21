@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
 import javafx.geometry.Pos;
 
 import javax.persistence.*;
@@ -10,10 +11,12 @@ import java.io.Serializable;
 public class Post implements Serializable {
 
     @Id
+    @Expose
     @Column(name = "id")
     @GeneratedValue
     private int id;
 
+    @Expose
     @Column(name = "name")
     private String name;
 

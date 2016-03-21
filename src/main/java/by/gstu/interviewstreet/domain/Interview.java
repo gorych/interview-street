@@ -1,14 +1,18 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "interviews")
 public class Interview implements Serializable {
+
+    private static final String OPEN_TYPE = "open";
 
     private static final String LOCK_ICON = "lock";
     private static final String LOCK_OPEN_ICON = "lock_open";
@@ -17,37 +21,64 @@ public class Interview implements Serializable {
     private static final String LOCK_OPEN_ICON_TITLE = "Анкета открыта для прохождения";
 
     @Id
-    @Column(name = "id")
+    @Expose
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
-    @Size(min = 1, max = 50)
+    @Expose
     @Column(name = "name")
     private String name;
 
-    @Size(min = 1, max = 100)
+    @Expose
     @Column(name = "description")
     private String description;
 
+    @Expose
+    @Column(name = "goal")
+    private String goal;
+
+    @Expose
+    @Column(name = "audience")
+    private String audience;
+
+    @Expose
     @Column(name = "hide")
-    private boolean hide;
+    private boolean isHide;
 
-    @Column(name = "hash")
-    private long hash;
-
+    @Expose
+    @Temporal(TemporalType.DATE)
+    @Generated(GenerationTime.INSERT)
     @Column(name = "placement_date")
     private Date placementDate;
 
-   // private Date dateOff;
+    @Expose
+    @Temporal(TemporalType.DATE)
+    @Column(name = "end_date")
+    private Date endDate;
 
+    @Expose
     @Column(name = "question_count")
     private long questionCount;
 
-    @NotNull
+    @Expose
     @ManyToOne()
     @JoinColumn(name = "type_id")
     private InterviewType type;
 
+    public boolean isOpen() {
+        return OPEN_TYPE.equals(type.getName());
+    }
+
+    public String getLockIcon() {
+        return isHide ? LOCK_ICON : LOCK_OPEN_ICON;
+    }
+
+    public String getTitle() {
+        return isHide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
+    }
+
+    //region Getters and Setters
     public int getId() {
         return id;
     }
@@ -72,20 +103,28 @@ public class Interview implements Serializable {
         this.description = description;
     }
 
-    public boolean isHide() {
-        return hide;
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
+    }
+
+    public String getAudience() {
+        return audience;
+    }
+
+    public void setAudience(String audience) {
+        this.audience = audience;
+    }
+
+    public boolean getHide() {
+        return isHide;
     }
 
     public void setHide(boolean hide) {
-        this.hide = hide;
-    }
-
-    public long getHash() {
-        return hash;
-    }
-
-    public void setHash(long hash) {
-        this.hash = hash;
+        this.isHide = hide;
     }
 
     public Date getPlacementDate() {
@@ -96,13 +135,13 @@ public class Interview implements Serializable {
         this.placementDate = placementDate;
     }
 
-   /* public Date getDateOff() {
-        return dateOff;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setDateOff(Date dateOff) {
-        this.dateOff = dateOff;
-    }*/
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
     public long getQuestionCount() {
         return questionCount;
@@ -119,48 +158,7 @@ public class Interview implements Serializable {
     public void setType(InterviewType type) {
         this.type = type;
     }
-
-    public String getLockIcon() {
-        return hide ? LOCK_ICON : LOCK_OPEN_ICON;
-    }
-
-    public String getTitle() {
-        return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Interview interview = (Interview) o;
-
-        if (getId() != interview.getId()) return false;
-        if (isHide() != interview.isHide()) return false;
-        if (getHash() != interview.getHash()) return false;
-        if (getQuestionCount() != interview.getQuestionCount()) return false;
-        if (!getName().equals(interview.getName())) return false;
-        if (getDescription() != null ? !getDescription().equals(interview.getDescription()) : interview.getDescription() != null)
-            return false;
-        if (!getPlacementDate().equals(interview.getPlacementDate())) return false;
-       // if (!getDateOff().equals(interview.getDateOff())) return false;
-        return getType().equals(interview.getType());
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getId();
-        result = 31 * result + getName().hashCode();
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (isHide() ? 1 : 0);
-        result = 31 * result + (int) (getHash() ^ (getHash() >>> 32));
-        result = 31 * result + getPlacementDate().hashCode();
-      //  result = 31 * result + getDateOff().hashCode();
-        result = 31 * result + (int) (getQuestionCount() ^ (getQuestionCount() >>> 32));
-        result = 31 * result + getType().hashCode();
-        return result;
-    }
+    //endregion
 
     @Override
     public String toString() {
@@ -168,12 +166,14 @@ public class Interview implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", hide=" + hide +
-                ", hash=" + hash +
+                ", goal='" + goal + '\'' +
+                ", audience='" + audience + '\'' +
+                ", hide=" + isHide +
                 ", placementDate=" + placementDate +
-                ", dateOff=" + /*dateOff*/
+                ", endDate=" + endDate +
                 ", questionCount=" + questionCount +
                 ", type=" + type +
                 '}';
     }
+
 }

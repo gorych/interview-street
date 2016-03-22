@@ -112,41 +112,41 @@
 
                 <div class="row modal-row">
                     <div class="input-field col l12 m12 s12">
-                        <input id="name" name="name" type="text" value="Новая анкета" length="60"/>
-                        <label for="name" class="active">Наименование</label>
+                        <input required id="name" class="validate" type="text" placeholder="Минимум 5 символов" pattern=".{5,}" length="60" />
+                        <label for="name" data-error="От 5 до 60 символов" class="active">Наименование</label>
                     </div>
                     <div class="input-field col l6 m6 s12">
-                        <select id="type" name="type">
+                        <select required id="type" class="validate invalid">
                             <option value="-1" disabled selected>Выбирите тип опроса</option>
                             <option value="1">Открытый</option>
                             <option value="2">Анонимный</option>
                         </select>
-                        <label class="info-badge">Тип опроса</label>
+                        <label for="type" class="validate" data-error="Не выбран">Тип опроса</label>
                     </div>
                     <div class="input-field col l6 m6 s12">
-                        <input id="end-date" name="endDate" class="datepicker" type="date"/>
-                        <label for="end-date">Дата окончания опроса</label>
+                        <input required id="end-date" class="datepicker" type="date"
+                               pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"/>
+                        <label for="end-date" data-error="Неверный формат">Дата окончания опроса</label>
                     </div>
 
                     <div class="input-field col l6 m6 s12">
-                        <select id="subdivisions" name="subdivisions" multiple>
+                        <select required id="subdivisions" multiple>
                             <option value="-1" disabled selected>Выберите подразделения</option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
                             </c:forEach>
                         </select>
-                        <label>Подразделение</label>
+                        <label for="subdivisions">Подразделение</label>
                     </div>
                     <div class="input-field col l6 m6 s12">
-                        <select id="posts" name="posts" multiple>
+                        <select required id="posts" multiple>
                             <option value="-1" disabled selected>Сначала выберите подразделения</option>
                         </select>
-                        <label>Должности</label>
+                        <label for="posts">Должности</label>
                     </div>
                     <div class="input-field col l12 m12 s12">
-                        <input id="description" name="description" type="text" value="Пустая анкета"
-                               length="70"/>
-                        <label for="description" class="active">Описание</label>
+                        <input required id="description" class="validate" type="text" placeholder="Минимум 3 символа" pattern=".{3,}" length="70"/>
+                        <label for="description" data-error="От 3 до 70 символов" class="active">Описание</label>
                     </div>
                 </div>
             </div>

@@ -26,7 +26,11 @@
             selectYears: 10,
             format: 'yyyy-mm-dd',
             formatSubmit: 'yyyy-mm-dd',
-            min: tomorrow
+            min: tomorrow,
+
+            onClose: function () {
+               // $("#end-date").blur();
+            }
         });
         $('select').material_select();
     });

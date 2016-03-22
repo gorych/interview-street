@@ -8,6 +8,11 @@
     content: "Только для анонимных пользователей";
 }
 
+input[type=text].invalid.invalid-select {
+    border-bottom: none;
+    box-shadow: 0 2px 0 0 #F44336;
+}
+
 .action-btn-position {
     position: absolute;
     top: -5px;

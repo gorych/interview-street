@@ -1,6 +1,6 @@
 ;(function () {
 
-    var operationErrMsg = "Данную операцию выполнить невозможно";
+    var operationErrMsg = "Ошибка при выполнении операции";
 
     var $typeSelect = $("#type");
     var $postSelect = $("#posts");
@@ -82,7 +82,7 @@
 
     function addListenerToSaveInterviewBtn() {
         $("#save-interview").click(function () {
-            if (!isValidationForm()) {
+            if (!isValidForm()) {
                 return;
             }
 
@@ -166,11 +166,13 @@
                 }).done(function (response) {
                     var posts = JSON.parse(response);
                     if (response.length > 0) {
-                        fillPostSelect($postSelect, posts);
+                        fillPostSelect(posts);
 
                         $postSelect.material_select();
                         $postSelect.val(postValues).material_select();
                     }
+                }).fail(function () {
+                    console.log("Ошибка при загрузке списка должностей");
                 });
 
                 $('#name').addClass("active").val(interview.name);
@@ -180,6 +182,8 @@
                 $subSelect.val(subdivisionValues).material_select();
 
                 $("#add-edit-interview-modal").openModal();
+            }).fail(function () {
+                Materialize.toast(operationErrMsg);
             });
         });
     }
@@ -214,7 +218,7 @@
             }).done(function (response) {
                 var data = JSON.parse(response);
                 if (response.length > 0) {
-                    fillPostSelect($postSelect, data);
+                    fillPostSelect(data);
 
                     toggleSelectValidateClass($subSelect);
                     toggleSelectValidateClass($postSelect);
@@ -304,31 +308,32 @@
         $("label[for='type']").addClass("info-badge");
     }
 
-    function fillPostSelect(postSelect, data) {
-        $(postSelect).find('option').remove().end();
+    function fillPostSelect(data) {
+        $postSelect.find('option').remove().end();
 
         $.each(data, function (index, entry) {
             $.each(entry, function (j, post) {
                 var option = document.createElement("option");
                 if (index == 0) {
-                    $(postSelect).append("<option value='-1' disabled selected>Выберите должности</option>");
+                    $postSelect.append("<option value='-1' disabled selected>Выберите должности</option>");
                 }
                 option.setAttribute("value", post.id);
                 option.textContent = post.name;
 
-                $(postSelect).append(option);
+                $postSelect.append(option);
             });
         });
 
-        $(postSelect).material_select();
+        $postSelect.material_select();
     }
 
     //endregion
 
     //region Validation
 
-    function isValidationForm() {
+    function isValidForm() {
         var $form = $("#add-interview-form");
+
         $form.find(".validate").each(function (i, el) {
             if ($(el).is('select')) {
                 toggleSelectValidateClass(el);
@@ -344,8 +349,7 @@
         if (!input.value || input.validity.patternMismatch) {
             $(input).addClass("invalid");
         } else {
-            $(input)
-                .removeClass("invalid").addClass("valid");
+            $(input).removeClass("invalid").addClass("valid");
         }
     }
 

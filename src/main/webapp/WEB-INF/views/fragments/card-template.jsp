@@ -1,4 +1,5 @@
-<!--Hidden template for inserting new cards-->
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <div id ="card-template" class="col s12 m6 l4 hide">
     <div class="card darken-1 z-depth-2">
         <div class="card-content card-content-wrapper grey lighten-4">

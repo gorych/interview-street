@@ -3,14 +3,14 @@ package by.gstu.interviewstreet.domain;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "interview_types")
 public class InterviewType implements Serializable {
 
-    private static final String OPEN_INTERVIEW_TYPE_NAME = "open";
+    private static final int OPEN_TYPE_ID = 1;
+    private static final String OPEN_TYPE_NAME = "open";
 
     private static final String VISIBILITY_ICON = "visibility";
     private static final String VISIBILITY_OFF_ICON = "visibility_off";
@@ -19,14 +19,13 @@ public class InterviewType implements Serializable {
     private static final String VISIBILITY_OFF_ICON_TITLE = "Анонимная анкета";
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue
     @Expose
-
+    @GeneratedValue
+    @Column(name = "id")
     private int id;
 
+    @Expose
     @Column(name = "name")
-    @NotNull
     private String name;
 
     public int getId() {
@@ -45,12 +44,16 @@ public class InterviewType implements Serializable {
         this.name = name;
     }
 
+    public boolean isOpen() {
+        return OPEN_TYPE_NAME.equals(name) || OPEN_TYPE_ID == id;
+    }
+
     public String getVisibilityIcon() {
-        return name.equals(OPEN_INTERVIEW_TYPE_NAME) ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
+        return name.equals(OPEN_TYPE_NAME) ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
     }
 
     public String getTitle() {
-        return name.equals(OPEN_INTERVIEW_TYPE_NAME) ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
+        return name.equals(OPEN_TYPE_NAME) ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
     }
 
     @Override

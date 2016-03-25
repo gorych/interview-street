@@ -12,8 +12,6 @@ import java.util.*;
 @Table(name = "interviews")
 public class Interview implements Serializable {
 
-    private static final String OPEN_TYPE = "open";
-
     private static final String LOCK_ICON = "lock";
     private static final String LOCK_OPEN_ICON = "lock_open";
 
@@ -44,7 +42,7 @@ public class Interview implements Serializable {
 
     @Expose
     @Column(name = "hide")
-    private boolean isHide;
+    private boolean hide;
 
     @Expose
     @Temporal(TemporalType.DATE)
@@ -66,16 +64,12 @@ public class Interview implements Serializable {
     @JoinColumn(name = "type_id")
     private InterviewType type;
 
-    public boolean isOpen() {
-        return OPEN_TYPE.equals(type.getName());
-    }
-
     public String getLockIcon() {
-        return isHide ? LOCK_ICON : LOCK_OPEN_ICON;
+        return hide ? LOCK_ICON : LOCK_OPEN_ICON;
     }
 
     public String getTitle() {
-        return isHide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
+        return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
     }
 
     //region Getters and Setters
@@ -120,11 +114,11 @@ public class Interview implements Serializable {
     }
 
     public boolean getHide() {
-        return isHide;
+        return hide;
     }
 
     public void setHide(boolean hide) {
-        this.isHide = hide;
+        this.hide = hide;
     }
 
     public Date getPlacementDate() {
@@ -168,7 +162,7 @@ public class Interview implements Serializable {
                 ", description='" + description + '\'' +
                 ", goal='" + goal + '\'' +
                 ", audience='" + audience + '\'' +
-                ", hide=" + isHide +
+                ", hide=" + hide +
                 ", placementDate=" + placementDate +
                 ", endDate=" + endDate +
                 ", questionCount=" + questionCount +

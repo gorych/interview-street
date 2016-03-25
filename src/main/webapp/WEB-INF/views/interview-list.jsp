@@ -14,16 +14,19 @@
 <main class="container">
     <div class="row card-container">
         <div class="chip-wrapper">
+
             <c:if test="${empty chip || (chip eq true)}">
                 <div class="chip teal white-text">
                     Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
                     <i class="material-icons" id="hide-chip-btn">close</i>
                 </div>
             </c:if>
+
         </div>
         <c:forEach var="interview" items="${interviews}">
             <div class="col s12 m6 l4">
                 <div class="card darken-1 z-depth-2">
+
                     <div class="card-content card-content-wrapper grey lighten-4">
                         <i class="material-icons visibility-icon black-text" title="${interview.type.title}">
                                 ${interview.type.visibilityIcon}</i>
@@ -37,6 +40,7 @@
                                title="Посмотреть описание">more_vert</i>
                         </h6>
                     </div>
+
                     <div class="card-reveal card-reveal-wrapper">
                         <span class="card-title"><i class="material-icons right">close</i></span>
                         <c:if test="${interview.type.name == 'close'}">
@@ -45,6 +49,7 @@
                         </c:if>
                         <p class="description">${interview.description}</p>
                     </div>
+
                     <div class="card-action card-action-wrapper teal">
                         <div class="left-block">
                             <a href="#" data-interview-id="${interview.id}"
@@ -53,6 +58,7 @@
                                    title="${interview.title}">${interview.lockIcon}</i>
                             </a>
                         </div>
+
                         <div class="right-block">
                             <a href="<c:url value="/designer/${interview.id}"/>"
                                class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
@@ -65,6 +71,7 @@
                                 <i class="material-icons black-text" title="Анализ результатов">equalizer</i>
                             </a>
                         </div>
+
                         <div class="fixed-action-btn action-btn-position click-to-toggle">
                             <a class="btn-floating btn white accent-3">
                                 <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
@@ -84,12 +91,13 @@
                                 </li>
                             </ul>
                         </div>
+
                     </div>
                 </div>
             </div>
         </c:forEach>
-        <%@include file="fragments/card-template.html" %>
-    </div>
+        <%@include file="fragments/card-template.jsp" %>
+    </div><!--end card container-->
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
         <a class="btn-floating btn-large red">
@@ -112,25 +120,26 @@
 
                 <div class="row modal-row">
                     <div class="input-field col l12 m12 s12">
-                        <input required id="name" class="validate" type="text" placeholder="Минимум 5 символов" pattern=".{5,}" length="60" />
+                        <input required id="name" name="name" class="validate" type="text" placeholder="Минимум 5 символов" pattern=".{5,}" length="60" />
                         <label for="name" data-error="От 5 до 60 символов" class="active">Наименование</label>
-                    </div>
-                    <div class="input-field col l6 m6 s12">
-                        <select required id="type" class="validate invalid">
-                            <option value="-1" disabled selected>Выбирите тип опроса</option>
-                            <option value="1">Открытый</option>
-                            <option value="2">Анонимный</option>
-                        </select>
-                        <label for="type" class="validate" data-error="Не выбран">Тип опроса</label>
-                    </div>
-                    <div class="input-field col l6 m6 s12">
-                        <input required id="end-date" class="datepicker" type="date"
-                               pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"/>
-                        <label for="end-date" data-error="Неверный формат">Дата окончания опроса</label>
                     </div>
 
                     <div class="input-field col l6 m6 s12">
-                        <select required id="subdivisions" multiple>
+                        <select id="type" name="type" class="validate">
+                            <option value="1" selected>Открытый</option>
+                            <option value="2">Анонимный</option>
+                        </select>
+                        <label for="type">Тип опроса</label>
+                    </div>
+
+                    <div class="input-field col l6 m6 s12">
+                        <input required id="end-date" name="end-date" class="datepicker validate" type="date"
+                               pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])"/>
+                        <label for="end-date">Дата окончания опроса</label>
+                    </div>
+
+                    <div class="input-field col l6 m6 s12">
+                        <select required id="subdivisions" name="subdivisions" class="validate" multiple>
                             <option value="-1" disabled selected>Выберите подразделения</option>
                             <c:forEach var="item" items="${subdivisions}">
                                 <option value="${item.id}">${item.name}</option>
@@ -138,18 +147,21 @@
                         </select>
                         <label for="subdivisions">Подразделение</label>
                     </div>
+
                     <div class="input-field col l6 m6 s12">
-                        <select required id="posts" multiple>
+                        <select required id="posts" name="posts" class="validate" multiple>
                             <option value="-1" disabled selected>Сначала выберите подразделения</option>
                         </select>
                         <label for="posts">Должности</label>
                     </div>
+
                     <div class="input-field col l12 m12 s12">
-                        <input required id="description" class="validate" type="text" placeholder="Минимум 3 символа" pattern=".{3,}" length="70"/>
+                        <input required id="description" name="description" class="validate" type="text" placeholder="Минимум 3 символа" pattern=".{3,}" length="70"/>
                         <label for="description" data-error="От 3 до 70 символов" class="active">Описание</label>
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <a id="reset-form-btn" href="#"
                    class="modal-action modal-close waves-effect waves-red btn-flat ">Отмена</a>

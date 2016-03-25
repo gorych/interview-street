@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.web.controller;
 
 
+import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
@@ -32,20 +33,22 @@ public class EditorController {
     AnswerService answerService;
 
     @Autowired
+    EmployeeService employeeService;
+
+    @Autowired
     QuestionService questionService;
 
     @Autowired
     InterviewService interviewService;
 
     @Autowired
+    IInterviewTypeDAO interviewTypeDAO;
+
+    @Autowired
     SubdivisionService subdivisionService;
 
     @Autowired
-    EmployeeService employeeService;
-
-    @Autowired
     UserInterviewService userInterviewService;
-
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String showInterviewList(Model model) {
@@ -76,7 +79,7 @@ public class EditorController {
         Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
         interview = interviewService.save(interview);
 
-        if (interview.isOpen()) {
+        if (interview.getType().isOpen()) {
             Integer[] postIds = JSONParser.convertJsonElementToObject(idsArray, Integer[].class);
             userInterviewService.addInterviewToUserByPost(interview, postIds);
         }
@@ -85,7 +88,7 @@ public class EditorController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.POST)
     public String processDeleteQuery(@RequestParam String data) {
         Interview interview = JSONParser.convertJsonStringToObject(data, Interview.class);
         interviewService.remove(interview);
@@ -94,12 +97,12 @@ public class EditorController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/hide-interview/{interviewId}"}, method = RequestMethod.GET)
-    public String hideInterview(@PathVariable int interviewId) {
+    @RequestMapping(value = {"/lock-interview/{interviewId}"}, method = RequestMethod.GET)
+    public String lockOrUnlockInterview(@PathVariable int interviewId) {
         try {
-            interviewService.lock(interviewId);
+            interviewService.lockOrUnlock(interviewId);
         } catch (RuntimeException e) {
-            throw new IllegalArgumentException("Incorrect request param 'interviewId' = " + interviewId);
+            return AttributeConstants.ERROR_RESPONSE_BODY;
         }
         return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }

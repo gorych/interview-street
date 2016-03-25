@@ -1,10 +1,12 @@
 ;(function () {
 
     var operationErrMsg = "Ошибка при выполнении операции";
+    var toastDuration = 2000;
 
     var $typeSelect = $("#type");
     var $postSelect = $("#posts");
     var $subSelect = $("#subdivisions");
+    var $tempCard = {};
 
     /*Constructor for interview*/
     function Interview() {
@@ -13,7 +15,7 @@
         this.description = $("#description").val();
         this.goal = $("#goal").val();
         this.audience = $("#audience").val();
-        this.isHide = true;
+        this.hide = true;
         this.endDate = $("#end-date").val();
         this.type = {
             id: $typeSelect.val()
@@ -37,7 +39,7 @@
     });
 
     $('.lock-btn').each(function () {
-        addHideInterviewListener(this, $(this).attr("data-interview-id"));
+        addLockInterviewListener(this);
     });
 
     $('.delete-btn').each(function () {
@@ -45,7 +47,7 @@
     });
 
     $('.edit-interview-btn').each(function () {
-        addEditInterviewListener(this, $(this).attr("data-interview-id"));
+        addEditInterviewListener(this);
     });
 
     $("#hide-chip-btn").click(function () {
@@ -53,7 +55,7 @@
             url: "/hide-chip",
             method: 'GET'
         }).fail(function () {
-            Materialize.toast(operationErrMsg);
+            Materialize.toast(operationErrMsg, toastDuration);
         });
     });
 
@@ -98,22 +100,24 @@
                 interview.id = interviewId;
                 buildNewCard(interview);
 
+                clearForm();
                 $("#add-edit-interview-modal").closeModal();
             }).fail(function () {
-                Materialize.toast(operationErrMsg);
+                Materialize.toast(operationErrMsg, toastDuration);
             });
         });
     }
 
-    function addHideInterviewListener(btn, interviewId) {
+    function addLockInterviewListener(btn) {
+        var that = btn;
         $(btn).click(function () {
             $.ajax({
-                url: "/hide-interview/" + interviewId,
+                url: "/lock-interview/" + $(this).attr("data-interview-id"),
                 method: 'GET'
             }).done(function (response) {
                 if (response == "success") {
-                    var $icon = $(this).find("i");
-                    var lock = ($icon.text() == "lock");
+                    var $icon = $(that).find("i");
+                    var lock = ($icon.html() == "lock");
 
                     var msg;
                     if (lock) {
@@ -125,33 +129,31 @@
                     }
 
                     $icon.attr("title", msg);
-                    Materialize.toast(msg);
+                    Materialize.toast(msg, toastDuration);
                 }
             }).fail(function () {
-                Materialize.toast(operationErrMsg);
+                Materialize.toast(operationErrMsg, toastDuration);
             });
         });
     }
 
     function addDeleteInterviewListener(button) {
         $(button).click(function () {
-            var interviewId = this.getAttribute("data-interview-id");
-            var submitBtn = $("#submit-delete-btn");
-            var card = $(this).parent(".card");
+            var $interviewId = $(this).attr("data-interview-id");
 
-            $(submitBtn).attr("id", interviewId);
-            submitBtn.parentNode = card;
+            $("#submit-delete-btn").attr("data-id", $interviewId);
+            $tempCard = $(this).closest(".card");
 
             $("#delete-interview-modal").openModal();
         });
     }
 
-    function addEditInterviewListener(btn, interviewId) {
+    function addEditInterviewListener(btn) {
         $(btn).click(function () {
             $.ajax({
                 url: '/edit-interview',
                 method: 'GET',
-                data: {"interviewId": interviewId}
+                data: {"interviewId": $(this).attr("data-interview-id")}
             }).done(function (response) {
                 var data = JSON.parse(response);
 
@@ -192,18 +194,17 @@
         $("#submit-delete-btn").click(function () {
             $.ajax({
                 url: "/delete-interview",
-                method: 'GET',
-                data: {data: JSON.stringify({id: $(this).attr("id")})}
+                method: 'POST',
+                data: {data: JSON.stringify({id: $(this).attr("data-id")})}
             }).done(function (response) {
                 if (response === "success") {
+                    $tempCard.remove();
 
-                    $(this).parent().remove();
                     $("#delete-interview-modal").closeModal();
-
-                    Materialize.toast("Анкета успешно удалена");
+                    Materialize.toast("Анкета успешно удалена", toastDuration);
                 }
             }).fail(function () {
-                Materialize.toast(operationErrMsg);
+                Materialize.toast(operationErrMsg, toastDuration);
             });
         });
     }
@@ -224,7 +225,7 @@
                     toggleSelectValidateClass($postSelect);
                 }
             }).fail(function () {
-                Materialize.toast(operationErrMsg);
+                Materialize.toast(operationErrMsg, toastDuration);
             });
         });
     }
@@ -260,11 +261,15 @@
             $visibilityIcon.html("visibility");
         }
 
-        $card.removeClass("hide").removeAttr("id");
-
         $card.find("[data-interview-id]").each(function () {
             $(this).attr("data-interview-id", interview.id);
         });
+
+        addLockInterviewListener($card.find(".lock-btn"));
+        addEditInterviewListener($card.find(".edit-interview-btn"));
+        addDeleteInterviewListener($card.find(".delete-btn"));
+
+        $card.removeClass("hide").removeAttr("id");
 
         $(".card-container").append($card);
     }
@@ -293,7 +298,6 @@
     }
 
     function rebuildAddForm() {
-
         $subSelect.material_select('destroy');
         $postSelect.material_select('destroy');
 

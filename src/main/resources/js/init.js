@@ -1,9 +1,7 @@
 (function ($) {
     $(function () {
         $('.slider').slider({full_width: true});
-        $('.modal-trigger').leanModal({
-            dismissible: false
-        });
+
         $('.button-collapse').sideNav();
 
         /*Min date for datepicker*/
@@ -29,9 +27,10 @@
             min: tomorrow,
 
             onClose: function () {
-               // $("#end-date").blur();
+                $("#end-date").focus();
             }
         });
+
         $('select').material_select();
     });
 })(jQuery);

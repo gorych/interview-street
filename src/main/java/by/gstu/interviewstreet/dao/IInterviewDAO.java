@@ -32,7 +32,7 @@ public interface IInterviewDAO {
 
     void remove(Interview interview);
 
-    void lock(int interviewId);
+    void lockOrUnlock(int interviewId);
 
     void pass(int interviewId, int userId);
 

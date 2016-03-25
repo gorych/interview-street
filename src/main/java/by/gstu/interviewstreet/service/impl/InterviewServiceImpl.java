@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewDAO;
 import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
-import by.gstu.interviewstreet.dao.IUserDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
@@ -102,7 +101,7 @@ public class InterviewServiceImpl implements InterviewService {
         jsonObject.put("date", interview.getPlacementDate() + "");
         jsonObject.put("type_id", interview.getType().getId() + "");
         jsonObject.put("type", interview.getType().getId() <= OPEN_INTERVIEW ? "visibility" : "visibility_off");
-        jsonObject.put("lock", interview.getHide() ? "lock" : "lock_open");
+        jsonObject.put("lockOrUnlock", interview.getHide() ? "lockOrUnlock" : "lock_open");
         jsonObject.put("description", interview.getDescription());
         jsonObject.put("subdivisions", subdivisions.toString());
         jsonObject.put("subdvsn_names", subdivisionNames.toString());
@@ -190,7 +189,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public void lock(int id) {
-        interviewDAO.lock(id);
+    public void lockOrUnlock(int id) {
+        interviewDAO.lockOrUnlock(id);
     }
 }

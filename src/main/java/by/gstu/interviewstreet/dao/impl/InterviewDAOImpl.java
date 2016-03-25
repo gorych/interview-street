@@ -1,10 +1,7 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.domain.Form;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.domain.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -110,7 +107,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    public void lock(int interviewId) {
+    public void lockOrUnlock(int interviewId) {
         Session session = getSession();
 
         UserInterview userInterview = (UserInterview) session
@@ -119,15 +116,20 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
                 .uniqueResult();
 
         Interview interview;
-        if(userInterview != null){
+        if (userInterview != null) {
             interview = userInterview.getInterview();
             userInterview.setPassed(false);
             session.save(userInterview);
-        }else {
+        } else {
             interview = getById(interviewId);
         }
 
-        interview.setHide(true);
+        if (interview.getHide()) {
+            interview.setHide(false);
+        } else {
+            interview.setHide(true);
+        }
+
         session.save(interview);
     }
 

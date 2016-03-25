@@ -31,5 +31,5 @@ public interface InterviewService {
 
     void remove(Interview interview);
 
-    void lock(int id);
+    void lockOrUnlock(int id);
 }

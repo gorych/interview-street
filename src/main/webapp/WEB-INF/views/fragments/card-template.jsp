@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<div id ="card-template" class="col s12 m6 l4 hide">
+<div id ="card-template1" class="col s12 m6 l4 hide">
     <div class="card darken-1 z-depth-2">
         <div class="card-content card-content-wrapper grey lighten-4">
-            <i class="material-icons visibility-icon black-text" title="Анкета закрыта для прохождения"></i>
+            <i class="material-icons visibility-icon black-text" title=""></i>
             <span class="badge new"></span>
             <span class="fixed-block card-title-wrapper"></span>
             <div class="divider divider-wrapper teal"></div>
@@ -39,7 +39,7 @@
             </div>
             <div class="fixed-action-btn action-btn-position click-to-toggle">
                 <a class="btn-floating btn white accent-3">
-                    <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
+                    <i class="large material-icons black-text" title="Нажмите для выбора операции">dashboard</i>
                 </a>
                 <ul>
                     <li>

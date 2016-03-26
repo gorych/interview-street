@@ -8,7 +8,6 @@ public final class AttributeConstants {
     public static final String INTERVIEW = "interview";
     public static final String SUBDIVISION = "subdivision";
     public static final String TYPE = "type";
-    public static final String USER_INTERVIEW = "extendUserInterview";
     public static final String CHIP = "chip";
 
 

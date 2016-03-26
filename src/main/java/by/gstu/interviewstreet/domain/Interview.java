@@ -1,12 +1,13 @@
 package by.gstu.interviewstreet.domain;
 
+import by.gstu.interviewstreet.web.util.DateUtils;
 import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "interviews")
@@ -60,9 +61,13 @@ public class Interview implements Serializable {
     private long questionCount;
 
     @Expose
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "type_id")
     private InterviewType type;
+
+    public boolean getIsNew() {
+        return DateUtils.isToday(placementDate);
+    }
 
     public String getLockIcon() {
         return hide ? LOCK_ICON : LOCK_OPEN_ICON;
@@ -152,6 +157,7 @@ public class Interview implements Serializable {
     public void setType(InterviewType type) {
         this.type = type;
     }
+
     //endregion
 
     @Override

@@ -46,17 +46,6 @@ public class ViewerController {
         }
     }
 
-    @RequestMapping(value = {"/load-subdivisions/{interviewId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
-    @ResponseBody
-    public String loadSubdivisions(@PathVariable int interviewId) {
-        try {
-            Interview interview = interviewService.get(interviewId);
-            return interviewService.getJSON(interview);
-        } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
-        }
-    }
-
     @RequestMapping(value = {"/load-questions/{interviewId}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     @ResponseBody
     public String loadQuestions(@PathVariable int interviewId) {

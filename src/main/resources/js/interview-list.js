@@ -24,13 +24,13 @@
 
     //region Events
 
-    $('.modal-trigger').leanModal({
+    $(".modal-trigger").leanModal({
         dismissible: false,
         ready: function () {
             $(".click-to-toggle").removeClass("active");
         },
         complete: function () {
-            clearForm("#add-interview-form");
+            clearForm();
         }
     });
 
@@ -38,22 +38,26 @@
         toggleSelectValidateClass(this);
     });
 
-    $('.lock-btn').each(function () {
+    $(".lock-btn").each(function () {
         addLockInterviewListener(this);
     });
 
-    $('.delete-btn').each(function () {
+    $(".delete-btn").each(function () {
         addDeleteInterviewListener(this);
     });
 
-    $('.edit-interview-btn').each(function () {
+    $(".edit-interview-btn").each(function () {
         addEditInterviewListener(this);
+    });
+
+    $("#reset-form-btn").click(function () {
+        clearForm();
     });
 
     $("#hide-chip-btn").click(function () {
         $.ajax({
             url: "/hide-chip",
-            method: 'GET'
+            method: "GET"
         }).fail(function () {
             Materialize.toast(operationErrMsg, toastDuration);
         });
@@ -65,12 +69,14 @@
         /*If type is open*/
         if (interviewType == 1) {
             resetAddFormSelects();
-        } else {
+        } else if (interviewType == 2) {
             rebuildAddForm();
+        } else {
+            Materialize.toast(operationErrMsg, toastDuration);
         }
     });
 
-    $("#add-interview-form").find("input.validate").blur(function () {
+    $("#add-interview-form").find(".validate").blur(function () {
         toggleInputValidateClass(this);
     });
 
@@ -93,14 +99,13 @@
 
             var data = JSON.stringify([interview, postIds]);
             $.ajax({
-                url: "/create-interview",
+                url: "/save-interview",
                 data: data,
                 type: "POST"
             }).done(function (interviewId) {
                 interview.id = interviewId;
                 buildNewCard(interview);
 
-                clearForm();
                 $("#add-edit-interview-modal").closeModal();
             }).fail(function () {
                 Materialize.toast(operationErrMsg, toastDuration);
@@ -113,24 +118,22 @@
         $(btn).click(function () {
             $.ajax({
                 url: "/lock-interview/" + $(this).attr("data-interview-id"),
-                method: 'GET'
-            }).done(function (response) {
-                if (response == "success") {
-                    var $icon = $(that).find("i");
-                    var lock = ($icon.html() == "lock");
+                method: "GET"
+            }).done(function () {
+                var $icon = $(that).find("i");
+                var lock = ($icon.html() == "lock");
 
-                    var msg;
-                    if (lock) {
-                        $icon.html("lock_open");
-                        msg = "Анкета открыта для прохождения";
-                    } else {
-                        $icon.html("lock");
-                        msg = "Анкета закрыта для прохождения";
-                    }
-
-                    $icon.attr("title", msg);
-                    Materialize.toast(msg, toastDuration);
+                var msg;
+                if (lock) {
+                    $icon.html("lock_open");
+                    msg = "Анкета открыта для прохождения";
+                } else {
+                    $icon.html("lock");
+                    msg = "Анкета закрыта для прохождения";
                 }
+
+                $icon.attr("title", msg);
+                Materialize.toast(msg, toastDuration);
             }).fail(function () {
                 Materialize.toast(operationErrMsg, toastDuration);
             });
@@ -151,37 +154,24 @@
     function addEditInterviewListener(btn) {
         $(btn).click(function () {
             $.ajax({
-                url: '/edit-interview',
-                method: 'GET',
+                url: "/load-card-values",
+                method: "GET",
                 data: {"interviewId": $(this).attr("data-interview-id")}
             }).done(function (response) {
                 var data = JSON.parse(response);
 
-                var postValues = data.posts;
-                var subdivisionValues = data.subdivisions;
                 var interview = data.interview;
 
-                $.ajax({
-                    url: '/load-posts',
-                    method: 'GET',
-                    data: {"data": JSON.stringify(subdivisionValues)}
-                }).done(function (response) {
-                    var posts = JSON.parse(response);
-                    if (response.length > 0) {
-                        fillPostSelect(posts);
+                $("#name").val(interview.name);
+                $("#description").val(interview.description);
+                $("#end-date").val(interview.endDate);
+                $("label[for='end-date']").addClass("active");
 
-                        $postSelect.material_select();
-                        $postSelect.val(postValues).material_select();
-                    }
-                }).fail(function () {
-                    console.log("Ошибка при загрузке списка должностей");
-                });
+                addOptionsToPostSelect(data.allPosts);
 
-                $('#name').addClass("active").val(interview.name);
-                $('#description').addClass("active").val(interview.description);
-
+                $subSelect.val(data.subs).material_select();
+                $postSelect.val(data.activePosts).material_select();
                 $typeSelect.val(interview.type.id).material_select();
-                $subSelect.val(subdivisionValues).material_select();
 
                 $("#add-edit-interview-modal").openModal();
             }).fail(function () {
@@ -194,7 +184,7 @@
         $("#submit-delete-btn").click(function () {
             $.ajax({
                 url: "/delete-interview",
-                method: 'POST',
+                method: "POST",
                 data: {data: JSON.stringify({id: $(this).attr("data-id")})}
             }).done(function (response) {
                 if (response === "success") {
@@ -213,13 +203,13 @@
         $subSelect.change(function () {
             var values = $(this).val();
             $.ajax({
-                url: '/load-posts',
-                method: 'POST',
+                url: "/load-posts",
+                method: "POST",
                 data: JSON.stringify(values)
             }).done(function (response) {
                 var data = JSON.parse(response);
                 if (response.length > 0) {
-                    fillPostSelect(data);
+                    addOptionsToPostSelect(data);
 
                     toggleSelectValidateClass($subSelect);
                     toggleSelectValidateClass($postSelect);
@@ -239,7 +229,12 @@
     }
 
     function buildNewCard(interview) {
-        var $card = $("#card-template").clone();
+        var template = document.querySelector("#card-template");
+        if (!template) {
+            location.reload();
+        }
+
+        var $card = $(template).clone();
 
         var $goal = $card.find(".goal");
         var $audience = $card.find(".audience");
@@ -254,11 +249,11 @@
         if (interview.type.id > 1) {
             $goal.text(interview.goal);
             $audience.text(interview.audience);
-            $visibilityIcon.html("visibility_off");
+            $visibilityIcon.html("visibility_off").attr("Анонимная анкета");
         } else {
             $goal.addClass("hide");
             $audience.addClass("hide");
-            $visibilityIcon.html("visibility");
+            $visibilityIcon.html("visibility").attr("Открытая анкета");
         }
 
         $card.find("[data-interview-id]").each(function () {
@@ -298,8 +293,8 @@
     }
 
     function rebuildAddForm() {
-        $subSelect.material_select('destroy');
-        $postSelect.material_select('destroy');
+        $subSelect.material_select("destroy");
+        $postSelect.material_select("destroy");
 
         $subSelect.next("label").replaceWith("<label for='goal'>Цель опроса</label>");
         $postSelect.next("label").replaceWith("<label for='audience'>Целевая аудитория</label>");
@@ -307,13 +302,13 @@
         $subSelect.before("<input id='goal' class='validate' type='text' length='65'/>");
         $postSelect.before("<input id='audience' class='validate' type='text' length='25'/>");
 
-        $('input#goal, input#audience').characterCounter();
+        $("input#goal, input#audience").characterCounter();
 
         $("label[for='type']").addClass("info-badge");
     }
 
-    function fillPostSelect(data) {
-        $postSelect.find('option').remove().end();
+    function addOptionsToPostSelect(data) {
+        $postSelect.find("option").remove().end();
 
         $.each(data, function (index, entry) {
             $.each(entry, function (j, post) {
@@ -339,7 +334,7 @@
         var $form = $("#add-interview-form");
 
         $form.find(".validate").each(function (i, el) {
-            if ($(el).is('select')) {
+            if ($(el).is("select")) {
                 toggleSelectValidateClass(el);
             } else {
                 toggleInputValidateClass(el);

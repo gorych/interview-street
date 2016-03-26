@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,6 +10,7 @@ import java.io.Serializable;
 public class Subdivision implements Serializable{
 
     @Id
+    @Expose
     @Column(name = "id")
     @GeneratedValue
     private int id;

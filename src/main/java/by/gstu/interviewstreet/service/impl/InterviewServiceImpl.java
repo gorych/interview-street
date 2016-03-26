@@ -1,28 +1,36 @@
 package by.gstu.interviewstreet.service.impl;
 
+import by.gstu.interviewstreet.dao.IEmployeeDAO;
 import by.gstu.interviewstreet.dao.IInterviewDAO;
 import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.domain.Employee;
+import by.gstu.interviewstreet.domain.Form;
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.InterviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
-    private IInterviewDAO interviewDAO;
+    private IInterviewTypeDAO interviewTypeDAO;
 
     @Autowired
-    IInterviewTypeDAO interviewTypeDAO;
+    private IEmployeeDAO employeeDAO;
+
+    @Autowired
+    private IInterviewDAO interviewDAO;
 
     @Autowired
     private IUserInterviewDAO userInterviewDAO;
@@ -70,77 +78,26 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public String getJSON(Interview interview) {
-        final int OPEN_INTERVIEW = 1;
-
-        StringBuilder posts = new StringBuilder();
-        StringBuilder subdivisions = new StringBuilder();
-        StringBuilder subdivisionNames = new StringBuilder();
-
-        List<UserInterview> userInterviews = userInterviewDAO.getById(interview.getId());
-        if (userInterviews != null && userInterviews.size() != 0) {
-            for (UserInterview ui : userInterviews) {
-                int postId = ui.getUser().getEmployee().getPost().getId();
-                int subdivisionId = ui.getUser().getEmployee().getSubdivision().getId();
-                String subdivisionName = ui.getUser().getEmployee().getSubdivision().getName();
-
-                posts.append(postId).append(",");
-                subdivisions.append(subdivisionId).append(",");
-                subdivisionNames.append(subdivisionName).append(",");
-            }
-            posts.deleteCharAt(posts.length() - 1);
-            subdivisions.deleteCharAt(subdivisions.length() - 1);
-            subdivisionNames.deleteCharAt(subdivisionNames.length() - 1);
-        }
-
-        List<Map<String, String>> jsonList = new ArrayList<>();
-        Map<String, String> jsonObject = new HashMap<>();
-
-        jsonObject.put("id", interview.getId() + "");
-        jsonObject.put("name", interview.getName());
-        jsonObject.put("date", interview.getPlacementDate() + "");
-        jsonObject.put("type_id", interview.getType().getId() + "");
-        jsonObject.put("type", interview.getType().getId() <= OPEN_INTERVIEW ? "visibility" : "visibility_off");
-        jsonObject.put("lockOrUnlock", interview.getHide() ? "lockOrUnlock" : "lock_open");
-        jsonObject.put("description", interview.getDescription());
-        jsonObject.put("subdivisions", subdivisions.toString());
-        jsonObject.put("subdvsn_names", subdivisionNames.toString());
-        jsonObject.put("posts", posts.toString());
-        jsonObject.put("interview_id", interview.getId() + "");
-
-        jsonList.add(jsonObject);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(jsonList);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
-    }
-
-    @Override
-    @Transactional
-    public String getJson(int interviewId) {
+    public Map<String, Object> getValueMapForCard(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getById(interviewId);
 
-        JSONArray jsonPosts = new JSONArray();
-        JSONArray jsonSubdivisions = new JSONArray();
-        for (int i = 0; i < userInterviews.size(); i++) {
-            UserInterview userInterview = userInterviews.get(i);
-
-            int postId = userInterview.getUser().getEmployee().getPost().getId();
-            int subdivisionId = userInterview.getUser().getEmployee().getSubdivision().getId();
-
-            jsonPosts.put(i, postId);
-            jsonSubdivisions.put(i, subdivisionId);
+        List<Integer> posts = new ArrayList<>();
+        List<Integer> subIds = new ArrayList<>();
+        for (UserInterview userInterview : userInterviews) {
+            posts.add(userInterview.getUser().getEmployee().getPost().getId());
+            subIds.add(userInterview.getUser().getEmployee().getSubdivision().getId());
         }
 
-        JSONObject json = new JSONObject();
-        json.put("posts", jsonPosts);
-        json.put("subdivisions", jsonSubdivisions);
-        json.put("interview", new JSONObject(interview));
+        List<Employee> employees = employeeDAO.getBySubdivisionIds(subIds);
 
-        return json.toString();
+        Map<String, Object> valueMap = new HashMap<>();
+        valueMap.put("activePosts", posts);
+        valueMap.put("subs", subIds);
+        valueMap.put("allPosts", employees);
+        valueMap.put("interview", interview);
+
+        return valueMap;
     }
 
     @Override

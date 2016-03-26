@@ -3,8 +3,6 @@ package by.gstu.interviewstreet.domain;
 import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -30,7 +28,7 @@ public class Employee implements Serializable {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "subdivision_id")
     private Subdivision subdivision;
 

@@ -12,8 +12,8 @@ public class Post implements Serializable {
 
     @Id
     @Expose
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
     @Expose

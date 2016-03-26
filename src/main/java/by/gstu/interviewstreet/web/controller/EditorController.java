@@ -13,14 +13,17 @@ import by.gstu.interviewstreet.web.param.RequestTextParam;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 //@Secured(UserRoleConstants.EDITOR)
@@ -62,14 +65,16 @@ public class EditorController {
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public String loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
-        Integer[] subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, Integer[].class);
+
+        Type type = new TypeToken<List<Integer>>() { }.getType();
+        List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 
         return JSONParser.convertObjectToJsonString(employees);
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/create-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/save-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public String processAddInterviewForm(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
@@ -89,7 +94,7 @@ public class EditorController {
 
     @ResponseBody
     @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.POST)
-    public String processDeleteQuery(@RequestParam String data) {
+    public String deleteInterview(@RequestParam String data) {
         Interview interview = JSONParser.convertJsonStringToObject(data, Interview.class);
         interviewService.remove(interview);
 
@@ -99,13 +104,20 @@ public class EditorController {
     @ResponseBody
     @RequestMapping(value = {"/lock-interview/{interviewId}"}, method = RequestMethod.GET)
     public String lockOrUnlockInterview(@PathVariable int interviewId) {
-        try {
-            interviewService.lockOrUnlock(interviewId);
-        } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
-        }
+        interviewService.lockOrUnlock(interviewId);
+
         return AttributeConstants.SUCCESS_RESPONSE_BODY;
     }
+
+    @ResponseBody
+    @RequestMapping(value = {"/load-card-values"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+    public String loadValuesForCard(@RequestParam int interviewId) {
+        Map<String, Object> valueMap = interviewService.getValueMapForCard(interviewId);
+
+        return JSONParser.convertObjectToJsonString(valueMap);
+    }
+
+    //region Form building
 
     @RequestMapping(value = {"/designer/{interviewId}"}, method = RequestMethod.GET)
     public String showQuestionsEditor(@PathVariable int interviewId, Model model) {
@@ -145,13 +157,6 @@ public class EditorController {
         } catch (RuntimeException e) {
             return AttributeConstants.EMPTY_BODY;
         }
-    }
-
-
-    @ResponseBody
-    @RequestMapping(value = {"/edit-interview"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
-    public String editInterviewModal(@RequestParam int interviewId) {
-        return interviewService.getJson(interviewId);
     }
 
     @RequestMapping(value = {"/send-form"}, method = RequestMethod.POST)
@@ -215,4 +220,6 @@ public class EditorController {
             return e.getMessage();
         }
     }
+
+    //endregion
 }

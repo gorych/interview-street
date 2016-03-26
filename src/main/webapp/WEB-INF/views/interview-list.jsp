@@ -30,7 +30,11 @@
                     <div class="card-content card-content-wrapper grey lighten-4">
                         <i class="material-icons visibility-icon black-text" title="${interview.type.title}">
                                 ${interview.type.visibilityIcon}</i>
-                        <span class="badge new"></span>
+                        
+                        <c:if test="${interview.isNew}">
+                            <span class="badge new"></span>
+                        </c:if>
+
                         <span class="fixed-block card-title-wrapper">${interview.name}</span>
                         <div class="divider divider-wrapper teal"></div>
                         <h6 class="placement-date">${interview.placementDate}</h6>
@@ -74,7 +78,7 @@
 
                         <div class="fixed-action-btn action-btn-position click-to-toggle">
                             <a class="btn-floating btn white accent-3">
-                                <i class="large material-icons black-text" title="Дополнительные операции">dashboard</i>
+                                <i class="large material-icons black-text" title="Нажмите для выбора операции">dashboard</i>
                             </a>
                             <ul>
                                 <li>

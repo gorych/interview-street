@@ -25,7 +25,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     @SuppressWarnings("unchecked")
     public List<UserInterview> getUserInterviews(User user) {
         return getSession()
-                .createQuery("FROM UserInterview WHERE user.id = :id AND interview.isHide = false AND isPassed != true " +
+                .createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false AND isPassed != true " +
                         "AND interview.type.id = :typeId")
                 .setInteger("id", user.getId())
                 .setInteger("typeId", 1)

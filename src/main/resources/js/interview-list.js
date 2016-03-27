@@ -384,6 +384,8 @@
     function toggleInputValidateClass(input) {
         if (!input.value || input.validity.patternMismatch) {
             $(input).addClass("invalid");
+        } else {
+            $(input).removeClass("invalid").addClass("valid");
         }
     }
 
@@ -393,6 +395,10 @@
 
         if (!value || value < 1) {
             $(hiddenInput).addClass("invalid invalid-select");
+        } else {
+            $(hiddenInput)
+                .removeClass("invalid invalid-select")
+                .addClass("valid valid-select");
         }
     }
 

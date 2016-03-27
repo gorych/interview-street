@@ -82,7 +82,7 @@ public class EditorController {
         JsonArray idsArray = jsonArray.get(1).getAsJsonArray();
 
         Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
-        interview = interviewService.save(interview);
+        interview = interviewService.saveOrUpdate(interview);
 
         if (interview.getType().isOpen()) {
             Integer[] postIds = JSONParser.convertJsonElementToObject(idsArray, Integer[].class);

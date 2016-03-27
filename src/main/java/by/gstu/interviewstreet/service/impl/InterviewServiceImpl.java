@@ -9,6 +9,7 @@ import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.web.util.DateUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public Map<String, Object> getValueMapForCard(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
-        List<UserInterview> userInterviews = userInterviewDAO.getById(interviewId);
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);
 
         List<Integer> posts = new ArrayList<>();
         List<Integer> subIds = new ArrayList<>();
@@ -133,9 +134,35 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview save(Interview interview) {
-        interviewDAO.save(interview);
-        return interview;
+    public Interview saveOrUpdate(Interview interview) {
+        Interview existed = interviewDAO.getById(interview.getId());
+
+        /*create new interview*/
+        if (existed == null) {
+            interviewDAO.save(interview);
+            return interview;
+        }
+
+        removeAllUserInterviews(existed);
+
+        existed.setName(interview.getName());
+        existed.setType(interview.getType());
+        existed.setGoal(interview.getGoal());
+        existed.setEndDate(interview.getEndDate());
+        existed.setAudience(interview.getAudience());
+        existed.setPlacementDate(DateUtils.getToday());
+        existed.setDescription(interview.getDescription());
+        existed.setHide(true);
+
+        interviewDAO.save(existed);
+        return existed;
+    }
+
+    private void removeAllUserInterviews(Interview interview) {
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interview.getId());
+        for (UserInterview ui : userInterviews) {
+            userInterviewDAO.remove(ui);
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public interface InterviewService {
 
     Interview get(long hash);
 
-    Interview save(Interview interview);
+    Interview saveOrUpdate(Interview interview);
 
     void remove(Interview interview);
 

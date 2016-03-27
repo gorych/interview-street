@@ -82,8 +82,8 @@
                             </a>
                             <ul>
                                 <li>
-                                    <a href="#" data-interview-id="${interview.id}"
-                                       class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
+                                    <a href="#add-edit-interview-modal" data-interview-id="${interview.id}"
+                                       class="edit-interview-btn btn-floating orange modal-trigger" title="Редактировать анкету">
                                         <i class="material-icons black-text">mode_edit</i>
                                     </a>
                                 </li>
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="input-field col l6 m6 s12">
-                        <select id="type" name="type" class="validate">
+                        <select required id="type" name="type" class="validate">
                             <option value="1" selected>Открытый</option>
                             <option value="2">Анонимный</option>
                         </select>

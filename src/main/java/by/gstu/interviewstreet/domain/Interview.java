@@ -4,8 +4,12 @@ import by.gstu.interviewstreet.web.util.DateUtils;
 import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,18 +30,24 @@ public class Interview implements Serializable {
     private int id;
 
     @Expose
+    @NotEmpty
+    @Length(min = 5, max = 60)
     @Column(name = "name")
     private String name;
 
     @Expose
+    @NotEmpty
+    @Length(min = 3, max = 70)
     @Column(name = "description")
     private String description;
 
     @Expose
+    @Length(max = 65)
     @Column(name = "goal")
     private String goal;
 
     @Expose
+    @Length(max = 25)
     @Column(name = "audience")
     private String audience;
 
@@ -47,11 +57,12 @@ public class Interview implements Serializable {
 
     @Expose
     @Temporal(TemporalType.DATE)
-    @Generated(GenerationTime.INSERT)
+    @Generated(GenerationTime.ALWAYS)
     @Column(name = "placement_date")
     private Date placementDate;
 
     @Expose
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
     private Date endDate;
@@ -61,6 +72,7 @@ public class Interview implements Serializable {
     private long questionCount;
 
     @Expose
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "type_id")
     private InterviewType type;
@@ -135,7 +147,10 @@ public class Interview implements Serializable {
     }
 
     public Date getEndDate() {
-        return endDate;
+        if (DateUtils.isMoreThanToday(endDate)) {
+            return endDate;
+        }
+        return DateUtils.getTomorrow();
     }
 
     public void setEndDate(Date endDate) {

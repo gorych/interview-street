@@ -15,11 +15,21 @@ public final class DateUtils {
         return Calendar.getInstance().getTime();
     }
 
+    public static Date getTomorrow(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        return calendar.getTime();
+    }
+
     public static boolean isToday(Date date) {
         String today = sdf.format(getToday());
         String someday = sdf.format(date);
 
         return today.equals(someday);
+    }
+
+    public static boolean isMoreThanToday(Date date) {
+        return date.after(getToday());
     }
 
 }

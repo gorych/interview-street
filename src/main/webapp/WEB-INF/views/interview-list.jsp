@@ -9,7 +9,7 @@
     <link href="/resources/css/interview-list.css" rel="stylesheet" type="text/css">
     <title>Interview Street - Список анкет</title>
 </head>
-<body class="grey lighten-3">
+<body>
 <%@include file="fragments/header.jsp" %>
 <main class="container">
     <div class="row card-container">

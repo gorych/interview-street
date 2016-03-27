@@ -6,7 +6,7 @@
     var $typeSelect = $("#type");
     var $postSelect = $("#posts");
     var $subSelect = $("#subdivisions");
-    var $tempCard = {};
+    var $tempCard = null;
 
     /*Constructor for interview*/
     function Interview() {
@@ -30,7 +30,7 @@
             $(".click-to-toggle").removeClass("active");
         },
         complete: function () {
-            clearForm();
+            cleanAllValues();
         }
     });
 
@@ -51,7 +51,7 @@
     });
 
     $("#reset-form-btn").click(function () {
-        clearForm();
+        cleanAllValues();
     });
 
     $("#hide-chip-btn").click(function () {
@@ -95,6 +95,11 @@
             }
 
             var interview = new Interview();
+
+            /*if id not exists than server will create new interview*/
+            var id = $("#add-edit-interview-modal").attr("data-temp-id");
+            interview.id = id ? id : null;
+
             var postIds = $postSelect.val();
 
             var data = JSON.stringify([interview, postIds]);
@@ -104,8 +109,14 @@
                 type: "POST"
             }).done(function (interviewId) {
                 interview.id = interviewId;
-                buildNewCard(interview);
 
+                if ($tempCard) {
+                    fillCardTemplate($tempCard, interview);
+                } else {
+                    buildNewCard(interview);
+                }
+
+                cleanAllValues();
                 $("#add-edit-interview-modal").closeModal();
             }).fail(function () {
                 Materialize.toast(operationErrMsg, toastDuration);
@@ -144,7 +155,7 @@
         $(button).click(function () {
             var $interviewId = $(this).attr("data-interview-id");
 
-            $("#submit-delete-btn").attr("data-id", $interviewId);
+            $("#submit-delete-btn").attr("data-temp-id", $interviewId);
             $tempCard = $(this).closest(".card");
 
             $("#delete-interview-modal").openModal();
@@ -152,11 +163,13 @@
     }
 
     function addEditInterviewListener(btn) {
+        var id = $(btn).attr("data-interview-id");
+
         $(btn).click(function () {
             $.ajax({
                 url: "/load-card-values",
                 method: "GET",
-                data: {"interviewId": $(this).attr("data-interview-id")}
+                data: {"interviewId": id}
             }).done(function (response) {
                 var data = JSON.parse(response);
 
@@ -173,7 +186,11 @@
                 $postSelect.val(data.activePosts).material_select();
                 $typeSelect.val(interview.type.id).material_select();
 
-                $("#add-edit-interview-modal").openModal();
+                $("#add-edit-interview-modal")
+                    .attr("data-temp-id", id);
+
+                /*Remember card which need update*/
+                $tempCard = $(btn).closest(".card");
             }).fail(function () {
                 Materialize.toast(operationErrMsg);
             });
@@ -185,10 +202,13 @@
             $.ajax({
                 url: "/delete-interview",
                 method: "POST",
-                data: {data: JSON.stringify({id: $(this).attr("data-id")})}
+                data: {data: JSON.stringify({id: $(this).attr("data-temp-id")})}
             }).done(function (response) {
                 if (response === "success") {
                     $tempCard.remove();
+
+                    /*Clean link*/
+                    $tempCard = null;
 
                     $("#delete-interview-modal").closeModal();
                     Materialize.toast("Анкета успешно удалена", toastDuration);
@@ -236,7 +256,24 @@
 
         var $card = $(template).clone();
 
+        $card.find("[data-interview-id]").each(function () {
+            $(this).attr("data-interview-id", interview.id);
+        });
+
+        addLockInterviewListener($card.find(".lock-btn"));
+        addEditInterviewListener($card.find(".edit-interview-btn"));
+        addDeleteInterviewListener($card.find(".delete-btn"));
+
+        fillCardTemplate($card, interview);
+        fillCardTemplate($card, interview);
+        $card.removeClass("hide").removeAttr("id");
+
+        $(".card-container").append($card);
+    }
+
+    function fillCardTemplate($card, interview) {
         var $goal = $card.find(".goal");
+        var $lockIcon = $card.find(".lock-btn").find("i");
         var $audience = $card.find(".audience");
         var $visibilityIcon = $card.find(".visibility-icon");
 
@@ -250,28 +287,26 @@
             $goal.text(interview.goal);
             $audience.text(interview.audience);
             $visibilityIcon.html("visibility_off").attr("Анонимная анкета");
+
         } else {
             $goal.addClass("hide");
             $audience.addClass("hide");
             $visibilityIcon.html("visibility").attr("Открытая анкета");
         }
 
-        $card.find("[data-interview-id]").each(function () {
-            $(this).attr("data-interview-id", interview.id);
-        });
-
-        addLockInterviewListener($card.find(".lock-btn"));
-        addEditInterviewListener($card.find(".edit-interview-btn"));
-        addDeleteInterviewListener($card.find(".delete-btn"));
-
-        $card.removeClass("hide").removeAttr("id");
-
-        $(".card-container").append($card);
+        $lockIcon.html("lock").attr("title", "Анкета закрыта для прохождения");
     }
 
-    function clearForm() {
+    function cleanAllValues() {
         $(".invalid").removeClass("invalid");
         $("label[for='end-date']").removeClass("active");
+
+        /*Del temporary ids*/
+        $("[data-temp-id]").each(function () {
+            $(this).removeAttr("data-temp-id");
+        });
+
+        $tempCard = null;
 
         resetAddFormSelects();
 
@@ -296,15 +331,17 @@
         $subSelect.material_select("destroy");
         $postSelect.material_select("destroy");
 
-        $subSelect.next("label").replaceWith("<label for='goal'>Цель опроса</label>");
-        $postSelect.next("label").replaceWith("<label for='audience'>Целевая аудитория</label>");
+        if (!$("#goal, #audience").length) {
+            $subSelect.next("label").replaceWith("<label for='goal' class='active'>Цель опроса</label>");
+            $postSelect.next("label").replaceWith("<label for='audience' class='active'>Целевая аудитория</label>");
 
-        $subSelect.before("<input id='goal' class='validate' type='text' length='65'/>");
-        $postSelect.before("<input id='audience' class='validate' type='text' length='25'/>");
+            $subSelect.before("<input required id='goal' class='validate' type='text' length='65' placeholder='Максимум 65 символов''/>");
+            $postSelect.before("<input required id='audience' class='validate' type='text' length='25' placeholder='Максимум 25 символов''/>");
 
-        $("input#goal, input#audience").characterCounter();
+            $("input#goal, input#audience").characterCounter();
 
-        $("label[for='type']").addClass("info-badge");
+            $("label[for='type']").addClass("info-badge");
+        }
     }
 
     function addOptionsToPostSelect(data) {
@@ -333,11 +370,11 @@
     function isValidForm() {
         var $form = $("#add-interview-form");
 
-        $form.find(".validate").each(function (i, el) {
-            if ($(el).is("select")) {
-                toggleSelectValidateClass(el);
+        $form.find("[required]").each(function (i, elem) {
+            if ($(elem).is("select")) {
+                toggleSelectValidateClass(elem);
             } else {
-                toggleInputValidateClass(el);
+                toggleInputValidateClass(elem);
             }
         });
 
@@ -347,8 +384,6 @@
     function toggleInputValidateClass(input) {
         if (!input.value || input.validity.patternMismatch) {
             $(input).addClass("invalid");
-        } else {
-            $(input).removeClass("invalid").addClass("valid");
         }
     }
 
@@ -358,10 +393,6 @@
 
         if (!value || value < 1) {
             $(hiddenInput).addClass("invalid invalid-select");
-        } else {
-            $(hiddenInput)
-                .removeClass("invalid invalid-select")
-                .addClass("valid valid-select");
         }
     }
 

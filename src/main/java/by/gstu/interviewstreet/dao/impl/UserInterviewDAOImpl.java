@@ -11,7 +11,7 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements IUserIntervie
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<UserInterview> getById(int interviewId) {
+    public List<UserInterview> getByInterviewId(int interviewId) {
         return getSession()
                 .createQuery("FROM UserInterview WHERE interview.id =:interviewId GROUP BY user.employee.post.id")
                 .setInteger("interviewId", interviewId)
@@ -23,5 +23,9 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements IUserIntervie
         getSession().save(userInterview);
     }
 
+    @Override
+    public void remove(UserInterview userInterview) {
+        getSession().delete(userInterview);
+    }
 
 }

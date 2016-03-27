@@ -127,16 +127,6 @@
     margin: 2px 0;
 }
 
-.info-badge:after {
-    margin-left: 1.0rem;
-    padding: 0.1rem 0.3rem;
-    text-overflow: ellipsis;
-    border-radius: 1px;
-    color: #000;
-    background: #bbdefb;
-    content: "Только для анонимных пользователей";
-}
-
 input[type=text].invalid.invalid-select {
     border-bottom: none;
     box-shadow: 0 2px 0 0 #F44336;

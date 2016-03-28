@@ -83,7 +83,7 @@
                             <ul>
                                 <li>
                                     <a href="#add-edit-interview-modal" data-interview-id="${interview.id}"
-                                       class="edit-interview-btn btn-floating orange modal-trigger" title="Редактировать анкету">
+                                       class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
                                         <i class="material-icons black-text">mode_edit</i>
                                     </a>
                                 </li>

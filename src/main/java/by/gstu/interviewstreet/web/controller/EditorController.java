@@ -117,6 +117,28 @@ public class EditorController {
         return JSONParser.convertObjectToJsonString(valueMap);
     }
 
+    @ResponseBody
+    @RequestMapping(value = {"/build-form"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String buildQuestionForm(int hash, int answerTypeId) {
+        AnswerType answerType = null;
+        Interview interview = null;
+        try {
+            answerType = answerService.getAnswerType(answerTypeId);
+            interview = interviewService.get(hash);
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+
+        if (interview == null || answerType == null) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+
+        List<Form> forms = formService.buildQuestionForm(interview, answerType);
+
+        return JSONParser.convertObjectToJsonString(forms);
+
+    }
+
     //region Form building
 
     @RequestMapping(value = {"/designer/{interviewId}"}, method = RequestMethod.GET)
@@ -130,23 +152,14 @@ public class EditorController {
         Interview interview = interviewService.get(interviewId);
         model.addAttribute(AttributeConstants.INTERVIEW, interview);
 
-        return "designer";
+        return "test";
     }
 
-    @ResponseBody
-    @RequestMapping(value = {"/create-question"}, method = RequestMethod.GET)
-    public long createQuestion() {
-        return questionService.insert();
-    }
 
     @ResponseBody
     @RequestMapping(value = {"/create-answer/{interviewId}/{questionId}"}, method = RequestMethod.GET)
     public long createAnswer(@PathVariable int interviewId, @PathVariable int questionId) {
-        Interview interview = interviewService.get(interviewId);
-        Question question = questionService.get(questionId);
-        Form form = new Form(question, interview);
-
-        return answerService.insert(form);
+        return -1;
     }
 
     @ResponseBody

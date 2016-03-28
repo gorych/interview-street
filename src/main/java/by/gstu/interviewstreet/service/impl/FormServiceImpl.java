@@ -19,6 +19,17 @@ import java.util.Map;
 @Service
 public class FormServiceImpl implements FormService {
 
+    private static final int BASE_FORM_COUNT = 1;
+    private static final int COMPLEX_FORM_COUNT = 3;
+
+    private static final String TEXT_TYPE = "text";
+    private static final String RADIO_TYPE = "radio";
+    private static final String RATING_TYPE = "rating";
+    private static final String CHECKBOX_TYPE = "checkbox";
+
+    private static final String DEFAULT_QUESTION_TEXT = "Введите текст вопроса";
+    private static final String DEFAULT_ANSWER_TEXT = "Ответ";
+
     @Autowired
     IFormDAO formDAO;
 
@@ -27,6 +38,41 @@ public class FormServiceImpl implements FormService {
 
     @Autowired
     IAnswerDAO answerDAO;
+
+    @Override
+    @Transactional
+    public List<Form> buildQuestionForm(Interview interview, AnswerType answerType) {
+        int formCount = 0;
+        List<Form> forms = new ArrayList<>();
+
+        String name = answerType.getName();
+        if (TEXT_TYPE.equals(name) || RATING_TYPE.equals(name)) {
+            formCount = BASE_FORM_COUNT;
+        }
+
+        if (RADIO_TYPE.equals(name) || CHECKBOX_TYPE.equals(name)) {
+            formCount = COMPLEX_FORM_COUNT;
+        }
+
+        /*Build default answer and question*/
+        Answer answer = new Answer(DEFAULT_ANSWER_TEXT, answerType);
+        Question question = new Question(DEFAULT_QUESTION_TEXT);
+        Form form = new Form(answer, question, interview);
+
+        /*Add to DB and get full entity with ID*/
+        answer = answerDAO.insert(answer);
+        question = questionDAO.insert(question);
+
+        for (int i = 0; i < formCount; i++) {
+            answer.setText(DEFAULT_ANSWER_TEXT + (i + 1));
+            form.setAnswer(answer);
+
+            formDAO.insert(form);
+            forms.add(form);
+        }
+
+        return forms;
+    }
 
     @Override
     @Transactional

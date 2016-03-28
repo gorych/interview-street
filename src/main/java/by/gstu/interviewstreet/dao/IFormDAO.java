@@ -10,7 +10,7 @@ public interface IFormDAO {
 
     List<Form> getByQuestion(Question question);
 
-    void insertForm(Form form);
+    void insert(Form form);
 
     void saveForm(List<Answer> answers, Question question);
 

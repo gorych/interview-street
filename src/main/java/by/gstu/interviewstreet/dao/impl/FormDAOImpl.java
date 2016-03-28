@@ -21,7 +21,7 @@ public class FormDAOImpl extends AbstractDbDAO implements IFormDAO {
     }
 
     @Override
-    public void insertForm(Form form) {
+    public void insert(Form form) {
         getSession().save(form);
     }
 

@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,27 +12,26 @@ import java.sql.Date;
 public class Form implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Expose
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
+    @Expose
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
+    @Expose
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "question_id")
     private Question question;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
-    public Form() {
-    }
+    public Form() { }
 
     public Form(Question question, Interview interview) {
         this.question = question;

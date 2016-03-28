@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,15 +10,16 @@ import java.io.Serializable;
 public class Question implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Expose
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
+    @Expose
     @Column(name = "text")
     private String text;
 
-    public Question() {
-    }
+    public Question() { }
 
     public Question(String text) {
         this.text = text;

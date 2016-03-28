@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IAnswerDAO {
 
-    Answer insert(AnswerType type);
+    Answer insert(Answer answer);
 
     void insertUserAnswer(UserAnswer userAnswer);
 

@@ -14,8 +14,7 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
 
 
     @Override
-    public Answer insert(AnswerType type) {
-        Answer answer = new Answer("Новый ответ", type);
+    public Answer insert(Answer answer) {
         getSession().save(answer);
         return answer;
     }

@@ -26,21 +26,6 @@ public class AnswerServiceImpl implements AnswerService {
     @Autowired
     private IInterviewDAO interviewDAO;
 
-    @Autowired
-    private IFormDAO formDAO;
-
-    @Override
-    @Transactional
-    public long insert(Form form) {
-        AnswerType answerType = answerTypeDAO.getDefaultAnswerType();
-        Answer answer = answerDAO.insert(answerType);
-
-        form.setAnswer(answer);
-        formDAO.insertForm(form);
-
-        return answer.getId();
-    }
-
     @Override
     @Transactional
     public void insertUserAnswers(Interview interview, List<Integer> questionIds, Map<Integer, String[]> answers, User user) {

@@ -1,24 +1,29 @@
 package by.gstu.interviewstreet.web.controller;
 
 
+import by.gstu.interviewstreet.domain.Form;
+import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.web.AttributeConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class IndexController {
+
+    @Autowired
+    InterviewService interviewService;
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String goToLogin(@RequestParam(value = "auth_error", required = false) String error, Model model) {

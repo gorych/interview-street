@@ -186,11 +186,11 @@
                 $postSelect.val(data.activePosts).material_select();
                 $typeSelect.val(interview.type.id).material_select();
 
-                $("#add-edit-interview-modal")
-                    .attr("data-temp-id", id);
-
                 /*Remember card which need update*/
                 $tempCard = $(btn).closest(".card");
+
+                $("#add-edit-interview-modal")
+                    .attr("data-temp-id", id).openModal();
             }).fail(function () {
                 Materialize.toast(operationErrMsg);
             });

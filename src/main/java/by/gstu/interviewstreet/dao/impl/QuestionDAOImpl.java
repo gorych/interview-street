@@ -11,13 +11,9 @@ import java.util.List;
 public class QuestionDAOImpl extends AbstractDbDAO implements IQuestionDAO {
 
     @Override
-    public long insert() {
-        Question question = new Question("Новый вопрос");
-        Serializable result = getSession().save(question);
-        if (result != null) {
-            return (Integer) result;
-        }
-        return -1;
+    public Question insert(Question question) {
+        getSession().save(question);
+        return question;
     }
 
     @Override

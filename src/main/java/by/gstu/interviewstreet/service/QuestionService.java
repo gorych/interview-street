@@ -8,11 +8,7 @@ import java.util.List;
 
 public interface QuestionService {
 
-    long insert();
-
     Question get(int id);
-
-    List<Question> qet(List<Integer> ids);
 
     String getJSON(List<Form> questionForms);
 }

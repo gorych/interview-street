@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IQuestionDAO {
 
-    long insert();
+    Question insert(Question question);
 
     Question qetById(int id);
 

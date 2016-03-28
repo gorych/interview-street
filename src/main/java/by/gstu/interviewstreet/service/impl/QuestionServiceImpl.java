@@ -23,20 +23,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public long insert() {
-        return questionDAO.insert();
-    }
-
-    @Override
-    @Transactional
     public Question get(int id) {
         return questionDAO.qetById(id);
-    }
-
-    @Override
-    @Transactional
-    public List<Question> qet(List<Integer> ids) {
-        return questionDAO.qet(ids);
     }
 
     @Override

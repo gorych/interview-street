@@ -8,12 +8,6 @@ import org.springframework.stereotype.Repository;
 public class AnswerTypeDAOImpl extends AbstractDbDAO implements IAnswerTypeDAO {
 
     @Override
-    public AnswerType getDefaultAnswerType() {
-        final int DEFAULT_ID = 1;
-        return getById(DEFAULT_ID);
-    }
-
-    @Override
     public AnswerType getById(int id) {
         return (AnswerType)getSession()
                 .createQuery("FROM AnswerType WHERE id = :id")

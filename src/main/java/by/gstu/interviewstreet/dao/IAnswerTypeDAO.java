@@ -4,8 +4,6 @@ import by.gstu.interviewstreet.domain.AnswerType;
 
 public interface IAnswerTypeDAO {
 
-    AnswerType getDefaultAnswerType();
-
     AnswerType getById(int id);
 
 }

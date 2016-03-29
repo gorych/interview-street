@@ -5,7 +5,12 @@
 
     new Clipboard("#clipboard-btn");
 
-    $(".question-btn").each(function () {
+    $("#clipboard-btn").click(function () {
+        Materialize.toast("Адрес скопирован в буфер обмена",2000);
+    });
+
+
+    $(".add-quest-btn").each(function () {
         showStaggered(this)
     });
 

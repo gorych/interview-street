@@ -2,8 +2,6 @@ package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IAnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.AnswerType;
-import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.UserAnswer;
 import org.springframework.stereotype.Repository;
 
@@ -56,15 +54,6 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
         Answer answer = (Answer) getSession().load(Answer.class, id);
         if (answer != null) {
             getSession().delete(answer);
-        }
-    }
-
-    @Override
-    public void remove(List<Form> forms) {
-        for (Form form : forms) {
-            if (form != null) {
-                getSession().delete(form.getAnswer());
-            }
         }
     }
 }

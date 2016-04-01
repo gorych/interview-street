@@ -1,8 +1,6 @@
 package by.gstu.interviewstreet.web.controller;
 
 
-import by.gstu.interviewstreet.domain.Form;
-import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.web.AttributeConstants;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.List;
 
 @Controller
 public class IndexController {

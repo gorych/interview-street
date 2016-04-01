@@ -87,4 +87,5 @@ label .interview-url {
 .section nav i {
     height: 34px;
     line-height: 34px;
+    margin-left: 0;
 }

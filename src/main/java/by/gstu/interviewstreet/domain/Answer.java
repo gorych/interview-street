@@ -24,17 +24,11 @@ public class Answer implements Serializable {
     @JoinColumn(name = "type_id")
     private AnswerType type;
 
-    public Answer() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-    public Answer(String text, AnswerType type) {
-        this.text = text;
-        this.type = type;
-    }
-
-    public Answer(AnswerType answerType) {
-        this.type = answerType;
-    }
+    public Answer() { }
 
     public int getId() {
         return id;
@@ -60,12 +54,21 @@ public class Answer implements Serializable {
         this.type = type;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
                 ", text='" + text + '\'' +
                 ", type=" + type +
+                ", question=" + question +
                 '}';
     }
 }

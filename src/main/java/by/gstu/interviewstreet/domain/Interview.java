@@ -6,12 +6,13 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "interviews")
@@ -68,14 +69,13 @@ public class Interview implements Serializable {
     private Date endDate;
 
     @Expose
-    @Column(name = "question_count")
-    private long questionCount;
-
-    @Expose
     @NotNull
     @ManyToOne
     @JoinColumn(name = "type_id")
     private InterviewType type;
+
+    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
+    private Set<Question> questions = new HashSet<>();
 
     public boolean getIsNew() {
         return DateUtils.isToday(placementDate);
@@ -87,6 +87,14 @@ public class Interview implements Serializable {
 
     public String getTitle() {
         return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
+    }
+
+    public String getFormatPlacementDate(){
+        return DateUtils.YYYY_MM_DD.format(placementDate);
+    }
+
+    public String getFormatEndDate(){
+        return DateUtils.YYYY_MM_DD.format(endDate);
     }
 
     //region Getters and Setters
@@ -157,12 +165,12 @@ public class Interview implements Serializable {
         this.endDate = endDate;
     }
 
-    public long getQuestionCount() {
-        return questionCount;
+    public Set<Question> getQuestions() {
+        return questions;
     }
 
-    public void setQuestionCount(long questionCount) {
-        this.questionCount = questionCount;
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
 
     public InterviewType getType() {
@@ -186,9 +194,8 @@ public class Interview implements Serializable {
                 ", hide=" + hide +
                 ", placementDate=" + placementDate +
                 ", endDate=" + endDate +
-                ", questionCount=" + questionCount +
+                ", questions=" + questions +
                 ", type=" + type +
                 '}';
     }
-
 }

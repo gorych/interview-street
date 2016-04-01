@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,6 +26,7 @@ public class InterviewType implements Serializable {
     private int id;
 
     @Expose
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
@@ -49,11 +51,11 @@ public class InterviewType implements Serializable {
     }
 
     public String getVisibilityIcon() {
-        return name.equals(OPEN_TYPE_NAME) ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
+        return OPEN_TYPE_ID == id ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
     }
 
     public String getTitle() {
-        return name.equals(OPEN_TYPE_NAME) ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
+        return OPEN_TYPE_ID == id ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
     }
 
     @Override

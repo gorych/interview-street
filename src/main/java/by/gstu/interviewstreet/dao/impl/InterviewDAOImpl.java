@@ -33,45 +33,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Form> getInterviewQuestions(int interviewId) {
-        return getSession().createQuery("FROM Form WHERE interview.id = :id GROUP BY question.id")
-                .setInteger("id", interviewId)
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public long getQuestionCount(int interviewId) {
-        Query query = getSession()
-                .createQuery("SELECT COUNT (*) FROM Form WHERE interview.id = :id GROUP BY question.id")
-                .setInteger("id", interviewId);
-        return query.list().size();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Form> getInterviewQuestions(long hash) {
-        return getSession()
-                .createQuery("FROM Form WHERE interview.hash = :hash GROUP BY question.id")
-                .setLong("hash", hash)
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<List<Form>> getInterviewAnswers(List<Form> questionForm) {
-        List<List<Form>> answers = new ArrayList<>();
-        Query query = getSession().createQuery("FROM Form WHERE question.id = :id");
-        for (Form form : questionForm) {
-            query.setInteger("id", form.getQuestion().getId());
-            answers.add(query.list());
-        }
-        return answers;
-    }
-
-
-    @Override
     public Interview getById(int id) {
         return (Interview) getSession()
                 .createQuery("FROM Interview WHERE id = :id")

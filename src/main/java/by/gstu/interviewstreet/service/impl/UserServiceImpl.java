@@ -63,8 +63,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<UserInterview> interviews = interviewDAO.getUserInterviews(user);
         for (UserInterview userInterview : interviews) {
             Interview interview = userInterview.getInterview();
-            long questionCount = interviewDAO.getQuestionCount(interview.getId());
-            interview.setQuestionCount((int)questionCount);
         }
 
         return interviews;

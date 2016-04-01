@@ -12,25 +12,24 @@ import java.util.Set;
 public class UserInterview implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
     @Expose
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
     @Expose
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "isPassed")
     private boolean isPassed;
 
-    public UserInterview(){
-    }
+    public UserInterview(){  }
 
     public UserInterview(Interview interview, User user) {
         this.interview = interview;

@@ -15,8 +15,21 @@ public class AnswerType implements Serializable{
     @GeneratedValue
     private int id;
 
+    @Expose
     @Column(name = "type")
     private String name;
+
+    @Expose
+    @Column(name = "icon")
+    private String icon;
+
+    @Expose
+    @Column(name = "title")
+    private String title;
+
+    @Expose
+    @Column(name = "default_value")
+    private String defaultValue;
 
     public int getId() {
         return id;
@@ -34,11 +47,38 @@ public class AnswerType implements Serializable{
         this.name = type;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
     @Override
     public String toString() {
         return "AnswerType{" +
                 "id=" + id +
-                ", type='" + name + '\'' +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", title='" + title + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
                 '}';
     }
 }

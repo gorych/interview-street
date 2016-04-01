@@ -179,12 +179,18 @@
                 $("#description").val(interview.description);
                 $("#end-date").val(interview.endDate);
                 $("label[for='end-date']").addClass("active");
-
-                addOptionsToPostSelect(data.allPosts);
-
-                $subSelect.val(data.subs).material_select();
-                $postSelect.val(data.activePosts).material_select();
                 $typeSelect.val(interview.type.id).material_select();
+
+                if(interview.type.id == 1) {
+                    addOptionsToPostSelect(data.allPosts);
+                    $subSelect.val(data.subs).material_select();
+                    $postSelect.val(data.activePosts).material_select();
+                }else {
+                    rebuildAddForm();
+                    $("#goal").val(interview.goal);
+                    $("#audience").val(interview.audience);
+                }
+
 
                 /*Remember card which need update*/
                 $tempCard = $(btn).closest(".card");
@@ -272,9 +278,9 @@
     }
 
     function fillCardTemplate($card, interview) {
-        var $goal = $card.find(".goal");
+        var $goal = $card.find("#goal");
+        var $audience = $card.find("#audience");
         var $lockIcon = $card.find(".lock-btn").find("i");
-        var $audience = $card.find(".audience");
         var $visibilityIcon = $card.find(".visibility-icon");
 
         $card.find(".card-title-wrapper").text(interview.name);

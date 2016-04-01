@@ -43,95 +43,28 @@
             </div>
         </div>
 
-        <!--Here place question sections-->
+        <!--This is container for forms-->
         <div id="question-container" class="col offset-l1 offset-m1 l10 m10 s12 center">
             <a class="btn-floating btn-large add-quest-btn first-btn waves-effect waves-light blue-grey lighten-2 hoverable"
                title="Добавить вопрос"><i class="material-icons">add</i></a>
-
-            <div class="section">
-                <div class="row">
-                    <div class="col l12 m12 s12">
-                        <nav>
-                            <div class="left number">1</div>
-                            <ul>
-                                <li><a href="#"><i class="material-icons" title="Переместить вниз">arrow_downward</i></a></li>
-                                <li><a href="#"><i class="material-icons" title="Переместить вверх">arrow_upward</i></a></li>
-                                <li><a href="#"><i class="material-icons" title="Дублировать вопрос">control_point_duplicate</i></a></li>
-                                <li><a href="#"><i class="material-icons" title="Удалить вопрос">delete</i></a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="row narrow-row center">
-                    <form class="">
-                        <!--<div class="input-field col l12 m12 s12">
-                            <input value="Введите текст вопроса" id="quest-text" type="text" length="250"/>
-                            <label class="active" for="quest-text">Текст вопроса</label>
-                        </div>
-
-                        <div class="offset-l1 col l2 m3 s12">
-                            <select>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                            <label>Количество звезд</label>
-                        </div>
-                        <div class="rating left-align col l8 m9 s12">
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                        </div>-->
-                        <div class="input-field  col offset-l2 l7 m11 s11">
-                            <input id="disabled" type="text" length="100"/>
-                            <label class="active" for="disabled">Введите ответ</label>
-                        </div>
-                        <div class=" col icon-col l1 m1 s1">
-                            <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                        </div>
-                        <div class="input-field  col offset-l2 l7 m11 s11">
-                            <input id="disabled" type="text" length="100"/>
-                            <label class="active" for="disabled">Введите ответ</label>
-                        </div>
-                        <div class=" col icon-col l1 m1 s1">
-                            <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                        </div>
-                        <div class="input-field  col offset-l2 l7 m11 s11">
-                            <input id="disabled" type="text" length="100"/>
-                            <label class="active" for="disabled">Введите ответ</label>
-                        </div>
-                        <div class=" col icon-col l1 m1 s1">
-                            <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                        </div>
-                        <div class="col offset-l2 l8 left-align">
-                            <i class="small material-icons green-text text-accent-4" title="Добавить ответ">add</i>
-                            <i class="small material-icons deep-orange-text" title="Добавить текстовый ответ">playlist_add</i>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="divider grey lighten-1"></div>
-
-                <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
-                   title="Добавить вопрос"><i class="material-icons">add</i></a>
-            </div>
         </div>
     </div>
 
+    <!--Hidden input for clipboard-->
     <label>
         <input type="text" class="interview-url" value="/test/url/place/here2d"/>
     </label>
 </main>
+
 <%@include file="fragments/footer.jsp" %>
+
+<%@include file="fragments/templates/form-template.jsp"%>
+<%@include file="fragments/templates/stag-list-template.jsp"%>
+
 <%@include file="fragments/general-js.html" %>
-<script src="/resources/vendors/clipboard/clipboard.js"></script>
+<script src="<c:url value="/resources/vendors/clipboard/clipboard.js"/>"></script>
+<script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
 <script src="/resources/js/designer.js"></script>
+
 </body>
 </html>

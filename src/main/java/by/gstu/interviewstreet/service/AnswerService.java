@@ -7,14 +7,9 @@ import java.util.Map;
 
 public interface AnswerService {
 
-    void insertUserAnswers(Interview interview, List<Integer> questions, Map<Integer, String[]> answers, User user);
-
     List<Answer> get(List<Integer> ids);
 
     AnswerType getAnswerType(int id);
-
-    /*get user answers*/
-    String getJSON(int questionId);
 
     void remove(int id);
 

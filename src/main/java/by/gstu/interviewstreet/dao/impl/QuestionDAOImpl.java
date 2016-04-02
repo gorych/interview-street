@@ -11,26 +11,11 @@ import java.util.List;
 public class QuestionDAOImpl extends AbstractDbDAO implements IQuestionDAO {
 
     @Override
-    public Question insert(Question question) {
-        getSession().save(question);
-        return question;
-    }
-
-    @Override
     public Question qetById(int id) {
         return (Question) getSession()
                 .createQuery("FROM Question WHERE id = :id")
                 .setInteger("id", id)
                 .uniqueResult();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Question> qet(List<Integer> ids) {
-        return getSession()
-                .createQuery("FROM Question WHERE id IN (:ids) ")
-                .setParameterList("ids", ids)
-                .list();
     }
 
     @Override

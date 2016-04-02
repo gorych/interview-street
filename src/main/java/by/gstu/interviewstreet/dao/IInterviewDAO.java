@@ -15,8 +15,6 @@ public interface IInterviewDAO {
 
     Interview getById(int id);
 
-    List<Interview> getByType(int typeId);
-
     Interview getByHash(long hash);
 
     void save(Interview interview);
@@ -24,7 +22,5 @@ public interface IInterviewDAO {
     void remove(Interview interview);
 
     void lockOrUnlock(int interviewId);
-
-    void pass(int interviewId, int userId);
 
 }

@@ -41,15 +41,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Interview> getByType(int typeId) {
-        return getSession()
-                .createQuery("FROM Interview WHERE type.id = :id")
-                .setInteger("id", typeId)
-                .list();
-    }
-
-    @Override
     public Interview getByHash(long hash) {
         return (Interview) getSession()
                 .createQuery("FROM Interview WHERE hash = :hash")
@@ -94,13 +85,4 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
         session.save(interview);
     }
 
-    @Override
-    public void pass(int interviewId, int userId) {
-        UserInterview interview = (UserInterview) getSession()
-                .createQuery("FROM UserInterview WHERE interview.id = :id AND user.id =:userId")
-                .setInteger("id", interviewId)
-                .setInteger("userId", userId)
-                .uniqueResult();
-        interview.setPassed(true);
-    }
 }

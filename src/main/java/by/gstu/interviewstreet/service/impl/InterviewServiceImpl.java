@@ -2,15 +2,12 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.IEmployeeDAO;
 import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
 import by.gstu.interviewstreet.domain.Employee;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.web.util.DateUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +50,7 @@ public class InterviewServiceImpl implements InterviewService {
 
         Map<String, Object> valueMap = new HashMap<>();
 
-        if(subIds.size() > 0) {
+        if (subIds.size() > 0) {
             List<Employee> employees = employeeDAO.getBySubdivisionIds(subIds);
             valueMap.put("allPosts", employees);
         }

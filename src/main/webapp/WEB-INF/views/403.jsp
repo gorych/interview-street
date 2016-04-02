@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="/resources/css/error.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/resources/css/error-page.css">
     <title>Interview Street - Доступ запрещен</title>
 </head>
 <body>

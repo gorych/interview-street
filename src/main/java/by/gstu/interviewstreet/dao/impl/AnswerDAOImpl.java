@@ -2,8 +2,6 @@ package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IAnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.AnswerType;
-import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.UserAnswer;
 import org.springframework.stereotype.Repository;
 
@@ -11,18 +9,6 @@ import java.util.List;
 
 @Repository
 public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
-
-
-    @Override
-    public Answer insert(Answer answer) {
-        getSession().save(answer);
-        return answer;
-    }
-
-    @Override
-    public void insertUserAnswer(UserAnswer userAnswer) {
-        getSession().save(userAnswer);
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -34,21 +20,8 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<UserAnswer> getUserAnswers(int questionId) {
-        return getSession()
-                .createQuery("FROM UserAnswer WHERE question.id = :id GROUP BY answer")
-                .setInteger("id", questionId)
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Integer> getAnswerCount(int questionId) {
-        return getSession()
-                .createQuery("SELECT COUNT(*) FROM UserAnswer WHERE question.id = :id GROUP BY answer")
-                .setInteger("id", questionId)
-                .list();
+    public void insert(Answer answer) {
+        getSession().save(answer);
     }
 
     @Override
@@ -56,15 +29,6 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
         Answer answer = (Answer) getSession().load(Answer.class, id);
         if (answer != null) {
             getSession().delete(answer);
-        }
-    }
-
-    @Override
-    public void remove(List<Form> forms) {
-        for (Form form : forms) {
-            if (form != null) {
-                getSession().delete(form.getAnswer());
-            }
         }
     }
 }

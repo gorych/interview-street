@@ -1,6 +1,5 @@
 package by.gstu.interviewstreet.dao;
 
-import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
@@ -14,26 +13,14 @@ public interface IInterviewDAO {
 
     List<UserInterview> getUserInterviews(User user);
 
-    List<Form> getInterviewQuestions(int interviewId);
-
-    List<Form> getInterviewQuestions(long hash);
-
-    List<List<Form>> getInterviewAnswers(List<Form> questionForm);
-
-    long getQuestionCount(int interviewId);
-
     Interview getById(int id);
 
-    List<Interview> getByType(int typeId);
-
-    Interview getByHash(long hash);
+    Interview getByHash(String hash);
 
     void save(Interview interview);
 
     void remove(Interview interview);
 
     void lockOrUnlock(int interviewId);
-
-    void pass(int interviewId, int userId);
 
 }

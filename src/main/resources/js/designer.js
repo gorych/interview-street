@@ -1,83 +1,85 @@
 ;(function () {
 
     var _pathname = window.location.pathname;
-    var _hash = _pathname.split("/")[2];
+    var _hash = _pathname.split("/")[1];
 
     new Clipboard("#clipboard-btn");
 
     $("#clipboard-btn").click(function () {
-        Materialize.toast("Адрес скопирован в буфер обмена",2000);
+        Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
-
-    $(".add-quest-btn").each(function () {
-        showStaggered(this)
+    $("[data-answer]").blur(function () {
+        alert("Операция временно недоступна.")
     });
 
-    //region Listeners functions
+    /*Show staggered list*/
+    $("#question-container").on('click', ".add-quest-btn", function () {
+        $(".row.staggered").remove();
 
-    function showStaggered(btn) {
-        $(btn).click(function () {
-            /*Remove all stag if its exist*/
-            $(".row.staggered").remove();
+        $(this).after(
+            $("#stag-list").render()
+        );
 
-            var $stag = $("<div class='row staggered center'></div>");
+        Materialize.showStaggeredList(".staggered");
+    });
 
-            var $header = $("<ul><li><h5>Выберите тип добавляемого вопроса</h5></li></ul>")
-            var $body = $("<div class='center'></div>");
+    $(document).on('click', "input[name=answer-type]", function () {
+        renderQuestionForm(this);
+    });
 
-            var $item = $("<ul class='staggered-item left-align'></ul>");
+    //region Helper functions
 
-            addSubItem($item, 1, "Текстовый ответ");
-            addSubItem($item, 2, "Одиночный выбор");
-            addSubItem($item, 3, "Множественный выбор");
-            addSubItem($item, 4, "Рейтинг");
-
-            $body.append($item);
-            $stag.append($header).append($body);
-
-            $(btn).after($stag);
-
-            $("input[name=answer-type]").each(function () {
-                $(this).click(function () {
-                    var answerTypeId = $(this).val();
-                    buildQuestionForm(answerTypeId);
-                });
-            });
-
-            Materialize.showStaggeredList($stag);
-        });
-
-        function addSubItem(item, typeId, subTitle) {
-            var input = "<input name='answer-type' type='radio' id='" + typeId + "' value='" + typeId + "'/>";
-            var label = "<label for='" + typeId + "'>" + subTitle + "</label>";
-            var li = "<li></li>";
-
-            $(item).append($(li).append(input).append(label));
-        }
-    }
-
-    function buildQuestionForm(answerTypeId) {
+    function renderQuestionForm(that) {
         $.ajax({
-            url: "/build-form",
+            url: "/designer/add-question",
             method: "POST",
-            data: {"hash": _hash, "answerTypeId": answerTypeId}
+            data: {
+                "hash": _hash, "answerTypeId": $(that).val(),
+                "number": findNumber(that)
+            }
         }).done(function (response) {
             if (response === "error") {
                 Materialize.toast("Ошибка при составлении формы", 2000);
                 return;
             }
-            console.log(JSON.parse(response));
+            var data = JSON.parse(response);
+            var $stag = $(".row.staggered");
+            var $btn = $stag.prev(".add-quest-btn");
+
+            $btn.after(
+                $("#question-template").render(data)
+            );
+
+            $stag.remove();
+            updateQuestionNumbers();
         }).fail(function () {
             Materialize.toast("Ошибка при составлении формы", 2000);
         });
     }
 
-    function renderForm(forms) {
-        $(".row.staggered").remove();
+    function findNumber(that) {
+        var intNumber;
 
+        var prevNumber = $(that).closest(".section").find('.number').html();
+        intNumber = parseInt(prevNumber);
+        if (intNumber) {
+            return (intNumber + 1);
+        }
 
-        //TODO
+        var nextNumber = $(that).closest('.staggered').next('.section').find('.number').html();
+        intNumber = parseInt(nextNumber);
+        if (intNumber) {
+            return intNumber;
+        }
+
+        return 1;
+    }
+
+    function updateQuestionNumbers() {
+        $(".number").each(function (index) {
+            $(this).html(index + 1);
+        });
     }
 
 }());

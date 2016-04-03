@@ -6,10 +6,9 @@ import java.util.Date;
 
 public final class DateUtils {
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
 
-    private DateUtils() {
-    }
+    private DateUtils() { }
 
     public static Date getToday() {
         return Calendar.getInstance().getTime();
@@ -22,8 +21,8 @@ public final class DateUtils {
     }
 
     public static boolean isToday(Date date) {
-        String today = sdf.format(getToday());
-        String someday = sdf.format(date);
+        String today = YYYY_MM_DD.format(getToday());
+        String someday = YYYY_MM_DD.format(date);
 
         return today.equals(someday);
     }

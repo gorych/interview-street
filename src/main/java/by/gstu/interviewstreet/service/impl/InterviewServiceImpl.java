@@ -2,19 +2,16 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.IEmployeeDAO;
 import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.dao.IUserInterviewDAO;
 import by.gstu.interviewstreet.domain.Employee;
-import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.web.util.DateUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +20,6 @@ import java.util.Map;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
-
-    @Autowired
-    private IInterviewTypeDAO interviewTypeDAO;
 
     @Autowired
     private IEmployeeDAO employeeDAO;
@@ -44,41 +38,6 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public List<Interview> getByType(int typeId) {
-        if (typeId < 1 || typeId > 2) {
-            return interviewDAO.getAll();
-        }
-        return interviewDAO.getByType(typeId);
-    }
-
-    @Override
-    @Transactional
-    public List<Form> getQuestions(int interviewId) {
-        List<Form> forms = interviewDAO.getInterviewQuestions(interviewId);
-        if (forms == null) {
-            return new ArrayList<>();
-        }
-        return forms;
-    }
-
-    @Override
-    @Transactional
-    public List<Form> getQuestions(long hash) {
-        List<Form> forms = interviewDAO.getInterviewQuestions(hash);
-        if (forms == null) {
-            return new ArrayList<>();
-        }
-        return forms;
-    }
-
-    @Override
-    @Transactional
-    public List<List<Form>> getAnswers(List<Form> questionForm) {
-        return interviewDAO.getInterviewAnswers(questionForm);
-    }
-
-    @Override
-    @Transactional
     public Map<String, Object> getValueMapForCard(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);
@@ -90,34 +49,18 @@ public class InterviewServiceImpl implements InterviewService {
             subIds.add(userInterview.getUser().getEmployee().getSubdivision().getId());
         }
 
-        List<Employee> employees = employeeDAO.getBySubdivisionIds(subIds);
-
         Map<String, Object> valueMap = new HashMap<>();
-        valueMap.put("activePosts", posts);
+
+        if (subIds.size() > 0) {
+            List<Employee> employees = employeeDAO.getBySubdivisionIds(subIds);
+            valueMap.put("allPosts", employees);
+        }
+
         valueMap.put("subs", subIds);
-        valueMap.put("allPosts", employees);
+        valueMap.put("activePosts", posts);
         valueMap.put("interview", interview);
 
         return valueMap;
-    }
-
-    @Override
-    public String getLightJSON(List<Interview> interviews) {
-        List<Map<String, String>> jsonList = new ArrayList<>();
-
-        for (Interview interview : interviews) {
-            Map<String, String> jsonObject = new HashMap<>();
-            jsonObject.put("id", interview.getId() + "");
-            jsonObject.put("name", interview.getName());
-            jsonList.add(jsonObject);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(jsonList);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
     }
 
     @Override
@@ -128,7 +71,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview get(long hash) {
+    public Interview get(String hash) {
         return interviewDAO.getByHash(hash);
     }
 
@@ -139,10 +82,12 @@ public class InterviewServiceImpl implements InterviewService {
 
         /*create new interview*/
         if (existed == null) {
+            byte[] bytes = interview.getName().getBytes();
+            interview.setHash(DigestUtils.md5DigestAsHex(bytes) + System.currentTimeMillis());
             interviewDAO.save(interview);
+
             return interview;
         }
-
         removeAllUserInterviews(existed);
 
         existed.setName(interview.getName());

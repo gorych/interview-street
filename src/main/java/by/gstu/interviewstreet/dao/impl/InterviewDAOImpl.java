@@ -33,45 +33,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Form> getInterviewQuestions(int interviewId) {
-        return getSession().createQuery("FROM Form WHERE interview.id = :id GROUP BY question.id")
-                .setInteger("id", interviewId)
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public long getQuestionCount(int interviewId) {
-        Query query = getSession()
-                .createQuery("SELECT COUNT (*) FROM Form WHERE interview.id = :id GROUP BY question.id")
-                .setInteger("id", interviewId);
-        return query.list().size();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Form> getInterviewQuestions(long hash) {
-        return getSession()
-                .createQuery("FROM Form WHERE interview.hash = :hash GROUP BY question.id")
-                .setLong("hash", hash)
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<List<Form>> getInterviewAnswers(List<Form> questionForm) {
-        List<List<Form>> answers = new ArrayList<>();
-        Query query = getSession().createQuery("FROM Form WHERE question.id = :id");
-        for (Form form : questionForm) {
-            query.setInteger("id", form.getQuestion().getId());
-            answers.add(query.list());
-        }
-        return answers;
-    }
-
-
-    @Override
     public Interview getById(int id) {
         return (Interview) getSession()
                 .createQuery("FROM Interview WHERE id = :id")
@@ -80,19 +41,10 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Interview> getByType(int typeId) {
-        return getSession()
-                .createQuery("FROM Interview WHERE type.id = :id")
-                .setInteger("id", typeId)
-                .list();
-    }
-
-    @Override
-    public Interview getByHash(long hash) {
+    public Interview getByHash(String hash) {
         return (Interview) getSession()
-                .createQuery("FROM Interview WHERE hash = :hash")
-                .setLong("hash", hash)
+                .createQuery("FROM Interview WHERE hash LIKE :hash")
+                .setString("hash", hash)
                 .uniqueResult();
     }
 
@@ -133,13 +85,4 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
         session.save(interview);
     }
 
-    @Override
-    public void pass(int interviewId, int userId) {
-        UserInterview interview = (UserInterview) getSession()
-                .createQuery("FROM UserInterview WHERE interview.id = :id AND user.id =:userId")
-                .setInteger("id", interviewId)
-                .setInteger("userId", userId)
-                .uniqueResult();
-        interview.setPassed(true);
-    }
 }

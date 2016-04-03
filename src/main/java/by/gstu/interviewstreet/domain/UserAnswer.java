@@ -10,21 +10,21 @@ import java.sql.Date;
 public class UserAnswer implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     private Interview interview;
 

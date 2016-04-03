@@ -51,22 +51,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public by.gstu.interviewstreet.domain.User get(String passportData) {
         return userDAO.getByPassportData(passportData.toUpperCase());
     }
-
-    @Override
-    @Transactional
-    public List<UserInterview> getInterviews(String passportData) {
-        by.gstu.interviewstreet.domain.User user = userDAO.getByPassportData(passportData);
-        if (user == null) {
-            return new ArrayList<>();
-        }
-
-        List<UserInterview> interviews = interviewDAO.getUserInterviews(user);
-        for (UserInterview userInterview : interviews) {
-            Interview interview = userInterview.getInterview();
-            long questionCount = interviewDAO.getQuestionCount(interview.getId());
-            interview.setQuestionCount((int)questionCount);
-        }
-
-        return interviews;
-    }
 }

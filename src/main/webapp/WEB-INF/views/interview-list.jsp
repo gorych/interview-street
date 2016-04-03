@@ -37,9 +37,9 @@
 
                         <span class="fixed-block card-title-wrapper">${interview.name}</span>
                         <div class="divider divider-wrapper teal"></div>
-                        <h6 class="placement-date">${interview.placementDate}</h6>
-                        <h6 class="end-date">${interview.endDate}</h6>
-                        <h6 class="card-question">${interview.questionCount}
+                        <h6 class="placement-date">${interview.formatPlacementDate}</h6>
+                        <h6 class="end-date">${interview.formatEndDate}</h6>
+                        <h6 class="card-question">${interview.questions.size()}
                             <i class="material-icons center activator activator-wrapper right"
                                title="Посмотреть описание">more_vert</i>
                         </h6>
@@ -64,7 +64,7 @@
                         </div>
 
                         <div class="right-block">
-                            <a href="<c:url value="/designer/${interview.id}"/>"
+                            <a href="<c:url value="/${interview.hash}/designer"/>"
                                class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список вопросов">subject</i>
                             </a>
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </c:forEach>
-        <%@include file="fragments/card-template.jsp" %>
+
     </div><!--end card container-->
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -191,6 +191,10 @@
 </main>
 <%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/general-js.html" %>
+
+<%@include file="fragments/templates/card-template.jsp" %>
+
+<script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
 <script src="/resources/js/interview-list.js"></script>
 </body>
 </html>

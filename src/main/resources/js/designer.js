@@ -44,6 +44,8 @@
                 return;
             }
             var data = JSON.parse(response);
+            console.log(data);
+
             var $stag = $(".row.staggered");
             var $btn = $stag.prev(".add-quest-btn");
 

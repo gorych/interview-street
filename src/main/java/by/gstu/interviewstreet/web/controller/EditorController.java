@@ -12,7 +12,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ import java.lang.reflect.Type;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Controller
 @Secured(UserRoleConstants.EDITOR)
@@ -72,8 +70,7 @@ public class EditorController {
     public String loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        Type type = new TypeToken<List<Integer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Integer>>() { }.getType();
         List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 
@@ -127,7 +124,10 @@ public class EditorController {
     @RequestMapping(value = {"/{hash}/designer"}, method = RequestMethod.GET)
     public String showDesigner(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
+        List<Question> questions = questionService.getAllOrderByNumber(hash);
+
         model.addAttribute(AttributeConstants.INTERVIEW, interview);
+        model.addAttribute(AttributeConstants.QUESTIONS, questions);
 
         return "designer";
     }
@@ -144,13 +144,34 @@ public class EditorController {
             }
 
             Question question = questionService.add(interview, number);
-            answerService.addDefaultAnswers(answerType, question);
+            Map<String, Object> valueMap = interviewService.getValueMapForQuestionForm(question, answerType);
 
-            /*Get question with answers*/
-            Question fullQuestion = questionService.get(question.getId());
+            return JSONParser.convertObjectToJsonString(valueMap);
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+    }
 
-            return JSONParser.convertObjectToJsonString(fullQuestion);
+    @ResponseBody
+    @RequestMapping(value = {"/designer/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String removeQuestion(@RequestParam int id) {
+        try {
+            Question question = questionService.get(id);
+            questionService.remove(question);
 
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/designer/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String moveQuestion(@RequestParam int id, @RequestParam int number) {
+        try {
+            questionService.move(id ,number);
+
+            return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
             return AttributeConstants.ERROR_RESPONSE_BODY;
         }

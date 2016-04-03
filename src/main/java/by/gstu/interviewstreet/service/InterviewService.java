@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.service;
 
+import by.gstu.interviewstreet.domain.AnswerType;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 
@@ -15,6 +16,8 @@ public interface InterviewService {
     List<Interview> getAll();
 
     Map<String, Object> getValueMapForCard(int interviewId);
+
+    Map<String, Object> getValueMapForQuestionForm(Question question, AnswerType answerType);
 
     Interview saveOrUpdate(Interview interview);
 

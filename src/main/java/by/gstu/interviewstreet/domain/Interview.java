@@ -33,23 +33,23 @@ public class Interview implements Serializable {
     @Expose
     @NotEmpty
     @Length(min = 5, max = 60)
-    @Column(name = "name")
+    @Column(name = "name", length = 60)
     private String name;
 
     @Expose
     @NotEmpty
     @Length(min = 3, max = 70)
-    @Column(name = "description")
+    @Column(name = "description", length = 70)
     private String description;
 
     @Expose
     @Length(max = 65)
-    @Column(name = "goal")
+    @Column(name = "goal", length = 65)
     private String goal;
 
     @Expose
     @Length(max = 25)
-    @Column(name = "audience")
+    @Column(name = "audience", length = 25)
     private String audience;
 
     @Expose
@@ -70,7 +70,7 @@ public class Interview implements Serializable {
 
     @Expose
     @NotNull
-    @JoinColumn(name = "hash")
+    @Column(name = "hash", length = 45)
     private String hash;
 
     @Expose

@@ -143,8 +143,8 @@ public class EditorController {
                 return AttributeConstants.ERROR_RESPONSE_BODY;
             }
 
-            Question question = questionService.add(interview, number);
-            Map<String, Object> valueMap = interviewService.getValueMapForQuestionForm(question, answerType);
+            Question question = questionService.addQuestion(interview, number);
+            Map<String, Object> valueMap = questionService.getValueMapForQuestionForm(question, answerType);
 
             return JSONParser.convertObjectToJsonString(valueMap);
         } catch (RuntimeException e) {
@@ -169,7 +169,7 @@ public class EditorController {
     @RequestMapping(value = {"/designer/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public String moveQuestion(@RequestParam int id, @RequestParam int number) {
         try {
-            questionService.move(id ,number);
+            questionService.move(id, number);
 
             return AttributeConstants.SUCCESS_RESPONSE_BODY;
         } catch (RuntimeException e) {
@@ -177,5 +177,22 @@ public class EditorController {
         }
     }
 
-    //endregion
+    @ResponseBody
+    @RequestMapping(value = {"/designer/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public String moveQuestion(@RequestParam int id) {
+        try {
+            Question question = questionService.get(id);
+
+            Interview interview = question.getInterview();
+            Integer nextNumber = question.getNumber() + 1;
+            AnswerType answerType = question.getAnswers().get(0).getType();
+
+            Question duplicated = questionService.addQuestion(interview, nextNumber);
+            Map<String, Object> valueMap = questionService.getValueMapForDuplicateQuestionForm(question, duplicated, answerType);
+
+            return JSONParser.convertObjectToJsonString(valueMap);
+        } catch (RuntimeException e) {
+            return AttributeConstants.ERROR_RESPONSE_BODY;
+        }
+    }
 }

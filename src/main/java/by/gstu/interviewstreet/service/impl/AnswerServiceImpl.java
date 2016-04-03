@@ -39,7 +39,7 @@ public class AnswerServiceImpl implements AnswerService {
         int answerCount = type.getAnswerCount();
 
         for (int i = 0; i < answerCount; i++) {
-            answerDAO.insert(new Answer(type, question, type.getDefaultValue()));
+            answerDAO.saveOrUpdate(new Answer(type, question, type.getDefaultValue()));
         }
     }
 

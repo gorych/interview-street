@@ -8,6 +8,8 @@ public interface IQuestionDAO {
 
     Question qetById(int id);
 
+    void insert(Question question);
+
     void remove(Question question);
 
 }

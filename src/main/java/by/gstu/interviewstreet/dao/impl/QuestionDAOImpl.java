@@ -19,6 +19,11 @@ public class QuestionDAOImpl extends AbstractDbDAO implements IQuestionDAO {
     }
 
     @Override
+    public void insert(Question question) {
+        getSession().save(question);
+    }
+
+    @Override
     public void remove(Question question) {
         if (question != null) {
             getSession().delete(question);

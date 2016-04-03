@@ -11,6 +11,8 @@ public interface AnswerService {
 
     AnswerType getAnswerType(int id);
 
+    void addDefaultAnswers(AnswerType type, Question question);
+
     void remove(int id);
 
 }

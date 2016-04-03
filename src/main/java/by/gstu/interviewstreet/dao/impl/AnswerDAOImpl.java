@@ -20,6 +20,11 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
+    public void insert(Answer answer) {
+        getSession().save(answer);
+    }
+
+    @Override
     public void remove(int id) {
         Answer answer = (Answer) getSession().load(Answer.class, id);
         if (answer != null) {

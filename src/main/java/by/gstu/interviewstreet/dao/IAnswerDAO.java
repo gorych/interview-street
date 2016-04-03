@@ -9,6 +9,8 @@ public interface IAnswerDAO {
 
     List<Answer> getByIds(List<Integer> ids);
 
+    void insert(Answer answer);
+
     void remove(int id);
 
 }

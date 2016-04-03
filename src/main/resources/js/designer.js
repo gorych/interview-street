@@ -51,6 +51,32 @@
         moveQuestion(this);
     });
 
+    _questionContainer.on('click', ".duplicate", function () {
+        var $section = $(this).parents(".section");
+
+        $.ajax({
+            url: "/designer/duplicate-question",
+            method: "POST",
+            data: {
+                "id": $section.attr("data-question")
+            }
+        }).done(function (response) {
+            if (response === "error") {
+                Materialize.toast("Ошибка при дублировании вопроса", 2000);
+                return;
+            }
+
+            var data = JSON.parse(response);
+            console.log(data);
+
+            $section.after(
+                $("#question-template").render(data)
+            );
+        }).fail(function () {
+            Materialize.toast("Ошибка при дублировании вопроса", 2000);
+        });
+    });
+
     $(document).on('click', "input[name=answer-type]", function () {
         renderQuestionForm(this);
     });
@@ -118,7 +144,6 @@
                 return;
             }
             var data = JSON.parse(response);
-            console.log(data);
 
             var $stag = $(".row.staggered");
             var $section = $stag.parent(".section");

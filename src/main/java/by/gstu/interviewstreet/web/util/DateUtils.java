@@ -10,7 +10,7 @@ public final class DateUtils {
 
     private DateUtils() { }
 
-    public static Date getToday() {
+    public static Date getNow() {
         return Calendar.getInstance().getTime();
     }
 
@@ -21,14 +21,14 @@ public final class DateUtils {
     }
 
     public static boolean isToday(Date date) {
-        String today = YYYY_MM_DD.format(getToday());
+        String today = YYYY_MM_DD.format(getNow());
         String someday = YYYY_MM_DD.format(date);
 
         return today.equals(someday);
     }
 
     public static boolean isMoreThanToday(Date date) {
-        return date.after(getToday());
+        return date.after(getNow());
     }
 
 }

@@ -28,7 +28,6 @@ public class Question implements Serializable {
     @JoinColumn(name = "interview_id")
     Interview interview;
 
-    @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 
@@ -83,10 +82,10 @@ public class Question implements Serializable {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
+                "interview=" + interview +
                 ", number=" + number +
-                ", interview=" + interview +
+                ", text='" + text + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

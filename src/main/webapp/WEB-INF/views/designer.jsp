@@ -11,7 +11,6 @@
 </head>
 <body>
 <%@include file="fragments/header.jsp" %>
-<c:set var="interviewId" value="${interview.id}" scope="session"/>
 <main class="container">
     <div class="row">
 
@@ -48,74 +47,91 @@
             <a class="btn-floating btn-large add-quest-btn first-btn waves-effect waves-light blue-grey lighten-2 hoverable"
                title="Добавить вопрос"><i class="material-icons">add</i></a>
 
-            <div class="section">
+            <c:forEach var="question" items="${questions}" varStatus="item">
+                <c:set var="answerType" scope="page" value="${question.answers[0].type}"/>
 
-                <%--Form navigation--%>
-                <div class="row">
-                    <div class="col l12 m12 s12">
-                        <nav>
-                            <div class="left number">1</div>
-                            <ul>
-                                <li><a><i class="material-icons move-down" title="Переместить вниз">arrow_downward</i></a></li>
-                                <li><a><i class="material-icons move-up" title="Переместить вверх">arrow_upward</i></a></li>
-                                <li><a><i class="material-icons duplicate"
-                                          title="Дублировать вопрос">control_point_duplicate</i></a></li>
-                                <li><a><i class="material-icons del-quest" title="Удалить вопрос">delete</i></a></li>
-                            </ul>
-                            <i class="right material-icons teal-text text-lighten-2" title="{{:answerType.title}}">star</i>
-                        </nav>
+                <div class="section" data-question="${question.id}">
+
+                        <%--Navigation--%>
+                    <div class="row">
+                        <div class="col l12 m12 s12">
+                            <nav>
+                                <div class="left number">${item.index + 1}</div>
+                                <ul>
+                                    <li><a><i class="material-icons move-down"
+                                              title="Переместить вниз">arrow_downward</i></a></li>
+                                    <li><a><i class="material-icons move-up" title="Переместить вверх">arrow_upward</i></a>
+                                    </li>
+                                    <li><a><i class="material-icons duplicate"
+                                              title="Дублировать вопрос">control_point_duplicate</i></a></li>
+                                    <li><a><i class="material-icons del-quest" title="Удалить вопрос">delete</i></a>
+                                    </li>
+                                </ul>
+                                <i class="right material-icons teal-text text-lighten-2"
+                                   title="${answerType.title}">${answerType.icon}</i>
+                            </nav>
+                        </div>
                     </div>
+
+                        <%--Body--%>
+                    <div class="row narrow-row">
+                        <div class="input-field col l12 m12 s12">
+                            <input value="Введите текст вопроса" type="text" length="250"
+                                   title="Текст вопроса"/>
+                            <label class="active">Текст вопроса</label>
+                        </div>
+
+                        <c:choose>
+                            <c:when test="${answerType.name eq 'radio' || answerType.name eq 'checkbox'}">
+                                <c:forEach var="answer" items="${question.answers}">
+                                    <div class="row narrow-row" data-answer="${answer.id}">
+                                        <div class="input-field  col offset-l2 l7 m11 s11">
+                                            <input type="text" length="100"
+                                                   value="${answer.text}" title="Текст ответа"/>
+                                            <label class="active">Введите ответ</label>
+                                        </div>
+                                        <div class=" col icon-col l1 m1 s1">
+                                            <i class="small material-icons red-text text-lighten-1"
+                                               title="Удалить ответ">delete_forever</i>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                                <div class="col offset-l2 l8 left-align">
+                                    <i class="small material-icons green-text text-accent-4"
+                                       title="Добавить ответ">add</i>
+                                    <i class="small material-icons deep-orange-text"
+                                       title="Добавить текстовый ответ">playlist_add</i>
+                                </div>
+                            </c:when>
+                            <c:when test="${answerType.name eq 'rating'}">
+                                <div class="input-field col offset-l2 l8 m12 s12">
+                                    <input type="number" min="3" max="10"
+                                           value="${answerType.defaultValue}" title="Количество звезд"/>
+                                    <label class="active">Количество звезд</label>
+                                </div>
+                                <div class="col offset-l2 col l8 m12 s12 rating center">
+                                    <c:forEach begin="1" end="${answerType.defaultValue}">
+                                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
+                                    </c:forEach>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="input-field  col offset-l2 l8 m11 s11">
+                                    <input disabled type="text" length="100"
+                                           title="Для данного типа вопроса не требуется ответ"/>
+                                    <label>Не содержит ответов</label>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+
+                        <%--Footer--%>
+                    <div class="divider grey lighten-1"></div>
+
+                    <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
+                       title="Добавить вопрос"><i class="material-icons">add</i></a>
                 </div>
-
-                <%--Form body--%>
-                <div class="row narrow-row">
-                    <div class="input-field col l12 m12 s12">
-                        <input data-question="{{:question.id}}" value="Введите текст вопроса" type="text" length="250"/>
-                        <label class="active">Текст вопроса</label>
-                    </div>
-<!--
-                    <div class="input-field  col offset-l2 l7 m11 s11">
-                        <input data-answer="{{:id}}" type="text" length="100" value="Ответ 1"/>
-                        <label class="active">Введите ответ</label>
-                    </div>
-                    <div class=" col icon-col l1 m1 s1">
-                        <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                    </div>
-                    <div class="input-field  col offset-l2 l7 m11 s11">
-                        <input data-answer="{{:id}}" type="text" length="100" value="Ответ 2"/>
-                        <label class="active">Введите ответ</label>
-                    </div>
-                    <div class=" col icon-col l1 m1 s1">
-                        <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                    </div>
-                    <div class="input-field  col offset-l2 l7 m11 s11">
-                        <input data-answer="{{:id}}" type="text" length="100" value="Ответ 3"/>
-                        <label class="active">Введите ответ</label>
-                    </div>
-                    <div class=" col icon-col l1 m1 s1">
-                        <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                    </div>
--->
-                    <div class="input-field col offset-l2 l8 m12 s12">
-                        <input data-answer="{{:id}}" type="number" min = "3" max = "10" value="5"/>
-                        <label class="active">Количество звезд</label>
-                    </div>
-                    <div class="col offset-l2 col l8 m12 s12 rating center">
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                    </div>
-
-                </div>
-
-                <%--Form footer--%>
-                <div class="divider grey lighten-1"></div>
-
-                <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
-                   title="Добавить вопрос"><i class="material-icons">add</i></a>
-            </div>
+            </c:forEach>
 
         </div>
     </div>
@@ -128,8 +144,8 @@
 
 <%@include file="fragments/footer.jsp" %>
 
-<%@include file="fragments/templates/question-template.jsp"%>
-<%@include file="fragments/templates/stag-list-template.jsp"%>
+<%@include file="fragments/templates/question-template.jsp" %>
+<%@include file="fragments/templates/stag-list-template.jsp" %>
 
 <%@include file="fragments/general-js.html" %>
 <script src="<c:url value="/resources/vendors/clipboard/clipboard.js"/>"></script>

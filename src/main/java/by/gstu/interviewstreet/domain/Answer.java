@@ -22,7 +22,7 @@ public class Answer implements Serializable {
     private String text;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "type_id")
     private AnswerType type;
 

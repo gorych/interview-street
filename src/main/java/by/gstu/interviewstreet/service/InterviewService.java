@@ -1,23 +1,24 @@
 package by.gstu.interviewstreet.service;
 
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.Question;
 
 import java.util.List;
 import java.util.Map;
 
 public interface InterviewService {
 
+    Interview get(int interviewId);
+
+    Interview get(String hash);
+
     List<Interview> getAll();
 
     Map<String, Object> getValueMapForCard(int interviewId);
 
-    Interview get(int interviewId);
-
-    Interview get(long hash);
-
     Interview saveOrUpdate(Interview interview);
 
-    void remove(Interview interview);
-
     void lockOrUnlock(int id);
+
+    void remove(Interview interview);
 }

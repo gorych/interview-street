@@ -41,10 +41,10 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
     }
 
     @Override
-    public Interview getByHash(long hash) {
+    public Interview getByHash(String hash) {
         return (Interview) getSession()
-                .createQuery("FROM Interview WHERE hash = :hash")
-                .setLong("hash", hash)
+                .createQuery("FROM Interview WHERE hash LIKE :hash")
+                .setString("hash", hash)
                 .uniqueResult();
     }
 

@@ -15,7 +15,7 @@ public interface IInterviewDAO {
 
     Interview getById(int id);
 
-    Interview getByHash(long hash);
+    Interview getByHash(String hash);
 
     void save(Interview interview);
 

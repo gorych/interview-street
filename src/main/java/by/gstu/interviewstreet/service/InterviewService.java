@@ -17,8 +17,6 @@ public interface InterviewService {
 
     Map<String, Object> getValueMapForCard(int interviewId);
 
-    Map<String, Object> getValueMapForQuestionForm(Question question, AnswerType answerType);
-
     Interview saveOrUpdate(Interview interview);
 
     void lockOrUnlock(int id);

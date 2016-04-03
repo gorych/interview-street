@@ -1,7 +1,11 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.*;
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.dao.IEmployeeDAO;
+import by.gstu.interviewstreet.dao.IInterviewDAO;
+import by.gstu.interviewstreet.dao.IUserInterviewDAO;
+import by.gstu.interviewstreet.domain.Employee;
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.web.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +20,6 @@ import java.util.Map;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
-
-    @Autowired
-    private IAnswerDAO answerDAO;
 
     @Autowired
     private IEmployeeDAO employeeDAO;
@@ -58,28 +59,6 @@ public class InterviewServiceImpl implements InterviewService {
         valueMap.put("subs", subIds);
         valueMap.put("activePosts", posts);
         valueMap.put("interview", interview);
-
-        return valueMap;
-    }
-
-    @Override
-    @Transactional
-    public Map<String, Object> getValueMapForQuestionForm(Question question, AnswerType answerType) {
-        int answerCount = answerType.getAnswerCount();
-
-        List<Answer> answers = new ArrayList<>();
-        for (int i = 0; i < answerCount; i++) {
-            Answer answer = new Answer(answerType, question, answerType.getDefaultValue());
-
-            answerDAO.insert(answer);
-            answers.add(answer);
-        }
-
-        Map<String, Object> valueMap = new HashMap<>();
-
-        valueMap.put("answerType", answerType);
-        valueMap.put("question", question);
-        valueMap.put("answers", answers);
 
         return valueMap;
     }

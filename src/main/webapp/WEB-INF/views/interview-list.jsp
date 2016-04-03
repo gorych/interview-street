@@ -64,7 +64,7 @@
                         </div>
 
                         <div class="right-block">
-                            <a href="<c:url value="/${interview.id}/designer"/>"
+                            <a href="<c:url value="/${interview.hash}/designer"/>"
                                class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список вопросов">subject</i>
                             </a>

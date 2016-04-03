@@ -11,10 +11,6 @@
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
-    $("[data-answer]").blur(function () {
-        alert("Операция временно недоступна.")
-    });
-
     /*Show staggered list*/
     _questionContainer.on('click', ".add-quest-btn", function () {
         $(".row.staggered").remove();

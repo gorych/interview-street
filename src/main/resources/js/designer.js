@@ -3,6 +3,8 @@
     var _pathname = window.location.pathname;
     var _hash = _pathname.split("/")[1];
 
+    var _questionContainer = $("#question-container");
+
     new Clipboard("#clipboard-btn");
 
     $("#clipboard-btn").click(function () {
@@ -14,7 +16,7 @@
     });
 
     /*Show staggered list*/
-    $("#question-container").on('click', ".add-quest-btn", function () {
+    _questionContainer.on('click', ".add-quest-btn", function () {
         $(".row.staggered").remove();
 
         $(this).after(
@@ -24,11 +26,83 @@
         Materialize.showStaggeredList(".staggered");
     });
 
+    _questionContainer.on('click', ".del-quest", function () {
+        var $section = $(this).parents(".section");
+
+        $.ajax({
+            url: "/designer/del-question",
+            method: "POST",
+            data: {
+                "id": $section.attr("data-question")
+            }
+        }).done(function (response) {
+            if (response !== "success") {
+                Materialize.toast("Ошибка при удалении вопроса", 2000);
+                return;
+            }
+            $section.remove();
+            Materialize.toast("Вопрос успешно удален", 2000);
+        }).fail(function () {
+            Materialize.toast("Ошибка при удалении вопроса", 2000);
+        });
+    });
+
+    _questionContainer.on('click', ".move-up, .move-down", function () {
+        moveQuestion(this);
+    });
+
     $(document).on('click', "input[name=answer-type]", function () {
         renderQuestionForm(this);
     });
 
     //region Helper functions
+
+    function moveQuestion(that) {
+        var $section = $(that).parents(".section");
+        var $curNumber = $section.find(".number").html();
+        var $lastNumber = $(".number:last").html();
+
+        var number = parseInt($curNumber);
+        var lastNumber = parseInt($lastNumber);
+
+        var isUp, isDown;
+        if ($(event.target).is(".move-up")) {
+            isUp = true;
+            number -= 1;
+        }
+
+        if ($(event.target).is(".move-down")) {
+            isDown = true;
+            number += 1;
+        }
+
+        if (number > 0 && number <= lastNumber) {
+            $.ajax({
+                url: "/designer/move-question",
+                method: "POST",
+                data: {
+                    "id": $section.attr("data-question"),
+                    "number": number
+                }
+            }).done(function () {
+                    if (isUp) {
+                        var $prevSection = $section.prev();
+                        $section.insertBefore($prevSection);
+                    }
+
+                    if (isDown) {
+                        var $nextSection = $section.next();
+                        $section.insertAfter($nextSection);
+                    }
+                    updateQuestionNumbers();
+                }
+            ).fail(function () {
+                Materialize.toast("Ошибка при перемешении вопроса", 2000);
+            });
+        } else {
+            Materialize.toast("Для данного вопроса операция <br/>недоступна", 2000);
+        }
+    }
 
     function renderQuestionForm(that) {
         $.ajax({
@@ -40,23 +114,26 @@
             }
         }).done(function (response) {
             if (response === "error") {
-                Materialize.toast("Ошибка при составлении формы", 2000);
+                Materialize.toast("Ошибка при составлении вопроса", 2000);
                 return;
             }
             var data = JSON.parse(response);
             console.log(data);
 
             var $stag = $(".row.staggered");
+            var $section = $stag.parent(".section");
             var $btn = $stag.prev(".add-quest-btn");
 
-            $btn.after(
+            var $elem = $section.length ? $section : $btn;
+
+            $elem.after(
                 $("#question-template").render(data)
             );
 
             $stag.remove();
             updateQuestionNumbers();
         }).fail(function () {
-            Materialize.toast("Ошибка при составлении формы", 2000);
+            Materialize.toast("Ошибка при составлении вопроса", 2000);
         });
     }
 

@@ -6,9 +6,21 @@ import java.util.List;
 
 public interface IQuestionDAO {
 
-    Question qetById(int id);
+    Question getById(int id);
 
-    void insert(Question question);
+    Question getByNumber(int number);
+
+    List<Question> getAllWhoseNumberMoreOrEquals(int number);
+
+    List<Question> getAllWhoseNumberMore(int number);
+
+    List<Question> getAllOrderByNumber(String hash);
+
+    void incrementNumbers(List<Question> questions);
+
+    void decrementNumbers(List<Question> questions);
+
+    void saveOrUpdate(Question question);
 
     void remove(Question question);
 

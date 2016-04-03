@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IAnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.UserAnswer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
-    public void insert(Answer answer) {
+    public void saveOrUpdate(Answer answer) {
         getSession().save(answer);
     }
 

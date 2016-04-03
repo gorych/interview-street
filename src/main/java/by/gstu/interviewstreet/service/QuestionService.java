@@ -10,6 +10,12 @@ public interface QuestionService {
 
     Question get(int id);
 
+    List<Question> getAllOrderByNumber(String hash);
+
     Question add(Interview interview, int number);
+
+    void move(int questId, int number);
+
+    void remove(Question question);
 
 }

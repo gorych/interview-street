@@ -70,6 +70,11 @@ public class Interview implements Serializable {
 
     @Expose
     @NotNull
+    @JoinColumn(name = "hash")
+    private String hash;
+
+    @Expose
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "type_id")
     private InterviewType type;
@@ -181,7 +186,16 @@ public class Interview implements Serializable {
         this.type = type;
     }
 
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
     //endregion
+
 
     @Override
     public String toString() {
@@ -194,7 +208,7 @@ public class Interview implements Serializable {
                 ", hide=" + hide +
                 ", placementDate=" + placementDate +
                 ", endDate=" + endDate +
-                ", questions=" + questions +
+                ", hash='" + hash + '\'' +
                 ", type=" + type +
                 '}';
     }

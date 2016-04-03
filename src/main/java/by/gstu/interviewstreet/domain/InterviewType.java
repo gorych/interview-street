@@ -30,6 +30,10 @@ public class InterviewType implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @NotEmpty
+    @Column(name = "rus_name")
+    private String rusName;
+
     public int getId() {
         return id;
     }
@@ -42,8 +46,16 @@ public class InterviewType implements Serializable {
         return name;
     }
 
-    public void setType(String name) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRusName() {
+        return rusName;
+    }
+
+    public void setRusName(String rusName) {
+        this.rusName = rusName;
     }
 
     public boolean isOpen() {

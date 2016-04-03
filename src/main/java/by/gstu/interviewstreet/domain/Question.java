@@ -26,13 +26,20 @@ public class Question implements Serializable {
     private int number;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="interview_id")
+    @JoinColumn(name = "interview_id")
     Interview interview;
 
+    @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Set<Answer> answers = new HashSet<>();
 
     public Question() { }
+
+    public Question(Interview interview, int number, String text) {
+        this.interview = interview;
+        this.number = number;
+        this.text = text;
+    }
 
     public int getId() {
         return id;
@@ -81,7 +88,6 @@ public class Question implements Serializable {
                 ", text='" + text + '\'' +
                 ", number=" + number +
                 ", interview=" + interview +
-                ", answers=" + answers +
                 '}';
     }
 }

@@ -31,6 +31,12 @@ public class AnswerType implements Serializable{
     @Column(name = "default_value")
     private String defaultValue;
 
+    @Column(name = "default_answer_count")
+    private int answerCount;
+
+    @Column(name = "min_answer_count")
+    private int minAnswerCount;
+
     public int getId() {
         return id;
     }
@@ -69,6 +75,22 @@ public class AnswerType implements Serializable{
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public int getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
+    }
+
+    public int getMinAnswerCount() {
+        return minAnswerCount;
+    }
+
+    public void setMinAnswerCount(int minAnswerCount) {
+        this.minAnswerCount = minAnswerCount;
     }
 
     @Override

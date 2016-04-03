@@ -11,6 +11,7 @@ import by.gstu.interviewstreet.web.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview get(long hash) {
+    public Interview get(String hash) {
         return interviewDAO.getByHash(hash);
     }
 
@@ -81,10 +82,12 @@ public class InterviewServiceImpl implements InterviewService {
 
         /*create new interview*/
         if (existed == null) {
+            byte[] bytes = interview.getName().getBytes();
+            interview.setHash(DigestUtils.md5DigestAsHex(bytes) + System.currentTimeMillis());
             interviewDAO.save(interview);
+
             return interview;
         }
-
         removeAllUserInterviews(existed);
 
         existed.setName(interview.getName());

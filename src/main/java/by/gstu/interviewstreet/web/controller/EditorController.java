@@ -179,7 +179,7 @@ public class EditorController {
 
     @ResponseBody
     @RequestMapping(value = {"/designer/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String moveQuestion(@RequestParam int id) {
+    public String duplicateQuestion(@RequestParam int id) {
         try {
             Question question = questionService.get(id);
 

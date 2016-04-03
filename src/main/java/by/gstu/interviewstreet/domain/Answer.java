@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 @Entity
@@ -20,15 +21,23 @@ public class Answer implements Serializable {
     @Column(name = "text")
     private String text;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id")
     private AnswerType type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne()
     @JoinColumn(name = "question_id")
     private Question question;
 
     public Answer() { }
+
+    public Answer(AnswerType answerType, Question question, String text) {
+        this.type = answerType;
+        this.question = question;
+        this.text = text;
+    }
 
     public int getId() {
         return id;

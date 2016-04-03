@@ -13,6 +13,7 @@
         alert("Операция временно недоступна.")
     });
 
+    /*Show staggered list*/
     $("#question-container").on('click', ".add-quest-btn", function () {
         $(".row.staggered").remove();
 
@@ -24,36 +25,55 @@
     });
 
     $(document).on('click', "input[name=answer-type]", function () {
-        showQuestionForm(this);
+        renderQuestionForm(this);
     });
 
     //region Helper functions
 
-    function showQuestionForm(that) {
+    function renderQuestionForm(that) {
         $.ajax({
-            url: "/build-form",
+            url: "/designer/add-question",
             method: "POST",
-            data: {"hash": _hash, "answerTypeId": $(that).attr("id")}
+            data: {
+                "hash": _hash, "answerTypeId": $(that).val(),
+                "number": findNumber(that)
+            }
         }).done(function (response) {
             if (response === "error") {
                 Materialize.toast("Ошибка при составлении формы", 2000);
                 return;
             }
-
             var data = JSON.parse(response);
-
             var $stag = $(".row.staggered");
             var $btn = $stag.prev(".add-quest-btn");
-            var $form = $("#form-template").render(data);
 
-            $btn.after($form);
+            $btn.after(
+                $("#question-template").render(data)
+            );
+
             $stag.remove();
-
             updateQuestionNumbers();
-            Materialize.fadeInImage($form);
         }).fail(function () {
             Materialize.toast("Ошибка при составлении формы", 2000);
         });
+    }
+
+    function findNumber(that) {
+        var intNumber;
+
+        var prevNumber = $(that).closest(".section").find('.number').html();
+        intNumber = parseInt(prevNumber);
+        if (intNumber) {
+            return (intNumber + 1);
+        }
+
+        var nextNumber = $(that).closest('.staggered').next('.section').find('.number').html();
+        intNumber = parseInt(nextNumber);
+        if (intNumber) {
+            return intNumber;
+        }
+
+        return 1;
     }
 
     function updateQuestionNumbers() {

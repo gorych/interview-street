@@ -1,6 +1,5 @@
 package by.gstu.interviewstreet.web.util;
 
-import by.gstu.interviewstreet.domain.Interview;
 import com.google.gson.*;
 
 import java.io.UnsupportedEncodingException;

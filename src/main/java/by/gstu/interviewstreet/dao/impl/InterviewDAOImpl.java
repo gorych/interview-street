@@ -2,11 +2,9 @@ package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.IInterviewDAO;
 import by.gstu.interviewstreet.domain.*;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -18,17 +16,6 @@ public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
 
         return getSession()
                 .createQuery("FROM Interview")
-                .list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<UserInterview> getUserInterviews(User user) {
-        return getSession()
-                .createQuery("FROM UserInterview WHERE user.id = :id AND interview.hide = false AND isPassed != true " +
-                        "AND interview.type.id = :typeId")
-                .setInteger("id", user.getId())
-                .setInteger("typeId", 1)
                 .list();
     }
 

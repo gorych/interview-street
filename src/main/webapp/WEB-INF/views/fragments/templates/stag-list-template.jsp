@@ -8,19 +8,19 @@
             <div class='center'>
                 <ul class='staggered-item left-align'>
                     <li>
-                        <input name='answer-type' type='radio' id='1'>
+                        <input name='answer-type' type='radio' id='1' value='1'>
                         <label for='1'>Текстовый ответ</label>
                     </li>
                     <li>
-                        <input name='answer-type' type='radio' id='2'>
+                        <input name='answer-type' type='radio' id='2' value='2'>
                         <label for='2'>Одиночный выбор</label>
                     </li>
                     <li>
-                        <input name='answer-type' type='radio' id='3'>
+                        <input name='answer-type' type='radio' id='3' value='3'>
                         <label for='3'>Множественный выбор</label>
                     </li>
                     <li>
-                        <input name='answer-type' type='radio' id='4'>
+                        <input name='answer-type' type='radio' id='4' value='4'>
                         <label for='4'>Рейтинг</label>
                     </li>
                 </ul>

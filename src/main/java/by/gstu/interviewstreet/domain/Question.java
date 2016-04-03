@@ -4,8 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "questions")
@@ -31,7 +30,7 @@ public class Question implements Serializable {
 
     @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private Set<Answer> answers = new HashSet<>();
+    private List<Answer> answers = new ArrayList<>();
 
     public Question() { }
 
@@ -73,11 +72,11 @@ public class Question implements Serializable {
         this.interview = interview;
     }
 
-    public Set<Answer> getAnswers() {
+    public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Set<Answer> answers) {
+    public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
 

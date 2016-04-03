@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%--JS Render template. Used on the designer page --%>
-<script id="form-template" type="text/x-jsrender">
+<script id="question-template" type="text/x-jsrender">
     <div class="section">
 
         <%--Form navigation--%>

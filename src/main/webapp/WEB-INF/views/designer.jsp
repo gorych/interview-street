@@ -17,7 +17,7 @@
 
         <div class="col l12 m12 s12">
             <h4 class="header teal-text">${interview.name}</h4>
-            <h5 class="interview-type">открытая</h5>
+            <h5 class="interview-type">${interview.type.rusName}</h5>
 
             <!--Icon bar-->
             <div class="row icons-row">
@@ -128,7 +128,7 @@
 
 <%@include file="fragments/footer.jsp" %>
 
-<%@include file="fragments/templates/form-template.jsp"%>
+<%@include file="fragments/templates/question-template.jsp"%>
 <%@include file="fragments/templates/stag-list-template.jsp"%>
 
 <%@include file="fragments/general-js.html" %>

@@ -209,8 +209,7 @@
                 url: "/delete-interview",
                 method: "POST",
                 data: {data: JSON.stringify({id: $(this).attr("data-temp-id")})}
-            }).done(function (response) {
-                if (response === "success") {
+            }).done(function () {
                     $tempCard.remove();
 
                     /*Clean link*/
@@ -218,7 +217,6 @@
 
                     $("#delete-interview-modal").closeModal();
                     Materialize.toast("Анкета успешно удалена", toastDuration);
-                }
             }).fail(function () {
                 Materialize.toast(operationErrMsg, toastDuration);
             });

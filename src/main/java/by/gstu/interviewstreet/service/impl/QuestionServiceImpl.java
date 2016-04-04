@@ -95,7 +95,7 @@ public class QuestionServiceImpl implements QuestionService {
             Answer duplicateAnswer = new Answer(answer.getType(), duplicate, answer.getText());
 
             answerDAO.saveOrUpdate(duplicateAnswer);
-            answers.add(answer);
+            answers.add(duplicateAnswer);
         }
 
         String[] keys = new String[]{"answerType", "question", "answers"};

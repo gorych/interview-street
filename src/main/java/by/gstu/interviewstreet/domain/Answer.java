@@ -72,6 +72,22 @@ public class Answer implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Answer answer = (Answer) o;
+
+        return getId() == answer.getId();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
+    }
+
+    @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +

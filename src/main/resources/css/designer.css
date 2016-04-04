@@ -50,6 +50,10 @@ label .interview-url {
     margin-left: -0.8rem;
 }
 
+.row .col .wide-col {
+    padding: 0;
+}
+
 .rating i {
     width: 3rem;
     font-size: 3rem;

@@ -11,6 +11,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.lang.reflect.Type;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @Secured(UserRoleConstants.EDITOR)
@@ -67,19 +70,22 @@ public class EditorController {
 
     @ResponseBody
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String loadPosts(@RequestBody String data) {
+    public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        Type type = new TypeToken<List<Integer>>() { }.getType();
+        Type type = new TypeToken<List<Integer>>() {
+        }.getType();
         List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 
-        return JSONParser.convertObjectToJsonString(employees);
+        String jsonData = JSONParser.convertObjectToJsonString(employees);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/save-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String processAddInterviewForm(@RequestBody String data) {
+    public ResponseEntity<String> processAddInterviewForm(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
         JsonElement interviewElement = jsonArray.get(0);
@@ -93,37 +99,44 @@ public class EditorController {
             userInterviewService.addInterviewToUserByPost(interview, postIds);
         }
 
-        return JSONParser.convertObjectToJsonString(interview.getId());
+        String jsonData = JSONParser.convertObjectToJsonString(interview.getId());
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.POST)
-    public String deleteInterview(@RequestParam String data) {
+    public ResponseEntity<String> deleteInterview(@RequestParam String data) {
         Interview interview = JSONParser.convertJsonStringToObject(data, Interview.class);
         interviewService.remove(interview);
 
-        return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/lock-interview/{interviewId}"}, method = RequestMethod.GET)
-    public String lockOrUnlockInterview(@PathVariable int interviewId) {
+    public ResponseEntity<String> lockOrUnlockInterview(@PathVariable int interviewId) {
         interviewService.lockOrUnlock(interviewId);
 
-        return AttributeConstants.SUCCESS_RESPONSE_BODY;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/load-card-values"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
-    public String loadValuesForCard(@RequestParam int interviewId) {
+    public ResponseEntity<String> loadValuesForCard(@RequestParam int interviewId) {
         Map<String, Object> valueMap = interviewService.getValueMapForCard(interviewId);
+        String jsonData = JSONParser.convertObjectToJsonString(valueMap);
 
-        return JSONParser.convertObjectToJsonString(valueMap);
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/{hash}/designer"}, method = RequestMethod.GET)
     public String showDesigner(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
+        if (interview == null) {
+            return "404";
+        }
+
         List<Question> questions = questionService.getAllOrderByNumber(hash);
 
         model.addAttribute(AttributeConstants.INTERVIEW, interview);
@@ -134,52 +147,60 @@ public class EditorController {
 
     @ResponseBody
     @RequestMapping(value = {"/designer/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String addQuestion(String hash, int answerTypeId, int number) {
+    public ResponseEntity<String> addQuestion(String hash, int answerTypeId, int number) {
         try {
             AnswerType answerType = answerService.getAnswerType(answerTypeId);
             Interview interview = interviewService.get(hash);
 
             if (interview == null || answerType == null) {
-                return AttributeConstants.ERROR_RESPONSE_BODY;
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             Question question = questionService.addQuestion(interview, number);
             Map<String, Object> valueMap = questionService.getValueMapForQuestionForm(question, answerType);
 
-            return JSONParser.convertObjectToJsonString(valueMap);
+            String jsonData = JSONParser.convertObjectToJsonString(valueMap);
+            return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @ResponseBody
     @RequestMapping(value = {"/designer/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String removeQuestion(@RequestParam int id) {
+    public ResponseEntity<String> removeQuestion(@RequestParam String hash, @RequestParam int id) {
         try {
+            Interview interview = interviewService.get(hash);
             Question question = questionService.get(id);
+
+            Set<Question> questions = interview.getQuestions();
+            if (!questions.contains(question)) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+
             questionService.remove(question);
 
-            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @ResponseBody
     @RequestMapping(value = {"/designer/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String moveQuestion(@RequestParam int id, @RequestParam int number) {
+    public ResponseEntity<String> moveQuestion(@RequestParam int id, @RequestParam int number) {
         try {
             questionService.move(id, number);
 
-            return AttributeConstants.SUCCESS_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @ResponseBody
     @RequestMapping(value = {"/designer/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public String duplicateQuestion(@RequestParam int id) {
+    public ResponseEntity<String> duplicateQuestion(@RequestParam int id) {
         try {
             Question question = questionService.get(id);
 
@@ -190,9 +211,67 @@ public class EditorController {
             Question duplicated = questionService.addQuestion(interview, nextNumber);
             Map<String, Object> valueMap = questionService.getValueMapForDuplicateQuestionForm(question, duplicated, answerType);
 
-            return JSONParser.convertObjectToJsonString(valueMap);
+            String jsonData = JSONParser.convertObjectToJsonString(valueMap);
+
+            return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return AttributeConstants.ERROR_RESPONSE_BODY;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/designer/add-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> addAnswer(String hash, int questId, @RequestParam(required = false) boolean textType) {
+        try {
+            Interview interview = interviewService.get(hash);
+            Question question = questionService.get(questId);
+            AnswerType answerType = question.getAnswers().get(0).getType();
+
+            Set<Question> questions = interview.getQuestions();
+            if (!questions.contains(question)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            Answer answer;
+            if (textType) {
+                answer = answerService.addDefaultTextAnswer(question);
+            } else {
+                answer = answerService.addDefaultAnswer(answerType, question);
+            }
+
+            String jsonData = JSONParser.convertObjectToJsonString(answer);
+
+            return new ResponseEntity<>(jsonData, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/designer/del-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> removeAnswer(String hash, int questId, int answerId) {
+        try {
+            Interview interview = interviewService.get(hash);
+            Question question = questionService.get(questId);
+            Answer answer = answerService.get(answerId);
+
+            Set<Question> questions = interview.getQuestions();
+            if (!questions.contains(question)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            final int MIN_ANSWER_COUNT = 2;
+            List<Answer> answers = question.getAnswers();
+
+            if (answers.size() <= MIN_ANSWER_COUNT || !answers.contains(answer)) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            answerService.remove(answer);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

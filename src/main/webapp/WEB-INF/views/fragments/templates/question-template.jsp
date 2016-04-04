@@ -31,37 +31,17 @@
 
             {{if answerType.name === "radio" || answerType.name === "checkbox"}}
                 {{for answers}}
-                        <div class="row narrow-row" data-answer="{{:id}}">
-                            <div class="input-field  col offset-l2 l7 m11 s11">
-                                <input type="text" length="100" value="{{:text}}" title="Текст ответа"/>
-                                <label class="active">Введите ответ</label>
-                            </div>
-                            <div class=" col icon-col l1 m1 s1">
-                                <i class="small material-icons red-text text-lighten-1" title="Удалить ответ">delete_forever</i>
-                            </div>
-                        </div>
+                    {{include tmpl="multiAnswTmpl"/}}
                 {{/for}}
-                <div class="col offset-l2 l8 left-align">
-                    <i class="small material-icons green-text text-accent-4" title="Добавить ответ">add</i>
-                    <i class="small material-icons deep-orange-text"
+                <div class="col wide-col offset-l2 l8 left-align">
+                    <i class="add-answer small material-icons green-text text-accent-4" title="Добавить ответ">add</i>
+                    <i class="add-text-answer small material-icons deep-orange-text"
                        title="Добавить текстовый ответ">playlist_add</i>
                 </div>
             {{else answerType.name === "rating" }}
-                <div class="input-field col offset-l2 l8 m12 s12">
-                    <input data-answer="{{:id}}" type="number" min="3" max="10" value="{{:answerType.defaultValue}}"
-                           title="Количество звезд"/>
-                    <label class="active">Количество звезд</label>
-                </div>
-                <div class="col offset-l2 col l8 m12 s12 rating center">
-                    {^{range start=1 end=answerType.defaultValue}}
-                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
-                    {{/range}}
-                </div>
+                {{include tmpl="rateAnswTmpl"/}}
             {{else}}
-                <div class="input-field  col offset-l2 l8 m11 s11">
-                    <input disabled type="text" title="Для данного типа вопроса не требуется ответ"/>
-                    <label>Нет содержит ответов</label>
-                </div>
+                {{include tmpl="textAnswTmpl"/}}
             {{/if}}
         </div>
 

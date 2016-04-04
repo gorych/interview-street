@@ -3,6 +3,15 @@
     var _pathname = window.location.pathname;
     var _hash = _pathname.split("/")[1];
 
+    $.templates({
+        questTmpl: "#question-template",
+        disabledAnswTmpl: "#disabled-answer-tmpl",
+        multiAnswTmpl: "#multi-answer-tmpl",
+        textAnswTmpl: "#text-answer-tmpl",
+        rateAnswTmpl: "#rate-answer-tmpl"
+
+    });
+
     var _questionContainer = $("#question-container");
 
     new Clipboard("#clipboard-btn");
@@ -29,13 +38,10 @@
             url: "/designer/del-question",
             method: "POST",
             data: {
+                "hash": _hash,
                 "id": $section.attr("data-question")
             }
-        }).done(function (response) {
-            if (response !== "success") {
-                Materialize.toast("Ошибка при удалении вопроса", 2000);
-                return;
-            }
+        }).done(function () {
             $section.remove();
             Materialize.toast("Вопрос успешно удален", 2000);
         }).fail(function () {
@@ -57,19 +63,72 @@
                 "id": $section.attr("data-question")
             }
         }).done(function (response) {
-            if (response === "error") {
-                Materialize.toast("Ошибка при дублировании вопроса", 2000);
-                return;
-            }
-
             var data = JSON.parse(response);
-            console.log(data);
 
             $section.after(
-                $("#question-template").render(data)
+                $.render.questTmpl(data)
             );
+
+            updateQuestionNumbers();
         }).fail(function () {
             Materialize.toast("Ошибка при дублировании вопроса", 2000);
+        });
+    });
+
+    _questionContainer.on('click', ".add-answer, .add-text-answer", function (event) {
+        var $section = $(this).parents(".section");
+        var textType = $(event.target).is(".add-text-answer");
+        var $that = $(this);
+
+        $.ajax({
+            url: "/designer/add-answer",
+            method: "POST",
+            data: {
+                "hash": _hash,
+                "questId": $section.attr("data-question"),
+                "textType": /*textType ? true :*/ false
+            }
+        }).done(function (response) {
+            var data = JSON.parse(response);
+
+            //TODO edit answer type
+
+            if (textType) {
+                $that.parent().after(
+                    $.render.multiAnswTmpl.render(data)
+                );
+                $that.remove();
+            } else {
+                $that.parent().before(
+                    $.render.multiAnswTmpl.render(data)
+                );
+            }
+
+        }).fail(function () {
+            Materialize.toast("Ошибка при добавлении ответа", 2000);
+        });
+    });
+
+    _questionContainer.on('click', ".del-answer", function () {
+        var $row = $(this).parents("[data-answer]");
+        var $section = $(this).parents(".section");
+
+        $.ajax({
+            url: "/designer/del-answer",
+            method: "POST",
+            data: {
+                "hash": _hash,
+                "questId": $section.attr("data-question"),
+                "answerId": $row.attr("data-answer")
+            }
+        }).done(function () {
+            $row.remove();
+        }).fail(function (xhr) {
+            if (xhr.status === 406) {
+                Materialize.toast("Для данного типа вопроса <br/>необходимо минимум 2 ответа", 2000);
+                return;
+            }
+            Materialize.toast("Ошибка при удалении ответа", 2000);
         });
     });
 
@@ -135,10 +194,6 @@
                 "number": findNumber(that)
             }
         }).done(function (response) {
-            if (response === "error") {
-                Materialize.toast("Ошибка при составлении вопроса", 2000);
-                return;
-            }
             var data = JSON.parse(response);
 
             var $stag = $(".row.staggered");
@@ -148,7 +203,7 @@
             var $elem = $section.length ? $section : $btn;
 
             $elem.after(
-                $("#question-template").render(data)
+                $.render.questTmpl.render(data)
             );
 
             $stag.remove();
@@ -181,5 +236,7 @@
             $(this).html(index + 1);
         });
     }
+
+    //endregion
 
 }());

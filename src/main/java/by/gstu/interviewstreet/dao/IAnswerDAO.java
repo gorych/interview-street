@@ -7,10 +7,12 @@ import java.util.List;
 
 public interface IAnswerDAO {
 
+    Answer getById(int id);
+
     List<Answer> getByIds(List<Integer> ids);
 
     void saveOrUpdate(Answer answer);
 
-    void remove(int id);
+    void remove(Answer answer);
 
 }

@@ -10,6 +10,14 @@ import java.util.List;
 public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
 
     @Override
+    public Answer getById(int id) {
+        return (Answer) getSession()
+                .createQuery("FROM Answer WHERE id=:id")
+                .setParameter("id", id)
+                .uniqueResult();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public List<Answer> getByIds(List<Integer> ids) {
         return getSession()
@@ -24,10 +32,7 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
-    public void remove(int id) {
-        Answer answer = (Answer) getSession().load(Answer.class, id);
-        if (answer != null) {
-            getSession().delete(answer);
-        }
+    public void remove(Answer answer) {
+        getSession().delete(answer);
     }
 }

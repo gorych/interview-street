@@ -23,6 +23,12 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
+    public Answer get(int id) {
+        return answerDAO.getById(id);
+    }
+
+    @Override
+    @Transactional
     public List<Answer> get(List<Integer> ids) {
         return answerDAO.getByIds(ids);
     }
@@ -45,7 +51,27 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public void remove(int id) {
-        answerDAO.remove(id);
+    public Answer addDefaultAnswer(AnswerType type, Question question) {
+        Answer answer = new Answer(type, question, type.getDefaultValue());
+        answerDAO.saveOrUpdate(answer);
+
+        return answer;
+    }
+
+    @Override
+    @Transactional
+    public Answer addDefaultTextAnswer(Question question) {
+        //TODO getByName
+        AnswerType answerType = answerTypeDAO.getById(1);
+        Answer answer = new Answer(answerType, question, answerType.getDefaultValue());
+        answerDAO.saveOrUpdate(answer);
+
+        return answer;
+    }
+
+    @Override
+    @Transactional
+    public void remove(Answer answer) {
+        answerDAO.remove(answer);
     }
 }

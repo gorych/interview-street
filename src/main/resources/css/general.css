@@ -30,25 +30,3 @@ input:not([type]) + label:after, input[type=text] + label:after, input[type=pass
     opacity: 0;
     transition: .2s opacity ease-out, .2s color ease-out;
 }
-
-.info-alert {
-    color: #333;
-    background-color: #d9edf7;
-    padding: 15px;
-}
-
-.error-alert {
-    color: #a94442;
-    background-color: #f2dede;
-    padding: 10px 5px;
-}
-
-.danger-alert {
-    color: #fff;
-    background-color: #e22d3a;
-    padding: 10px 5px;
-}
-
-.error-alert li {
-    list-style-type: disc;
-}

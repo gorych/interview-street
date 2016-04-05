@@ -53,17 +53,16 @@
 .goal:before {
     content: "Цель: ";
     font-weight: 800;
- ";
 }
 
 .description:before {
     content: "Описание: ";
-    font-weight: 800;: ";
+    font-weight: 800;
 }
 
 .audience:before {
     content: "Аудитория: ";
-    font-weight: 800;: ";
+    font-weight: 800;
 }
 
 .card-content h6 {

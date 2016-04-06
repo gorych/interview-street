@@ -15,6 +15,11 @@ i {
     margin-top: 0;
 }
 
+.add-answer, .add-text-answer {
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
 .add-quest-btn {
     margin: 2rem 0;
 }

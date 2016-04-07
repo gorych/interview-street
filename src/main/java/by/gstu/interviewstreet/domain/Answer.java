@@ -21,13 +21,14 @@ public class Answer implements Serializable {
     @Column(name = "text")
     private String text;
 
+    @Expose
     @NotNull
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "type_id")
     private AnswerType type;
 
     @NotNull
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -79,7 +80,6 @@ public class Answer implements Serializable {
         Answer answer = (Answer) o;
 
         return getId() == answer.getId();
-
     }
 
     @Override

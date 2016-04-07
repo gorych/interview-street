@@ -24,7 +24,6 @@ public class Question implements Serializable {
     @Column(name = "text")
     private String text;
 
-    @Expose
     @NotNull
     @Column(name = "number")
     private int number;
@@ -40,6 +39,7 @@ public class Question implements Serializable {
     @JoinColumn(name = "interview_id")
     Interview interview;
 
+    @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 

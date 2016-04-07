@@ -39,6 +39,11 @@ public class QuestionType implements Serializable{
     @Column(name = "min_answer_count")
     private int minAnswerCount;
 
+    @NotNull
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private AnswerType answerType;
+
     public int getId() {
         return id;
     }
@@ -85,6 +90,14 @@ public class QuestionType implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public AnswerType getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(AnswerType answerType) {
+        this.answerType = answerType;
     }
 
     @Override

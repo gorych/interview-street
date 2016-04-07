@@ -14,7 +14,7 @@ public interface QuestionService {
 
     List<Question> getAllOrderByNumber(String hash);
 
-    Question addQuestion(Interview interview, int number);
+    Question addQuestion(Interview interview, AnswerType answerType,  int number);
 
     void move(int questId, int number);
 

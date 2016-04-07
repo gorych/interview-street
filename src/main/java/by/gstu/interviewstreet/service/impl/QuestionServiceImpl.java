@@ -1,11 +1,8 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IAnswerDAO;
-import by.gstu.interviewstreet.dao.IQuestionDAO;
-import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.AnswerType;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.Question;
+import by.gstu.interviewstreet.dao.AnswerDAO;
+import by.gstu.interviewstreet.dao.QuestionDAO;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.service.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,10 @@ import java.util.Map;
 public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
-    private IQuestionDAO questionDAO;
+    private QuestionDAO questionDAO;
 
     @Autowired
-    private IAnswerDAO answerDAO;
+    private AnswerDAO answerDAO;
 
     @Override
     @Transactional
@@ -39,8 +36,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public Question addQuestion(Interview interview, int number) {
-        Question question = new Question(interview, number, "Введите текст вопроса");
+    public Question addQuestion(Interview interview, AnswerType answerType, int number) {
+        Question question = new Question(interview, answerType.getQuestionType(), number, "Введите текст вопроса");
         List<Question> questions = questionDAO.getAllWhoseNumberMoreOrEquals(number);
 
         questionDAO.incrementNumbers(questions);
@@ -65,10 +62,13 @@ public class QuestionServiceImpl implements QuestionService {
         questionDAO.saveOrUpdate(whom);
     }
 
+    //TODO duplicate code
+
     @Override
     @Transactional
     public Map<String, Object> getValueMapForQuestionForm(Question question, AnswerType answerType) {
-        int answerCount = answerType.getAnswerCount();
+        QuestionType questionType = question.getType();
+        int answerCount = questionType.getAnswerCount();
 
         List<Answer> answers = new ArrayList<>();
         for (int i = 0; i < answerCount; i++) {

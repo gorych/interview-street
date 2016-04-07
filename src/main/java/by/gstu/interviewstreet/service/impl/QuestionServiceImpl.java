@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.AnswerDAO;
 import by.gstu.interviewstreet.dao.QuestionDAO;
+import by.gstu.interviewstreet.dao.QuestionTypeDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.service.ServiceUtils;
@@ -17,6 +18,9 @@ import java.util.Map;
 public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
+    private QuestionTypeDAO questionTypeDAO;
+
+    @Autowired
     private QuestionDAO questionDAO;
 
     @Autowired
@@ -30,14 +34,20 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
+    public QuestionType getType(int typeId) {
+        return questionTypeDAO.getById(typeId);
+    }
+
+    @Override
+    @Transactional
     public List<Question> getAllOrderByNumber(String hash) {
         return questionDAO.getAllOrderByNumber(hash);
     }
 
     @Override
     @Transactional
-    public Question addQuestion(Interview interview, AnswerType answerType, int number) {
-        Question question = new Question(interview, answerType.getQuestionType(), number, "Введите текст вопроса");
+    public Question addDefaultQuestion(Interview interview, QuestionType questionType, int number) {
+        Question question = new Question(interview, questionType, number, "Введите текст вопроса");
         List<Question> questions = questionDAO.getAllWhoseNumberMoreOrEquals(number);
 
         questionDAO.incrementNumbers(questions);
@@ -62,35 +72,11 @@ public class QuestionServiceImpl implements QuestionService {
         questionDAO.saveOrUpdate(whom);
     }
 
-    //TODO duplicate code
-
     @Override
     @Transactional
-    public Map<String, Object> getValueMapForQuestionForm(Question question, AnswerType answerType) {
-        QuestionType questionType = question.getType();
-        int answerCount = questionType.getAnswerCount();
-
+    public Map<String, Object> getValueMapForDuplicateQuestionForm(Question question, Question duplicate) {
         List<Answer> answers = new ArrayList<>();
-        for (int i = 0; i < answerCount; i++) {
-            Answer answer = new Answer(answerType, question, answerType.getDefaultValue());
 
-            answerDAO.saveOrUpdate(answer);
-            answers.add(answer);
-        }
-
-        String[] keys = new String[]{"answerType", "question", "answers"};
-        Object[] objects = new Object[]{answerType, question, answers};
-
-        return ServiceUtils.buildValueMap(keys, objects);
-    }
-
-    //TODO delete duplicate code
-
-    @Override
-    @Transactional
-    public Map<String, Object> getValueMapForDuplicateQuestionForm(Question question, Question duplicate, AnswerType answerType) {
-
-        List<Answer> answers = new ArrayList<>();
         for (Answer answer : question.getAnswers()) {
             Answer duplicateAnswer = new Answer(answer.getType(), duplicate, answer.getText());
 
@@ -99,7 +85,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         String[] keys = new String[]{"answerType", "question", "answers"};
-        Object[] objects = new Object[]{answerType, duplicate, answers};
+        Object[] objects = new Object[]{question.getType().getAnswerType(), duplicate, answers};
 
         return ServiceUtils.buildValueMap(keys, objects);
     }

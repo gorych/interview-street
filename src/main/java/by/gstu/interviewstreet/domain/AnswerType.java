@@ -1,13 +1,15 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "answer_types")
-public class AnswerType implements Serializable{
+public class AnswerType implements Serializable {
 
     @Id
     @Expose
@@ -16,26 +18,18 @@ public class AnswerType implements Serializable{
     private int id;
 
     @Expose
-    @Column(name = "type")
+    @NotEmpty
+    @Column(name = "name")
     private String name;
-
-    @Expose
-    @Column(name = "icon")
-    private String icon;
-
-    @Expose
-    @Column(name = "title")
-    private String title;
 
     @Expose
     @Column(name = "default_value")
     private String defaultValue;
 
-    @Column(name = "default_answer_count")
-    private int answerCount;
-
-    @Column(name = "min_answer_count")
-    private int minAnswerCount;
+    @NotNull
+    @ManyToOne()
+    @JoinColumn(name = "type_id")
+    private QuestionType questionType;
 
     public int getId() {
         return id;
@@ -53,22 +47,6 @@ public class AnswerType implements Serializable{
         this.name = type;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDefaultValue() {
         return defaultValue;
     }
@@ -77,20 +55,12 @@ public class AnswerType implements Serializable{
         this.defaultValue = defaultValue;
     }
 
-    public int getAnswerCount() {
-        return answerCount;
+    public QuestionType getQuestionType() {
+        return questionType;
     }
 
-    public void setAnswerCount(int answerCount) {
-        this.answerCount = answerCount;
-    }
-
-    public int getMinAnswerCount() {
-        return minAnswerCount;
-    }
-
-    public void setMinAnswerCount(int minAnswerCount) {
-        this.minAnswerCount = minAnswerCount;
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
     @Override
@@ -98,9 +68,8 @@ public class AnswerType implements Serializable{
         return "AnswerType{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
-                ", title='" + title + '\'' +
                 ", defaultValue='" + defaultValue + '\'' +
+                ", questionType=" + questionType +
                 '}';
     }
 }

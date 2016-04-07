@@ -1,10 +1,13 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "questions")
@@ -17,13 +20,22 @@ public class Question implements Serializable {
     private int id;
 
     @Expose
+    @NotEmpty
     @Column(name = "text")
     private String text;
 
     @Expose
+    @NotNull
     @Column(name = "number")
     private int number;
 
+    @Expose
+    @NotNull
+    @ManyToOne()
+    @JoinColumn(name = "type_id")
+    QuestionType type;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     Interview interview;
@@ -33,9 +45,10 @@ public class Question implements Serializable {
 
     public Question() { }
 
-    public Question(Interview interview, int number, String text) {
+    public Question(Interview interview, QuestionType type, int number, String text) {
         this.interview = interview;
         this.number = number;
+        this.type = type;
         this.text = text;
     }
 
@@ -61,6 +74,14 @@ public class Question implements Serializable {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public QuestionType getType() {
+        return type;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
     }
 
     public Interview getInterview() {
@@ -98,10 +119,11 @@ public class Question implements Serializable {
     @Override
     public String toString() {
         return "Question{" +
-                "interview=" + interview +
-                ", number=" + number +
+                "id=" + id +
                 ", text='" + text + '\'' +
-                ", id=" + id +
+                ", number=" + number +
+                ", type=" + type +
+                ", interview=" + interview +
                 '}';
     }
 }

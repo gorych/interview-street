@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
+
+    private static final String TEXT_ANSWER_NAME = "text";
 
     @Autowired
     private AnswerDAO answerDAO;
@@ -36,21 +39,37 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public AnswerType getAnswerType(int id) {
-        return answerTypeDAO.getById(id);
-    }
+    public List<Answer> addDefaultAnswers(Question question) {
+        QuestionType questionType = question.getType();
+        AnswerType answerType = questionType.getAnswerType();
 
-    //TODO duplicate code
+        int answerCount = questionType.getAnswerCount();
+        String defaultValue = answerType.getDefaultValue();
+
+        List<Answer> answers = new ArrayList<>();
+        for (int i = 0; i < answerCount; i++) {
+            Answer answer = new Answer(answerType, question, defaultValue);
+
+            answerDAO.saveOrUpdate(answer);
+            answers.add(answer);
+        }
+
+        return answers;
+    }
 
     @Override
     @Transactional
-    public void addDefaultAnswers(AnswerType type, Question question) {
-        QuestionType questionType = question.getType();
-        int answerCount = questionType.getAnswerCount();
+    public List<Answer> duplicateAnswers(Question question, Question duplicate) {
+        List<Answer> answers = new ArrayList<>();
 
-        for (int i = 0; i < answerCount; i++) {
-            answerDAO.saveOrUpdate(new Answer(type, question, type.getDefaultValue()));
+        for (Answer answer : question.getAnswers()) {
+            Answer duplicateAnswer = new Answer(answer.getType(), duplicate, answer.getText());
+
+            answerDAO.saveOrUpdate(duplicateAnswer);
+            answers.add(duplicateAnswer);
         }
+
+        return answers;
     }
 
     @Override
@@ -65,8 +84,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     @Transactional
     public Answer addDefaultTextAnswer(Question question) {
-        //TODO getByName
-        AnswerType answerType = answerTypeDAO.getById(1);
+        AnswerType answerType = answerTypeDAO.getByName(TEXT_ANSWER_NAME);
         Answer answer = new Answer(answerType, question, answerType.getDefaultValue());
         answerDAO.saveOrUpdate(answer);
 

@@ -11,9 +11,9 @@ public interface AnswerService {
 
     List<Answer> get(List<Integer> ids);
 
-    AnswerType getAnswerType(int id);
+    List<Answer> addDefaultAnswers(Question question);
 
-    void addDefaultAnswers(AnswerType type, Question question);
+    List<Answer> duplicateAnswers(Question question, Question duplicated);
 
     Answer addDefaultTextAnswer(Question question);
 

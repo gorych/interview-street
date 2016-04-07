@@ -17,7 +17,7 @@
 
             <c:if test="${empty chip || (chip eq true)}">
                 <div class="chip teal white-text">
-                    Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
+                    Здравствуйте, ${user/user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
                     <i class="material-icons" id="hide-chip-btn">close</i>
                 </div>
             </c:if>

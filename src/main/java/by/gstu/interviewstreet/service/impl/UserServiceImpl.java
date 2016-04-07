@@ -1,9 +1,7 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IUserDAO;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.dao.InterviewDAO;
+import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.security.UserPosition;
 import by.gstu.interviewstreet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,10 @@ import java.util.*;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
-    IUserDAO userDAO;
+    UserDAO userDAO;
 
     @Autowired
-    IInterviewDAO interviewDAO;
+    InterviewDAO interviewDAO;
 
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {

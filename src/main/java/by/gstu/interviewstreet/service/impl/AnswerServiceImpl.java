@@ -1,10 +1,11 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IAnswerDAO;
-import by.gstu.interviewstreet.dao.IAnswerTypeDAO;
+import by.gstu.interviewstreet.dao.AnswerDAO;
+import by.gstu.interviewstreet.dao.AnswerTypeDAO;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.AnswerType;
 import by.gstu.interviewstreet.domain.Question;
+import by.gstu.interviewstreet.domain.QuestionType;
 import by.gstu.interviewstreet.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,10 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
 
     @Autowired
-    private IAnswerDAO answerDAO;
+    private AnswerDAO answerDAO;
 
     @Autowired
-    private IAnswerTypeDAO answerTypeDAO;
+    private AnswerTypeDAO answerTypeDAO;
 
     @Override
     @Transactional
@@ -39,10 +40,13 @@ public class AnswerServiceImpl implements AnswerService {
         return answerTypeDAO.getById(id);
     }
 
+    //TODO duplicate code
+
     @Override
     @Transactional
     public void addDefaultAnswers(AnswerType type, Question question) {
-        int answerCount = type.getAnswerCount();
+        QuestionType questionType = question.getType();
+        int answerCount = questionType.getAnswerCount();
 
         for (int i = 0; i < answerCount; i++) {
             answerDAO.saveOrUpdate(new Answer(type, question, type.getDefaultValue()));

@@ -5,8 +5,7 @@ import java.util.Map;
 
 public final class ServiceUtils {
 
-    private ServiceUtils() {
-    }
+    private ServiceUtils() { }
 
     public static Map<String, Object> buildValueMap(String[] keys, Object[] objects) throws IllegalArgumentException {
         if (keys.length != objects.length) {

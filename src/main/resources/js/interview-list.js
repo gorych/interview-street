@@ -56,7 +56,7 @@
 
     $("#hide-chip-btn").click(function () {
         $.ajax({
-            url: "/hide-chip",
+            url: "/user/hide-chip",
             method: "GET"
         }).fail(function () {
             Materialize.toast(operationErrMsg, toastDuration);

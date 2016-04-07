@@ -48,11 +48,11 @@
                title="Добавить вопрос"><i class="material-icons">add</i></a>
 
             <c:forEach var="question" items="${questions}" varStatus="item">
-                <c:set var="answerType" scope="page" value="${question.answers[0].type}"/>
+                <c:set var="questionType" scope="page" value="${question.type}"/>
 
                 <div class="section" data-question="${question.id}">
 
-                        <%--Navigation--%>
+                    <%--Navigation--%>
                     <div class="row">
                         <div class="col l12 m12 s12">
                             <nav>
@@ -68,12 +68,12 @@
                                     </li>
                                 </ul>
                                 <i class="right material-icons teal-text text-lighten-2"
-                                   title="${answerType.title}">${answerType.icon}</i>
+                                   title="${questionType.title}">${questionType.icon}</i>
                             </nav>
                         </div>
                     </div>
 
-                        <%--Body--%>
+                    <%--Body--%>
                     <div class="row narrow-row">
                         <div class="input-field col l12 m12 s12">
                             <input value="Введите текст вопроса" type="text" length="250"
@@ -82,28 +82,55 @@
                         </div>
 
                         <c:choose>
-                            <c:when test="${answerType.name eq 'radio' || answerType.name eq 'checkbox'}">
+                            <c:when test="${questionType.name eq 'radio' || questionType.name eq 'checkbox'}">
+
                                 <c:forEach var="answer" items="${question.answers}">
                                     <div class="row narrow-row" data-answer="${answer.id}">
-                                        <div class="input-field  col offset-l2 l7 m11 s11">
-                                            <input type="text" length="100"
-                                                   value="${answer.text}" title="Текст ответа"/>
-                                            <label class="active">Введите ответ</label>
-                                        </div>
-                                        <div class="col icon-col l1 m1 s1">
-                                            <i class="del-answer small material-icons red-text text-lighten-1"
-                                               title="Удалить ответ">delete_forever</i>
-                                        </div>
+                                        <c:choose>
+                                            <c:when test="${answer.type.name eq 'text'}">
+                                                <c:set var="textAnswer" value="${answer}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="input-field  col offset-l2 l7 m11 s11">
+                                                    <input type="text" length="100"
+                                                           value="${answer.text}" title="Текст ответа"/>
+                                                    <label class="active">Введите ответ</label>
+                                                </div>
+                                                <div class="col icon-col l1 m1 s1">
+                                                    <i class="del-answer small material-icons red-text text-lighten-1"
+                                                       title="Удалить ответ">delete_forever</i>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </c:forEach>
+
                                 <div class="col wide-col offset-l2 l8 left-align">
                                     <i class="add-answer small material-icons green-text text-accent-4"
                                        title="Добавить ответ">add</i>
-                                    <i class="add-text-answer small material-icons deep-orange-text"
-                                       title="Добавить текстовый ответ">playlist_add</i>
+                                    <c:if test="${empty textAnswer}">
+                                        <i class="add-text-answer small material-icons deep-orange-text"
+                                           title="Добавить текстовый ответ">playlist_add</i>
+                                    </c:if>
                                 </div>
+
+                                <c:if test="${not empty textAnswer}">
+                                    <div class="row narrow-row" data-answer="${textAnswer.id}">
+                                        <div class="input-field  col offset-l2 l7 m11 s11">
+                                            <input type="text" length="100"
+                                                   value="Другой вариант" title="Примечание для текстового ответа"/>
+                                            <label class="active">Введите примечание</label>
+                                        </div>
+                                        <div class="col icon-col l1 m1 s1">
+                                            <i class="del-text-answer small material-icons red-text text-lighten-1"
+                                               title="Удалить ответ">delete_forever</i>
+                                        </div>
+                                    </div>
+                                </c:if>
+
                             </c:when>
-                            <c:when test="${answerType.name eq 'rating'}">
+
+                            <c:when test="${questionType eq 'rating'}">
                                 <div class="input-field col offset-l2 l8 m12 s12">
                                     <input type="number" min="3" max="10"
                                            value="${answerType.defaultValue}" title="Количество звезд"/>
@@ -115,6 +142,7 @@
                                     </c:forEach>
                                 </div>
                             </c:when>
+
                             <c:otherwise>
                                 <div class="input-field  col offset-l2 l8 m11 s11">
                                     <input disabled type="text" length="100"
@@ -122,10 +150,12 @@
                                     <label>Не содержит ответов</label>
                                 </div>
                             </c:otherwise>
+
                         </c:choose>
+
                     </div>
 
-                        <%--Footer--%>
+                    <%--Footer--%>
                     <div class="divider grey lighten-1"></div>
 
                     <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
@@ -144,7 +174,7 @@
 
 <%@include file="fragments/footer.jsp" %>
 
-<%@include file="fragments/templates/answers/disabled-answer-template.jsp" %>
+<%@include file="fragments/templates/answers/optional-answer-tamplate.jsp" %>
 <%@include file="fragments/templates/answers/text-answer-tamplate.jsp" %>
 <%@include file="fragments/templates/answers/rate-answer-template.jsp" %>
 <%@include file="fragments/templates/answers/multi-answer-template.jsp" %>

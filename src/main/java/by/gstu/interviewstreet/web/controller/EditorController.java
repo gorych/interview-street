@@ -1,12 +1,12 @@
 package by.gstu.interviewstreet.web.controller;
 
 
-import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
+import by.gstu.interviewstreet.web.util.ControllerUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Type;
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,35 +29,32 @@ import java.util.Set;
 public class EditorController {
 
     @Autowired
-    UserService userService;
+    public UserService userService;
 
     @Autowired
-    AnswerService answerService;
+    public AnswerService answerService;
 
     @Autowired
-    EmployeeService employeeService;
+    public EmployeeService employeeService;
 
     @Autowired
-    QuestionService questionService;
+    public QuestionService questionService;
 
     @Autowired
-    InterviewService interviewService;
+    public InterviewService interviewService;
 
     @Autowired
-    IInterviewTypeDAO interviewTypeDAO;
+    public SubdivisionService subdivisionService;
 
     @Autowired
-    SubdivisionService subdivisionService;
+    public UserInterviewService userInterviewService;
 
-    @Autowired
-    UserInterviewService userInterviewService;
+    @ResponseBody
+    @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
+    public ResponseEntity<String> hideChip(HttpSession session) {
+        session.setAttribute(AttributeConstants.CHIP, false);
 
-    @ModelAttribute(AttributeConstants.USER_INITIALS)
-    public String addUserInitials(Principal principal) {
-        String username = principal.getName();
-        User user = userService.get(username);
-
-        return user.getEmployee().getInitials();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
@@ -149,6 +146,7 @@ public class EditorController {
     @RequestMapping(value = {"/designer/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> addQuestion(String hash, int answerTypeId, int number) {
         try {
+            //TODO add by question type
             AnswerType answerType = answerService.getAnswerType(answerTypeId);
             Interview interview = interviewService.get(hash);
 
@@ -156,10 +154,11 @@ public class EditorController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            Question question = questionService.addQuestion(interview, number);
+            Question question = questionService.addQuestion(interview, answerType, number);
             Map<String, Object> valueMap = questionService.getValueMapForQuestionForm(question, answerType);
 
             String jsonData = JSONParser.convertObjectToJsonString(valueMap);
+
             return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -206,9 +205,10 @@ public class EditorController {
 
             Interview interview = question.getInterview();
             Integer nextNumber = question.getNumber() + 1;
+            //TODO Add by question type
             AnswerType answerType = question.getAnswers().get(0).getType();
 
-            Question duplicated = questionService.addQuestion(interview, nextNumber);
+            Question duplicated = questionService.addQuestion(interview, answerType, nextNumber);
             Map<String, Object> valueMap = questionService.getValueMapForDuplicateQuestionForm(question, duplicated, answerType);
 
             String jsonData = JSONParser.convertObjectToJsonString(valueMap);
@@ -233,7 +233,7 @@ public class EditorController {
             }
 
             Answer answer;
-            if (textType) {
+            if (textType && ControllerUtils.notExistTextAnswer(questions)) {
                 answer = answerService.addDefaultTextAnswer(question);
             } else {
                 answer = answerService.addDefaultAnswer(answerType, question);

@@ -1,7 +1,7 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IUserDAO;
-import by.gstu.interviewstreet.dao.IUserInterviewDAO;
+import by.gstu.interviewstreet.dao.UserDAO;
+import by.gstu.interviewstreet.dao.UserInterviewDAO;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
@@ -16,10 +16,10 @@ import java.util.List;
 public class UserInterviewServiceImpl implements UserInterviewService {
 
     @Autowired
-    IUserDAO userDAO;
+    UserDAO userDAO;
 
     @Autowired
-    IUserInterviewDAO userInterviewDAO;
+    UserInterviewDAO userInterviewDAO;
 
     @Override
     @Transactional

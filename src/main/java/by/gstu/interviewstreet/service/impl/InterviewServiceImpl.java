@@ -1,8 +1,8 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IEmployeeDAO;
-import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IUserInterviewDAO;
+import by.gstu.interviewstreet.dao.EmployeeDAO;
+import by.gstu.interviewstreet.dao.InterviewDAO;
+import by.gstu.interviewstreet.dao.UserInterviewDAO;
 import by.gstu.interviewstreet.domain.Employee;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
@@ -22,13 +22,13 @@ import java.util.Map;
 public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
-    private IEmployeeDAO employeeDAO;
+    private EmployeeDAO employeeDAO;
 
     @Autowired
-    private IInterviewDAO interviewDAO;
+    private InterviewDAO interviewDAO;
 
     @Autowired
-    private IUserInterviewDAO userInterviewDAO;
+    private UserInterviewDAO userInterviewDAO;
 
     @Override
     @Transactional
@@ -95,7 +95,7 @@ public class InterviewServiceImpl implements InterviewService {
         existed.setGoal(interview.getGoal());
         existed.setEndDate(interview.getEndDate());
         existed.setAudience(interview.getAudience());
-        existed.setPlacementDate(DateUtils.getNow());
+        existed.setPlacementDate(DateUtils.getToday());
         existed.setDescription(interview.getDescription());
         existed.setHide(true);
 

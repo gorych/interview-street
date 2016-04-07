@@ -1,6 +1,6 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IEmployeeDAO;
+import by.gstu.interviewstreet.dao.EmployeeDAO;
 import by.gstu.interviewstreet.domain.Employee;
 import by.gstu.interviewstreet.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    IEmployeeDAO employeeDAO;
+    EmployeeDAO employeeDAO;
 
     @Override
     @Transactional

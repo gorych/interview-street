@@ -16,7 +16,7 @@
                                   title="Дублировать вопрос">control_point_duplicate</i></a></li>
                         <li><a><i class="material-icons del-quest" title="Удалить вопрос">delete</i></a></li>
                     </ul>
-                    <i class="right material-icons teal-text text-lighten-2" title="{{:answerType.title}}">{{:answerType.icon}}</i>
+                    <i class="right material-icons teal-text text-lighten-2" title="{{:question.type.title}}">{{:question.type.icon}}</i>
                 </nav>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <label class="active">Текст вопроса</label>
             </div>
 
-            {{if answerType.name === "radio" || answerType.name === "checkbox"}}
+            {{if question.type.name === "radio" || question.type.name === "checkbox"}}
                 {{for answers}}
                     {{include tmpl="multiAnswTmpl"/}}
                 {{/for}}
@@ -38,7 +38,7 @@
                     <i class="add-text-answer small material-icons deep-orange-text"
                        title="Добавить текстовый ответ">playlist_add</i>
                 </div>
-            {{else answerType.name === "rating" }}
+            {{else question.type.name=== "rating" }}
                 {{include tmpl="rateAnswTmpl"/}}
             {{else}}
                 {{include tmpl="textAnswTmpl"/}}

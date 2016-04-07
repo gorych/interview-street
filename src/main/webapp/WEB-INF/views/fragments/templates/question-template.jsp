@@ -2,7 +2,7 @@
 
 <%--JS Render template. Used on the designer page --%>
 <script id="question-template" type="text/x-jsrender">
-    <div class="section" data-question="{{:question.id}}">
+    <div class="section" data-question="{{:id}}">
 
         <%--Form navigation--%>
         <div class="row">
@@ -16,7 +16,7 @@
                                   title="Дублировать вопрос">control_point_duplicate</i></a></li>
                         <li><a><i class="material-icons del-quest" title="Удалить вопрос">delete</i></a></li>
                     </ul>
-                    <i class="right material-icons teal-text text-lighten-2" title="{{:question.type.title}}">{{:question.type.icon}}</i>
+                    <i class="right material-icons teal-text text-lighten-2" title="{{:type.title}}">{{:type.icon}}</i>
                 </nav>
             </div>
         </div>
@@ -24,12 +24,12 @@
         <%--Form body--%>
         <div class="row narrow-row">
             <div class="input-field col l12 m12 s12">
-                <input value="{{:question.text}}" type="text" length="250"
+                <input value="{{:text}}" type="text" length="250"
                        title="Текст вопроса"/>
                 <label class="active">Текст вопроса</label>
             </div>
 
-            {{if question.type.name === "radio" || question.type.name === "checkbox"}}
+            {{if type.name === "radio" || type.name === "checkbox"}}
                 {{for answers}}
                     {{include tmpl="multiAnswTmpl"/}}
                 {{/for}}
@@ -38,7 +38,7 @@
                     <i class="add-text-answer small material-icons deep-orange-text"
                        title="Добавить текстовый ответ">playlist_add</i>
                 </div>
-            {{else question.type.name=== "rating" }}
+            {{else type.name=== "rating" }}
                 {{include tmpl="rateAnswTmpl"/}}
             {{else}}
                 {{include tmpl="textAnswTmpl"/}}

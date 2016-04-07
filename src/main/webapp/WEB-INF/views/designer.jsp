@@ -127,17 +127,16 @@
                                         </div>
                                     </div>
                                 </c:if>
-
                             </c:when>
 
-                            <c:when test="${questionType eq 'rating'}">
+                            <c:when test="${questionType.name eq 'rating'}">
                                 <div class="input-field col offset-l2 l8 m12 s12">
                                     <input type="number" min="3" max="10"
-                                           value="${answerType.defaultValue}" title="Количество звезд"/>
+                                           value="${questionType.answerType.defaultValue}" title="Количество звезд"/>
                                     <label class="active">Количество звезд</label>
                                 </div>
                                 <div class="col offset-l2 col l8 m12 s12 rating center">
-                                    <c:forEach begin="1" end="${answerType.defaultValue}">
+                                    <c:forEach begin="1" end="${questionType.answerType.defaultValue}">
                                         <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
                                     </c:forEach>
                                 </div>

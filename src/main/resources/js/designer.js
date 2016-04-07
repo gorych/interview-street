@@ -5,11 +5,10 @@
 
     $.templates({
         questTmpl: "#question-template",
-        disabledAnswTmpl: "#disabled-answer-tmpl",
         multiAnswTmpl: "#multi-answer-tmpl",
         textAnswTmpl: "#text-answer-tmpl",
+        otherAnswTmpl: "#other-answer-tmpl",
         rateAnswTmpl: "#rate-answer-tmpl"
-
     });
 
     var _questionContainer = $("#question-container");
@@ -86,16 +85,14 @@
             data: {
                 "hash": _hash,
                 "questId": $section.attr("data-question"),
-                "textType": /*textType ? true :*/ false
+                "textType": textType ? true : false
             }
         }).done(function (response) {
             var data = JSON.parse(response);
 
-            //TODO edit answer type
-
             if (textType) {
                 $that.parent().after(
-                    $.render.multiAnswTmpl.render(data)
+                    $.render.otherAnswTmpl.render(data)
                 );
                 $that.remove();
             } else {
@@ -103,15 +100,15 @@
                     $.render.multiAnswTmpl.render(data)
                 );
             }
-
         }).fail(function () {
             Materialize.toast("Ошибка при добавлении ответа", 2000);
         });
     });
 
-    _questionContainer.on('click', ".del-answer", function () {
+    _questionContainer.on('click', ".del-answer, .del-text-answer", function () {
         var $row = $(this).parents("[data-answer]");
         var $section = $(this).parents(".section");
+        var textType = $(event.target).is(".del-text-answer");
 
         $.ajax({
             url: "/designer/del-answer",
@@ -122,6 +119,12 @@
                 "answerId": $row.attr("data-answer")
             }
         }).done(function () {
+            if (textType) {
+                $row.prev().append(
+                    "<i class='add-text-answer small material-icons deep-orange-text' " +
+                    "title='Добавить текстовый ответ'>playlist_add</i>"
+                );
+            }
             $row.remove();
         }).fail(function (xhr) {
             if (xhr.status === 406) {
@@ -150,9 +153,7 @@
         if ($(event.target).is(".move-up")) {
             isUp = true;
             number -= 1;
-        }
-
-        if ($(event.target).is(".move-down")) {
+        } else if ($(event.target).is(".move-down")) {
             isDown = true;
             number += 1;
         }

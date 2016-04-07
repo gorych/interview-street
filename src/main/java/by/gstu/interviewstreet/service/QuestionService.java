@@ -19,9 +19,9 @@ public interface QuestionService {
 
     Question addDefaultQuestion(Interview interview, QuestionType questionType, int number);
 
-    void move(int questId, int number);
+    void saveOrUpdate(Question question);
 
-    Map<String, Object> getValueMapForDuplicateQuestionForm(Question question, Question duplicate);
+    void move(int questId, int number);
 
     void remove(Question question);
 

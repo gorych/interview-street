@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -70,7 +69,7 @@ public class DesignerController {
 
     @ResponseBody
     @RequestMapping(value = {"/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> removeQuestion(@RequestParam String hash, @RequestParam int id) {
+    public ResponseEntity<String> removeQuestion(String hash, int id) {
         try {
             Interview interview = interviewService.get(hash);
             Question question = questionService.get(id);
@@ -90,7 +89,7 @@ public class DesignerController {
 
     @ResponseBody
     @RequestMapping(value = {"/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> moveQuestion(@RequestParam int id, @RequestParam int number) {
+    public ResponseEntity<String> moveQuestion(int id, int number) {
         try {
             questionService.move(id, number);
 
@@ -102,7 +101,7 @@ public class DesignerController {
 
     @ResponseBody
     @RequestMapping(value = {"/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> duplicateQuestion(@RequestParam int id) {
+    public ResponseEntity<String> duplicateQuestion(int id) {
         try {
             Question question = questionService.get(id);
 
@@ -117,6 +116,27 @@ public class DesignerController {
             String jsonData = JSONParser.convertObjectToJsonString(duplicated);
 
             return new ResponseEntity<>(jsonData, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/save-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> saveQuestion(String hash, int id, String text) {
+        try {
+            Interview interview = interviewService.get(hash);
+            Question question = questionService.get(id);
+
+            Set<Question> questions = interview.getQuestions();
+            if (!questions.contains(question)) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            question.setText(text);
+            questionService.saveOrUpdate(question);
+
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

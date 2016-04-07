@@ -19,6 +19,34 @@
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
+    _questionContainer.on("focus", "input", function () {
+        $(this).select();
+    });
+
+    _questionContainer.on("blur", "input", function () {
+        if ($(this).parents().is("[data-answer]")) {
+            return;
+        }
+
+        if ($(this).parents().is("[data-question]")) {
+            $.ajax({
+                url: "/designer/save-question",
+                method: "POST",
+                data: {
+                    "hash": _hash,
+                    "id": $(this).parents("[data-question]").attr("data-question"),
+                    "text": $(this).val()
+                }
+            }).fail(function () {
+                console.log("Ошибка при сохранении вопроса");
+            });
+        }
+    });
+
+    _questionContainer.on("blur", "input", function () {
+
+    });
+
     /*Show staggered list*/
     _questionContainer.on('click', ".add-quest-btn", function () {
         $(".row.staggered").remove();
@@ -42,6 +70,7 @@
             }
         }).done(function () {
             $section.remove();
+            updateQuestionNumbers();
             Materialize.toast("Вопрос успешно удален", 2000);
         }).fail(function () {
             Materialize.toast("Ошибка при удалении вопроса", 2000);
@@ -94,7 +123,6 @@
                 $that.parent().after(
                     $.render.otherAnswTmpl.render(data)
                 );
-                $that.remove();
             } else {
                 $that.parent().before(
                     $.render.multiAnswTmpl.render(data)
@@ -125,9 +153,7 @@
                     "title='Добавить текстовый ответ'>playlist_add</i>"
                 );
             }
-
             $row.remove();
-            updateQuestionNumbers();
         }).fail(function (xhr) {
             if (xhr.status === 406) {
                 Materialize.toast("Для данного типа вопроса <br/>необходимо минимум 2 ответа", 2000);

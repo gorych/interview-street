@@ -66,7 +66,7 @@ public class QuestionDAOImpl extends AbstractDbDAO implements QuestionDAO {
         }
     }
 
-    /*Used when remove new question*/
+    /*Used when remove question*/
     @Override
     @SuppressWarnings("unchecked")
     public void decrementNumbers(List<Question> questions) {
@@ -81,7 +81,7 @@ public class QuestionDAOImpl extends AbstractDbDAO implements QuestionDAO {
 
     @Override
     public void saveOrUpdate(Question question) {
-        getSession().save(question);
+        getSession().saveOrUpdate(question);
     }
 
     @Override

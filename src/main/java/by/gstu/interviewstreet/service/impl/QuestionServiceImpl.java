@@ -1,18 +1,14 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.AnswerDAO;
 import by.gstu.interviewstreet.dao.QuestionDAO;
 import by.gstu.interviewstreet.dao.QuestionTypeDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.QuestionService;
-import by.gstu.interviewstreet.service.ServiceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -22,9 +18,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionDAO questionDAO;
-
-    @Autowired
-    private AnswerDAO answerDAO;
 
     @Override
     @Transactional
@@ -58,6 +51,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
+    public void saveOrUpdate(Question question) {
+        questionDAO.saveOrUpdate(question);
+    }
+
+    @Override
+    @Transactional
     public void move(int questId, int number) {
         Question who = questionDAO.getById(questId);
         Question whom = questionDAO.getByNumber(number);
@@ -70,24 +69,6 @@ public class QuestionServiceImpl implements QuestionService {
 
         questionDAO.saveOrUpdate(who);
         questionDAO.saveOrUpdate(whom);
-    }
-
-    @Override
-    @Transactional
-    public Map<String, Object> getValueMapForDuplicateQuestionForm(Question question, Question duplicate) {
-        List<Answer> answers = new ArrayList<>();
-
-        for (Answer answer : question.getAnswers()) {
-            Answer duplicateAnswer = new Answer(answer.getType(), duplicate, answer.getText());
-
-            answerDAO.saveOrUpdate(duplicateAnswer);
-            answers.add(duplicateAnswer);
-        }
-
-        String[] keys = new String[]{"answerType", "question", "answers"};
-        Object[] objects = new Object[]{question.getType().getAnswerType(), duplicate, answers};
-
-        return ServiceUtils.buildValueMap(keys, objects);
     }
 
     @Override

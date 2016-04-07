@@ -76,7 +76,7 @@
                     <%--Body--%>
                     <div class="row narrow-row">
                         <div class="input-field col l12 m12 s12">
-                            <input value="Введите текст вопроса" type="text" length="250"
+                            <input value="${question.text}" type="text" length="250"
                                    title="Текст вопроса"/>
                             <label class="active">Текст вопроса</label>
                         </div>
@@ -91,7 +91,7 @@
                                                 <c:set var="textAnswer" value="${answer}"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="input-field  col offset-l2 l7 m11 s11">
+                                                <div class="input-field col offset-l2 l7 m11 s11">
                                                     <input type="text" length="100"
                                                            value="${answer.text}" title="Текст ответа"/>
                                                     <label class="active">Введите ответ</label>

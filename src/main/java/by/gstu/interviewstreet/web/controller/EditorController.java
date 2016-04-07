@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttributeConstants;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
-import by.gstu.interviewstreet.web.util.JSONParser1;
+import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
@@ -68,14 +68,14 @@ public class EditorController {
     @ResponseBody
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
-        JsonArray jsonArray = JSONParser1.convertJsonStringToJsonArray(data);
+        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
         Type type = new TypeToken<List<Integer>>() {
         }.getType();
-        List<Integer> subdivisionIds = JSONParser1.convertJsonElementToObject(jsonArray, type);
+        List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 
-        String jsonData = JSONParser1.convertObjectToJsonString(employees);
+        String jsonData = JSONParser.convertObjectToJsonString(employees);
 
         return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
@@ -83,20 +83,20 @@ public class EditorController {
     @ResponseBody
     @RequestMapping(value = {"/save-interview"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> processAddInterviewForm(@RequestBody String data) {
-        JsonArray jsonArray = JSONParser1.convertJsonStringToJsonArray(data);
+        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
         JsonElement interviewElement = jsonArray.get(0);
         JsonArray idsArray = jsonArray.get(1).getAsJsonArray();
 
-        Interview interview = JSONParser1.convertJsonElementToObject(interviewElement, Interview.class);
+        Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
         interview = interviewService.saveOrUpdate(interview);
 
         if (interview.getType().isOpen()) {
-            Integer[] postIds = JSONParser1.convertJsonElementToObject(idsArray, Integer[].class);
+            Integer[] postIds = JSONParser.convertJsonElementToObject(idsArray, Integer[].class);
             userInterviewService.addInterviewToUserByPost(interview, postIds);
         }
 
-        String jsonData = JSONParser1.convertObjectToJsonString(interview.getId());
+        String jsonData = JSONParser.convertObjectToJsonString(interview.getId());
 
         return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
@@ -104,7 +104,7 @@ public class EditorController {
     @ResponseBody
     @RequestMapping(value = {"/delete-interview"}, method = RequestMethod.POST)
     public ResponseEntity<String> deleteInterview(@RequestParam String data) {
-        Interview interview = JSONParser1.convertJsonStringToObject(data, Interview.class);
+        Interview interview = JSONParser.convertJsonStringToObject(data, Interview.class);
         interviewService.remove(interview);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -122,7 +122,7 @@ public class EditorController {
     @RequestMapping(value = {"/load-card-values"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> loadValuesForCard(@RequestParam int interviewId) {
         Map<String, Object> valueMap = interviewService.getValueMapForCard(interviewId);
-        String jsonData = JSONParser1.convertObjectToJsonString(valueMap);
+        String jsonData = JSONParser.convertObjectToJsonString(valueMap);
 
         return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
@@ -157,7 +157,7 @@ public class EditorController {
             Question question = questionService.addQuestion(interview, answerType, number);
             Map<String, Object> valueMap = questionService.getValueMapForQuestionForm(question, answerType);
 
-            String jsonData = JSONParser1.convertObjectToJsonString(valueMap);
+            String jsonData = JSONParser.convertObjectToJsonString(valueMap);
 
             return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -211,7 +211,7 @@ public class EditorController {
             Question duplicated = questionService.addQuestion(interview, answerType, nextNumber);
             Map<String, Object> valueMap = questionService.getValueMapForDuplicateQuestionForm(question, duplicated, answerType);
 
-            String jsonData = JSONParser1.convertObjectToJsonString(valueMap);
+            String jsonData = JSONParser.convertObjectToJsonString(valueMap);
 
             return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -239,7 +239,7 @@ public class EditorController {
                 answer = answerService.addDefaultAnswer(answerType, question);
             }
 
-            String jsonData = JSONParser1.convertObjectToJsonString(answer);
+            String jsonData = JSONParser.convertObjectToJsonString(answer);
 
             return new ResponseEntity<>(jsonData, HttpStatus.OK);
         } catch (RuntimeException e) {

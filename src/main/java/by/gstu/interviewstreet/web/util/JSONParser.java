@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
 
-public class JSONParser1 {
+public class JSONParser {
 
     private static Gson GSON;
 
@@ -19,7 +19,7 @@ public class JSONParser1 {
         GSON = builder.create();
     }
 
-    private JSONParser1() {
+    private JSONParser() {
     }
 
     public static <T> T convertJsonStringToObject(String data, Class<T> clazz) {

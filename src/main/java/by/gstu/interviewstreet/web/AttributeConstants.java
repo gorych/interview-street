@@ -13,13 +13,6 @@ public final class AttributeConstants {
     public static final String INTERVIEWS = "interviews";
     public static final String SUBDIVISIONS = "subdivisions";
 
-
-    public static final String SUCCESS_RESPONSE_BODY = "success";
-    public static final String ERROR_RESPONSE_BODY = "error";
-    public static final String EMPTY_BODY = "";
-
-
-    private AttributeConstants() {
-    }
+    private AttributeConstants() { }
 
 }

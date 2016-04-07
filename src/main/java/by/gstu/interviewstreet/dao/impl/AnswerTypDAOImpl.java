@@ -15,4 +15,12 @@ public class AnswerTypDAOImpl extends AbstractDbDAO implements AnswerTypeDAO {
                 .uniqueResult();
     }
 
+    @Override
+    public AnswerType getByName(String name) {
+        return (AnswerType) getSession()
+                .createQuery("FROM AnswerType WHERE name LIKE :name")
+                .setString("name", name)
+                .uniqueResult();
+    }
+
 }

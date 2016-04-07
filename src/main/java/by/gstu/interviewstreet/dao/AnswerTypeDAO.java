@@ -6,4 +6,6 @@ public interface AnswerTypeDAO {
 
     AnswerType getById(int id);
 
+    AnswerType getByName(String name);
+
 }

@@ -125,7 +125,9 @@
                     "title='Добавить текстовый ответ'>playlist_add</i>"
                 );
             }
+
             $row.remove();
+            updateQuestionNumbers();
         }).fail(function (xhr) {
             if (xhr.status === 406) {
                 Materialize.toast("Для данного типа вопроса <br/>необходимо минимум 2 ответа", 2000);
@@ -191,7 +193,7 @@
             url: "/designer/add-question",
             method: "POST",
             data: {
-                "hash": _hash, "answerTypeId": $(that).val(),
+                "hash": _hash, "questTypeId": $(that).val(),
                 "number": findNumber(that)
             }
         }).done(function (response) {

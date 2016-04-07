@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AnswerTypDAOImpl extends AbstractDbDAO implements AnswerTypeDAO {
 
-
-
     @Override
     public AnswerType getById(int id) {
         return (AnswerType) getSession()

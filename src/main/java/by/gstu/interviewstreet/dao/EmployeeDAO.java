@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.domain.Employee;
 import java.util.Collection;
 import java.util.List;
 
-public interface IEmployeeDAO {
+public interface EmployeeDAO {
 
     List<Employee> getBySubdivisionIds(Collection subdivisionIds);
 

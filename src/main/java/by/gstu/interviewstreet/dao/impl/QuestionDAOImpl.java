@@ -1,15 +1,14 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IQuestionDAO;
+import by.gstu.interviewstreet.dao.QuestionDAO;
 import by.gstu.interviewstreet.domain.Question;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Repository
-public class QuestionDAOImpl extends AbstractDbDAO implements IQuestionDAO {
+public class QuestionDAOImpl extends AbstractDbDAO implements QuestionDAO {
 
     @Override
     public Question getById(int id) {

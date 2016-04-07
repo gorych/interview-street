@@ -1,15 +1,14 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IEmployeeDAO;
+import by.gstu.interviewstreet.dao.EmployeeDAO;
 import by.gstu.interviewstreet.domain.Employee;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class EmployeeDAOImpl extends AbstractDbDAO implements IEmployeeDAO {
+public class EmployeeDAOImpl extends AbstractDbDAO implements EmployeeDAO {
 
     @Override
     @SuppressWarnings("unchecked")

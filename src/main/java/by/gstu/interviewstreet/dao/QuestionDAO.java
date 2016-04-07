@@ -4,7 +4,7 @@ import by.gstu.interviewstreet.domain.Question;
 
 import java.util.List;
 
-public interface IQuestionDAO {
+public interface QuestionDAO {
 
     Question getById(int id);
 

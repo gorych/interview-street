@@ -1,14 +1,13 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IUserDAO;
+import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.domain.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl extends AbstractDbDAO implements IUserDAO {
+public class UserDAOImpl extends AbstractDbDAO implements UserDAO {
 
     @Override
     public User getByPassportData(String passportData) {

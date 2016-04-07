@@ -1,13 +1,13 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IAnswerDAO;
+import by.gstu.interviewstreet.dao.AnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
+public class AnswerDAOImpl extends AbstractDbDAO implements AnswerDAO {
 
     @Override
     public Answer getById(int id) {

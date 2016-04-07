@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.domain.User;
 import java.util.Collection;
 import java.util.List;
 
-public interface IUserDAO {
+public interface UserDAO {
 
     User getByPassportData(String passportData);
 

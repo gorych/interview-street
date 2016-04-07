@@ -4,7 +4,7 @@ import by.gstu.interviewstreet.domain.Subdivision;
 
 import java.util.List;
 
-public interface ISubdivisionDAO {
+public interface SubdivisionDAO {
 
     List<Subdivision> getAll();
 

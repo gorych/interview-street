@@ -5,7 +5,7 @@ import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.util.List;
 
-public interface IUserInterviewDAO {
+public interface UserInterviewDAO {
 
     List<UserInterview> getByInterviewId(int interviewId);
 

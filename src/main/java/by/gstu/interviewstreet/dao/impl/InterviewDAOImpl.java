@@ -1,6 +1,6 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IInterviewDAO;
+import by.gstu.interviewstreet.dao.InterviewDAO;
 import by.gstu.interviewstreet.domain.*;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class InterviewDAOImpl extends AbstractDbDAO implements IInterviewDAO {
+public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
     @Override
     @SuppressWarnings("unchecked")

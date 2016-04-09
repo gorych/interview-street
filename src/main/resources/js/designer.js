@@ -25,6 +25,17 @@
 
     _questionContainer.on("blur", "input", function () {
         if ($(this).parents().is("[data-answer]")) {
+            $.ajax({
+                url: "/designer/save-answer",
+                method: "POST",
+                data: {
+                    "questId": $(this).parents("[data-question]").attr("data-question"),
+                    "answerId": $(this).parents("[data-answer]").attr("data-answer"),
+                    "text": $(this).val()
+                }
+            }).fail(function () {
+                console.log("Ошибка при сохранении ответа");
+            });
             return;
         }
 
@@ -43,8 +54,8 @@
         }
     });
 
-    _questionContainer.on("blur", "input", function () {
-
+    $(window).unload(function () {
+        $("input:focus").blur();
     });
 
     /*Show staggered list*/
@@ -169,6 +180,35 @@
 
     //region Helper functions
 
+    function renderQuestionForm(that) {
+        $.ajax({
+            url: "/designer/add-question",
+            method: "POST",
+            data: {
+                "hash": _hash,
+                "questTypeId": $(that).val(),
+                "number": findNumber(that)
+            }
+        }).done(function (response) {
+            var data = JSON.parse(response);
+
+            var $stag = $(".row.staggered");
+            var $section = $stag.parent(".section");
+            var $btn = $stag.prev(".add-quest-btn");
+
+            var $elem = $section.length ? $section : $btn;
+
+            $elem.after(
+                $.render.questTmpl.render(data)
+            );
+
+            $stag.remove();
+            updateQuestionNumbers();
+        }).fail(function () {
+            Materialize.toast("Ошибка при составлении вопроса", 2000);
+        });
+    }
+
     function moveQuestion(that) {
         var $section = $(that).parents(".section");
         var $curNumber = $section.find(".number").html();
@@ -212,34 +252,6 @@
         } else {
             Materialize.toast("Для данного вопроса операция <br/>недоступна", 2000);
         }
-    }
-
-    function renderQuestionForm(that) {
-        $.ajax({
-            url: "/designer/add-question",
-            method: "POST",
-            data: {
-                "hash": _hash, "questTypeId": $(that).val(),
-                "number": findNumber(that)
-            }
-        }).done(function (response) {
-            var data = JSON.parse(response);
-
-            var $stag = $(".row.staggered");
-            var $section = $stag.parent(".section");
-            var $btn = $stag.prev(".add-quest-btn");
-
-            var $elem = $section.length ? $section : $btn;
-
-            $elem.after(
-                $.render.questTmpl.render(data)
-            );
-
-            $stag.remove();
-            updateQuestionNumbers();
-        }).fail(function () {
-            Materialize.toast("Ошибка при составлении вопроса", 2000);
-        });
     }
 
     function findNumber(that) {

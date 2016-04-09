@@ -4,6 +4,10 @@ h5 {
 
 i {
     cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 #question-container .section {

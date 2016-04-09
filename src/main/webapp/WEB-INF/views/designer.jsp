@@ -118,7 +118,7 @@
                                     <div class="row narrow-row" data-answer="${textAnswer.id}">
                                         <div class="input-field  col offset-l2 l7 m11 s11">
                                             <input type="text" length="100"
-                                                   value="Другой вариант" title="Примечание для текстового ответа"/>
+                                                   value="${textAnswer.text}" title="Примечание для текстового ответа"/>
                                             <label class="active">Введите примечание</label>
                                         </div>
                                         <div class="col icon-col l1 m1 s1">
@@ -130,14 +130,14 @@
                             </c:when>
 
                             <c:when test="${questionType.name eq 'rating'}">
-                                <div class="input-field col offset-l2 l8 m12 s12">
+                                <div class="input-field col offset-l2 l8 m12 s12" data-answer="${question.answers[0].id}">
                                     <input type="number" min="3" max="10"
-                                           value="${questionType.answerType.defaultValue}" title="Количество звезд"/>
+                                           value="${question.answers[0].text}" title="Количество звезд"/>
                                     <label class="active">Количество звезд</label>
                                 </div>
                                 <div class="col offset-l2 col l8 m12 s12 rating center">
-                                    <c:forEach begin="1" end="${questionType.answerType.defaultValue}">
-                                        <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
+                                    <c:forEach begin="1" end="${question.answers[0].text}">
+                                        <i class="small material-icons red-text text-lighten-1">star_rate</i>
                                     </c:forEach>
                                 </div>
                             </c:when>

@@ -183,6 +183,7 @@
 <%@include file="fragments/general-js.html" %>
 <script src="<c:url value="/resources/vendors/clipboard/clipboard.js"/>"></script>
 <script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
+<script src="<c:url value="/resources/js/jsrender.extends.js"/>"></script>
 <script src="/resources/js/designer.js"></script>
 
 </body>

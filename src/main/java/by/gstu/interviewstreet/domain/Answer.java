@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ public class Answer implements Serializable {
     private int id;
 
     @Expose
+    @NotEmpty
     @Column(name = "text")
     private String text;
 

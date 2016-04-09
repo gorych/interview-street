@@ -28,7 +28,7 @@ public class AnswerDAOImpl extends AbstractDbDAO implements AnswerDAO {
 
     @Override
     public void saveOrUpdate(Answer answer) {
-        getSession().save(answer);
+        getSession().saveOrUpdate(answer);
     }
 
     @Override

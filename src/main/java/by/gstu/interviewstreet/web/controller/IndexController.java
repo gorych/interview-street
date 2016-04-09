@@ -47,8 +47,6 @@ public class IndexController {
         return "login";
     }
 
-
-
     @RequestMapping(value = {"/403"}, method = RequestMethod.GET)
     public String accessDenied() {
         return "403";

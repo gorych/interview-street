@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<script id="other-answer-tmpl" type="text/x-jsrender">
+<script id="optional-answer-tmpl" type="text/x-jsrender">
      <div data-answer="{{:id}}" class="row narrow-row">
         <div class="input-field  col offset-l2 l7 m11 s11">
             <input type="text" length="100"

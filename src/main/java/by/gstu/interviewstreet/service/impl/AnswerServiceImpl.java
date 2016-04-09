@@ -18,6 +18,7 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
 
     private static final String TEXT_ANSWER_NAME = "text";
+    private static final int MIN_ANSWER_COUNT = 2;
 
     @Autowired
     private AnswerDAO answerDAO;
@@ -33,8 +34,27 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
+    public Answer get(Question question, int id) {
+        Answer answer = answerDAO.getById(id);
+        List<Answer> answers = question.getAnswers();
+
+        if (!answers.contains(answer)) {
+            throw new IllegalArgumentException("User is trying to get a nonexistent answer.");
+        }
+
+        return answer;
+    }
+
+    @Override
+    @Transactional
     public List<Answer> get(List<Integer> ids) {
         return answerDAO.getByIds(ids);
+    }
+
+    @Override
+    @Transactional
+    public void saveOrUpdate(Answer answer) {
+        answerDAO.saveOrUpdate(answer);
     }
 
     @Override

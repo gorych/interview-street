@@ -9,7 +9,11 @@ public interface AnswerService {
 
     Answer get(int id);
 
+    Answer get(Question question, int id);
+
     List<Answer> get(List<Integer> ids);
+
+    void saveOrUpdate(Answer answer);
 
     List<Answer> addDefaultAnswers(Question question);
 

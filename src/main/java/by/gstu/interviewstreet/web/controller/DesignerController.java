@@ -3,6 +3,7 @@ package by.gstu.interviewstreet.web.controller;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
+import by.gstu.interviewstreet.web.AnswerValidator;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,180 +24,168 @@ import java.util.Set;
 @RequestMapping("/designer")
 @Secured(UserRoleConstants.EDITOR)
 public class DesignerController {
-    
-    @Autowired
-    public UserService userService;
 
     @Autowired
-    public AnswerService answerService;
+    AnswerValidator validator;
 
     @Autowired
-    public EmployeeService employeeService;
+    UserService userService;
 
     @Autowired
-    public QuestionService questionService;
+    AnswerService answerService;
 
     @Autowired
-    public InterviewService interviewService;
+    EmployeeService employeeService;
 
     @Autowired
-    public SubdivisionService subdivisionService;
+    QuestionService questionService;
 
     @Autowired
-    public UserInterviewService userInterviewService;
+    InterviewService interviewService;
+
+    @Autowired
+    SubdivisionService subdivisionService;
+
+    @Autowired
+    UserInterviewService userInterviewService;
+
 
     @ResponseBody
     @RequestMapping(value = {"/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> addQuestion(String hash, int questTypeId, int number) {
-        try {
-            QuestionType questionType = questionService.getType(questTypeId);
-            Interview interview = interviewService.get(hash);
+        QuestionType questionType = questionService.getType(questTypeId);
+        Interview interview = interviewService.get(hash);
 
-            if (interview == null || questionType == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            Question question = questionService.addDefaultQuestion(interview, questionType, number);
-            List<Answer> answers = answerService.addDefaultAnswers(question);
-
-            question.setAnswers(answers);
-            String jsonData = JSONParser.convertObjectToJsonString(question);
-
-            return new ResponseEntity<>(jsonData, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (interview == null || questionType == null) {
+            return new ResponseEntity<>(
+                    "Error getting interview or question type. " +
+                            "Interview hash = " + hash + ". question type id = " + questTypeId,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+
+        Question question = questionService.addDefaultQuestion(interview, questionType, number);
+        List<Answer> answers = answerService.addDefaultAnswers(question);
+
+        question.setAnswers(answers);
+        String jsonData = JSONParser.convertObjectToJsonString(question);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> removeQuestion(String hash, int id) {
-        try {
-            Interview interview = interviewService.get(hash);
-            Question question = questionService.get(id);
+        Question question = questionService.get(hash, id);
+        questionService.remove(question);
 
-            Set<Question> questions = interview.getQuestions();
-            if (!questions.contains(question)) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            }
-
-            questionService.remove(question);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> moveQuestion(int id, int number) {
-        try {
-            questionService.move(id, number);
+        questionService.move(id, number);
 
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> duplicateQuestion(int id) {
-        try {
-            Question question = questionService.get(id);
+        Question question = questionService.get(id);
 
-            Interview interview = question.getInterview();
-            Integer nextNumber = question.getNumber() + 1;
-            QuestionType questionType = question.getType();
+        Interview interview = question.getInterview();
+        Integer nextNumber = question.getNumber() + 1;
+        QuestionType questionType = question.getType();
 
-            Question duplicated = questionService.addDefaultQuestion(interview, questionType, nextNumber);
-            List<Answer> answers = answerService.duplicateAnswers(question, duplicated);
+        Question duplicated = questionService.addDefaultQuestion(interview, questionType, nextNumber);
+        List<Answer> answers = answerService.duplicateAnswers(question, duplicated);
 
-            duplicated.setAnswers(answers);
-            String jsonData = JSONParser.convertObjectToJsonString(duplicated);
+        duplicated.setAnswers(answers);
+        String jsonData = JSONParser.convertObjectToJsonString(duplicated);
 
-            return new ResponseEntity<>(jsonData, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/save-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> saveQuestion(String hash, int id, String text) {
-        try {
-            Interview interview = interviewService.get(hash);
-            Question question = questionService.get(id);
+    public ResponseEntity<String> saveQuestion(String hash, int questId, String text) {
+        Question question = questionService.get(hash, questId);
 
-            Set<Question> questions = interview.getQuestions();
-            if (!questions.contains(question)) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            }
+        question.setText(text);
+        questionService.saveOrUpdate(question);
 
-            question.setText(text);
-            questionService.saveOrUpdate(question);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/add-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> addAnswer(String hash, int questId, @RequestParam(required = false) boolean textType) {
-        try {
-            Interview interview = interviewService.get(hash);
-            Question question = questionService.get(questId);
-            AnswerType answerType = question.getAnswers().get(0).getType();
+        Interview interview = interviewService.get(hash);
+        Question question = questionService.get(questId);
+        AnswerType answerType = question.getAnswers().get(0).getType();
 
-            Set<Question> questions = interview.getQuestions();
-            if (!questions.contains(question)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            Answer answer;
-            if (textType && ControllerUtils.notExistTextAnswer(questions)) {
-                answer = answerService.addDefaultTextAnswer(question);
-            } else {
-                answer = answerService.addDefaultAnswer(answerType, question);
-            }
-
-            String jsonData = JSONParser.convertObjectToJsonString(answer);
-
-            return new ResponseEntity<>(jsonData, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Set<Question> questions = interview.getQuestions();
+        if (!questions.contains(question)) {
+            return new ResponseEntity<>(
+                    "Question with id = " + questId + " not exist in the interview with hash = " + hash,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+
+        Answer answer;
+        if (textType && ControllerUtils.notExistTextAnswer(questions)) {
+            answer = answerService.addDefaultTextAnswer(question);
+        } else {
+            answer = answerService.addDefaultAnswer(answerType, question);
+        }
+
+        String jsonData = JSONParser.convertObjectToJsonString(answer);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = {"/del-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> removeAnswer(String hash, int questId, int answerId) {
-        try {
-            Interview interview = interviewService.get(hash);
-            Question question = questionService.get(questId);
-            Answer answer = answerService.get(answerId);
+        Question question = questionService.get(hash, questId);
+        Answer answer = answerService.get(question, answerId);
 
-            Set<Question> questions = interview.getQuestions();
-            if (!questions.contains(question)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        final int MIN_ANSWER_COUNT = 2;
+        List<Answer> answers = question.getAnswers();
 
-            final int MIN_ANSWER_COUNT = 2;
-            List<Answer> answers = question.getAnswers();
-
-            if (answers.size() <= MIN_ANSWER_COUNT || !answers.contains(answer)) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            }
-
-            answerService.remove(answer);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (answers.size() <= MIN_ANSWER_COUNT) {
+            return new ResponseEntity<>(
+                    "Error deleting the answer. The question must have at least two responses. " +
+                    "Current answers size = " + answers.size(),
+                    HttpStatus.NOT_ACCEPTABLE
+            );
         }
+
+        answerService.remove(answer);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/save-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> saveAnswer(int questId, int answerId, String text) {
+        Question question = questionService.get(questId);
+        Answer answer = answerService.get(question, answerId);
+
+        answer.setText(text);
+
+        BindException bindException = new BindException(answer, "answer");
+        validator.validate(answer, bindException);
+
+        if (bindException.hasErrors()) {
+            return new ResponseEntity<>("Value = " + text + " is invalid.", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        answerService.saveOrUpdate(answer);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

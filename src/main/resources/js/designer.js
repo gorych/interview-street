@@ -18,7 +18,8 @@
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
-    $(window).unload(function () {
+    /*Reset focused input to save its value*/
+    $(window).on("beforeunload", function () {
         $("input:focus").blur();
     });
 
@@ -183,6 +184,10 @@
             });
     });
 
+    _questionContainer.on('input', ".rating", function () {
+        updateStars($(this));
+    });
+
     /*Listener for question types list. Add new question*/
     $(document).on('click', "input[name=answer-type]", function () {
         var data = {
@@ -258,6 +263,20 @@
         $(".number").each(function (index) {
             $(this).html(index + 1);
         });
+    }
+
+    function updateStars(that) {
+        var starCol = $(that).parent().next().empty();
+        var length = parseInt($(that).val());
+        if ($(that).val().length > 1 && (length < 3 || length > 10)) {
+            $(that.val(3));
+            length = 3;
+        }
+
+        var i = 0;
+        for (; i < length; i++) {
+            $(starCol).append("<i class='small material-icons red-text text-lighten-1'>star_rate</i>");
+        }
     }
 
     //endregion

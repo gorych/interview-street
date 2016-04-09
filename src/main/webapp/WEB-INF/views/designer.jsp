@@ -131,8 +131,8 @@
 
                             <c:when test="${questionType.name eq 'rating'}">
                                 <div class="input-field col offset-l2 l8 m12 s12" data-answer="${question.answers[0].id}">
-                                    <input type="number" min="3" max="10"
-                                           value="${question.answers[0].text}" title="Количество звезд"/>
+                                    <input class="rating" type="number" min="3" max="10"
+                                           value="${question.answers[0].text}" title="Минимум 3 - Максимум 10"/>
                                     <label class="active">Количество звезд</label>
                                 </div>
                                 <div class="col offset-l2 col l8 m12 s12 rating center">

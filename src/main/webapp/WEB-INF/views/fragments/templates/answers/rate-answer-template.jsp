@@ -2,7 +2,7 @@
 
 <script id="rate-answer-tmpl" type="text/x-jsrender">
     <div data-answer="{{:answers[0].id}}" class="input-field col offset-l2 l8 m12 s12">
-        <input  type="number" min="3" max="10" value="{{:answers[0].type.defaultValue}}"
+        <input class="rating"  type="number" min="3" max="10" value="{{:answers[0].type.defaultValue}}"
                title="Количество звезд"/>
         <label class="active">Количество звезд</label>
     </div>

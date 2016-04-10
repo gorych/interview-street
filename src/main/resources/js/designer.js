@@ -2,7 +2,7 @@
 
     var _questionContainer = $("#question-container");
     var _pathname = window.location.pathname;
-    var _hash = _pathname.split("/")[1];
+    var _hash = _pathname.split("/")[2];
 
     $.templates({
         questTmpl: "#question-template",
@@ -45,13 +45,13 @@
 
         if ($(this).parents().is("[data-answer]")) {
             data.answerId = $(this).parents("[data-answer]").attr("data-answer");
-            $.post("/designer/save-answer", data, onAjaxCallback);
+            $.post("/designer/save-answer", data, global.ajaxCallback);
             return;
         }
 
         if ($(this).parents().is("[data-question]")) {
             data.hash = _hash;
-            $.post("/designer/save-question", data, onAjaxCallback);
+            $.post("/designer/save-question", data, global.ajaxCallback);
         }
     });
 
@@ -63,7 +63,7 @@
             "id": $section.attr("data-question")
         };
 
-        $.post("/designer/del-question", data, onAjaxCallback)
+        $.post("/designer/del-question", data, global.ajaxCallback)
             .done(function () {
                 $section.remove();
                 updateQuestionNumbers();
@@ -104,7 +104,7 @@
             "number": number
         };
 
-        $.post("/designer/move-question", data, onAjaxCallback)
+        $.post("/designer/move-question", data, global.ajaxCallback)
             .done(function () {
                 success();
                 updateQuestionNumbers();
@@ -114,7 +114,7 @@
     /*Duplicate question*/
     _questionContainer.on('click', ".duplicate", function () {
         var $section = $(this).parents(".section");
-        $.post("/designer/duplicate-question", {"id": $section.attr("data-question")}, onAjaxCallback)
+        $.post("/designer/duplicate-question", {"id": $section.attr("data-question")}, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
 
@@ -147,7 +147,7 @@
             };
         }
 
-        $.post("/designer/add-answer", data, onAjaxCallback)
+        $.post("/designer/add-answer", data, global.ajaxCallback)
             .done(function (response) {
                 var obj = JSON.parse(response);
                 console.log(obj);
@@ -167,7 +167,7 @@
             "answerId": $row.attr("data-answer")
         };
 
-        $.post("/designer/del-answer", data, onAjaxCallback)
+        $.post("/designer/del-answer", data, global.ajaxCallback)
             .done(function () {
                 if (textType) {
                     $row.prev().append(
@@ -196,7 +196,7 @@
             "number": findSuitableNumber($(this))
         };
 
-        $.post("/designer/add-question", data, onAjaxCallback)
+        $.post("/designer/add-question", data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
 
@@ -213,15 +213,7 @@
     });
 
     //region Helper functions
-
-    /*General ajax callback function*/
-    function onAjaxCallback(xhr) {
-        if (xhr.status === "400") {
-            Materialize.toast("Ошибка при выполнении операции", 2000);
-            console.log(xhr.responseText);
-        }
-    }
-
+    
     /*Find prev or next number*/
     function findPrevOrNextNumber(that, which) {
         var $section = $(that).parents(".section");

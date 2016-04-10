@@ -6,4 +6,6 @@ public interface InterviewTypeDAO {
 
     InterviewType getById(int id);
 
+    InterviewType getByName(String name);
+
 }

@@ -16,4 +16,13 @@ public class InterviewTypeDAOImpl extends AbstractDbDAO implements InterviewType
                 .setInteger("id", id)
                 .uniqueResult();
     }
+
+    @Override
+    @Transactional
+    public InterviewType getByName(String name) {
+        return (InterviewType) getSession()
+                .createQuery("FROM InterviewType WHERE name LIKE :name")
+                .setString("name", name)
+                .uniqueResult();
+    }
 }

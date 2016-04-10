@@ -54,9 +54,13 @@
         </div>
 
         <%--Form footer--%>
-        <div class="divider grey lighten-1"></div>
+        <div class="col s12 divider grey lighten-1"></div>
 
-        <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
-           title="Добавить вопрос"><i class="material-icons">add</i></a>
+        <div class="row narrow-row center">
+            <div class="col s12">
+                <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
+                title="Добавить вопрос"><i class="material-icons">add</i></a>
+            </div>
+        </div>
     </div>
 </script>

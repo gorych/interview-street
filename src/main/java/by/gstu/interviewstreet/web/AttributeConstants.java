@@ -6,6 +6,9 @@ public final class AttributeConstants {
 
 
     public static final String INTERVIEW = "interview";
+    public static final String OPEN_TYPE = "open_type";
+    public static final String CLOSE_TYPE = "close_type";
+    public static final String EXPERT_TYPE = "expert_type";
     public static final String CHIP = "chip";
 
 

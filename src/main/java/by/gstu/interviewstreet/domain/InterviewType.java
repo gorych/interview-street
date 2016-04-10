@@ -13,12 +13,6 @@ public class InterviewType implements Serializable {
     private static final int OPEN_TYPE_ID = 1;
     private static final String OPEN_TYPE_NAME = "open";
 
-    private static final String VISIBILITY_ICON = "visibility";
-    private static final String VISIBILITY_OFF_ICON = "visibility_off";
-
-    private static final String VISIBILITY_ICON_TITLE = "Открытая анкета";
-    private static final String VISIBILITY_OFF_ICON_TITLE = "Анонимная анкета";
-
     @Id
     @Expose
     @GeneratedValue
@@ -26,13 +20,17 @@ public class InterviewType implements Serializable {
     private int id;
 
     @Expose
-    @NotEmpty
     @Column(name = "name")
     private String name;
 
-    @NotEmpty
     @Column(name = "rus_name")
     private String rusName;
+
+    @Column(name = "icon")
+    private String visibilityIcon;
+
+    @Column(name = "title")
+    private String title;
 
     public int getId() {
         return id;
@@ -62,12 +60,20 @@ public class InterviewType implements Serializable {
         return OPEN_TYPE_NAME.equals(name) || OPEN_TYPE_ID == id;
     }
 
-    public String getVisibilityIcon() {
-        return OPEN_TYPE_ID == id ? VISIBILITY_ICON : VISIBILITY_OFF_ICON;
+    public String getTitle() {
+        return title;
     }
 
-    public String getTitle() {
-        return OPEN_TYPE_ID == id ? VISIBILITY_ICON_TITLE : VISIBILITY_OFF_ICON_TITLE;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getVisibilityIcon() {
+        return visibilityIcon;
+    }
+
+    public void setVisibilityIcon(String visibilityIcon) {
+        this.visibilityIcon = visibilityIcon;
     }
 
     @Override

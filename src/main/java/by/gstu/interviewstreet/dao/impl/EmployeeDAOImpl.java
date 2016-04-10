@@ -14,7 +14,7 @@ public class EmployeeDAOImpl extends AbstractDbDAO implements EmployeeDAO {
     @SuppressWarnings("unchecked")
     public List<Employee> getBySubdivisionIds(Collection subdivisionIds) {
         return getSession()
-                .createQuery("FROM Employee WHERE subdivision.id IN (:subdivisionIds) GROUP BY post.id")
+                .createQuery("FROM Employee WHERE subdivision.id IN (:subdivisionIds) GROUP BY post.id ORDER BY post.name ASC")
                 .setParameterList("subdivisionIds", subdivisionIds)
                 .list();
     }

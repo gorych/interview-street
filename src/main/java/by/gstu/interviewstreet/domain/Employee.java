@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.apache.commons.lang.WordUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -81,7 +82,7 @@ public class Employee implements Serializable {
     }
 
     public String getInitials() {
-        return secondname + " " + lastname;
+        return WordUtils.capitalize((firstname + " " + secondname).toLowerCase());
     }
 
     @Override

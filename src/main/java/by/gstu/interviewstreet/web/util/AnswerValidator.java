@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web;
+package by.gstu.interviewstreet.web.util;
 
 import by.gstu.interviewstreet.domain.Answer;
 import org.springframework.stereotype.Component;

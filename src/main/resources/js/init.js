@@ -27,8 +27,9 @@
             min: tomorrow,
 
             onClose: function () {
-                $("#end-date").focus();
+                validator.isValidDate($("#end-date"));
             }
+
         });
 
         $('select').material_select();

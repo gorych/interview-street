@@ -11,6 +11,8 @@ public interface InterviewDAO {
 
     List<Interview> getAll();
 
+    List<Interview> getAllInRange(int from, int howMany);
+
     Interview getById(int id);
 
     Interview getByHash(String hash);

@@ -13,9 +13,18 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Interview> getAll() {
-
         return getSession()
                 .createQuery("FROM Interview")
+                .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Interview> getAllInRange(int from, int howMany) {
+        return getSession()
+                .createQuery("FROM Interview ORDER BY placementDate DESC")
+                .setFirstResult(from)
+                .setMaxResults(howMany)
                 .list();
     }
 

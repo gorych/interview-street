@@ -3,7 +3,7 @@ package by.gstu.interviewstreet.web.controller;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
-import by.gstu.interviewstreet.web.AnswerValidator;
+import by.gstu.interviewstreet.web.util.AnswerValidator;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/designer")
 @Secured(UserRoleConstants.EDITOR)
-public class DesignerController {
+public class DesignerActionsController {
 
     @Autowired
     AnswerValidator validator;
@@ -49,7 +49,6 @@ public class DesignerController {
     @Autowired
     UserInterviewService userInterviewService;
 
-
     @ResponseBody
     @RequestMapping(value = {"/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> addQuestion(String hash, int questTypeId, int number) {
@@ -59,7 +58,7 @@ public class DesignerController {
         if (interview == null || questionType == null) {
             return new ResponseEntity<>(
                     "Error getting interview or question type. " +
-                            "Interview hash = " + hash + ". question type id = " + questTypeId,
+                    "Interview hash = " + hash + ". question type id = " + questTypeId,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -158,7 +157,7 @@ public class DesignerController {
         if (answers.size() <= MIN_ANSWER_COUNT) {
             return new ResponseEntity<>(
                     "Error deleting the answer. The question must have at least two responses. " +
-                    "Current answers size = " + answers.size(),
+                            "Current answers size = " + answers.size(),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }

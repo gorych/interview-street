@@ -15,6 +15,8 @@ public interface InterviewService {
 
     List<Interview> getAll();
 
+    List<Interview> getAllInRange(int from, int howMany);
+
     Map<String, Object> getValueMapForCard(int interviewId);
 
     Interview saveOrUpdate(Interview interview);

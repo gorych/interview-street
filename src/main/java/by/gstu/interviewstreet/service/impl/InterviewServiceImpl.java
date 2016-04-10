@@ -38,6 +38,12 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
+    public List<Interview> getAllInRange(int from, int howMany) {
+        return interviewDAO.getAllInRange(from, howMany);
+    }
+
+    @Override
+    @Transactional
     public Map<String, Object> getValueMapForCard(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);

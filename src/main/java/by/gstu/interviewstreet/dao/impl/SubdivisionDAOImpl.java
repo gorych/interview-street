@@ -12,6 +12,6 @@ public class SubdivisionDAOImpl extends AbstractDbDAO implements SubdivisionDAO 
     @Override
     @SuppressWarnings("unchecked")
     public List<Subdivision> getAll() {
-        return getSession().createQuery("from Subdivision ").list();
+        return getSession().createQuery("FROM Subdivision ORDER BY name ASC").list();
     }
 }

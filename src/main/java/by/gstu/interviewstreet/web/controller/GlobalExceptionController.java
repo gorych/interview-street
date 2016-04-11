@@ -17,6 +17,7 @@ public class GlobalExceptionController {
         return "404";
     }
 
+    //TODO trow to error page
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

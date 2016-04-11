@@ -45,6 +45,24 @@ public class Post implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        if (getId() != post.getId()) return false;
+        return getName() != null ? getName().equals(post.getName()) : post.getName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +

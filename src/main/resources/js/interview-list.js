@@ -4,7 +4,7 @@
     var $tempCard = null;
 
     $("#hide-chip-btn").click(function () {
-        $.get("/hide-chip", global.ajaxCallback());
+        $.get("/user/hide-chip", null, global.ajaxCallback);
     });
 
     $(document).on("click", ".delete-btn", function () {
@@ -52,9 +52,6 @@
                 $icon.attr("title", msg);
                 Materialize.toast(msg, toastDuration);
             });
-    });
-
-    $(".edit-interview-btn").each(function () {
     });
 
 }());

@@ -4,13 +4,12 @@ package by.gstu.interviewstreet.web.controller;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.UserService;
-import by.gstu.interviewstreet.web.AttributeConstants;
+import by.gstu.interviewstreet.web.AttrConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -24,7 +23,7 @@ public class UserController {
     @Autowired
     public UserService userService;
 
-    @ModelAttribute(AttributeConstants.USER_INITIALS)
+    @ModelAttribute(AttrConstants.USER_INITIALS)
     public String addUserInitials(Principal principal) {
         String username = principal.getName();
         User user = userService.get(username);
@@ -35,7 +34,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
     public ResponseEntity<String> hideChip(HttpSession session) {
-        session.setAttribute(AttributeConstants.CHIP, false);
+        session.setAttribute(AttrConstants.CHIP, false);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

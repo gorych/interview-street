@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.SubdivisionService;
 import by.gstu.interviewstreet.service.UserInterviewService;
-import by.gstu.interviewstreet.web.AttributeConstants;
+import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -23,8 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @Secured(UserRoleConstants.EDITOR)
 public class InterviewActionsController {
 
-    @Autowired
-    InterviewTypeDAO interviewTypeDAO;
+    private static final int INTERVIEW_INDEX = 0;
+    private static final int POST_IDS_INDEX = 1;
+    private static final int SUB_IDS_INDEX = 2;
 
     @Autowired
     public InterviewService interviewService;
@@ -35,14 +36,23 @@ public class InterviewActionsController {
     @Autowired
     public UserInterviewService userInterviewService;
 
-    @RequestMapping(value = {"/form"}, method = RequestMethod.GET)
-    public String showForm(Model model) {
-        model.addAttribute(AttributeConstants.INTERVIEW, new Interview());
-        model.addAttribute(AttributeConstants.SUBDIVISIONS, subdivisionService.getAll());
+    @Autowired
+    InterviewTypeDAO interviewTypeDAO;
 
-        model.addAttribute(AttributeConstants.OPEN_TYPE, interviewTypeDAO.getByName("open"));
-        model.addAttribute(AttributeConstants.CLOSE_TYPE, interviewTypeDAO.getByName("close"));
-        model.addAttribute(AttributeConstants.EXPERT_TYPE, interviewTypeDAO.getByName("expert"));
+    @RequestMapping(value = {"/form"}, method = RequestMethod.GET)
+    public String showForm(@RequestParam(required = false) Integer id, ModelMap model) {
+        if (id != null && id > 0) {
+            model.putAll(interviewService.getModelMapForEditForm(id));
+            model.addAttribute(AttrConstants.EDIT_MODE, true);
+            return "form";
+        }
+
+        model.addAttribute(AttrConstants.INTERVIEW, new Interview());
+        model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getAll());
+
+        model.addAttribute(AttrConstants.OPEN_TYPE, interviewTypeDAO.getByName("open"));
+        model.addAttribute(AttrConstants.CLOSE_TYPE, interviewTypeDAO.getByName("close"));
+        model.addAttribute(AttrConstants.EXPERT_TYPE, interviewTypeDAO.getByName("expert"));
 
         return "form";
     }
@@ -52,15 +62,17 @@ public class InterviewActionsController {
     public ResponseEntity<String> processAddInterviewForm(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        JsonElement interviewElement = jsonArray.get(0);
-        JsonArray idsArray = jsonArray.get(1).getAsJsonArray();
+        JsonElement interviewElement = jsonArray.get(INTERVIEW_INDEX);
+        JsonArray postIdsArray = jsonArray.get(POST_IDS_INDEX).getAsJsonArray();
+        JsonArray subIdsArray = jsonArray.get(SUB_IDS_INDEX).getAsJsonArray();
 
         Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
         interview = interviewService.saveOrUpdate(interview);
 
         if (interview.getType().isOpen()) {
-            Integer[] postIds = JSONParser.convertJsonElementToObject(idsArray, Integer[].class);
-            userInterviewService.addInterviewToUserByPost(interview, postIds);
+            Integer[] postIds = JSONParser.convertJsonElementToObject(postIdsArray, Integer[].class);
+            Integer[] subIds = JSONParser.convertJsonElementToObject(subIdsArray, Integer[].class);
+            userInterviewService.addInterviewToUserByPost(interview, postIds, subIds);
         }
 
         return new ResponseEntity<>(interview.getHash(), HttpStatus.OK);

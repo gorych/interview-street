@@ -23,8 +23,8 @@ public class UserInterviewServiceImpl implements UserInterviewService {
 
     @Override
     @Transactional
-    public void addInterviewToUserByPost(Interview interview, Integer[] postIds) {
-        List<User> users = userDAO.getByPosts(postIds);
+    public void addInterviewToUserByPost(Interview interview, Integer[] postIds, Integer[] subIds) {
+        List<User> users = userDAO.getByPosts(postIds, subIds);
         UserInterview userInterview;
         for (User user : users) {
             userInterview = new UserInterview(interview, user);

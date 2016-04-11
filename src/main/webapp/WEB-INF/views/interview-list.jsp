@@ -30,7 +30,7 @@
                     <div class="card-content card-content-wrapper grey lighten-4">
                         <i class="material-icons visibility-icon black-text" title="${interview.type.title}">
                                 ${interview.type.visibilityIcon}</i>
-                        
+
                         <c:if test="${interview.isNew}">
                             <span class="badge new"></span>
                         </c:if>
@@ -79,12 +79,13 @@
 
                         <div class="fixed-action-btn action-btn-position click-to-toggle">
                             <a class="btn-floating btn white accent-3">
-                                <i class="large material-icons black-text" title="Нажмите для выбора операции">dashboard</i>
+                                <i class="large material-icons black-text"
+                                   title="Нажмите для выбора операции">dashboard</i>
                             </a>
                             <ul>
                                 <li>
-                                    <a href="#" data-interview-id="${interview.id}"
-                                       class="edit-interview-btn btn-floating orange" title="Редактировать анкету">
+                                    <a href="<c:url value="/interview/form?id=${interview.id}"/>"
+                                       class="btn-floating orange" title="Редактировать анкету">
                                         <i class="material-icons black-text">mode_edit</i>
                                     </a>
                                 </li>
@@ -101,6 +102,15 @@
                 </div>
             </div>
         </c:forEach>
+
+        <ul class="pagination right hide">
+            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="#!">1</a></li>
+            <li class="waves-effect"><a href="#!">2</a></li>
+            <li class="waves-effect"><a href="#!">3</a></li>
+            <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+
 
     </div><!--end card container-->
 

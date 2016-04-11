@@ -2,21 +2,18 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.dao.EmployeeDAO;
 import by.gstu.interviewstreet.dao.InterviewDAO;
+import by.gstu.interviewstreet.dao.SubdivisionDAO;
 import by.gstu.interviewstreet.dao.UserInterviewDAO;
-import by.gstu.interviewstreet.domain.Employee;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
@@ -26,6 +23,9 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
     private InterviewDAO interviewDAO;
+
+    @Autowired
+    private SubdivisionDAO subdivisionDAO;
 
     @Autowired
     private UserInterviewDAO userInterviewDAO;
@@ -44,27 +44,45 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Map<String, Object> getValueMapForCard(int interviewId) {
+    public Map<String, Object> getModelMapForEditForm(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);
 
-        List<Integer> posts = new ArrayList<>();
-        List<Integer> subIds = new ArrayList<>();
+        List<Post> activePosts = new ArrayList<>();
+        List<Integer> activeSubIds = new ArrayList<>();
+
         for (UserInterview userInterview : userInterviews) {
-            posts.add(userInterview.getUser().getEmployee().getPost().getId());
-            subIds.add(userInterview.getUser().getEmployee().getSubdivision().getId());
+            activePosts.add(userInterview.getUser().getEmployee().getPost());
+            activeSubIds.add(userInterview.getUser().getEmployee().getSubdivision().getId());
+        }
+
+        Map<Object, String> posts = new HashMap<>();
+        Map<Object, String> subdivisions = new TreeMap<>();
+        if (activeSubIds.size() > 0) {
+
+            /*List of employees which have such subdivisions*/
+            List<Employee> employees = employeeDAO.getBySubdivisionIds(activeSubIds);
+
+            for (Employee employee : employees) {
+                Post post = employee.getPost();
+
+                /*Mark post if it was selected. Used on form.jsp*/
+                posts.put(post, activePosts.contains(post) ? "selected" : "not_selected");
+            }
+
+            /*List of subs for select, which used on form.jsp*/
+            List<Subdivision> subs = subdivisionDAO.getAll();
+
+            for (Subdivision sub : subs) {
+                subdivisions.put(sub, activeSubIds.contains(sub.getId()) ? "selected" : "not_selected");
+            }
+
         }
 
         Map<String, Object> valueMap = new HashMap<>();
-
-        if (subIds.size() > 0) {
-            List<Employee> employees = employeeDAO.getBySubdivisionIds(subIds);
-            valueMap.put("allPosts", employees);
-        }
-
-        valueMap.put("subs", subIds);
-        valueMap.put("activePosts", posts);
-        valueMap.put("interview", interview);
+        valueMap.put(AttrConstants.POSTS, posts);
+        valueMap.put(AttrConstants.SUBDIVISIONS, subdivisions);
+        valueMap.put(AttrConstants.INTERVIEW, interview);
 
         return valueMap;
     }
@@ -88,8 +106,8 @@ public class InterviewServiceImpl implements InterviewService {
 
         /*create new interview*/
         if (existed == null) {
-            byte[] bytes = interview.getName().getBytes();
-            interview.setHash(DigestUtils.md5DigestAsHex(bytes) + System.currentTimeMillis());
+            byte[] bytes = (interview.getName()+ System.currentTimeMillis()).getBytes();
+            interview.setHash(DigestUtils.md5DigestAsHex(bytes));
             interviewDAO.save(interview);
 
             return interview;

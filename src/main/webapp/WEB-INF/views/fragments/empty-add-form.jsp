@@ -3,7 +3,7 @@
 
 <form id="add-interview-form" class="hide col s12" method="POST" action="<c:url value="/interview/form"/>">
     <input type="hidden" name="type" value=""/>
-    <div class="row valign-wrapper">
+    <div class="row valign-wrapper left-align">
         <div class="col l9">
             <h4 id="title"></h4>
         </div>
@@ -23,8 +23,8 @@
         <div class="hide input-field col s12 m6 l6">
             <select id="subdivisions" name="subdivisions" class="validate" multiple>
                 <option value="-1" disabled selected>Выберите подразделения</option>
-                <c:forEach var="item" items="${subdivisions}">
-                    <option value="${item.id}">${item.name}</option>
+                <c:forEach var="sub" items="${subdivisions}">
+                    <option value="${sub.id}">${sub.name}</option>
                 </c:forEach>
             </select>
             <label for="subdivisions">Подразделение</label>

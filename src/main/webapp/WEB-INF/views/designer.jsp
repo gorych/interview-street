@@ -47,7 +47,7 @@
             <a class="btn-floating btn-large add-quest-btn first-btn waves-effect waves-light blue-grey lighten-2 hoverable"
                title="Добавить вопрос"><i class="material-icons">add</i></a>
 
-            <c:forEach var="question" items="${questions}" varStatus="item">
+            <c:forEach var="question" items="${questions}" varStatus="sub">
             <c:set var="questionType" scope="page" value="${question.type}"/>
 
             <div class="section" data-question="${question.id}">
@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col l12 m12 s12">
                         <nav>
-                            <div class="left number">${item.index + 1}</div>
+                            <div class="left number">${sub.index + 1}</div>
                             <ul>
                                 <li><a><i class="material-icons move-down"
                                           title="Переместить вниз">arrow_downward</i></a></li>

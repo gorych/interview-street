@@ -9,7 +9,7 @@ import by.gstu.interviewstreet.service.EmployeeService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.service.SubdivisionService;
-import by.gstu.interviewstreet.web.AttributeConstants;
+import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -46,8 +46,8 @@ public class EditorController extends UserController {
         final int BEGIN_INDEX = 0;
         final int RECORD_COUNT = 6;
 
-        model.addAttribute(AttributeConstants.INTERVIEWS, interviewService.getAllInRange(BEGIN_INDEX, RECORD_COUNT));
-        model.addAttribute(AttributeConstants.SUBDIVISIONS, subdivisionService.getAll());
+        model.addAttribute(AttrConstants.INTERVIEWS, interviewService.getAllInRange(BEGIN_INDEX, RECORD_COUNT));
+        model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getAll());
 
         return "interview-list";
     }
@@ -75,8 +75,8 @@ public class EditorController extends UserController {
 
         List<Question> questions = questionService.getAllOrderByNumber(hash);
 
-        model.addAttribute(AttributeConstants.INTERVIEW, interview);
-        model.addAttribute(AttributeConstants.QUESTIONS, questions);
+        model.addAttribute(AttrConstants.INTERVIEW, interview);
+        model.addAttribute(AttrConstants.QUESTIONS, questions);
 
         return "designer";
     }

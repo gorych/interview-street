@@ -11,8 +11,18 @@
     <title>Interview Street - Добавление/Редактирование анкеты</title>
 </head>
 <body>
-<main class="valign-wrapper">
+<main class="valign-wrapper center">
     <div class="row container valign">
+
+        <c:choose>
+            <c:when test="${edit_mode eq true}">
+                <input name="id" class="edit-mode" type="hidden" value="${interview.id}"/>
+                <%@include file="fragments/fill-edit-form.jsp" %>
+            </c:when>
+            <c:otherwise>
+                <%@include file="fragments/empty-add-form.jsp" %>
+            </c:otherwise>
+        </c:choose>
 
         <div class="promo-container hide">
             <div class="col s12 m12 l12 center">
@@ -36,7 +46,8 @@
                     <i class="material-icons">${close_type.visibilityIcon}</i>
                     <p class="promo-caption">Анонимный опрос</p>
                     <p class="light center">
-                        Досутпен для всех пользователей по конкретному адресу. Информация о респондентах не сохраняется.
+                        Досутпен для всех пользователей по конкретному адресу. Информация о респондентах не
+                        сохраняется.
                     </p>
                 </div>
             </div>
@@ -53,7 +64,17 @@
             </div>
         </div>
 
-        <%@include file="fragments/add-edit-form.jsp" %>
+        <div class="preloader-wrapper center-align big">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+            </div>
+        </div>
 
     </div>
 </main>

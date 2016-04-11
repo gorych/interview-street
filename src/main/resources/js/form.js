@@ -1,7 +1,7 @@
 ;(function () {
 
-    function Interview() {
-        this.id = null;
+    function Interview(id) {
+        this.id = id;
         this.name = $("[name='name']").val();
         this.endDate = $("#end-date").val();
         this.description = $("[name='description']").val();
@@ -17,8 +17,12 @@
 
     /*Ascent effect*/
     $(document).ready(function () {
-        $(".promo-container").removeClass("hide");
-        Materialize.fadeInImage('.promo-container')
+        var $elem = $(".edit-mode").length > 0
+            ? $("#add-interview-form")
+            : $(".promo-container");
+
+        $elem.removeClass("hide");
+        Materialize.fadeInImage($elem);
     });
 
     $(document).on("click", ".promo", function () {
@@ -50,15 +54,22 @@
             return;
         }
 
+        var id = $(".edit-mode").val();
         var data = [
-            new Interview(), $postSelect.val()
+            new Interview((id && id > 0) ? id : null),
+            $postSelect.val(),
+            $("#subdivisions").val()
         ];
 
         console.log(JSON.stringify(data));
         $.post("/interview/save", JSON.stringify(data), global.ajaxCallback)
             .done(function (hash) {
-                window.location = location.protocol + '//' + location.host + "/" + hash + "/designer";
+                window.location = location.protocol + '//' + location.host + "/editor/" + hash + "/designer";
             });
+
+        $("#add-interview-form").addClass("hide");
+        $(".preloader-wrapper").addClass("active");
+
     });
 
     $("#subdivisions").change(function () {
@@ -85,7 +96,6 @@
                 if (index == 0) {
                     $postSelect
                         .append("<option value='-1' disabled selected>Выберите должности</option>")
-                        .append("<option value='0'>Все должности</option>");
                 }
                 option.setAttribute("value", post.id);
                 option.textContent = post.name;

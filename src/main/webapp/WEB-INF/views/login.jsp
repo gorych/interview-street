@@ -9,9 +9,9 @@
     <title>Interview Street - Вход</title>
     <%@include file="fragments/meta.html" %>
 
-    <link rel="stylesheet" type="text/css" href="/resources/vendors/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/vendors/materialize/materialize.min.css"/>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="/resources/css/login.css" rel="stylesheet" type="text/css">
+    <link href="<c:url value="/resources/css/login.css"/>" rel="stylesheet" type="text/css">
 
 </head>
 <body class="valign-wrapper">
@@ -34,14 +34,15 @@
             <h2 class="center-align">Вход</h2>
 
             <div class="row">
-                <sf:form class="col s12" action="/j_spring_security_check" method="POST">
+                <c:url value="/j_spring_security_check" var="loginUrl"/>
+                <sf:form class="col s12" action="${loginUrl}" method="POST">
                     <div class="row">
                         <div class="input-field col s12">
                             <input id="passport-series" placeholder="Серия и номер паспорта(слитно)"
                                    name="j_username" type="text" pattern="[А-я]{2}[0-9]{7}"
                                    oninput="invalidPassportData(this)"
                                    oninvalid="invalidPassportData(this)"/>
-                            <label class="activate" for="passport-series">Паспортные данные</label>
+                            <label class="active" for="passport-series">Паспортные данные</label>
                         </div>
                         <c:if test="${not empty auth_error}">
                             <div class="red-text error">
@@ -71,8 +72,8 @@
     </div>
 </main>
 
-<%@include file="fragments/general-js.html" %>
-<script src="/resources/js/login.js"></script>
+<%@include file="fragments/general-js.jsp" %>
+<script src="<c:url value="/resources/js/login.js"/>"></script>
 
 </body>
 </html>

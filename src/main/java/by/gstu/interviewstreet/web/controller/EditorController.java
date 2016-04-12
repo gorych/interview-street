@@ -21,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -57,7 +59,8 @@ public class EditorController extends UserController {
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        Type type = new TypeToken<List<Integer>>() { }.getType();
+        Type type = new TypeToken<List<Integer>>() {
+        }.getType();
         List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 
@@ -67,11 +70,13 @@ public class EditorController extends UserController {
     }
 
     @RequestMapping(value = {"/{hash}/designer"}, method = RequestMethod.GET)
-    public String showDesigner(@PathVariable String hash, Model model) {
+    public String showDesigner(@PathVariable String hash, HttpServletResponse response, Model model) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
             return "404";
         }
+
+        response.addCookie(new Cookie("hash", hash));
 
         List<Question> questions = questionService.getAllOrderByNumber(hash);
 

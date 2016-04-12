@@ -1,8 +1,7 @@
 ;(function () {
 
     var _questionContainer = $("#question-container");
-    var _pathname = window.location.pathname;
-    var _hash = _pathname.split("/")[2];
+    var _hash = $.cookie("hash");
 
     $.templates({
         questTmpl: "#question-template",
@@ -45,13 +44,13 @@
 
         if ($(this).parents().is("[data-answer]")) {
             data.answerId = $(this).parents("[data-answer]").attr("data-answer");
-            $.post("/designer/save-answer", data, global.ajaxCallback);
+            $.post(global.rewriteUrl("/designer/save-answer"), data, global.ajaxCallback);
             return;
         }
 
         if ($(this).parents().is("[data-question]")) {
             data.hash = _hash;
-            $.post("/designer/save-question", data, global.ajaxCallback);
+            $.post(global.rewriteUrl("/designer/save-question"), data, global.ajaxCallback);
         }
     });
 
@@ -63,7 +62,7 @@
             "id": $section.attr("data-question")
         };
 
-        $.post("/designer/del-question", data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/del-question"), data, global.ajaxCallback)
             .done(function () {
                 $section.remove();
                 updateQuestionNumbers();
@@ -104,7 +103,7 @@
             "number": number
         };
 
-        $.post("/designer/move-question", data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/move-question"), data, global.ajaxCallback)
             .done(function () {
                 success();
                 updateQuestionNumbers();
@@ -114,7 +113,7 @@
     /*Duplicate question*/
     _questionContainer.on('click', ".duplicate", function () {
         var $section = $(this).parents(".section");
-        $.post("/designer/duplicate-question", {"id": $section.attr("data-question")}, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/duplicate-question"), {"id": $section.attr("data-question")}, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
 
@@ -147,7 +146,7 @@
             };
         }
 
-        $.post("/designer/add-answer", data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/add-answer"), data, global.ajaxCallback)
             .done(function (response) {
                 var obj = JSON.parse(response);
                 console.log(obj);
@@ -167,7 +166,7 @@
             "answerId": $row.attr("data-answer")
         };
 
-        $.post("/designer/del-answer", data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/del-answer"), data, global.ajaxCallback)
             .done(function () {
                 if (textType) {
                     $row.prev().append(
@@ -196,7 +195,7 @@
             "number": findSuitableNumber($(this))
         };
 
-        $.post("/designer/add-question", data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/designer/add-question"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
 
@@ -213,7 +212,7 @@
     });
 
     //region Helper functions
-    
+
     /*Find prev or next number*/
     function findPrevOrNextNumber(that, which) {
         var $section = $(that).parents(".section");

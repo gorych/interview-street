@@ -6,13 +6,15 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general-css.html" %>
-    <link href="/resources/css/form.css" rel="stylesheet" type="text/css">
+    <%@include file="fragments/general-css.jsp" %>
+    <link href="<c:url value="/resources/css/form.css"/>" rel="stylesheet" type="text/css">
     <title>Interview Street - Добавление/Редактирование анкеты</title>
 </head>
 <body>
 <main class="valign-wrapper center">
     <div class="row container valign">
+
+        <input type="hidden" value="${pageContext.request.contextPath}">
 
         <c:choose>
             <c:when test="${edit_mode eq true}">
@@ -79,7 +81,7 @@
     </div>
 </main>
 
-<%@include file="fragments/general-js.html" %>
+<%@include file="fragments/general-js.jsp" %>
 <script src="<c:url value="/resources/js/form.js"/>"></script>
 
 </body>

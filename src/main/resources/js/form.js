@@ -62,9 +62,9 @@
         ];
 
         console.log(JSON.stringify(data));
-        $.post("/interview/save", JSON.stringify(data), global.ajaxCallback)
+        $.post(global.rewriteUrl("/interview/save"), JSON.stringify(data), global.ajaxCallback)
             .done(function (hash) {
-                window.location = location.protocol + '//' + location.host + "/editor/" + hash + "/designer";
+                window.location = global.rewriteUrl("/editor/" + hash + "/designer");
             });
 
         $("#add-interview-form").addClass("hide");
@@ -73,7 +73,7 @@
     });
 
     $("#subdivisions").change(function () {
-        $.post("/editor/load-posts", JSON.stringify($(this).val()))
+        $.post(global.rewriteUrl("/editor/load-posts"), JSON.stringify($(this).val()))
             .done(function (response) {
                 var data = JSON.parse(response);
                 if (response.length > 0) {

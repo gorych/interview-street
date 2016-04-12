@@ -5,7 +5,7 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general-css.html" %>
+    <%@include file="fragments/general-css.jsp" %>
     <link href="<c:url value="/resources/css/designer.css"/>" rel="stylesheet" type="text/css">
     <title>Interview Street - Редактор анкет</title>
 </head>
@@ -174,6 +174,7 @@
         <label>
             <input type="text" class="interview-url" value="/test/url/place/here2d"/>
         </label>
+    </div>
 </main>
 
 <%@include file="fragments/footer.jsp" %>
@@ -185,11 +186,11 @@
 <%@include file="fragments/templates/question-template.jsp" %>
 <%@include file="fragments/templates/stag-list-template.jsp" %>
 
-<%@include file="fragments/general-js.html" %>
+<%@include file="fragments/general-js.jsp" %>
 <script src="<c:url value="/resources/vendors/clipboard/clipboard.js"/>"></script>
 <script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
 <script src="<c:url value="/resources/js/jsrender.extends.js"/>"></script>
-<script src="/resources/js/designer.js"></script>
+<script src="<c:url value="/resources/js/designer.js"/>"></script>
 
 </body>
 </html>

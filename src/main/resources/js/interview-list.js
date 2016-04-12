@@ -1,10 +1,9 @@
 ;(function () {
 
-    var toastDuration = 2000;
     var $tempCard = null;
 
     $("#hide-chip-btn").click(function () {
-        $.get("/user/hide-chip", null, global.ajaxCallback);
+        $.get(global.rewriteUrl("/user/hide-chip"), null, global.ajaxCallback);
     });
 
     $(document).on("click", ".delete-btn", function () {
@@ -16,12 +15,14 @@
         $("#delete-interview-modal").openModal();
     });
 
-    $("#submit-delete-btn").click(function () {
+    $("#submit-delete-btn").click(function (event) {
+        event.preventDefault();
+
         var data = {
             data: JSON.stringify({id: $(this).attr("data-temp-id")})
         };
 
-        $.post("/interview/delete", data, global.ajaxCallback)
+        $.post($(this).attr("href"), data, global.ajaxCallback)
             .done(function () {
                 $tempCard.remove();
 
@@ -29,13 +30,13 @@
                 $tempCard = null;
 
                 $("#delete-interview-modal").closeModal();
-                Materialize.toast("Анкета успешно удалена", toastDuration);
+                Materialize.toast("Анкета успешно удалена", 2000);
             });
     });
 
     $(document).on("click", ".lock-btn", function () {
         var that = $(this);
-        $.get("/interview/lock/" + $(this).attr("data-interview-id"), global.ajaxCallback)
+        $.get(global.rewriteUrl("/interview/lock/" + $(this).attr("data-interview-id")), global.ajaxCallback)
             .done(function () {
                 var $icon = $(that).find("i");
                 var lock = ($icon.html() == "lock");
@@ -50,7 +51,7 @@
                 }
 
                 $icon.attr("title", msg);
-                Materialize.toast(msg, toastDuration);
+                Materialize.toast(msg, 2000);
             });
     });
 

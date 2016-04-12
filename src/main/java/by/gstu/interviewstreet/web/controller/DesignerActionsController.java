@@ -29,25 +29,13 @@ public class DesignerActionsController {
     AnswerValidator validator;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     AnswerService answerService;
-
-    @Autowired
-    EmployeeService employeeService;
 
     @Autowired
     QuestionService questionService;
 
     @Autowired
     InterviewService interviewService;
-
-    @Autowired
-    SubdivisionService subdivisionService;
-
-    @Autowired
-    UserInterviewService userInterviewService;
 
     @ResponseBody
     @RequestMapping(value = {"/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
@@ -156,8 +144,7 @@ public class DesignerActionsController {
 
         if (answers.size() <= MIN_ANSWER_COUNT) {
             return new ResponseEntity<>(
-                    "Error deleting the answer. The question must have at least two responses. " +
-                            "Current answers size = " + answers.size(),
+                    "Error deleting the answer. The question must have at least two responses. Current answers size = " + answers.size(),
                     HttpStatus.NOT_ACCEPTABLE
             );
         }

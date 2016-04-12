@@ -5,8 +5,8 @@
 <html>
 <head>
     <%@include file="fragments/meta.html" %>
-    <%@include file="fragments/general-css.html" %>
-    <link href="/resources/css/interview-list.css" rel="stylesheet" type="text/css">
+    <%@include file="fragments/general-css.jsp" %>
+    <link href="<c:url value="/resources/css/interview-list.css"/>" rel="stylesheet" type="text/css">
     <title>Interview Street - Список анкет</title>
 </head>
 <body>
@@ -18,7 +18,7 @@
             <c:if test="${empty chip || (chip eq true)}">
                 <div class="chip teal white-text">
                     Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
-                    <i class="material-icons" id="hide-chip-btn">close</i>
+                    <i class="material-icons" id="hide-chip-btn" >close</i>
                 </div>
             </c:if>
 
@@ -104,11 +104,11 @@
         </c:forEach>
 
         <ul class="pagination right hide">
-            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="#!">1</a></li>
-            <li class="waves-effect"><a href="#!">2</a></li>
-            <li class="waves-effect"><a href="#!">3</a></li>
-            <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li class="waves-effect"><a href="#">2</a></li>
+            <li class="waves-effect"><a href="#">3</a></li>
+            <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
         </ul>
 
 
@@ -138,15 +138,15 @@
         </div>
         <div class="modal-footer">
             <a class="waves-effect waves-red btn-flat modal-action modal-close" href="#">Нет</a>
-            <a id="submit-delete-btn" class="waves-effect waves-green btn-flat modal-action" href="#">Да</a>
+            <a href="<c:url value="/interview/delete"/>" id="submit-delete-btn" class="waves-effect waves-green btn-flat modal-action">Да</a>
         </div>
     </div>
 
 </main>
 <%@include file="fragments/footer.jsp" %>
-<%@include file="fragments/general-js.html" %>
+<%@include file="fragments/general-js.jsp" %>
 
 <script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
-<script src="/resources/js/interview-list.js"></script>
+<script src="<c:url value="/resources/js/interview-list.js"/>"></script>
 </body>
 </html>

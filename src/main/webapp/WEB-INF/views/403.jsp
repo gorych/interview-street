@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="/resources/css/error-page.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/resources/css/error-page.css"/>">
     <title>Interview Street - Доступ запрещен</title>
 </head>
 <body>
@@ -23,7 +23,7 @@
     
     <br/>
     <a href="<c:url value="/"/>" class="logo logo-img-1x">
-        <img width="32" height="32" title="На главную" src="/resources/img/error-page-logo.png"/>
+        <img width="32" height="32" title="На главную" src="<c:url value="/resources/img/error-page-logo.png"/>"/>
     </a>
 </div>
 </body>

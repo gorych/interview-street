@@ -30,7 +30,7 @@ public class Question implements Serializable {
 
     @Expose
     @NotNull
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "type_id")
     QuestionType type;
 

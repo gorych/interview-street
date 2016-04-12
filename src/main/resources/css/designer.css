@@ -1,0 +1,104 @@
+h5 {
+    font-size: 1.34rem;
+}
+
+i {
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#question-container .section {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#question-container .section .input-field {
+    margin-top: 0;
+}
+
+.add-answer, .add-text-answer {
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.add-quest-btn {
+    margin: 2rem 0;
+}
+
+.first-btn {
+    margin-top: 1rem;
+}
+
+label .interview-url {
+    width: 1px;
+    height: 1px;
+}
+
+.interview-type:before {
+    content: "Тип анкеты: ";
+}
+
+.icons-row {
+    margin-bottom: 5px;
+}
+
+.narrow-row {
+    margin-bottom: 0;
+}
+
+.number {
+    background-color: #bcaaa4;
+    padding: 0 0.9rem;
+}
+
+.row .col .icon-col {
+    padding-left: 0;
+    margin-left: -0.8rem;
+}
+
+.row .col .wide-col {
+    padding: 0;
+}
+
+.rating i {
+    width: 3rem;
+    font-size: 3rem;
+}
+
+.staggered {
+    margin-top: -1rem;
+}
+
+.staggered-item {
+    width: 14rem;
+    margin: 0 auto;
+}
+
+.staggered li {
+    opacity: 0;
+}
+
+.section nav {
+    height: 34px;
+    line-height: 34px;
+    box-shadow: none;
+    background-color: #C8E6C9;
+}
+
+.section nav ul {
+    width: 14rem;
+    margin: 0 auto;
+}
+
+.section nav ul li a {
+    padding: 0 10px;
+}
+
+.section nav i {
+    height: 34px;
+    line-height: 34px;
+    margin-left: 0;
+}

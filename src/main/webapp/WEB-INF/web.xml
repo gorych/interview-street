@@ -18,6 +18,10 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/spring/spring-servlet.xml</param-value>
         </init-param>
+        <init-param>
+            <param-name>throwExceptionIfNoHandlerFound</param-name>
+            <param-value>true</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
@@ -59,11 +63,4 @@
             <page-encoding>UTF-8</page-encoding>
         </jsp-property-group>
     </jsp-config>
-
-    <locale-encoding-mapping-list>
-        <locale-encoding-mapping>
-            <locale>en</locale>
-            <encoding>UTF-8</encoding>
-        </locale-encoding-mapping>
-    </locale-encoding-mapping-list>
 </web-app>

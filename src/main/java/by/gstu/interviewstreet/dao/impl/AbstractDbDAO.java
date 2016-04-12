@@ -12,8 +12,12 @@ public abstract class AbstractDbDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    protected Session getSession(){
-        return sessionFactory.getCurrentSession();
+    protected Session getSession() {
+        Session session = sessionFactory.getCurrentSession();
+        if (session != null) {
+            return session;
+        }
+        return sessionFactory.openSession();
     }
 
 }

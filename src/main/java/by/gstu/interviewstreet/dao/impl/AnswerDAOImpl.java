@@ -1,28 +1,20 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IAnswerDAO;
+import by.gstu.interviewstreet.dao.AnswerDAO;
 import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.AnswerType;
-import by.gstu.interviewstreet.domain.Form;
-import by.gstu.interviewstreet.domain.UserAnswer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
-
-
-    @Override
-    public Answer insert(AnswerType type) {
-        Answer answer = new Answer("Новый ответ", type);
-        getSession().save(answer);
-        return answer;
-    }
+public class AnswerDAOImpl extends AbstractDbDAO implements AnswerDAO {
 
     @Override
-    public void insertUserAnswer(UserAnswer userAnswer) {
-        getSession().save(userAnswer);
+    public Answer getById(int id) {
+        return (Answer) getSession()
+                .createQuery("FROM Answer WHERE id=:id")
+                .setParameter("id", id)
+                .uniqueResult();
     }
 
     @Override
@@ -35,37 +27,12 @@ public class AnswerDAOImpl extends AbstractDbDAO implements IAnswerDAO {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<UserAnswer> getUserAnswers(int questionId) {
-        return getSession()
-                .createQuery("FROM UserAnswer WHERE question.id = :id GROUP BY answer")
-                .setInteger("id", questionId)
-                .list();
+    public void saveOrUpdate(Answer answer) {
+        getSession().saveOrUpdate(answer);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Integer> getAnswerCount(int questionId) {
-        return getSession()
-                .createQuery("SELECT COUNT(*) FROM UserAnswer WHERE question.id = :id GROUP BY answer")
-                .setInteger("id", questionId)
-                .list();
-    }
-
-    @Override
-    public void remove(int id) {
-        Answer answer = (Answer) getSession().load(Answer.class, id);
-        if (answer != null) {
-            getSession().delete(answer);
-        }
-    }
-
-    @Override
-    public void remove(List<Form> forms) {
-        for (Form form : forms) {
-            if (form != null) {
-                getSession().delete(form.getAnswer());
-            }
-        }
+    public void remove(Answer answer) {
+        getSession().delete(answer);
     }
 }

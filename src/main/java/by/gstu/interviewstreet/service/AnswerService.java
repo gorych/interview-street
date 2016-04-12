@@ -7,18 +7,23 @@ import java.util.Map;
 
 public interface AnswerService {
 
-    long insert(Form form);
+    Answer get(int id);
 
-    void insertUserAnswers(Interview interview, List<Integer> questions, Map<Integer, String[]> answers, User user);
+    Answer get(Question question, int id);
 
     List<Answer> get(List<Integer> ids);
 
-    AnswerType getAnswerType(int id);
+    void saveOrUpdate(Answer answer);
 
-    /*get user answers*/
-    String getJSON(int questionId);
+    List<Answer> addDefaultAnswers(Question question);
 
-    void remove(int id);
+    List<Answer> duplicateAnswers(Question question, Question duplicated);
+
+    Answer addDefaultTextAnswer(Question question);
+
+    Answer addDefaultAnswer(AnswerType type, Question question);
+
+    void remove(Answer answer);
 
 }
 

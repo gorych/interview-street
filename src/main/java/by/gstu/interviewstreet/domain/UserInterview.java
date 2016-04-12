@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,15 +12,16 @@ import java.util.Set;
 public class UserInterview implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
-    @NotNull
+    @Expose
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
+    @Expose
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,8 +29,7 @@ public class UserInterview implements Serializable {
     @Column(name = "isPassed")
     private boolean isPassed;
 
-    public UserInterview(){
-    }
+    public UserInterview(){  }
 
     public UserInterview(Interview interview, User user) {
         this.interview = interview;
@@ -62,7 +64,7 @@ public class UserInterview implements Serializable {
         return isPassed;
     }
 
-    public void setIsPassed(boolean isPassed) {
+    public void setPassed(boolean isPassed) {
         this.isPassed = isPassed;
     }
 

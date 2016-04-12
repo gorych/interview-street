@@ -1,14 +1,13 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.IUserDAO;
+import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.domain.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl extends AbstractDbDAO implements IUserDAO {
+public class UserDAOImpl extends AbstractDbDAO implements UserDAO {
 
     @Override
     public User getByPassportData(String passportData) {
@@ -20,9 +19,10 @@ public class UserDAOImpl extends AbstractDbDAO implements IUserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<User> getByPosts(Collection postIds) {
+    public List<User> getByPosts(Integer[] postIds, Integer[] subIds) {
         return getSession()
-                .createQuery("FROM User WHERE employee.post.id IN (:posts) GROUP BY employee.id")
+                .createQuery("FROM User WHERE employee.subdivision.id IN (:subs) AND employee.post.id IN (:posts) GROUP BY employee.id")
+                .setParameterList("subs", subIds)
                 .setParameterList("posts", postIds)
                 .list();
     }

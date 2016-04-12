@@ -1,5 +1,7 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -9,17 +11,16 @@ import java.io.Serializable;
 public class User implements Serializable{
 
     @Id
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @Expose
+    @ManyToOne()
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     @JoinColumn(name = "role_id")
     private UserRole role;
 

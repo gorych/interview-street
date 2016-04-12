@@ -1,8 +1,9 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
+import org.apache.commons.lang.WordUtils;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -10,8 +11,8 @@ import java.io.Serializable;
 public class Employee implements Serializable {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
     @Column(name = "firstname")
@@ -23,13 +24,12 @@ public class Employee implements Serializable {
     @Column(name = "lastname")
     private String lastname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @Expose
+    @ManyToOne()
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
+    @ManyToOne()
     @JoinColumn(name = "subdivision_id")
     private Subdivision subdivision;
 
@@ -82,7 +82,7 @@ public class Employee implements Serializable {
     }
 
     public String getInitials() {
-        return secondname + " " + lastname;
+        return WordUtils.capitalize((firstname + " " + secondname).toLowerCase());
     }
 
     @Override

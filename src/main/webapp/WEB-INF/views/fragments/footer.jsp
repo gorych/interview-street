@@ -10,8 +10,8 @@
             <div class="col l3 s12 white-text">
                 <h5>Ссылки</h5>
                 <ul>
-                    <li><a class="white-text" href="#!">Сайт университета</a></li>
-                    <li><a class="white-text" href="#!">Учебный портал</a></li>
+                    <li><a class="white-text" href="https://www.gstu.by">Сайт университета</a></li>
+                    <li><a class="white-text" href="http://www.edu.gstu.by/">Учебный портал</a></li>
                     <li><a class="white-text" href="#!">GitHub</a></li>
                 </ul>
             </div>

@@ -1,6 +1,8 @@
 package by.gstu.interviewstreet.domain;
 
+import com.google.gson.annotations.Expose;
 import javafx.geometry.Pos;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,15 +12,17 @@ import java.io.Serializable;
 public class Post implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Expose
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
+    @Expose
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
-    public Post(){
-    }
+    public Post(){ }
 
     public Post(int id) {
         this.id = id;
@@ -38,6 +42,24 @@ public class Post implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        if (getId() != post.getId()) return false;
+        return getName() != null ? getName().equals(post.getName()) : post.getName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
 
     @Override

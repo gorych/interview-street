@@ -1,64 +1,48 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.*;
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.dao.AnswerDAO;
+import by.gstu.interviewstreet.dao.AnswerTypeDAO;
+import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.domain.AnswerType;
+import by.gstu.interviewstreet.domain.Question;
+import by.gstu.interviewstreet.domain.QuestionType;
 import by.gstu.interviewstreet.service.AnswerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
-    @Autowired
-    private IAnswerDAO answerDAO;
+    private static final String TEXT_ANSWER_NAME = "text";
+    private static final int MIN_ANSWER_COUNT = 2;
 
     @Autowired
-    private IQuestionDAO questionDAO;
+    private AnswerDAO answerDAO;
 
     @Autowired
-    private IAnswerTypeDAO answerTypeDAO;
-
-    @Autowired
-    private IInterviewDAO interviewDAO;
-
-    @Autowired
-    private IFormDAO formDAO;
+    private AnswerTypeDAO answerTypeDAO;
 
     @Override
     @Transactional
-    public long insert(Form form) {
-        AnswerType answerType = answerTypeDAO.getDefaultAnswerType();
-        Answer answer = answerDAO.insert(answerType);
-
-        form.setAnswer(answer);
-        formDAO.insertForm(form);
-
-        return answer.getId();
+    public Answer get(int id) {
+        return answerDAO.getById(id);
     }
 
     @Override
     @Transactional
-    public void insertUserAnswers(Interview interview, List<Integer> questionIds, Map<Integer, String[]> answers, User user) {
-        List<Question> questions = questionDAO.qet(questionIds);
+    public Answer get(Question question, int id) {
+        Answer answer = answerDAO.getById(id);
+        List<Answer> answers = question.getAnswers();
 
-        Calendar calender = Calendar.getInstance();
-        java.util.Date utilDate = calender.getTime();
-        java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
+        if (!answers.contains(answer)) {
+            throw new IllegalArgumentException("User is trying to get a nonexistent answer.");
+        }
 
-        for (Question question : questions) {
-            String[] userAnswers = answers.get(question.getId());
-            for (String answer : userAnswers) {
-                answerDAO.insertUserAnswer(new UserAnswer(user, question, interview, answer, currentDate));
-            }
-        }
-        if (user != null) {
-            interviewDAO.pass(interview.getId(), user.getId());
-        }
+        return answer;
     }
 
     @Override
@@ -69,43 +53,67 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     @Transactional
-    public AnswerType getAnswerType(int id) {
-        return answerTypeDAO.getById(id);
+    public void saveOrUpdate(Answer answer) {
+        answerDAO.saveOrUpdate(answer);
     }
 
     @Override
     @Transactional
-    public String getJSON(int questionId) {
-        List<UserAnswer> answers = answerDAO.getUserAnswers(questionId);
-        List<Integer> count = answerDAO.getAnswerCount(questionId);
+    public List<Answer> addDefaultAnswers(Question question) {
+        QuestionType questionType = question.getType();
+        AnswerType answerType = questionType.getAnswerType();
 
-        List<Map<String, String>> jsonList = new ArrayList<>();
+        int answerCount = questionType.getAnswerCount();
+        String defaultValue = answerType.getDefaultValue();
 
-        Map<String, String> jsonObject = new HashMap<>();
-        StringBuilder res = new StringBuilder();
-        StringBuilder counts = new StringBuilder();
+        List<Answer> answers = new ArrayList<>();
+        for (int i = 0; i < answerCount; i++) {
+            Answer answer = new Answer(answerType, question, defaultValue);
 
-        for (int i = 0; i < answers.size(); i++) {
-            UserAnswer answer = answers.get(i);
-            res.append(answer.getAnswer()).append(";");
-            counts.append(count.get(i)).append(";");
+            answerDAO.saveOrUpdate(answer);
+            answers.add(answer);
         }
 
-        jsonObject.put("answer", res.deleteCharAt(res.length() - 1).toString());
-        jsonObject.put("counts", counts.deleteCharAt(counts.length() - 1).toString());
-        jsonObject.put("allNumber", count.size() + "");
-        jsonList.add(jsonObject);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(jsonList);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
+        return answers;
     }
 
     @Override
     @Transactional
-    public void remove(int id) {
-        answerDAO.remove(id);
+    public List<Answer> duplicateAnswers(Question question, Question duplicate) {
+        List<Answer> answers = new ArrayList<>();
+
+        for (Answer answer : question.getAnswers()) {
+            Answer duplicateAnswer = new Answer(answer.getType(), duplicate, answer.getText());
+
+            answerDAO.saveOrUpdate(duplicateAnswer);
+            answers.add(duplicateAnswer);
+        }
+
+        return answers;
+    }
+
+    @Override
+    @Transactional
+    public Answer addDefaultAnswer(AnswerType type, Question question) {
+        Answer answer = new Answer(type, question, type.getDefaultValue());
+        answerDAO.saveOrUpdate(answer);
+
+        return answer;
+    }
+
+    @Override
+    @Transactional
+    public Answer addDefaultTextAnswer(Question question) {
+        AnswerType answerType = answerTypeDAO.getByName(TEXT_ANSWER_NAME);
+        Answer answer = new Answer(answerType, question, answerType.getDefaultValue());
+        answerDAO.saveOrUpdate(answer);
+
+        return answer;
+    }
+
+    @Override
+    @Transactional
+    public void remove(Answer answer) {
+        answerDAO.remove(answer);
     }
 }

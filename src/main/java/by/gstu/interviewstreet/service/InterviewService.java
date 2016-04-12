@@ -1,35 +1,26 @@
 package by.gstu.interviewstreet.service;
 
-import by.gstu.interviewstreet.domain.ExtendUserInterview;
-import by.gstu.interviewstreet.domain.Form;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.web.param.RequestParamException;
+import org.springframework.ui.ModelMap;
 
 import java.util.List;
+import java.util.Map;
 
 public interface InterviewService {
 
-    List<Interview> getAll();
-
-    List<Interview> getByType(int typeId);
-
-    List<Form> getQuestions(int interviewId);
-
-    List<Form> getQuestions(long hash);
-
-    List<List<Form>> getAnswers(List<Form> questionForm);
-
-    String getJSON(Interview interview);
-
-    String getLightJSON(List<Interview> interview);
-
     Interview get(int interviewId);
 
-    Interview get(long hash);
+    Interview get(String hash);
 
-    Interview insert(ExtendUserInterview userInterview) throws RequestParamException;
+    List<Interview> getAll();
 
-    void remove(List<Integer> ids);
+    List<Interview> getAllInRange(int from, int howMany);
 
-    void hide(int id);
+    Map<String, Object> getModelMapForEditForm(int interviewId);
+
+    Interview saveOrUpdate(Interview interview);
+
+    void lockOrUnlock(int id);
+
+    void remove(Interview interview);
 }

@@ -11,7 +11,4 @@ public interface UserService {
 
     User get(String passportData);
 
-    List<User> getUsers(Collection postIds);
-
-    List<UserInterview> getInterviews(String passportData);
 }

@@ -1,6 +1,6 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.ISubdivisionDAO;
+import by.gstu.interviewstreet.dao.SubdivisionDAO;
 import by.gstu.interviewstreet.domain.Subdivision;
 import by.gstu.interviewstreet.service.SubdivisionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.List;
 public class SubdivisionServiceImpl implements SubdivisionService{
 
     @Autowired
-    ISubdivisionDAO subdivisionDAO;
+    SubdivisionDAO subdivisionDAO;
 
     @Override
     @Transactional

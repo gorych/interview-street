@@ -1,45 +1,108 @@
 package by.gstu.interviewstreet.domain;
 
+import by.gstu.interviewstreet.web.util.DateUtils;
+import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "interviews")
 public class Interview implements Serializable {
 
+    private static final String LOCK_ICON = "lock";
+    private static final String LOCK_OPEN_ICON = "lock_open";
+
+    private static final String LOCK_ICON_TITLE = "Анкета закрыта для прохождения";
+    private static final String LOCK_OPEN_ICON_TITLE = "Анкета открыта для прохождения";
+
     @Id
-    @Column(name = "id")
+    @Expose
     @GeneratedValue
+    @Column(name = "id")
     private int id;
 
-    @Size(min = 1, max = 50)
-    @Column(name = "name")
+    @Expose
+    @NotEmpty
+    @Length(min = 5, max = 60)
+    @Column(name = "name", length = 60)
     private String name;
 
-    @Size(min = 1, max = 100)
-    @Column(name = "description")
+    @Expose
+    @NotEmpty
+    @Length(min = 3, max = 70)
+    @Column(name = "description", length = 70)
     private String description;
 
+    @Expose
+    @Length(max = 65)
+    @Column(name = "goal", length = 65)
+    private String goal;
+
+    @Expose
+    @Length(max = 25)
+    @Column(name = "audience", length = 25)
+    private String audience;
+
+    @Expose
     @Column(name = "hide")
     private boolean hide;
 
-    @Column(name = "hash")
-    private long hash;
-
+    @Expose
+    @Temporal(TemporalType.DATE)
+    @Generated(GenerationTime.ALWAYS)
     @Column(name = "placement_date")
     private Date placementDate;
 
-    @Column(name = "question_count")
-    private long questionCount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Expose
     @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(name = "end_date")
+    private Date endDate;
+
+    @Expose
+    @NotNull
+    @Column(name = "hash", length = 45)
+    private String hash;
+
+    @Expose
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "type_id")
     private InterviewType type;
 
+    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
+    private Set<Question> questions = new HashSet<>();
+
+    public boolean getIsNew() {
+        return DateUtils.isToday(placementDate);
+    }
+
+    public String getLockIcon() {
+        return hide ? LOCK_ICON : LOCK_OPEN_ICON;
+    }
+
+    public String getTitle() {
+        return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
+    }
+
+    public String getFormatPlacementDate(){
+        return DateUtils.YYYY_MM_DD.format(placementDate);
+    }
+
+    public String getFormatEndDate(){
+        return DateUtils.YYYY_MM_DD.format(endDate);
+    }
+
+    //region Getters and Setters
     public int getId() {
         return id;
     }
@@ -64,20 +127,28 @@ public class Interview implements Serializable {
         this.description = description;
     }
 
-    public boolean isHide() {
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
+    }
+
+    public String getAudience() {
+        return audience;
+    }
+
+    public void setAudience(String audience) {
+        this.audience = audience;
+    }
+
+    public boolean getHide() {
         return hide;
     }
 
     public void setHide(boolean hide) {
         this.hide = hide;
-    }
-
-    public long getQuestionCount() {
-        return questionCount;
-    }
-
-    public void setQuestionCount(long questionCount) {
-        this.questionCount = questionCount;
     }
 
     public Date getPlacementDate() {
@@ -88,6 +159,25 @@ public class Interview implements Serializable {
         this.placementDate = placementDate;
     }
 
+    public Date getEndDate() {
+        if (DateUtils.isMoreThanToday(endDate)) {
+            return endDate;
+        }
+        return DateUtils.getTomorrow();
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
+
     public InterviewType getType() {
         return type;
     }
@@ -96,13 +186,16 @@ public class Interview implements Serializable {
         this.type = type;
     }
 
-    public long getHash() {
+    public String getHash() {
         return hash;
     }
 
-    public void setHash(long hash) {
+    public void setHash(String hash) {
         this.hash = hash;
     }
+
+    //endregion
+
 
     @Override
     public String toString() {
@@ -110,37 +203,13 @@ public class Interview implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", goal='" + goal + '\'' +
+                ", audience='" + audience + '\'' +
                 ", hide=" + hide +
-                ", hash=" + hash +
                 ", placementDate=" + placementDate +
+                ", endDate=" + endDate +
+                ", hash='" + hash + '\'' +
                 ", type=" + type +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Interview)) return false;
-
-        Interview interview = (Interview) o;
-
-        if (getId() != interview.getId()) return false;
-        if (isHide() != interview.isHide()) return false;
-        if (!getName().equals(interview.getName())) return false;
-        if (!getDescription().equals(interview.getDescription())) return false;
-        if (!getPlacementDate().equals(interview.getPlacementDate())) return false;
-        return getType().equals(interview.getType());
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getId();
-        result = 31 * result + getName().hashCode();
-        result = 31 * result + getDescription().hashCode();
-        result = 31 * result + (isHide() ? 1 : 0);
-        result = 31 * result + getPlacementDate().hashCode();
-        result = 31 * result + getType().hashCode();
-        return result;
     }
 }

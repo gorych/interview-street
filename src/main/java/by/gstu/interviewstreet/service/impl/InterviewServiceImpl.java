@@ -1,18 +1,17 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IInterviewTypeDAO;
-import by.gstu.interviewstreet.dao.IUserDAO;
-import by.gstu.interviewstreet.dao.IUserInterviewDAO;
+import by.gstu.interviewstreet.dao.EmployeeDAO;
+import by.gstu.interviewstreet.dao.InterviewDAO;
+import by.gstu.interviewstreet.dao.SubdivisionDAO;
+import by.gstu.interviewstreet.dao.UserInterviewDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.InterviewService;
-import by.gstu.interviewstreet.web.param.RequestIdParam;
-import by.gstu.interviewstreet.web.param.RequestParamException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.*;
 
@@ -20,16 +19,16 @@ import java.util.*;
 public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
-    private IUserDAO userDAO;
+    private EmployeeDAO employeeDAO;
 
     @Autowired
-    private IInterviewDAO interviewDAO;
+    private InterviewDAO interviewDAO;
 
     @Autowired
-    IInterviewTypeDAO interviewTypeDAO;
+    private SubdivisionDAO subdivisionDAO;
 
     @Autowired
-    private IUserInterviewDAO userInterviewDAO;
+    private UserInterviewDAO userInterviewDAO;
 
     @Override
     @Transactional
@@ -39,107 +38,53 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public List<Interview> getByType(int typeId) {
-        if(typeId < 1 || typeId > 2){
-            return interviewDAO.getAll();
-        }
-        return interviewDAO.getByType(typeId);
+    public List<Interview> getAllInRange(int from, int howMany) {
+        return interviewDAO.getAllInRange(from, howMany);
     }
 
     @Override
     @Transactional
-    public List<Form> getQuestions(int interviewId) {
-        List<Form> forms = interviewDAO.getInterviewQuestions(interviewId);
-        if (forms == null) {
-            return new ArrayList<>();
-        }
+    public Map<String, Object> getModelMapForEditForm(int interviewId) {
+        Interview interview = interviewDAO.getById(interviewId);
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);
 
-        return forms;
-    }
+        List<Post> activePosts = new ArrayList<>();
+        List<Integer> activeSubIds = new ArrayList<>();
 
-    @Override
-    @Transactional
-    public List<Form> getQuestions(long hash) {
-        List<Form> forms = interviewDAO.getInterviewQuestions(hash);
-        if (forms == null) {
-            return new ArrayList<>();
+        for (UserInterview userInterview : userInterviews) {
+            activePosts.add(userInterview.getUser().getEmployee().getPost());
+            activeSubIds.add(userInterview.getUser().getEmployee().getSubdivision().getId());
         }
 
-        return forms;
-    }
+        Map<Object, String> posts = new HashMap<>();
+        Map<Object, String> subdivisions = new TreeMap<>();
+        if (activeSubIds.size() > 0) {
 
-    @Override
-    @Transactional
-    public List<List<Form>> getAnswers(List<Form> questionForm) {
-        return interviewDAO.getInterviewAnswers(questionForm);
-    }
+            /*List of employees which have such subdivisions*/
+            List<Employee> employees = employeeDAO.getBySubdivisionIds(activeSubIds);
 
-    @Override
-    @Transactional
-    public String getJSON(Interview interview) {
-        final int OPEN_INTERVIEW = 1;
+            for (Employee employee : employees) {
+                Post post = employee.getPost();
 
-        StringBuilder posts = new StringBuilder();
-        StringBuilder subdivisions = new StringBuilder();
-        StringBuilder subdivisionNames = new StringBuilder();
-
-        List<UserInterview> userInterviews = userInterviewDAO.getById(interview.getId());
-        if (userInterviews != null && userInterviews.size() != 0) {
-            for (UserInterview ui : userInterviews) {
-                int postId = ui.getUser().getEmployee().getPost().getId();
-                int subdivisionId = ui.getUser().getEmployee().getSubdivision().getId();
-                String subdivisionName = ui.getUser().getEmployee().getSubdivision().getName();
-
-                posts.append(postId).append(",");
-                subdivisions.append(subdivisionId).append(",");
-                subdivisionNames.append(subdivisionName).append(",");
+                /*Mark post if it was selected. Used on form.jsp*/
+                posts.put(post, activePosts.contains(post) ? "selected" : "not_selected");
             }
-            posts.deleteCharAt(posts.length() - 1);
-            subdivisions.deleteCharAt(subdivisions.length() - 1);
-            subdivisionNames.deleteCharAt(subdivisionNames.length() - 1);
+
+            /*List of subs for select, which used on form.jsp*/
+            List<Subdivision> subs = subdivisionDAO.getAll();
+
+            for (Subdivision sub : subs) {
+                subdivisions.put(sub, activeSubIds.contains(sub.getId()) ? "selected" : "not_selected");
+            }
+
         }
 
-        List<Map<String, String>> jsonList = new ArrayList<>();
-        Map<String, String> jsonObject = new HashMap<>();
+        Map<String, Object> valueMap = new HashMap<>();
+        valueMap.put(AttrConstants.POSTS, posts);
+        valueMap.put(AttrConstants.SUBDIVISIONS, subdivisions);
+        valueMap.put(AttrConstants.INTERVIEW, interview);
 
-        jsonObject.put("id", interview.getId() + "");
-        jsonObject.put("name", interview.getName());
-        jsonObject.put("date", interview.getPlacementDate() + "");
-        jsonObject.put("type_id", interview.getType().getId() + "");
-        jsonObject.put("type", interview.getType().getId() <= OPEN_INTERVIEW ? "visibility" : "visibility_off");
-        jsonObject.put("hide", interview.isHide() ? "lock" : "lock_open");
-        jsonObject.put("description", interview.getDescription());
-        jsonObject.put("subdivisions", subdivisions.toString());
-        jsonObject.put("subdvsn_names", subdivisionNames.toString());
-        jsonObject.put("posts", posts.toString());
-        jsonObject.put("interview_id", interview.getId() + "");
-
-        jsonList.add(jsonObject);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(jsonList);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
-    }
-
-    @Override
-    public String getLightJSON(List<Interview> interviews) {
-        List<Map<String, String>> jsonList = new ArrayList<>();
-
-        for (Interview interview:interviews){
-            Map<String, String> jsonObject = new HashMap<>();
-            jsonObject.put("id", interview.getId() + "");
-            jsonObject.put("name", interview.getName());
-            jsonList.add(jsonObject);
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(jsonList);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
+        return valueMap;
     }
 
     @Override
@@ -150,52 +95,54 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public Interview get(long hash) {
-            return interviewDAO.getByHash(hash);
+    public Interview get(String hash) {
+        return interviewDAO.getByHash(hash);
     }
 
     @Override
     @Transactional
-    public Interview insert(ExtendUserInterview userInterview) throws RequestParamException {
-        Interview interview = userInterview.getInterview();
+    public Interview saveOrUpdate(Interview interview) {
+        Interview existed = interviewDAO.getById(interview.getId());
 
-        Calendar calender = Calendar.getInstance();
-        java.util.Date utilDate = calender.getTime();
-        java.sql.Date currentDate = new java.sql.Date(utilDate.getTime());
+        /*create new interview*/
+        if (existed == null) {
+            byte[] bytes = (interview.getName()+ System.currentTimeMillis()).getBytes();
+            interview.setHash(DigestUtils.md5DigestAsHex(bytes));
+            interviewDAO.save(interview);
 
-        int interviewType = interview.getType().getId();
-        InterviewType type = interviewTypeDAO.getById(interviewType);
-
-        interview.setPlacementDate(currentDate);
-        interview.setType(type);
-        interview.setHide(true);
-        interview.setHash(interview.hashCode());
-
-        Set<Post> posts = userInterview.getPosts();
-        if (interviewType == 2)/*so it is necessary*/ {
-            interviewDAO.insert(interview);
             return interview;
         }
-        List<Integer> ids = new ArrayList<>();
-        for (Post post : posts) {
-            ids.add(new RequestIdParam(post.getId()).intValue());
+        removeAllUserInterviews(existed);
+
+        existed.setName(interview.getName());
+        existed.setType(interview.getType());
+        existed.setGoal(interview.getGoal());
+        existed.setEndDate(interview.getEndDate());
+        existed.setAudience(interview.getAudience());
+        existed.setPlacementDate(DateUtils.getToday());
+        existed.setDescription(interview.getDescription());
+        existed.setHide(true);
+
+        interviewDAO.save(existed);
+        return existed;
+    }
+
+    private void removeAllUserInterviews(Interview interview) {
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interview.getId());
+        for (UserInterview ui : userInterviews) {
+            userInterviewDAO.remove(ui);
         }
-
-        List<User> users = userDAO.getByPosts(ids);
-        interviewDAO.insert(interview, users);
-
-        return interview;
     }
 
     @Override
     @Transactional
-    public void remove(List<Integer> ids) {
-        interviewDAO.remove(ids);
+    public void remove(Interview interview) {
+        interviewDAO.remove(interview);
     }
 
     @Override
     @Transactional
-    public void hide(int id) {
-        interviewDAO.hide(id);
+    public void lockOrUnlock(int id) {
+        interviewDAO.lockOrUnlock(id);
     }
 }

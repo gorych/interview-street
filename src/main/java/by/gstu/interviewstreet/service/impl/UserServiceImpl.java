@@ -1,9 +1,7 @@
 package by.gstu.interviewstreet.service.impl;
 
-import by.gstu.interviewstreet.dao.IInterviewDAO;
-import by.gstu.interviewstreet.dao.IUserDAO;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.dao.InterviewDAO;
+import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.security.UserPosition;
 import by.gstu.interviewstreet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,10 @@ import java.util.*;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
-    IUserDAO userDAO;
+    UserDAO userDAO;
 
     @Autowired
-    IInterviewDAO interviewDAO;
+    InterviewDAO interviewDAO;
 
     @Transactional
     public UserDetails loadUserByUsername(String j_username) throws UsernameNotFoundException {
@@ -50,29 +48,5 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public by.gstu.interviewstreet.domain.User get(String passportData) {
         return userDAO.getByPassportData(passportData.toUpperCase());
-    }
-
-    @Override
-    @Transactional
-    public List<by.gstu.interviewstreet.domain.User> getUsers(Collection postIds) {
-        return userDAO.getByPosts(postIds);
-    }
-
-    @Override
-    @Transactional
-    public List<UserInterview> getInterviews(String passportData) {
-        by.gstu.interviewstreet.domain.User user = userDAO.getByPassportData(passportData);
-        if (user == null) {
-            return new ArrayList<>();
-        }
-
-        List<UserInterview> interviews = interviewDAO.getUserInterviews(user);
-        for (UserInterview userInterview : interviews) {
-            Interview interview = userInterview.getInterview();
-            long questionCount = interviewDAO.getQuestionCount(interview.getId());
-            interview.setQuestionCount(questionCount);
-        }
-
-        return interviews;
     }
 }

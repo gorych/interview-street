@@ -2,10 +2,12 @@ package by.gstu.interviewstreet.web.controller;
 
 import by.gstu.interviewstreet.dao.InterviewTypeDAO;
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.SubdivisionService;
 import by.gstu.interviewstreet.service.UserInterviewService;
+import by.gstu.interviewstreet.service.UserService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/interview")
 @Secured(UserRoleConstants.EDITOR)
@@ -26,6 +30,9 @@ public class InterviewActionsController {
     private static final int INTERVIEW_INDEX = 0;
     private static final int POST_IDS_INDEX = 1;
     private static final int SUB_IDS_INDEX = 2;
+
+    @Autowired
+    public UserService userService;
 
     @Autowired
     public InterviewService interviewService;
@@ -59,17 +66,20 @@ public class InterviewActionsController {
 
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     @ResponseBody
-    public ResponseEntity<String> processAddInterviewForm(@RequestBody String data) {
+    public ResponseEntity<String> processAddInterviewForm(@RequestBody String data, Principal principal) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
-
         JsonElement interviewElement = jsonArray.get(INTERVIEW_INDEX);
-        JsonArray postIdsArray = jsonArray.get(POST_IDS_INDEX).getAsJsonArray();
-        JsonArray subIdsArray = jsonArray.get(SUB_IDS_INDEX).getAsJsonArray();
 
         Interview interview = JSONParser.convertJsonElementToObject(interviewElement, Interview.class);
+        User creator = userService.get(principal.getName());
+        interview.setCreator(creator);
+
         interview = interviewService.saveOrUpdate(interview);
 
         if (interview.getType().isOpen()) {
+            JsonArray postIdsArray = jsonArray.get(POST_IDS_INDEX).getAsJsonArray();
+            JsonArray subIdsArray = jsonArray.get(SUB_IDS_INDEX).getAsJsonArray();
+
             Integer[] postIds = JSONParser.convertJsonElementToObject(postIdsArray, Integer[].class);
             Integer[] subIds = JSONParser.convertJsonElementToObject(subIdsArray, Integer[].class);
             userInterviewService.addInterviewToUserByPost(interview, postIds, subIds);
@@ -91,6 +101,16 @@ public class InterviewActionsController {
     @RequestMapping(value = {"/lock/{interviewId}"}, method = {RequestMethod.GET})
     public ResponseEntity<String> lockOrUnlockInterview(@PathVariable int interviewId) {
         interviewService.lockOrUnlock(interviewId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/update-introductory-text"}, method = RequestMethod.POST)
+    public ResponseEntity<String> updateIntroductoryText(@RequestParam String hash, String text) {
+        Interview interview = interviewService.get(hash);
+        interview.setIntroductoryText(text);
+        interviewService.update(interview);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

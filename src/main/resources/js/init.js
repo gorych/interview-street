@@ -33,5 +33,7 @@
         });
 
         $('select').material_select();
+
+        $('textarea').trigger('autoresize');
     });
 })(jQuery);

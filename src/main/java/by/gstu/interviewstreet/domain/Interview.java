@@ -42,6 +42,11 @@ public class Interview implements Serializable {
     @Column(name = "description", length = 70)
     private String description;
 
+    @Generated(GenerationTime.INSERT)
+    @Length(min = 0, max = 500)
+    @Column(name = "introductory_text", length = 500)
+    private String introductoryText;
+
     @Expose
     @Length(max = 65)
     @Column(name = "goal", length = 65)
@@ -56,8 +61,6 @@ public class Interview implements Serializable {
     @Column(name = "hide")
     private boolean hide;
 
-    @Expose
-    @Temporal(TemporalType.DATE)
     @Generated(GenerationTime.ALWAYS)
     @Column(name = "placement_date")
     private Date placementDate;
@@ -68,10 +71,14 @@ public class Interview implements Serializable {
     @Column(name = "end_date")
     private Date endDate;
 
-    @Expose
     @NotNull
     @Column(name = "hash", length = 45)
     private String hash;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User creator;
 
     @Expose
     @NotNull
@@ -81,6 +88,9 @@ public class Interview implements Serializable {
 
     @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
     private Set<Question> questions = new HashSet<>();
+
+    public Interview() {
+    }
 
     public boolean getIsNew() {
         return DateUtils.isToday(placementDate);
@@ -94,11 +104,11 @@ public class Interview implements Serializable {
         return hide ? LOCK_ICON_TITLE : LOCK_OPEN_ICON_TITLE;
     }
 
-    public String getFormatPlacementDate(){
+    public String getFormatPlacementDate() {
         return DateUtils.YYYY_MM_DD.format(placementDate);
     }
 
-    public String getFormatEndDate(){
+    public String getFormatEndDate() {
         return DateUtils.YYYY_MM_DD.format(endDate);
     }
 
@@ -178,6 +188,14 @@ public class Interview implements Serializable {
         this.questions = questions;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
     public InterviewType getType() {
         return type;
     }
@@ -194,8 +212,15 @@ public class Interview implements Serializable {
         this.hash = hash;
     }
 
-    //endregion
+    public String getIntroductoryText() {
+        return introductoryText;
+    }
 
+    public void setIntroductoryText(String introductoryText) {
+        this.introductoryText = introductoryText;
+    }
+
+    //endregion
 
     @Override
     public String toString() {
@@ -210,6 +235,7 @@ public class Interview implements Serializable {
                 ", endDate=" + endDate +
                 ", hash='" + hash + '\'' +
                 ", type=" + type +
+                ", creator=" + creator +
                 '}';
     }
 }

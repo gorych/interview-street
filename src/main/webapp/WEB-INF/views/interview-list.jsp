@@ -16,9 +16,9 @@
         <div class="chip-wrapper">
 
             <c:if test="${empty chip || (chip eq true)}">
-                <div class="chip teal white-text">
+                <div class="chip white-text brown lighten-2">
                     Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
-                    <i class="material-icons" id="hide-chip-btn" >close</i>
+                    <i class="material-icons" id="hide-chip-btn">close</i>
                 </div>
             </c:if>
 
@@ -102,20 +102,10 @@
                 </div>
             </div>
         </c:forEach>
-
-        <ul class="pagination right hide">
-            <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li class="waves-effect"><a href="#">2</a></li>
-            <li class="waves-effect"><a href="#">3</a></li>
-            <li class="waves-effect"><a href="#"><i class="material-icons">chevron_right</i></a></li>
-        </ul>
-
-
     </div><!--end card container-->
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red">
+        <a class="btn-floating btn-large red lighten-1">
             <i class="large material-icons">dashboard</i>
         </a>
         <ul>
@@ -138,7 +128,7 @@
         </div>
         <div class="modal-footer">
             <a class="waves-effect waves-red btn-flat modal-action modal-close" href="#">Нет</a>
-            <a href="<c:url value="/interview/delete"/>" id="submit-delete-btn" class="waves-effect waves-green btn-flat modal-action">Да</a>
+            <a href="#" id="submit-delete-btn" class="waves-effect waves-green btn-flat modal-action">Да</a>
         </div>
     </div>
 

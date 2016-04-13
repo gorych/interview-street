@@ -4,8 +4,10 @@ public final class AttrConstants {
 
     public static final String CHIP = "chip";
     public static final String EDIT_MODE = "edit_mode";
-    public static final String ACTIVE_SUBS = "active_subs";
     public static final String USER_INITIALS = "user_initials";
+    public static final String PAGE_COUNT = "page_count";
+    public static final String FROM_INDEX = "from_index";
+    public static final String TO_INDEX = "to_index";
 
 
     public static final String INTERVIEW = "interview";

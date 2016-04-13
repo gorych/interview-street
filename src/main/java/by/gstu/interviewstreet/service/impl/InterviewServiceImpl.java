@@ -38,8 +38,8 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public List<Interview> getAllInRange(int from, int howMany) {
-        return interviewDAO.getAllInRange(from, howMany);
+    public List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential) {
+        return interviewDAO.getAllInRange(from, howMany, userCredential);
     }
 
     @Override
@@ -112,6 +112,7 @@ public class InterviewServiceImpl implements InterviewService {
 
             return interview;
         }
+        //TODO WHAT???
         removeAllUserInterviews(existed);
 
         existed.setName(interview.getName());
@@ -121,10 +122,18 @@ public class InterviewServiceImpl implements InterviewService {
         existed.setAudience(interview.getAudience());
         existed.setPlacementDate(DateUtils.getToday());
         existed.setDescription(interview.getDescription());
+
+        //TODO WHAT???
         existed.setHide(true);
 
         interviewDAO.save(existed);
         return existed;
+    }
+
+    @Override
+    @Transactional
+    public void update(Interview interview) {
+        interviewDAO.save(interview);
     }
 
     private void removeAllUserInterviews(Interview interview) {

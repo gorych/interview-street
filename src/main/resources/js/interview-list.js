@@ -16,13 +16,11 @@
     });
 
     $("#submit-delete-btn").click(function (event) {
-        event.preventDefault();
-
         var data = {
             data: JSON.stringify({id: $(this).attr("data-temp-id")})
         };
 
-        $.post($(this).attr("href"), data, global.ajaxCallback)
+        $.post(global.rewriteUrl("/interview/delete"), data, global.ajaxCallback)
             .done(function () {
                 $tempCard.remove();
 

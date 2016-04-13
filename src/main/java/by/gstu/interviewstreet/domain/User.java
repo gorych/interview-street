@@ -1,10 +1,13 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import com.sun.deploy.util.ArrayUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +19,7 @@ public class User implements Serializable{
     private int id;
 
     @Expose
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
@@ -26,6 +29,9 @@ public class User implements Serializable{
 
     @Column(name = "passportData")
     private String passportData;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Interview> interviews = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -57,6 +63,14 @@ public class User implements Serializable{
 
     public void setPassportData(String passportData) {
         this.passportData = passportData;
+    }
+
+    public List<Interview> getInterviews() {
+        return interviews;
+    }
+
+    public void setInterviews(List<Interview> interviews) {
+        this.interviews = interviews;
     }
 
     @Override

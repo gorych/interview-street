@@ -14,11 +14,13 @@ public interface InterviewService {
 
     List<Interview> getAll();
 
-    List<Interview> getAllInRange(int from, int howMany);
+    List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential);
 
     Map<String, Object> getModelMapForEditForm(int interviewId);
 
     Interview saveOrUpdate(Interview interview);
+
+    void update(Interview interview);
 
     void lockOrUnlock(int id);
 

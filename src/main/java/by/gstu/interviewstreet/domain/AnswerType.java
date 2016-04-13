@@ -27,7 +27,8 @@ public class AnswerType implements Serializable {
     private String defaultValue;
 
     @NotNull
-    @OneToOne(mappedBy = "answerType")
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private QuestionType questionType;
 
     public int getId() {

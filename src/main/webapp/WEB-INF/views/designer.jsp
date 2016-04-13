@@ -34,10 +34,9 @@
             <!--Interview initial text-->
             <div class="row narrow-row">
                 <div class="input-field col l12 m12 s12">
-                    <input
-                            value="Здравствуйте, потратьте, пожалуйста, несколько минут своего времени на заполнение следующей анкеты."
-                            id="initial-text" type="text" length="200"/>
-                    <label class="active" for="initial-text">Вводный текст анкеты</label>
+                    <textarea id="init-tbox" class="materialize-textarea"></textarea>
+                    <input id="initial-text" type="hidden" value="${interview.introductoryText}">
+                    <label class="active" for="init-tbox">Вводный текст анкеты</label>
                 </div>
             </div>
         </div>

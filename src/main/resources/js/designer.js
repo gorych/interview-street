@@ -13,13 +13,23 @@
 
     new Clipboard("#clipboard-btn");
 
+    $("#init-tbox")
+        .val($("#initial-text").val())
+        .blur(function () {
+            var data = {
+                hash: _hash,
+                text: $(this).val()
+            };
+            $.post(global.rewriteUrl("/interview/update-introductory-text"), data, global.ajaxCallback);
+        });
+
     $("#clipboard-btn").click(function () {
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
     /*Reset focused input to save its value*/
     $(window).on("beforeunload", function () {
-        $("input:focus").blur();
+        $("input:focus, textarea:focus").blur();
     });
 
     /*Show list of question types*/
@@ -200,7 +210,7 @@
                 var data = JSON.parse(response);
 
                 var $stag = $(".row.staggered");
-                var $section = $stag.parent(".section");
+                var $section = $stag.parents(".section");
                 var $btn = $stag.prev(".add-quest-btn");
 
                 var $elem = $section.length ? $section : $btn;

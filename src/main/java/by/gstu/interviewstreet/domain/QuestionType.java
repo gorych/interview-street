@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "question_types")
-public class QuestionType implements Serializable{
+public class QuestionType implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -40,8 +40,7 @@ public class QuestionType implements Serializable{
     private int minAnswerCount;
 
     @NotNull
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "questionType")
     private AnswerType answerType;
 
     public int getId() {

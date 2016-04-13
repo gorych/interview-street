@@ -20,9 +20,10 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Interview> getAllInRange(int from, int howMany) {
+    public List<Interview> getAllInRange(int from, int howMany, String userCredential) {
         return getSession()
-                .createQuery("FROM Interview ORDER BY placementDate DESC")
+                .createQuery("FROM Interview WHERE creator.passportData LIKE :userCredential ORDER BY placementDate DESC")
+                .setString("userCredential", userCredential)
                 .setFirstResult(from)
                 .setMaxResults(howMany)
                 .list();
@@ -46,7 +47,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
     @Override
     public void save(Interview interview) {
-        getSession().save(interview);
+        getSession().saveOrUpdate(interview);
     }
 
     @Override

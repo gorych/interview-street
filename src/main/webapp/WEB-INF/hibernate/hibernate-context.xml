@@ -10,7 +10,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
           p:dataSource-ref="dataSource"
           p:packagesToScan="by.gstu.interviewstreet.domain"
           p:configLocation="/WEB-INF/hibernate/hibernate.cfg.xml">
@@ -29,7 +29,7 @@
           p:initialSize="5"
           p:maxActive="20"/>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager"
           p:sessionFactory-ref="sessionFactory"/>
 
 </beans>

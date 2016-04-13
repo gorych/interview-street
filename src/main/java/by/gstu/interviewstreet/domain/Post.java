@@ -1,7 +1,6 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
-import javafx.geometry.Pos;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;

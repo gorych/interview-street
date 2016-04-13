@@ -12,8 +12,14 @@ public final class ControllerUtils {
     }
 
     public static boolean notExistTextAnswer(Set<Question> questions) {
-        return questions.stream()
-                .filter(quest -> quest.getType().getName().equals(TEXT_ANSWER_NAME)).count() < 1;
+        for (Question question:questions) {
+            if(question.getType().getName().equals(TEXT_ANSWER_NAME)){
+                return true;
+            }
+        }
+        return false;
+       /* return questions.stream()
+                .filter(quest -> quest.getType().getName().equals(TEXT_ANSWER_NAME)).count() < 1;*/
     }
 
 }

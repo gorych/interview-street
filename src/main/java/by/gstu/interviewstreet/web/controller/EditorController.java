@@ -28,7 +28,8 @@ import java.util.List;
 @Secured(UserRoleConstants.EDITOR)
 public class EditorController extends UserController {
 
-    private static final int DEFAULT_RECORD_COUNT = 6;
+    private static int START_PAGE_NUMBER = 1;
+    private static int DEFAULT_RECORD_COUNT = 6;
 
     @Autowired
     public EmployeeService employeeService;
@@ -46,26 +47,61 @@ public class EditorController extends UserController {
     UserService userService;
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
-    public String showInterviewList(@RequestParam(required = false) Integer beginIndex, Model model, Principal principal) {
-        if (beginIndex == null || beginIndex < 0) {
-            beginIndex = 0;
-        }
-
+    public String showInterviewList(@RequestParam(required = false) Integer pageNumber, Model model, Principal principal) {
         User user = userService.get(principal.getName());
         List<Subdivision> subs = subdivisionService.getAll();
         List<Interview> allInterviews = user.getInterviews();
 
         int size = allInterviews.size();
-        int toIndex = beginIndex + DEFAULT_RECORD_COUNT;
 
-        List<Interview> onePartInterviews = allInterviews.subList(beginIndex, toIndex <= size ? toIndex : size);
+        if (pageNumber == null || pageNumber > size || pageNumber < 0) {
+            pageNumber = 1;
+        }
 
-        model.addAttribute(AttrConstants.FROM_INDEX, beginIndex);
-        model.addAttribute(AttrConstants.PAGE_COUNT,
-                ControllerUtils.getPageCount(size, DEFAULT_RECORD_COUNT)
-        );
+        int pageCount = ControllerUtils.getPageCount(size, DEFAULT_RECORD_COUNT);
+        int leftBorder = START_PAGE_NUMBER;
+        int rightBorder = DEFAULT_RECORD_COUNT;
+        while (true) {
+            if (pageNumber == leftBorder) {
+                rightBorder = leftBorder + DEFAULT_RECORD_COUNT - 1;
+                if (rightBorder > pageCount) {
+                    rightBorder = pageCount;
+                }
+                break;
+            }
 
-        model.addAttribute(AttrConstants.INTERVIEWS, ControllerUtils.sortInterviewList(onePartInterviews));
+            if (pageNumber > leftBorder && pageNumber < rightBorder) {
+                if (rightBorder > pageCount) {
+                    rightBorder = pageCount;
+                }
+                break;
+            }
+
+            if (pageNumber == rightBorder) {
+                leftBorder = pageNumber;
+                rightBorder = leftBorder + DEFAULT_RECORD_COUNT - 1;
+                if (rightBorder >= pageCount) {
+                    leftBorder = pageNumber - 3;
+                    rightBorder = pageCount;
+                }
+                break;
+            }
+
+            leftBorder = rightBorder;
+            rightBorder += DEFAULT_RECORD_COUNT-1;
+        }
+
+        int fromIndex = DEFAULT_RECORD_COUNT * (pageNumber - 1);
+        int toIndex = fromIndex + DEFAULT_RECORD_COUNT;
+
+        List<Interview> interviewsForPage = allInterviews.subList(fromIndex, toIndex <= size ? toIndex : size);
+
+        model.addAttribute(AttrConstants.PAGE_COUNT, pageCount);
+        model.addAttribute(AttrConstants.START_PAGE, leftBorder);
+        model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, rightBorder);
+        model.addAttribute(AttrConstants.ACTIVE_PAGE_NUMBER, pageNumber);
+
+        model.addAttribute(AttrConstants.INTERVIEWS, ControllerUtils.sortInterviewList(interviewsForPage));
         model.addAttribute(AttrConstants.SUBDIVISIONS, subs);
 
         return "interview-list";
@@ -76,8 +112,7 @@ public class EditorController extends UserController {
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        Type type = new TypeToken<List<Integer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Integer>>() { }.getType();
         List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 

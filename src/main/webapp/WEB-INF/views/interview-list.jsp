@@ -102,6 +102,42 @@
                 </div>
             </div>
         </c:forEach>
+
+        <c:if test="${page_count > 1}">
+            <div class="col s12 right-align">
+                <ul class="pagination">
+                    <li class="prev-page">
+                        <c:if test="${active_page > 1}">
+                            <a href="<c:url value="/editor/interview-list?pageNumber=${active_page - 1}"/>">
+                                <i class="material-icons">chevron_left</i>
+                            </a>
+                        </c:if>
+                    </li>
+                    <c:forEach var="i" begin="${start_page}" end="${last_page}">
+                        <c:choose>
+                            <c:when test="${active_page == i}">
+                                <li class="active brown lighten-2">
+                                    <a href="<c:url value="/editor/interview-list?pageNumber=${i}"/>">${i}</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <a href="<c:url value="/editor/interview-list?pageNumber=${i}"/>">${i}</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    <li class="next-page">
+                        <c:if test="${active_page < page_count}">
+                            <a href="<c:url value="/editor/interview-list?pageNumber=${active_page + 1}"/>">
+                                <i class="material-icons">chevron_right</i>
+                            </a>
+                        </c:if>
+                    </li>
+                </ul>
+            </div>
+        </c:if>
+
     </div><!--end card container-->
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">

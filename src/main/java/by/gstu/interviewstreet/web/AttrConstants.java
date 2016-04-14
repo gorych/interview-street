@@ -6,8 +6,9 @@ public final class AttrConstants {
     public static final String EDIT_MODE = "edit_mode";
     public static final String USER_INITIALS = "user_initials";
     public static final String PAGE_COUNT = "page_count";
-    public static final String FROM_INDEX = "from_index";
-    public static final String TO_INDEX = "to_index";
+    public static final String START_PAGE = "start_page";
+    public static final String ACTIVE_PAGE_NUMBER = "active_page";
+    public static final String LAST_PAGE_NUMBER = "last_page";
 
 
     public static final String INTERVIEW = "interview";

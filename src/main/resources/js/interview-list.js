@@ -6,6 +6,11 @@
         $.get(global.rewriteUrl("/user/hide-chip"), null, global.ajaxCallback);
     });
 
+    $(document).ready(function () {
+        $(".prev-page").not(":has(a)").append("<a href='#'><i class='material-icons'>chevron_left</i></a>").addClass("disabled");
+        $(".next-page").not(":has(a)").append("<a href='#'><i class='material-icons'>chevron_right</i></a>").addClass("disabled")
+    });
+
     $(document).on("click", ".delete-btn", function () {
         var $interviewId = $(this).attr("data-interview-id");
 

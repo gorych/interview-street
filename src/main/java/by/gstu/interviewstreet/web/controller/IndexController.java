@@ -42,4 +42,9 @@ public class IndexController {
         return "403";
     }
 
+    @RequestMapping(value = {"/404"}, method = RequestMethod.GET)
+    public String resourceNotFound() {
+        return "404";
+    }
+
 }

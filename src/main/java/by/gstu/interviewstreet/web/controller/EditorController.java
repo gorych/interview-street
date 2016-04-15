@@ -45,7 +45,7 @@ public class EditorController extends UserController {
 
     @Autowired
     public SubdivisionService subdivisionService;
-    
+
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String showInterviewList(@RequestParam(required = false) Integer pageNumber, Model model, Principal principal) {
         User user = userService.get(principal.getName());

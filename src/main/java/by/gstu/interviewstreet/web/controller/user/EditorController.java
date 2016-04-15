@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.controller;
+package by.gstu.interviewstreet.web.controller.user;
 
 
 import by.gstu.interviewstreet.domain.*;

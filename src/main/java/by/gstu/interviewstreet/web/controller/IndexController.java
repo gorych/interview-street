@@ -32,19 +32,9 @@ public class IndexController {
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String goToLogin(@RequestParam(value = "auth_error", required = false) String error, Model model) {
         if (error != null) {
-            model.addAttribute("auth_error", "Пользователь с такими паспортными данными не существует.");
+            model.addAttribute("auth_error", "Пользователь с такими паспортными данными не найден.");
         }
         return "login";
-    }
-
-    @RequestMapping(value = {"/403"}, method = RequestMethod.GET)
-    public String accessDenied() {
-        return "403";
-    }
-
-    @RequestMapping(value = {"/404"}, method = RequestMethod.GET)
-    public String resourceNotFound() {
-        return "404";
     }
 
 }

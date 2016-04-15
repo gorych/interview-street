@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.controller;
+package by.gstu.interviewstreet.web.controller.error;
 
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,11 +10,6 @@ public class GlobalExceptionController {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public String handleNotFoundException(NoHandlerFoundException e) {
-        return "404";
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public String badRequestHandle(NoHandlerFoundException e) {
         return "404";
     }
 

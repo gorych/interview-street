@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.controller;
+package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;

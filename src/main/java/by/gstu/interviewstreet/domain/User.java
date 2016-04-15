@@ -1,10 +1,8 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
-import com.sun.deploy.util.ArrayUtil;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

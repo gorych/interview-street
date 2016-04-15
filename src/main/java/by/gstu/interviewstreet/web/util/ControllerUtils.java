@@ -27,4 +27,42 @@ public final class ControllerUtils {
         return (int) Math.ceil(allInterviewSize / cardsOnPage);
     }
 
+    /*Used for building pagination*/
+    public static int[] getPaginationBounds(int pageNumber, int pageCount, int cardCountPerPage, int startPageNumber) {
+        int leftBorder = startPageNumber;
+        int rightBorder = cardCountPerPage;
+
+        while (true) {
+            if (pageNumber == leftBorder) {
+                rightBorder = leftBorder + cardCountPerPage - 1;
+                if (rightBorder > pageCount) {
+                    rightBorder = pageCount;
+                }
+                break;
+            }
+
+            if (pageNumber > leftBorder && pageNumber < rightBorder) {
+                if (rightBorder > pageCount) {
+                    rightBorder = pageCount;
+                }
+                break;
+            }
+
+            if (pageNumber == rightBorder) {
+                leftBorder = pageNumber;
+                rightBorder = leftBorder + cardCountPerPage - 1;
+                if (rightBorder >= pageCount) {
+                    leftBorder = pageNumber - 3;
+                    rightBorder = pageCount;
+                }
+                break;
+            }
+
+            leftBorder = rightBorder;
+            rightBorder += cardCountPerPage - 1;
+        }
+
+        return new int[]{leftBorder, rightBorder};
+    }
+
 }

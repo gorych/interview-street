@@ -28,21 +28,16 @@ import java.util.List;
 @Secured(UserRoleConstants.EDITOR)
 public class EditorController extends UserController {
 
-    private static int START_PAGE_NUMBER = 1;
-    private static int DEFAULT_RECORD_COUNT = 6;
-
+    private static final int START_PAGE_NUMBER = 1;
+    private static final int CARD_COUNT_PER_PAGE = 6;
     @Autowired
     public EmployeeService employeeService;
-
     @Autowired
     public QuestionService questionService;
-
     @Autowired
     public InterviewService interviewService;
-
     @Autowired
     public SubdivisionService subdivisionService;
-
     @Autowired
     UserService userService;
 
@@ -53,72 +48,30 @@ public class EditorController extends UserController {
         List<Interview> allInterviews = user.getInterviews();
 
         int size = allInterviews.size();
+        int pageCount = ControllerUtils.getPageCount(size, CARD_COUNT_PER_PAGE);
 
-        if (pageNumber == null || pageNumber > size || pageNumber < 0) {
-            pageNumber = 1;
+        if (pageNumber == null || pageNumber > pageCount || pageNumber < 0) {
+            pageNumber = START_PAGE_NUMBER;
         }
 
-        int pageCount = ControllerUtils.getPageCount(size, DEFAULT_RECORD_COUNT);
-        int leftBorder = START_PAGE_NUMBER;
-        int rightBorder = DEFAULT_RECORD_COUNT;
-        while (true) {
-            if (pageNumber == leftBorder) {
-                rightBorder = leftBorder + DEFAULT_RECORD_COUNT - 1;
-                if (rightBorder > pageCount) {
-                    rightBorder = pageCount;
-                }
-                break;
-            }
+        int[] bounds = ControllerUtils.getPaginationBounds(pageNumber, pageCount,
+                CARD_COUNT_PER_PAGE, START_PAGE_NUMBER);
 
-            if (pageNumber > leftBorder && pageNumber < rightBorder) {
-                if (rightBorder > pageCount) {
-                    rightBorder = pageCount;
-                }
-                break;
-            }
+        int fromIndex = CARD_COUNT_PER_PAGE * (pageNumber - 1);
+        int lastIndex = fromIndex + CARD_COUNT_PER_PAGE;
+        int toIndex = lastIndex <= size ? lastIndex : size;
 
-            if (pageNumber == rightBorder) {
-                leftBorder = pageNumber;
-                rightBorder = leftBorder + DEFAULT_RECORD_COUNT - 1;
-                if (rightBorder >= pageCount) {
-                    leftBorder = pageNumber - 3;
-                    rightBorder = pageCount;
-                }
-                break;
-            }
-
-            leftBorder = rightBorder;
-            rightBorder += DEFAULT_RECORD_COUNT-1;
-        }
-
-        int fromIndex = DEFAULT_RECORD_COUNT * (pageNumber - 1);
-        int toIndex = fromIndex + DEFAULT_RECORD_COUNT;
-
-        List<Interview> interviewsForPage = allInterviews.subList(fromIndex, toIndex <= size ? toIndex : size);
+        List<Interview> interviewsForPage = allInterviews.subList(fromIndex, toIndex);
 
         model.addAttribute(AttrConstants.PAGE_COUNT, pageCount);
-        model.addAttribute(AttrConstants.START_PAGE, leftBorder);
-        model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, rightBorder);
+        model.addAttribute(AttrConstants.START_PAGE_NUMBER, bounds[0]);
+        model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, bounds[1]);
         model.addAttribute(AttrConstants.ACTIVE_PAGE_NUMBER, pageNumber);
 
         model.addAttribute(AttrConstants.INTERVIEWS, ControllerUtils.sortInterviewList(interviewsForPage));
         model.addAttribute(AttrConstants.SUBDIVISIONS, subs);
 
         return "interview-list";
-    }
-
-    @ResponseBody
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> loadPosts(@RequestBody String data) {
-        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
-
-        Type type = new TypeToken<List<Integer>>() { }.getType();
-        List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
-        List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
-
-        String jsonData = JSONParser.convertObjectToJsonString(employees);
-
-        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/{hash}/designer"}, method = RequestMethod.GET)
@@ -136,6 +89,21 @@ public class EditorController extends UserController {
         model.addAttribute(AttrConstants.QUESTIONS, questions);
 
         return "designer";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    public ResponseEntity<String> loadPosts(@RequestBody String data) {
+        JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
+
+        Type type = new TypeToken<List<Integer>>() {
+        }.getType();
+        List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
+        List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
+
+        String jsonData = JSONParser.convertObjectToJsonString(employees);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
 }

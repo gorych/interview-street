@@ -36,7 +36,7 @@
                         {{include tmpl="multiAnswTmpl"/}}
                     {{/if}}
                 {{/for}}
-                <div class="col wide-col offset-l2 l8 left-align">
+                <div class="col wide-col offset-l2 s12 m12 l8 left-align">
                     <i class="add-answer small material-icons green-text text-accent-4" title="Добавить ответ">add</i>
                     {{if ~getId() <= 0}}
                         <i class="add-text-answer small material-icons deep-orange-text"

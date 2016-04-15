@@ -8,7 +8,7 @@
     </div>
     <div class="col offset-l2 col l8 m12 s12 rating center">
         {^{range start=1 end=answers[0].type.defaultValue}}
-            <i class="small material-icons red-text text-lighten-1 hoverable">star_rate</i>
+            <i class="small material-icons red-text text-lighten-1">star_rate</i>
         {{/range}}
     </div>
 </script>

@@ -19,4 +19,8 @@ var global = global || {};
         return results[1] || 0;
     };
 
+    $("#hide-chip-btn").click(function () {
+        $.get(global.rewriteUrl("/user/hide-chip"), null, global.ajaxCallback);
+    });
+
 }());

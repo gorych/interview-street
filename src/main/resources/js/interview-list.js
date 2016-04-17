@@ -2,10 +2,6 @@
 
     var $tempCard = null;
 
-    $("#hide-chip-btn").click(function () {
-        $.get(global.rewriteUrl("/user/hide-chip"), null, global.ajaxCallback);
-    });
-
     $(document).ready(function () {
         $(".prev-page").not(":has(a)").append("<a href='#'><i class='material-icons'>chevron_left</i></a>").addClass("disabled");
         $(".next-page").not(":has(a)").append("<a href='#'><i class='material-icons'>chevron_right</i></a>").addClass("disabled")
@@ -20,7 +16,7 @@
         $("#delete-interview-modal").openModal();
     });
 
-    $("#submit-delete-btn").click(function (event) {
+    $("#submit-delete-btn").click(function () {
         var data = {
             data: JSON.stringify({id: $(this).attr("data-temp-id")})
         };

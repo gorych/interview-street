@@ -28,8 +28,11 @@ public class User implements Serializable{
     @Column(name = "passportData")
     private String passportData;
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
-    private List<Interview> interviews = new ArrayList<>();
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Interview> createdInterviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserInterview> interviewsForPassing = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -63,12 +66,20 @@ public class User implements Serializable{
         this.passportData = passportData;
     }
 
-    public List<Interview> getInterviews() {
-        return interviews;
+    public List<Interview> getCreatedInterviews() {
+        return createdInterviews;
     }
 
-    public void setInterviews(List<Interview> interviews) {
-        this.interviews = interviews;
+    public void setCreatedInterviews(List<Interview> interviews) {
+        this.createdInterviews = interviews;
+    }
+
+    public List<UserInterview> getInterviewsForPassing() {
+        return interviewsForPassing;
+    }
+
+    public void setInterviewsForPassing(List<UserInterview> interviewsForPassing) {
+        this.interviewsForPassing = interviewsForPassing;
     }
 
     @Override

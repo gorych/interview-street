@@ -96,6 +96,10 @@ public class Interview implements Serializable {
         return DateUtils.isToday(placementDate);
     }
 
+    public boolean getIsDeadline() {
+        return DateUtils.isToday(endDate);
+    }
+
     public String getLockIcon() {
         return hide ? LOCK_ICON : LOCK_OPEN_ICON;
     }

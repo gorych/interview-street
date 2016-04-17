@@ -15,19 +15,6 @@
     text-overflow: ellipsis;
 }
 
-.chip {
-    border-radius: 0;
-}
-
-.chip-wrapper {
-    padding: 1.0rem 0.75rem 0;
-    margin-bottom: 0.4rem;
-}
-
-.chip-wrapper h4 {
-    margin: 0.5rem 0;
-}
-
 .card .card-action a {
     margin-right: 5px;
 }
@@ -134,26 +121,6 @@ input[type=text].invalid.invalid-select {
 input[type=text].valid.valid-select {
     border-bottom: none;
     box-shadow: 0 2px 0 0 #4CAF50;
-}
-
-.modal .modal-content {
-    padding-bottom: 0;
-}
-
-.modal-row {
-    margin-bottom: 0;
-}
-
-.placement-date:before {
-    content: "Дата создания: ";
-}
-
-.end-date:before {
-    content: "Дата окончания: ";
-}
-
-.picker__date-display {
-    display: none;
 }
 
 strong {

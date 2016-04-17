@@ -9,12 +9,12 @@ public class CrashController {
 
     @RequestMapping(value = {"/403"}, method = RequestMethod.GET)
     public String accessDenied() {
-        return "403";
+        return "error/403";
     }
 
     @RequestMapping(value = {"/404"}, method = RequestMethod.GET)
     public String resourceNotFound() {
-        return "404";
+        return "error/404";
     }
 
 }

@@ -48,9 +48,9 @@ public class EditorController extends UserController {
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String showInterviewList(@RequestParam(required = false) Integer pageNumber, Model model, Principal principal) {
-        User user = userService.get(principal.getName());
+        User user = getUserByPrincipal(principal);
         List<Subdivision> subs = subdivisionService.getAll();
-        List<Interview> allInterviews = user.getInterviews();
+        List<Interview> allInterviews = user.getCreatedInterviews();
 
         int size = allInterviews.size();
         int pageCount = ControllerUtils.getPageCount(size, CARD_COUNT_PER_PAGE);
@@ -83,7 +83,7 @@ public class EditorController extends UserController {
     public String showDesigner(@PathVariable String hash, HttpServletResponse response, Model model) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
-            return "404";
+            return "error/404";
         }
 
         response.addCookie(new Cookie("hash", hash));

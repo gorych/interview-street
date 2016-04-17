@@ -20,18 +20,22 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
-@Secured(UserRoleConstants.EDITOR)
+@Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
 public class UserController {
 
     @Autowired
     public UserService userService;
 
+    protected User getUserByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userService.get(username);
+    }
+
     @ModelAttribute(AttrConstants.USER_INITIALS)
     public String addUserInitials(Principal principal) {
-        String username = principal.getName();
-        User user = userService.get(username);
-
-        return user.getEmployee().getInitials();
+        return getUserByPrincipal(principal)
+                .getEmployee()
+                .getInitials();
     }
 
     @ResponseBody

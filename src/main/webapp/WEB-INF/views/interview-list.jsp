@@ -13,16 +13,8 @@
 <%@include file="fragments/header.jsp" %>
 <main class="container">
     <div class="row card-container">
-        <div class="chip-wrapper">
+        <%@include file="fragments/chip.jsp" %>
 
-            <c:if test="${empty chip || (chip eq true)}">
-                <div class="chip white-text brown lighten-2">
-                    Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
-                    <i class="material-icons" id="hide-chip-btn">close</i>
-                </div>
-            </c:if>
-
-        </div>
         <c:forEach var="interview" items="${interviews}">
             <div class="col s12 m6 l4">
                 <div class="card darken-1 z-depth-2">

@@ -23,6 +23,7 @@ public final class AttrConstants {
     public static final String QUESTIONS = "questions";
     public static final String INTERVIEWS = "interviews";
     public static final String SUBDIVISIONS = "subdivisions";
+    public static final String USER_INTERVIEWS = "user_interviews";
 
 
     private AttrConstants() {}

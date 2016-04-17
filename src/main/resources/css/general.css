@@ -30,3 +30,32 @@ input:not([type]) + label:after, input[type=text] + label:after, input[type=pass
     opacity: 0;
     transition: .2s opacity ease-out, .2s color ease-out;
 }
+
+.chip {
+    border-radius: 0;
+}
+
+.chip-wrapper {
+    padding: 1.0rem 0.75rem 0;
+    margin-bottom: 0.4rem;
+}
+
+.chip-wrapper h4 {
+    margin: 0.5rem 0;
+}
+
+.placement-date:before {
+    content: "Дата создания: ";
+}
+
+.publication-date:before {
+    content: "Дата размешения: ";
+}
+
+.end-date:before {
+    content: "Дата окончания: ";
+}
+
+.narrow-row {
+    margin-bottom: 0;
+}

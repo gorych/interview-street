@@ -10,9 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "interviews")
@@ -87,10 +85,9 @@ public class Interview implements Serializable {
     private InterviewType type;
 
     @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
-    private Set<Question> questions = new HashSet<>();
+    private List<Question> questions = new ArrayList<>();
 
-    public Interview() {
-    }
+    public Interview() { }
 
     public boolean getIsNew() {
         return DateUtils.isToday(placementDate);
@@ -184,11 +181,11 @@ public class Interview implements Serializable {
         this.endDate = endDate;
     }
 
-    public Set<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 

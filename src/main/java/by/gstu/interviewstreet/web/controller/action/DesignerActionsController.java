@@ -113,7 +113,7 @@ public class DesignerActionsController {
         Question question = questionService.get(questId);
         AnswerType answerType = question.getAnswers().get(0).getType();
 
-        Set<Question> questions = interview.getQuestions();
+        List<Question> questions = interview.getQuestions();
         if (!questions.contains(question)) {
             return new ResponseEntity<>(
                     "Question with id = " + questId + " not exist in the interview with hash = " + hash,

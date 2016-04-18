@@ -13,7 +13,7 @@ public final class ControllerUtils {
     private ControllerUtils() {
     }
 
-    public static boolean notExistTextAnswer(Set<Question> questions) {
+    public static boolean notExistTextAnswer(List<Question> questions) {
         return questions.stream()
                 .filter(quest -> quest.getType().getName().equals(TEXT_ANSWER_NAME)).count() < 1;
     }
@@ -21,6 +21,11 @@ public final class ControllerUtils {
     public static List<Interview> sortInterviewList(List<Interview> interviews) {
         interviews.sort((o1, o2) -> o1.getPlacementDate().compareTo(o2.getPlacementDate()));
         return interviews;
+    }
+
+    public static List<Question> sortQuestionList(List<Question> questions) {
+        questions.sort((o1, o2) -> o1.getNumber() - o2.getNumber());
+        return questions;
     }
 
     public static int getPageCount(int allInterviewSize, double cardsOnPage) {

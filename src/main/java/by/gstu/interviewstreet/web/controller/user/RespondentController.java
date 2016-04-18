@@ -1,9 +1,14 @@
 package by.gstu.interviewstreet.web.controller.user;
 
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.util.ControllerUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +25,9 @@ import java.util.stream.Collectors;
 @Secured(UserRoleConstants.RESPONDENT)
 public class RespondentController extends UserController {
 
+    @Autowired
+    UserInterviewService userInterviewService;
+
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
@@ -33,9 +41,19 @@ public class RespondentController extends UserController {
     }
 
     @RequestMapping("/{hash}/interview")
-    public String showDashboard(@PathVariable String hash) {
+    public String showDashboard(@PathVariable String hash, Principal principal, Model model) {
+        UserInterview userInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
+        if (userInterview == null) {
+            return "redirect:/dashboard";
+        }
 
-        return "dashboard";
+        Interview interview = userInterview.getInterview();
+        List<Question> sortedQuestions = ControllerUtils.sortQuestionList(interview.getQuestions());
+
+        model.addAttribute(AttrConstants.INTERVIEW, interview);
+        model.addAttribute(AttrConstants.QUESTIONS, sortedQuestions);
+
+        return "interview";
     }
 
 }

@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
         Interview interview = interviewDAO.getByHash(hash);
         Question question = questionDAO.getById(questId);
 
-        Set<Question> questions = interview.getQuestions();
+        List<Question> questions = interview.getQuestions();
         if (questions.contains(question)) {
             return question;
         }

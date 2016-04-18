@@ -32,4 +32,10 @@ public class UserInterviewServiceImpl implements UserInterviewService {
         }
     }
 
+    @Override
+    @Transactional
+    public UserInterview getByUserAndInterview(String username, String hash) {
+        return userInterviewDAO.getByUserAndInterview(username, hash);
+    }
+
 }

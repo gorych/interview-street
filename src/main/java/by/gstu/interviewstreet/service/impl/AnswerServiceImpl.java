@@ -18,7 +18,6 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
 
     private static final String TEXT_ANSWER_NAME = "text";
-    private static final int MIN_ANSWER_COUNT = 2;
 
     @Autowired
     private AnswerDAO answerDAO;

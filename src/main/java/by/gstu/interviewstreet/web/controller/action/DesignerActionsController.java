@@ -111,7 +111,7 @@ public class DesignerActionsController {
     public ResponseEntity<String> addAnswer(String hash, int questId, @RequestParam(required = false) boolean textType) {
         Interview interview = interviewService.get(hash);
         Question question = questionService.get(questId);
-        AnswerType answerType = question.getAnswers().get(0).getType();
+        AnswerType answerType = question.getType().getAnswerType();
 
         List<Question> questions = interview.getQuestions();
         if (!questions.contains(question)) {

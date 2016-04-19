@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "answer_types")
-public class AnswerType implements Serializable {
+public class AnswerType implements Serializable, Comparable<AnswerType> {
 
     @Id
     @Expose
@@ -71,5 +71,10 @@ public class AnswerType implements Serializable {
                 ", defaultValue='" + defaultValue + '\'' +
                 ", questionType=" + questionType +
                 '}';
+    }
+
+    @Override
+    public int compareTo(AnswerType a) {
+        return  a.getName().compareTo(getName());
     }
 }

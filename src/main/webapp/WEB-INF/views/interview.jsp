@@ -6,48 +6,9 @@
 <head>
     <%@include file="fragments/meta.html" %>
     <%@include file="fragments/general-css.jsp" %>
+    <link href="<c:url value="/resources/css/interview.css"/>" rel="stylesheet" type="text/css">
+
     <title>Interview Street - ${interview.name}</title>
-
-    <style>
-        footer.page-footer {
-            margin-top: 20px;
-            padding-top: 0;
-        }
-
-        .question {
-            border: 1px solid #000;
-            border-radius: 5px;
-            padding: 0 10px 10px;
-            margin-bottom: 50px;
-        }
-
-        .question:first-of-type {
-            margin-top: 20px;
-        }
-
-        .question-text {
-            font-size: 1.4rem;
-        }
-
-        .number {
-            width: 30px;
-            height: 30px;
-            margin: 0 auto -15px;
-            position: relative;
-            bottom: 15px;
-            line-height: 30px;
-            border-radius: 3px;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-        }
-
-        .input-field label.fix {
-            left: 0;
-        }
-
-    </style>
-
 </head>
 <body>
 <%@include file="fragments/header.jsp" %>
@@ -59,13 +20,16 @@
     </div>
 
     <div class="row">
+        <c:if test="${empty questions}">
+            <h5 class="red-text">Извините, в данной анкете пока нет ни одного вопроса.</h5>
+        </c:if>
 
         <c:forEach var="question" items="${questions}" varStatus="current">
             <div class="question col s12">
                 <div class="number teal">${current.index + 1}</div>
                 <h5 class="question-text">${question.text}</h5>
 
-                <c:forEach var="answer" items="${question.answers}">
+                <c:forEach var="answer" items="${question.sortedAnswers}">
                     <c:set var="answerType" value="${answer.type.name}"/>
                     <c:choose>
                         <c:when test="${answerType eq 'checkbox' || answerType eq 'radio'}">
@@ -77,7 +41,7 @@
                         <c:when test="${answerType eq 'text'}">
                             <div class="input-field">
                                 <input id="${answer.id}" type="text" class="validate">
-                                <label class="fix" for="${answer.id}">Введите текст ответа</label>
+                                <label class="fix" for="${answer.id}">${answer.text}</label>
                             </div>
                         </c:when>
                         <c:otherwise>
@@ -97,77 +61,7 @@
             </div>
         </c:forEach>
 
-        <!--
-        <div class="question col s12">
-            <div class="number teal">4</div>
-            <h5 class="question-text">Как часто выходите в театр?</h5>
-            <div class="input-field col offset-l2 l8 m12 s12" data-answer="${question.answers[0].id}">
-                <input class="rating" type="number" min="3" max="10"
-                       value="3" title="Минимум 3 - Максимум 10"/>
-                <label class="active">Оценка</label>
-            </div>
-            <div class="col offset-l2 col l8 m12 s12 rating center">
-                <i class="small material-icons red-text text-lighten-1">star_rate</i>
-                <i class="small material-icons red-text text-lighten-1">star_rate</i>
-                <i class="small material-icons red-text text-lighten-1">star_rate</i>
-            </div>
-        </div>
-
-        <div class="question col s12">
-            <div class="number teal">1</div>
-            <h5 class="question-text">Как часто выходите в театр?</h5>
-            <p>
-                <input name="group1" type="radio" id="test1"/>
-                <label for="test1">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group1" type="radio" id="test1"/>
-                <label for="test1">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group1" type="radio" id="test1"/>
-                <label for="test1">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group1" type="radio" id="test1"/>
-                <label for="test1">Вариант ответа</label>
-            </p>
-        </div>
-
-        <div class="question col s12">
-            <div class="number teal">2</div>
-            <h5 class="question-text">Как часто выходите в театр?</h5>
-            <p>
-                <input name="group2" type="checkbox" id="test2"/>
-                <label for="test2">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group2" type="checkbox" id="test3"/>
-                <label for="test3">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group2" type="checkbox" id="test4"/>
-                <label for="test4">Вариант ответа</label>
-            </p>
-            <p>
-                <input name="group2" type="checkbox" id="test5"/>
-                <label for="test5">Вариант ответа</label>
-            </p>
-            <div class="input-field">
-                <input id="email" type="email" class="validate">
-                <label class="fix" for="email">Email</label>
-            </div>
-        </div>
-
-        <div class="question col s12">
-            <div class="number teal">3</div>
-            <h5 class="question-text">Как часто выходите в театр?</h5>
-            <div class="input-field">
-                <input id="email" type="email" class="validate">
-                <label class="fix" for="email">Email</label>
-            </div>
-        </div>-->
-
+        <a class="waves-effect waves-light btn-large right"><i class="material-icons right">send</i>Отправить анкету</a>
     </div>
 </main>
 
@@ -180,6 +74,7 @@
 </footer>
 
 <%@include file="fragments/general-js.jsp" %>
+<script src="<c:url value="/resources/js/interview.js"/>"></script>
 
 </body>
 </html>

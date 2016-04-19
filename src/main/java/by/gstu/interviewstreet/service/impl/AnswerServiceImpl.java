@@ -18,6 +18,7 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
 
     private static final String TEXT_ANSWER_NAME = "text";
+    private static final String TEXT_ANSWER_VALUE = "Текст ответа";
 
     @Autowired
     private AnswerDAO answerDAO;
@@ -63,7 +64,9 @@ public class AnswerServiceImpl implements AnswerService {
         AnswerType answerType = questionType.getAnswerType();
 
         int answerCount = questionType.getAnswerCount();
-        String defaultValue = answerType.getDefaultValue();
+        String defaultValue = TEXT_ANSWER_NAME.equals(answerType.getName())
+                ? TEXT_ANSWER_VALUE
+                : answerType.getDefaultValue();
 
         List<Answer> answers = new ArrayList<>();
         for (int i = 0; i < answerCount; i++) {

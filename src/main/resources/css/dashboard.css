@@ -11,6 +11,10 @@
     background-color: transparent;
 }
 
+.collection-item .title a {
+    text-decoration: underline;
+}
+
 .chip-wrapper {
     padding: 1.0rem 0 0.4rem;
     margin-bottom: 0.4rem;

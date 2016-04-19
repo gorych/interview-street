@@ -22,9 +22,9 @@
                 <h6>Количество: ${user_interviews.size()}</h6>
             </div>
             <div class="row narrow-row">
-                <c:if test="${user_interviews.size() < 1}">
+                <c:if test="${empty user_interviews}">
                     <div class="collection-item teal lighten-5">
-                        <h6>У вас нет анкет для прохождения</h6>
+                        <h6>У вас нет анкет для прохождения.</h6>
                     </div>
                 </c:if>
 
@@ -36,15 +36,15 @@
                         <c:choose>
                             <c:when test="${interview.isNew}">
                                 <i class="large-i material-icons circle green lighten-1" title="Анкета добавлена сегодня">schedule</i>
-                                <span class="title green-text">${interview.name}</span>
+                                <span class="title"><a class="green-text" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:when>
                             <c:when test="${interview.isDeadline}">
                                 <i class="large-i material-icons circle red lighten-1" title="Сегодня последний день для прохождения анкеты">watch_later</i>
-                                <span class="title red-text">${interview.name}</span>
+                                <span class="title"><a class="red-text" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:when>
                             <c:otherwise>
                                 <i class="large-i material-icons circle brown lighten-1" title="Ещё есть время для прохождения">timelapse</i>
-                                <span class="title brown-text text-darken-4">${interview.name}</span>
+                                <span class="title"><a class="brown-text text-darken-4" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:otherwise>
                         </c:choose>
 

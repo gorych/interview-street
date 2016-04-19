@@ -48,6 +48,11 @@ input:not([type]) + label:after, input[type=text] + label:after, input[type=pass
     content: "Дата создания: ";
 }
 
+.rating i {
+    width: 3rem;
+    font-size: 3rem;
+}
+
 .publication-date:before {
     content: "Дата размешения: ";
 }

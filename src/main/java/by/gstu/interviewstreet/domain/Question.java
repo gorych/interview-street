@@ -7,38 +7,34 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "questions")
 public class Question implements Serializable {
 
-    @Id
-    @Expose
-    @GeneratedValue
-    @Column(name = "id")
-    private int id;
-
-    @Expose
-    @NotEmpty
-    @Column(name = "text")
-    private String text;
-
-    @NotNull
-    @Column(name = "number")
-    private int number;
-
     @Expose
     @NotNull
     @ManyToOne
     @JoinColumn(name = "type_id")
     QuestionType type;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     Interview interview;
-
+    @Id
+    @Expose
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
+    @Expose
+    @NotEmpty
+    @Column(name = "text")
+    private String text;
+    @NotNull
+    @Column(name = "number")
+    private int number;
     @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
@@ -50,6 +46,11 @@ public class Question implements Serializable {
         this.number = number;
         this.type = type;
         this.text = text;
+    }
+
+    public List<Answer> getSortedAnswers() {
+        Collections.sort(answers);
+        return answers;
     }
 
     public int getId() {

@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.web.util;
 
+import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 
@@ -13,9 +14,9 @@ public final class ControllerUtils {
     private ControllerUtils() {
     }
 
-    public static boolean notExistTextAnswer(List<Question> questions) {
-        return questions.stream()
-                .filter(quest -> quest.getType().getName().equals(TEXT_ANSWER_NAME)).count() < 1;
+    public static boolean notExistTextAnswer(List<Answer> answers) {
+        return answers.stream()
+                .filter(a -> a.getType().getName().equals(TEXT_ANSWER_NAME)).count() < 1;
     }
 
     public static List<Interview> sortInterviewList(List<Interview> interviews) {

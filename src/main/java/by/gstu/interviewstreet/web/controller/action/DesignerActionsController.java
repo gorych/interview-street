@@ -2,7 +2,9 @@ package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
-import by.gstu.interviewstreet.service.*;
+import by.gstu.interviewstreet.service.AnswerService;
+import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.web.util.AnswerValidator;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
@@ -18,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/designer")
 @Secured(UserRoleConstants.EDITOR)
 public class DesignerActionsController {
+
+    private static final int ANSWER_COUNT_WITHOUT_TEXT_ANSWER = 2;
+    private static final int ANSWER_COUNT_WITH_TEXT_ANSWER = 3;
+    private static final String TEXT_ANSWER_NAME = "text";
 
     @Autowired
     AnswerValidator validator;
@@ -46,7 +51,7 @@ public class DesignerActionsController {
         if (interview == null || questionType == null) {
             return new ResponseEntity<>(
                     "Error getting interview or question type. " +
-                    "Interview hash = " + hash + ". question type id = " + questTypeId,
+                    "Interview hash = " + hash + ". Question type id = " + questTypeId,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -114,15 +119,17 @@ public class DesignerActionsController {
         AnswerType answerType = question.getType().getAnswerType();
 
         List<Question> questions = interview.getQuestions();
+        List<Answer> answers = question.getAnswers();
+
         if (!questions.contains(question)) {
             return new ResponseEntity<>(
-                    "Question with id = " + questId + " not exist in the interview with hash = " + hash,
+                    "Question with id = " + questId + " not exists in the interview with hash = " + hash,
                     HttpStatus.BAD_REQUEST
             );
         }
 
         Answer answer;
-        if (textType && ControllerUtils.notExistTextAnswer(questions)) {
+        if (textType && ControllerUtils.notExistTextAnswer(answers)) {
             answer = answerService.addDefaultTextAnswer(question);
         } else {
             answer = answerService.addDefaultAnswer(answerType, question);
@@ -139,10 +146,14 @@ public class DesignerActionsController {
         Question question = questionService.get(hash, questId);
         Answer answer = answerService.get(question, answerId);
 
-        final int MIN_ANSWER_COUNT = 2;
         List<Answer> answers = question.getAnswers();
 
-        if (answers.size() <= MIN_ANSWER_COUNT) {
+        boolean textAnswerExists = !ControllerUtils.notExistTextAnswer(answers);
+        boolean isTextAnswer = TEXT_ANSWER_NAME.equals(answer.getType().getName());
+
+        int minAnswerCount = textAnswerExists ? ANSWER_COUNT_WITH_TEXT_ANSWER : ANSWER_COUNT_WITHOUT_TEXT_ANSWER;
+
+        if (answers.size() <= minAnswerCount && !isTextAnswer) {
             return new ResponseEntity<>(
                     "Error deleting the answer. The question must have at least two responses. Current answers size = " + answers.size(),
                     HttpStatus.NOT_ACCEPTABLE

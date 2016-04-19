@@ -101,8 +101,7 @@ public class EditorController extends UserController {
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 
-        Type type = new TypeToken<List<Integer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Integer>>() { }.getType();
         List<Integer> subdivisionIds = JSONParser.convertJsonElementToObject(jsonArray, type);
         List<Employee> employees = employeeService.getBySubdivisions(subdivisionIds);
 

@@ -188,13 +188,13 @@
             })
             .fail(function (xhr) {
                 if (xhr.status === 406) {
-                    Materialize.toast("Для данного типа вопроса <br/>необходимо минимум 2 ответа", 2000);
+                    Materialize.toast("Для данного типа вопроса <br/>необходимо минимум 2 ответа <br/>(не включая текстовый)", 3000);
                 }
             });
     });
 
     _questionContainer.on('input', ".rating", function () {
-        updateStars($(this));
+        global.updateStars($(this));
     });
 
     /*Listener for question types list. Add new question*/
@@ -264,20 +264,6 @@
         $(".number").each(function (index) {
             $(this).html(index + 1);
         });
-    }
-
-    function updateStars(that) {
-        var starCol = $(that).parent().next().empty();
-        var length = parseInt($(that).val());
-        if ($(that).val().length > 1 && (length < 3 || length > 10)) {
-            $(that.val(3));
-            length = 3;
-        }
-
-        var i = 0;
-        for (; i < length; i++) {
-            $(starCol).append("<i class='small material-icons red-text text-lighten-1'>star_rate</i>");
-        }
     }
 
     //endregion

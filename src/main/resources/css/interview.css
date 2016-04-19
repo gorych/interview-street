@@ -1,0 +1,36 @@
+footer.page-footer {
+    margin-top: 20px;
+    padding-top: 0;
+}
+
+.question {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 0 10px 10px;
+    margin-bottom: 50px;
+}
+
+.question:first-of-type {
+    margin-top: 20px;
+}
+
+.question-text {
+    font-size: 1.4rem;
+}
+
+.number {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto -15px;
+    position: relative;
+    bottom: 15px;
+    line-height: 30px;
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+.input-field label.fix {
+    left: 0;
+}

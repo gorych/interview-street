@@ -1,7 +1,11 @@
 ;(function () {
 
-    $(document).on('input', ".rating", function () {
-        global.updateStars($(this));
+    $(".rating i").click(function () {
+        $(this).parent().find("i").removeClass("selected");
+        $(this)
+            .addClass("selected")
+            .prevUntil("input").addClass("selected");
+
     });
 
 }());

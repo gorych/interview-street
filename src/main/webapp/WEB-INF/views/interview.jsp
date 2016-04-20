@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="by.gstu.interviewstreet.web.util.DateUtils" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -45,30 +46,38 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <div class="input-field col offset-l2 l8 m12 s12">
-                                <input class="rating" type="number" min="3" max="${answer.text}"
-                                       value="3" title="Введите значение"/>
-                                <label class="active">Оценка</label>
-                            </div>
+                            <!--<div class="input-field col offset-l2 l8 m12 s12">
+                            <input class="rating" type="number" min="1" max="${answer.text}"
+                            value="1" title="Введите значение"/>
+                            <label class="active">Оценка</label>
+                            </div>-->
                             <div class="col offset-l2 col l8 m12 s12 rating center">
-                                <c:forEach begin="1" end="3">
+                                <input id="${answer.id}" type="hidden" value="1">
+                                <c:forEach begin="1" end="5">
                                     <i class="small material-icons red-text text-lighten-1">star_rate</i>
                                 </c:forEach>
                             </div>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
+
             </div>
         </c:forEach>
 
-        <a class="waves-effect waves-light btn-large right"><i class="material-icons right">send</i>Отправить анкету</a>
+        <a onclick="validator.checkFormInputs()"
+           class="waves-effect waves-light btn-large teal lighten-1 right"><i class="material-icons right">send</i>Отправить
+            анкету</a>
     </div>
 </main>
 
-<footer class="page-footer teal">
+<div id="error-block" class="hide col s12 m12 l12">
+    <h6 class="error red lighten-1 z-depth-1">Вы не ответили на этот вопрос или на его часть.</h6>
+</div>
+
+<footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
-        <div class="container">
-            Interview Street
+        <div class="container teal-text">
+            Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
         </div>
     </div>
 </footer>

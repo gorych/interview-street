@@ -7,6 +7,7 @@ import java.util.Date;
 public final class DateUtils {
 
     public static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat YYYY = new SimpleDateFormat("yyyy");
 
     private DateUtils() { }
 
@@ -17,6 +18,7 @@ public final class DateUtils {
     public static Date getTomorrow(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.get(Calendar.YEAR);
         return calendar.getTime();
     }
 

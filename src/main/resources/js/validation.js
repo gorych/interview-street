@@ -2,6 +2,14 @@ var validator = validator || {};
 
 (function () {
 
+    validator.checkFormInputs = function () {
+        $("input[type='text']").each(function(){
+            if($(this).val().length < 1){
+                $(this).after($("#error-block").clone().removeClass("hide"));
+            }
+        });
+    };
+
     validator.toggleSelectValidateClass = function (selector) {
         var hiddenInput = $(selector).prevAll("input.select-dropdown");
         var value = $(selector).val();

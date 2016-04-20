@@ -194,7 +194,7 @@
     });
 
     _questionContainer.on('input', ".rating", function () {
-        global.updateStars($(this));
+        updateStars($(this));
     });
 
     /*Listener for question types list. Add new question*/
@@ -264,6 +264,21 @@
         $(".number").each(function (index) {
             $(this).html(index + 1);
         });
+    }
+
+    function updateStars(that) {
+        var starCol = $(that).parent().next().empty();
+        var value = $(that).val();
+        var length = parseInt(value);
+        if (!value || (length < 3 || length > 10)) {
+            $(that.val(3));
+            length = 3;
+        }
+
+        var i = 0;
+        for (; i < length; i++) {
+            $(starCol).append("<i class='small material-icons red-text text-lighten-1'>star_rate</i>");
+        }
     }
 
     //endregion

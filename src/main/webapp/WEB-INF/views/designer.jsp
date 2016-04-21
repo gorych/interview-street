@@ -138,7 +138,7 @@
                                            value="${question.answers[0].text}" title="Минимум 3 - Максимум 10"/>
                                     <label class="active">Количество звезд</label>
                                 </div>
-                                <div class="col offset-l2 col l8 m12 s12 rating center">
+                                <div class="col col l12 m12 s12 rating center">
                                     <c:forEach begin="1" end="${question.answers[0].text}">
                                         <i class="small material-icons red-text text-lighten-1">star_rate</i>
                                     </c:forEach>

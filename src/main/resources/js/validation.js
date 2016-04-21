@@ -3,10 +3,17 @@ var validator = validator || {};
 (function () {
 
     validator.checkFormInputs = function () {
-        $("input[type='text']").each(function(){
-            if($(this).val().length < 1){
-                $(this).after($("#error-block").clone().removeClass("hide"));
+        $("[data-quest]").each(function(){
+            var $text = $(this).find("input[type='text']");
+            if($text.length > 0 && !$text.val()) {
+                $(this).after($(".error-block").clone().removeClass("hide"));
+                return;
             }
+
+            var radio = $(this).find("input[type='radio']");
+            var star = $(this).find("input[type='hidden']");
+            var checkbox = $(this).find("input[type='checkbox']");
+
         });
     };
 
@@ -33,7 +40,7 @@ var validator = validator || {};
         }
     };
 
-    /*Check date with type 'date'*/
+    /*Check input with type 'date'*/
     validator.isValidDate = function (dateField) {
         var dateInput = dateField[0];
         var hiddenInput = document.getElementsByName(dateInput.name + "_submit")[0];

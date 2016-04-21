@@ -56,4 +56,9 @@ public class RespondentController extends UserController {
         return "interview";
     }
 
+    public String sendInterview() {
+
+        return "dashboard";
+    }
+
 }

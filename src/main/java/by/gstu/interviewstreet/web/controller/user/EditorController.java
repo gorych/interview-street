@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Type;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -30,21 +31,16 @@ public class EditorController extends UserController {
 
     private static final int START_PAGE_NUMBER = 1;
     private static final int CARD_COUNT_PER_PAGE = 6;
-
-    @Autowired
-    UserService userService;
-
     @Autowired
     public EmployeeService employeeService;
-
     @Autowired
     public QuestionService questionService;
-
     @Autowired
     public InterviewService interviewService;
-
     @Autowired
     public SubdivisionService subdivisionService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String showInterviewList(@RequestParam(required = false) Integer pageNumber, Model model, Principal principal) {
@@ -67,13 +63,14 @@ public class EditorController extends UserController {
         int toIndex = lastIndex <= size ? lastIndex : size;
 
         List<Interview> interviewsForPage = allInterviews.subList(fromIndex, toIndex);
+        Collections.sort(interviewsForPage);
 
         model.addAttribute(AttrConstants.PAGE_COUNT, pageCount);
         model.addAttribute(AttrConstants.START_PAGE_NUMBER, bounds[0]);
         model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, bounds[1]);
         model.addAttribute(AttrConstants.ACTIVE_PAGE_NUMBER, pageNumber);
 
-        model.addAttribute(AttrConstants.INTERVIEWS, ControllerUtils.sortInterviewList(interviewsForPage));
+        model.addAttribute(AttrConstants.INTERVIEWS, interviewsForPage);
         model.addAttribute(AttrConstants.SUBDIVISIONS, subs);
 
         return "interview-list";

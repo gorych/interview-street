@@ -14,7 +14,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "interviews")
-public class Interview implements Serializable {
+public class Interview implements Serializable, Comparable<Interview> {
 
     private static final String LOCK_ICON = "lock";
     private static final String LOCK_OPEN_ICON = "lock_open";
@@ -238,5 +238,10 @@ public class Interview implements Serializable {
                 ", type=" + type +
                 ", creator=" + creator +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Interview i) {
+        return i.getPlacementDate().compareTo(getPlacementDate());
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "questions")
-public class Question implements Serializable {
+public class Question implements Serializable, Comparable<Question> {
 
     @Expose
     @NotNull
@@ -126,5 +126,10 @@ public class Question implements Serializable {
                 ", type=" + type +
                 ", interview=" + interview +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Question q) {
+        return q.getNumber() - getNumber();
     }
 }

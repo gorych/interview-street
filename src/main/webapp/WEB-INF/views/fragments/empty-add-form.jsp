@@ -4,10 +4,10 @@
 <form id="add-interview-form" class="hide col s12" method="POST" action="<c:url value="/interview/form"/>">
     <input type="hidden" name="type" value=""/>
     <div class="row valign-wrapper left-align">
-        <div class="col l9 m9">
+        <div class="col l9 m9 s9">
             <h4 id="title"></h4>
         </div>
-        <div class="col l3 m3">
+        <div class="col l3 m3 s9">
             <i class="interview-icon medium material-icons teal-text right">perm_identity</i>
         </div>
     </div>

@@ -46,15 +46,17 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <!--<div class="input-field col offset-l2 l8 m12 s12">
-                            <input class="rating" type="number" min="1" max="${answer.text}"
-                            value="1" title="Введите значение"/>
-                            <label class="active">Оценка</label>
-                            </div>-->
-                            <div class="col offset-l2 col l8 m12 s12 rating center">
-                                <input id="${answer.id}" type="hidden" value="1">
-                                <c:forEach begin="1" end="5">
-                                    <i class="small material-icons red-text text-lighten-1">star_rate</i>
+                            <div class="rating center">
+                                <input type="hidden" value="1"}>
+                                <div class="rating-wrapper center">
+                                    <i class="material-icons selected red-text text-lighten-1">star_border</i>
+                                    <span>1</span>
+                                </div>
+                                <c:forEach begin="2" end="${answer.text}" varStatus="cur">
+                                    <div class="rating-wrapper center">
+                                        <i class="material-icons red-text text-lighten-1">star_border</i>
+                                         <span>${cur.index}</span>
+                                    </div>
                                 </c:forEach>
                             </div>
                         </c:otherwise>
@@ -77,7 +79,7 @@
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
         <div class="container teal-text">
-            Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
+            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%></strong>
         </div>
     </div>
 </footer>

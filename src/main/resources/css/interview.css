@@ -46,27 +46,23 @@ footer.page-footer {
     left: 0;
 }
 
-.rating i:first-of-type:hover, .selected:first-of-type {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
+.rating span {
+    display: inline-block;
+    font-size: 14pt;
 }
 
-.rating i:last-of-type:hover, .selected:last-of-type {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+.rating i {
+    font-size: 2.6rem;
+    margin-bottom: -20px;
 }
 
-.rating i:hover, .selected {
-    background-color: #d7ccc8;
+.rating i:hover {
+    cursor: pointer;
 }
 
-.rating i:hover:after{
-    position: relative;
-    bottom: 3.2rem;
-    right: 18rem;
-    border-radius: 3px;
-    content: "0";
-    background-color: #a1ded8;
-    color: black;
-    z-index: 1;
+.rating-wrapper {
+    line-height: 10pt;
+    display: inline-block;
+    width: 2.9rem;
+    margin-bottom: 20px;
 }

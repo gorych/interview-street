@@ -5,10 +5,10 @@
     <input type="hidden" name="type" value="${interview.type.id}"/>
 
     <div class="row valign-wrapper">
-        <div class="col l9 m9 left-align">
-            <h4 id="title">Редактирование анкеты</h4>
+        <div class="col l9 m9 s9 left-align">
+            <h5 id="title">Редактирование анкеты</h5>
         </div>
-        <div class="col l3 m3">
+        <div class="col l3 m3 s3">
             <i class="interview-icon medium material-icons teal-text right">${interview.type.visibilityIcon}</i>
         </div>
     </div>

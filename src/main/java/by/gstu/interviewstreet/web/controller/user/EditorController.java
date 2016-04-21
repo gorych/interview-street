@@ -31,14 +31,19 @@ public class EditorController extends UserController {
 
     private static final int START_PAGE_NUMBER = 1;
     private static final int CARD_COUNT_PER_PAGE = 6;
+
     @Autowired
     public EmployeeService employeeService;
+
     @Autowired
     public QuestionService questionService;
+
     @Autowired
     public InterviewService interviewService;
+
     @Autowired
     public SubdivisionService subdivisionService;
+
     @Autowired
     UserService userService;
 

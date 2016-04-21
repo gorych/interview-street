@@ -20,6 +20,9 @@ var global = global || {};
     };
 
     global.scrollToElement = function (element) {
+        if (!element || element.length < 1) {
+            return;
+        }
         var SPEED = 1100;
 
         var destination = $(element).offset().top - 15;

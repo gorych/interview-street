@@ -2,21 +2,6 @@ var validator = validator || {};
 
 (function () {
 
-    validator.checkFormInputs = function () {
-        $("[data-quest]").each(function(){
-            var $text = $(this).find("input[type='text']");
-            if($text.length > 0 && !$text.val()) {
-                $(this).append($(".error-block").clone().removeClass("hide"));
-                return;
-            }
-
-            var radio = $(this).find("input[type='radio']");
-            var star = $(this).find("input[type='hidden']");
-            var checkbox = $(this).find("input[type='checkbox']");
-
-        });
-    };
-
     validator.toggleSelectValidateClass = function (selector) {
         var hiddenInput = $(selector).prevAll("input.select-dropdown");
         var value = $(selector).val();
@@ -66,6 +51,44 @@ var validator = validator || {};
         });
 
         return ($form.find("input.invalid").length < 1);
+    };
+
+    var _errorBlock = "<div class='error-block col s12 m12 l12'>" +
+        "<h6 class='error red darken-2 z-depth-1'>" +
+        "Вы не ответили на этот вопрос или на его часть.</h6></div>";
+
+    validator.isCorrectForm = function () {
+        $(".error-block").remove();
+        var isCorrect = true;
+
+        $("[data-quest]").each(function () {
+            var input = $(this).find("input").first();
+
+            if ($(input).is(":radio") || $(input).is(":checkbox")) {
+                if ($(this).find("input:checked").length < 1) {
+                    $(this).append(_errorBlock);
+                    isCorrect = false;
+                }
+            }
+
+            if ($(input).is(":text") || $(input).is(":hidden")) {
+                if (!$(this).find("input").val()) {
+                    $(this).append(_errorBlock);
+                    isCorrect = false;
+                }
+            }
+        });
+
+        $(".optional-text").each(function () {
+            if ($(this).closest(".col").prev().find("input").is(":checked") && !$(this).val()) {
+                $(this).parents("[data-quest]").append(_errorBlock);
+                isCorrect = false;
+            }
+        });
+
+        global.scrollToElement($(".error-block").first().parent());
+
+        return isCorrect;
     };
 
 }());

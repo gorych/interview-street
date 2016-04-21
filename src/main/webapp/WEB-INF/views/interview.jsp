@@ -44,8 +44,8 @@
                             <c:if test="${answerType eq 'text'}">
                                 <div class="row special-row valign-wrapper">
                                     <div class="col l1 m1 s1 optional-col">
-                                        <input name="group${question.id}" type="${questType}" id="${answer.id}"/>
-                                        <label class="optional-label" for="${answer.id}"></label>
+                                        <input class="optional-answer" name="group${question.id}" type="${questType}" id="${answer.id}"/>
+                                        <label for="${answer.id}"></label>
                                     </div>
                                     <div class="col l11 m11 s11 special-col">
                                         <div class="input-field special-input">

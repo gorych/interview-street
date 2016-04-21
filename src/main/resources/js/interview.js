@@ -27,9 +27,10 @@
         $(this).parents(".question").find("input").val(value);
     });
 
-    $(".optional-label").click(function () {
-        if (!$(this).prev().is(":checked")) {
-            $(this).closest(".col").next().find(".optional-text").focus();
+    $(".optional-answer").change(function () {
+        var input = $(this).closest(".col").next().find(".optional-text");
+        if ($(this).is(":checked")) {
+            $(input).focus();
         }
     });
 
@@ -43,7 +44,8 @@
         }
 
         var questions = [];
-        /*Collect data to server*/
+
+        /*Collect data for server*/
         $("[data-quest]").each(function () {
             var questId = $(this).attr("data-quest");
 
@@ -57,11 +59,7 @@
                 answers.push({id: id, text: text});
             });
 
-            $(this).find("input[type='hidden']").each(function () {
-                answers.push({id: $(this).attr("id"), text: $(this).val()})
-            });
-
-            $(this).find("input[type='text']:not('.optional-text')").each(function () {
+            $(this).find("input[type='hidden'], input[type='text']:not('.optional-text')").each(function () {
                 answers.push({id: $(this).attr("id"), text: $(this).val()})
             });
 

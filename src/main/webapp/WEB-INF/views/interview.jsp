@@ -43,13 +43,14 @@
                             </c:if>
                             <c:if test="${answerType eq 'text'}">
                                 <div class="row special-row valign-wrapper">
-                                    <div class="col l1 m1 s1 optional-radio-col">
-                                        <input name="group${question.id}" type="${questType}" id="${answer.id}" />
-                                        <label for="${answer.id}"></label>
+                                    <div class="col l1 m1 s1 optional-col">
+                                        <input name="group${question.id}" type="${questType}" id="${answer.id}"/>
+                                        <label class="optional-label" for="${answer.id}"></label>
                                     </div>
                                     <div class="col l11 m11 s11 special-col">
                                         <div class="input-field special-input">
-                                            <input type="text" class="validate" placeholder="Другой ответ" title="Свой вариант ответа"/>
+                                            <input type="text" class="optional-text" placeholder="Свой вариант ответа"
+                                                   title="Свой вариант ответа"/>
                                         </div>
                                     </div>
                                 </div>
@@ -57,13 +58,13 @@
                         </c:when>
                         <c:when test="${answerType eq 'text'}">
                             <div class="input-field">
-                                <input id="${answer.id}" type="text" class="validate">
+                                <input id="${answer.id}" type="text">
                                 <label class="fix" for="${answer.id}">${answer.text}</label>
                             </div>
                         </c:when>
                         <c:otherwise>
                             <div class="rating center">
-                                <input type="hidden" value="1"}>
+                                <input type="hidden" value="1"/>
                                 <div class="rating-wrapper center">
                                     <i class="material-icons selected red-text text-lighten-1">star_border</i>
                                     <span>1</span>
@@ -71,7 +72,7 @@
                                 <c:forEach begin="2" end="${answer.text}" varStatus="cur">
                                     <div class="rating-wrapper center">
                                         <i class="material-icons red-text text-lighten-1">star_border</i>
-                                         <span>${cur.index}</span>
+                                        <span>${cur.index}</span>
                                     </div>
                                 </c:forEach>
                             </div>
@@ -82,20 +83,17 @@
             </div>
         </c:forEach>
 
-        <a onclick="validator.checkFormInputs()"
+        <a id="send-form-btn"
            class="waves-effect waves-light btn-large teal lighten-1 right"><i class="material-icons right">send</i>Отправить
             анкету</a>
     </div>
 </main>
 
-<div class="hide error-block col s12 m12 l12">
-    <h6 class="error red darken-2 z-depth-1">Вы не ответили на этот вопрос или на его часть.</h6>
-</div>
-
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
         <div class="container teal-text">
-            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%></strong>
+            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
+            </strong>
         </div>
     </div>
 </footer>

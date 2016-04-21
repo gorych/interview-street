@@ -77,10 +77,10 @@ footer.page-footer {
 }
 
 .row .col .special-col,
-.row .col .optional-radio-col {
+.row .col .optional-col {
     margin-left: 0;
 }
 
-.row .col .optional-radio-col {
+.row .col .optional-col {
     width: 35px;
 }

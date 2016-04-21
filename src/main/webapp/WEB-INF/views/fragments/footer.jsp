@@ -19,7 +19,7 @@
     </div>
     <div class="footer-copyright">
         <div class="container">
-            &copy;Егор Семенченя, ГГТУ 2015<a class="brown-text text-lighten-3" href="#"></a>
+            &copy;Егор Семенченя, ГГТУ 2016<a class="brown-text text-lighten-3" href="#"></a>
         </div>
     </div>
 </footer>

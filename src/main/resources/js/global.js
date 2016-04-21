@@ -19,6 +19,13 @@ var global = global || {};
         return results[1] || 0;
     };
 
+    global.scrollToElement = function (element) {
+        var SPEED = 1100;
+
+        var destination = $(element).offset().top - 15;
+        $('body').animate({scrollTop: destination}, SPEED);
+    };
+
     $("#hide-chip-btn").click(function () {
         $.get(global.rewriteUrl("/user/hide-chip"), null, global.ajaxCallback);
     });

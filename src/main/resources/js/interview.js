@@ -1,18 +1,20 @@
 ;(function () {
 
-    $(document).ready(function(){
+    var $ratingStar = $(".rating i");
+
+    $(document).ready(function () {
         $(".selected").html("star");
     });
 
-    $(".rating i").hover(function() {
-       $(this).html("star");
+    $ratingStar.hover(function () {
+        $(this).html("star");
     });
 
-    $(".rating i").mouseout(function() {
+    $ratingStar.mouseout(function () {
         $(this).parents(".rating").find("i:not('.selected')").html("star_border");
     });
 
-    $(".rating i").click(function() {
+    $ratingStar.click(function () {
         $(this).parents(".rating").find("i")
             .html("star_border")
             .removeClass("selected");
@@ -24,5 +26,22 @@
         var value = $(this).next().html();
         $(this).parents(".question").find("input").val(value);
     });
+
+    $(".optional-label").click(function () {
+        if (!$(this).prev().is(":checked")) {
+            $(this).closest(".col").next().find(".optional-text").focus();
+        }
+    });
+
+    $(".optional-text").click(function () {
+        $(this).closest(".col").prev().find("input").prop("checked", true);
+    });
+
+    $("#send-form-btn").click(function(){
+        if(!validator.isCorrectForm()){
+            return;
+        }
+    });
+
 
 }());

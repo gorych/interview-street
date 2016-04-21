@@ -14,32 +14,38 @@ import java.util.List;
 @Table(name = "questions")
 public class Question implements Serializable, Comparable<Question> {
 
-    @Expose
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    QuestionType type;
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "interview_id")
-    Interview interview;
     @Id
     @Expose
     @GeneratedValue
     @Column(name = "id")
     private int id;
+
+    @Expose
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    QuestionType type;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "interview_id")
+    Interview interview;
+
     @Expose
     @NotEmpty
     @Column(name = "text")
     private String text;
+
     @NotNull
     @Column(name = "number")
     private int number;
+
     @Expose
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 
-    public Question() { }
+    public Question() {
+    }
 
     public Question(Interview interview, QuestionType type, int number, String text) {
         this.interview = interview;
@@ -130,6 +136,6 @@ public class Question implements Serializable, Comparable<Question> {
 
     @Override
     public int compareTo(Question q) {
-        return q.getNumber() - getNumber();
+        return getNumber() - q.getNumber();
     }
 }

@@ -32,12 +32,28 @@
 
                 <c:forEach var="answer" items="${question.sortedAnswers}">
                     <c:set var="answerType" value="${answer.type.name}"/>
+                    <c:set var="questType" value="${question.type.name}"/>
                     <c:choose>
-                        <c:when test="${answerType eq 'checkbox' || answerType eq 'radio'}">
-                            <p>
-                                <input name="group${question.id}" type="${answerType}" id="${answer.id}"/>
-                                <label for="${answer.id}">${answer.text}</label>
-                            </p>
+                        <c:when test="${questType eq 'checkbox' || questType eq 'radio'}">
+                            <c:if test="${answerType ne 'text'}">
+                                <p>
+                                    <input name="group${question.id}" type="${answerType}" id="${answer.id}"/>
+                                    <label for="${answer.id}">${answer.text}</label>
+                                </p>
+                            </c:if>
+                            <c:if test="${answerType eq 'text'}">
+                                <div class="row special-row valign-wrapper">
+                                    <div class="col l1 m1 s1 optional-radio-col">
+                                        <input name="group${question.id}" type="${questType}" id="${answer.id}" />
+                                        <label for="${answer.id}"></label>
+                                    </div>
+                                    <div class="col l11 m11 s11 special-col">
+                                        <div class="input-field special-input">
+                                            <input type="text" class="validate" placeholder="Другой ответ" title="Свой вариант ответа"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
                         </c:when>
                         <c:when test="${answerType eq 'text'}">
                             <div class="input-field">

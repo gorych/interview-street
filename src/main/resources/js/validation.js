@@ -6,7 +6,7 @@ var validator = validator || {};
         $("[data-quest]").each(function(){
             var $text = $(this).find("input[type='text']");
             if($text.length > 0 && !$text.val()) {
-                $(this).after($(".error-block").clone().removeClass("hide"));
+                $(this).append($(".error-block").clone().removeClass("hide"));
                 return;
             }
 

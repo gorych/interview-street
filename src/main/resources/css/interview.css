@@ -66,3 +66,21 @@ footer.page-footer {
     width: 2.9rem;
     margin-bottom: 20px;
 }
+
+.special-input {
+    margin-top: 5px;
+}
+
+.special-row {
+    margin-top: -1rem;
+    margin-bottom: 0;
+}
+
+.row .col .special-col,
+.row .col .optional-radio-col {
+    margin-left: 0;
+}
+
+.row .col .optional-radio-col {
+    width: 35px;
+}

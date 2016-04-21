@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/respondent")
@@ -29,11 +31,11 @@ public class RespondentController extends UserController {
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
-        /*List<UserInterview> availableInterview = user.getInterviewsForPassing()
+        List<UserInterview> availableInterview = user.getInterviewsForPassing()
                 .stream().filter(ui -> !ui.getInterview().getHide() && !ui.getInterview().getIsDeadline())
-                .collect(Collectors.toCollection(ArrayList::new));*/
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        model.addAttribute(AttrConstants.USER_INTERVIEWS, user.getInterviewsForPassing());
+        model.addAttribute(AttrConstants.USER_INTERVIEWS, availableInterview);
 
         return "dashboard";
     }

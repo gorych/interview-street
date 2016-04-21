@@ -26,7 +26,7 @@
         </c:if>
 
         <c:forEach var="question" items="${questions}" varStatus="current">
-            <div class="question col s12">
+            <div data-quest="${question.id}" class="question col s12">
                 <div class="number teal">${current.index + 1}</div>
                 <h5 class="question-text">${question.text}</h5>
 
@@ -72,8 +72,8 @@
     </div>
 </main>
 
-<div id="error-block" class="hide col s12 m12 l12">
-    <h6 class="error red lighten-1 z-depth-1">Вы не ответили на этот вопрос или на его часть.</h6>
+<div class="hide error-block col s12 m12 l12">
+    <h6 class="error red darken-2 z-depth-1">Вы не ответили на этот вопрос или на его часть.</h6>
 </div>
 
 <footer class="page-footer grey lighten-4">

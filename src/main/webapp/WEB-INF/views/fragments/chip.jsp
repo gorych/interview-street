@@ -3,7 +3,7 @@
 
 <div class="chip-wrapper">
     <c:if test="${empty chip || (chip eq true)}">
-        <div class="chip white-text brown lighten-2">
+        <div class="chip white-text teal">
             Здравствуйте, ${user_initials} <span class="hide-on-small-and-down">, Вы вошли под правами редактора.</span>
             <i class="material-icons" id="hide-chip-btn">close</i>
         </div>

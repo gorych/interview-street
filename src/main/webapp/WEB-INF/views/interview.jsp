@@ -64,7 +64,7 @@
                         </c:when>
                         <c:otherwise>
                             <div class="rating center">
-                                <input type="hidden" value="1"/>
+                                <input id="${answer.id}" type="hidden" value="1"/>
                                 <div class="rating-wrapper center">
                                     <i class="material-icons selected red-text text-lighten-1">star_border</i>
                                     <span>1</span>

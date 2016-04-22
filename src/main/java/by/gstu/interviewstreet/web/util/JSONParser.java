@@ -34,8 +34,6 @@ public class JSONParser {
 
     public static <T> T convertJsonStringToObject(String data, Type type) {
         data = prepareRawJsonDataString(data);
-        System.out.println(data);
-
         return GSON.fromJson(data, type);
     }
 

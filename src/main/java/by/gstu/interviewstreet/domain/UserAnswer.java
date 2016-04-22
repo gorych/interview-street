@@ -1,9 +1,11 @@
 package by.gstu.interviewstreet.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_answers")
@@ -14,6 +16,7 @@ public class UserAnswer implements Serializable {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -28,8 +31,15 @@ public class UserAnswer implements Serializable {
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
+
+    /*It's necessary for text answers, which user inputs himself*/
+    @NotEmpty
     @Column(name = "answer")
-    private String answer;
+    private String answerText;
 
     @Column(name = "reply_date")
     private Date replyDate;
@@ -37,11 +47,12 @@ public class UserAnswer implements Serializable {
     public UserAnswer() {
     }
 
-    public UserAnswer(User user, Question question, Interview interview, String answer, Date replayDate) {
+    public UserAnswer(User user, Question question, Interview interview, Answer answer, String answerText, Date replayDate) {
         this.user = user;
         this.question = question;
         this.interview = interview;
         this.answer = answer;
+        this.answerText = answerText;
         this.replyDate = replayDate;
     }
 
@@ -77,12 +88,20 @@ public class UserAnswer implements Serializable {
         this.interview = interview;
     }
 
-    public String getAnswer() {
+    public Answer getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(Answer answer) {
         this.answer = answer;
+    }
+
+    public String getAnswerText() {
+        return answerText;
+    }
+
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
     }
 
     public Date getReplyDate() {
@@ -100,7 +119,8 @@ public class UserAnswer implements Serializable {
                 ", user=" + user +
                 ", question=" + question +
                 ", interview=" + interview +
-                ", answer='" + answer + '\'' +
+                ", answer=" + answer +
+                ", answerText='" + answerText + '\'' +
                 ", replyDate=" + replyDate +
                 '}';
     }

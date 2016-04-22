@@ -1,14 +1,24 @@
 package by.gstu.interviewstreet.web.util;
 
 import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.domain.UserInterview;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ControllerUtils {
 
     public static final String TEXT_ANSWER_NAME = "text";
 
     private ControllerUtils() {
+    }
+
+    public static List<UserInterview> getAvailableInterviews(List<UserInterview> interviews) {
+        return interviews
+                .stream()
+                .filter(ui -> !ui.getInterview().getHide() && !ui.getPassed() && !ui.getInterview().getIsDeadline())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static boolean notExistTextAnswer(List<Answer> answers) {

@@ -84,16 +84,17 @@
         </c:forEach>
 
         <a id="send-form-btn"
-           class="waves-effect waves-light btn-large teal lighten-1 right"><i class="material-icons right">send</i>Отправить
-            анкету</a>
+           class="waves-effect waves-light btn-large teal lighten-1 right">
+           <i class="material-icons right">send</i>Отправить анкету
+        </a>
+        <input id="hash" type="hidden" value="${interview.hash}"/>
     </div>
 </main>
 
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
         <div class="container teal-text">
-            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
-            </strong>
+            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%></strong>
         </div>
     </div>
 </footer>

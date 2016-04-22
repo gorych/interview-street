@@ -44,7 +44,8 @@
                             <c:if test="${answerType eq 'text'}">
                                 <div class="row special-row valign-wrapper">
                                     <div class="col l1 m1 s1 optional-col">
-                                        <input class="optional-answer" name="group${question.id}" type="${questType}" id="${answer.id}"/>
+                                        <input class="optional-answer" name="group${question.id}" type="${questType}"
+                                               id="${answer.id}"/>
                                         <label for="${answer.id}"></label>
                                     </div>
                                     <div class="col l11 m11 s11 special-col">
@@ -83,18 +84,21 @@
             </div>
         </c:forEach>
 
-        <a id="send-form-btn"
-           class="waves-effect waves-light btn-large teal lighten-1 right">
-           <i class="material-icons right">send</i>Отправить анкету
-        </a>
-        <input id="hash" type="hidden" value="${interview.hash}"/>
+        <c:if test="${not empty questions}">
+            <a id="send-form-btn"
+               class="waves-effect waves-light btn-large teal lighten-1 right">
+                <i class="material-icons right">send</i>Отправить анкету
+            </a>
+            <input id="hash" type="hidden" value="${interview.hash}"/>
+        </c:if>
     </div>
 </main>
 
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
         <div class="container teal-text">
-            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%></strong>
+            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
+            </strong>
         </div>
     </div>
 </footer>

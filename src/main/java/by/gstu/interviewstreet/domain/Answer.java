@@ -28,6 +28,7 @@ public class Answer implements Serializable, Comparable<Answer> {
     @JoinColumn(name = "type_id")
     private AnswerType type;
 
+    @Expose
     @NotNull
     @ManyToOne
     @JoinColumn(name = "question_id")

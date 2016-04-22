@@ -43,37 +43,35 @@
             return;
         }
 
-        var questions = [];
-
+        var answers = [];
         /*Collect data for server*/
         $("[data-quest]").each(function () {
             var questId = $(this).attr("data-quest");
 
-            var answers = [];
+
             $(this).find("input:checked").each(function () {
                 var label = $(this).next();
 
                 var id = $(this).attr("id");
                 var text = ($(label).is("label") && !$(this).hasClass("optional-answer"))
                     ? $(label).html() : $(this).parent().next().find("input").val();
-                answers.push({id: id, text: text});
+                answers.push({id: id, text: text, question: {id: questId}});
             });
 
             $(this).find("input[type='hidden'], input[type='text']:not('.optional-text')").each(function () {
-                answers.push({id: $(this).attr("id"), text: $(this).val()})
+                answers.push({id: $(this).attr("id"), text: $(this).val(), question: {id: questId}})
             });
 
-            questions.push({id: questId, answers: answers});
         });
 
-        alert(JSON.stringify(questions));
+        alert(JSON.stringify(answers));
 
         var data = {
-            "hash": $("#hash").val(),
-            "data": JSON.stringify(questions)
+            hash: $("#hash").val(),
+            data: JSON.stringify(answers)
         };
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
-            .done(function(){
+            .done(function () {
                 alert("OK11111");
             });
         //alert(JSON.stringify(questions));

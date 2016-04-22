@@ -1,13 +1,12 @@
 package by.gstu.interviewstreet.web.controller.user;
 
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.Question;
-import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.service.UserAnswerService;
 import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Type;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/respondent")
@@ -38,16 +34,17 @@ public class RespondentController extends UserController {
     InterviewService interviewService;
 
     @Autowired
+    UserAnswerService userAnswerService;
+
+    @Autowired
     UserInterviewService userInterviewService;
 
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
-        List<UserInterview> availableInterview = user.getInterviewsForPassing()
-                .stream().filter(ui -> !ui.getInterview().getHide() && !ui.getInterview().getIsDeadline())
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<UserInterview> availableInterviews = ControllerUtils.getAvailableInterviews(user.getInterviewsForPassing());
 
-        model.addAttribute(AttrConstants.USER_INTERVIEWS, availableInterview);
+        model.addAttribute(AttrConstants.USER_INTERVIEWS, availableInterviews);
 
         return "dashboard";
     }
@@ -72,9 +69,7 @@ public class RespondentController extends UserController {
 
     @ResponseBody
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> sendInterview(String hash, String data) {
-        System.out.println(hash);
-
+    public ResponseEntity<String> sendInterview(String hash, String data, Principal principal) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
             return new ResponseEntity<>(
@@ -82,9 +77,17 @@ public class RespondentController extends UserController {
             );
         }
 
-        Type type = new TypeToken<List<Question>>() { }.getType();
-        Question[] questions = JSONParser.convertJsonStringToObject(data, Question[].class);
-        System.out.println(Arrays.asList(questions));
+        if (interview.getHide()) {
+            return new ResponseEntity<>(
+                    "User tries to send a interview which was closed =" + hash, HttpStatus.NOT_ACCEPTABLE
+            );
+        }
+
+        Type type = new TypeToken<List<Answer>>() { }.getType();
+        List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
+
+        User user = getUserByPrincipal(principal);
+        userAnswerService.save(user, interview, answers);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

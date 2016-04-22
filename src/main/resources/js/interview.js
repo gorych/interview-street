@@ -54,7 +54,7 @@
                 var label = $(this).next();
 
                 var id = $(this).attr("id");
-                var text = ($(label).is("label") && !$(label).hasClass("optional-label"))
+                var text = ($(label).is("label") && !$(this).hasClass("optional-answer"))
                     ? $(label).html() : $(this).parent().next().find("input").val();
                 answers.push({id: id, text: text});
             });
@@ -67,6 +67,16 @@
         });
 
         alert(JSON.stringify(questions));
+
+        var data = {
+            "hash": $("#hash").val(),
+            "data": JSON.stringify(questions)
+        };
+        $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
+            .done(function(){
+                alert("OK11111");
+            });
+        //alert(JSON.stringify(questions));
     });
 
 

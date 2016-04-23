@@ -64,18 +64,14 @@
 
         });
 
-        alert(JSON.stringify(answers));
-
         var data = {
             hash: $("#hash").val(),
             data: JSON.stringify(answers)
         };
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
             .done(function () {
-                alert("OK11111");
+                $('#thanks-modal').openModal();
             });
-        //alert(JSON.stringify(questions));
     });
-
 
 }());

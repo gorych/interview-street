@@ -15,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
 import java.security.Principal;
 import java.util.Collections;
@@ -49,7 +47,7 @@ public class RespondentController extends UserController {
         return "dashboard";
     }
 
-    @RequestMapping("/{hash}/interview")
+    @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
     public String showDashboard(@PathVariable String hash, Principal principal, Model model) {
         UserInterview userInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
         if (userInterview == null || userInterview.getPassed()) {
@@ -57,6 +55,20 @@ public class RespondentController extends UserController {
         }
 
         Interview interview = userInterview.getInterview();
+        List<Question> questions = interview.getQuestions();
+
+        Collections.sort(questions);
+
+        model.addAttribute(AttrConstants.INTERVIEW, interview);
+        model.addAttribute(AttrConstants.QUESTIONS, questions);
+
+        return "interview";
+    }
+
+    @RequestMapping(value = "interview/{hash}/anonymous", method = RequestMethod.GET)
+    public String showDashboard(@PathVariable String hash, Model model, HttpServletRequest request) {
+
+        Interview interview = interviewService.get(hash);
         List<Question> questions = interview.getQuestions();
 
         Collections.sort(questions);
@@ -83,7 +95,7 @@ public class RespondentController extends UserController {
             );
         }
 
-        Type type = new TypeToken<List<Answer>>() {}.getType();
+        Type type = new TypeToken<List<Answer>>() { }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         try {

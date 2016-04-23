@@ -12,6 +12,5 @@
            class="modal-action modal-close waves-effect waves-red btn-flat">Выход</a>
         <a href="<c:url value="/respondent/dashboard"/>"
            class="modal-action modal-close waves-effect waves-green btn-flat">На главную</a>
-
     </div>
 </div>

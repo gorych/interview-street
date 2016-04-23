@@ -44,6 +44,7 @@
         }
 
         var answers = [];
+
         /*Collect data for server*/
         $("[data-quest]").each(function () {
             var questId = $(this).attr("data-quest");
@@ -71,6 +72,9 @@
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
             .done(function () {
                 $('#thanks-modal').openModal();
+            })
+            .fail(function () {
+                alert("fail");
             });
     });
 

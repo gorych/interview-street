@@ -59,7 +59,11 @@
 
     </div>
 </main>
+
+<%@include file="fragments/thanks-for-passing-modal.jsp" %>
+
 <%@include file="fragments/footer.jsp" %>
 <%@include file="fragments/general-js.jsp" %>
+
 </body>
 </html>

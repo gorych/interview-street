@@ -35,5 +35,9 @@
         $('select').material_select();
 
         $('textarea').trigger('autoresize');
+
+        $('.modal-trigger').leanModal({
+            dismissible: false
+        });
     });
 })(jQuery);

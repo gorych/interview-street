@@ -28,8 +28,8 @@ public class Answer implements Serializable, Comparable<Answer> {
     @JoinColumn(name = "type_id")
     private AnswerType type;
 
-    @Expose
     @NotNull
+    @Expose(deserialize = true, serialize = false)
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;

@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,7 +17,7 @@ public class UserAnswer implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @NotNull
+    /*if interview type is anonymous user will be null*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

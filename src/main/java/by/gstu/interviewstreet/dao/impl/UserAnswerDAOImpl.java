@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class UserAnswerDAOImpl extends AbstractDbDAO implements UserAnswerDAO {
 
     @Override
-    public void save(UserAnswer userAnswer) {
-        getSession().save(userAnswer);
+    public void saveOrUpdate(UserAnswer userAnswer) {
+        getSession().saveOrUpdate(userAnswer);
     }
 }

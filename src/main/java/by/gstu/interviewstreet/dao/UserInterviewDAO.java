@@ -12,7 +12,7 @@ public interface UserInterviewDAO {
 
     UserInterview getByUserAndInterview(String username, String hash);
 
-    void saveOrUpdate(UserInterview userInterview);
+    void save(UserInterview userInterview);
 
     void remove(UserInterview userInterview);
 

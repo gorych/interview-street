@@ -52,7 +52,7 @@ public class RespondentController extends UserController {
     @RequestMapping("/{hash}/interview")
     public String showDashboard(@PathVariable String hash, Principal principal, Model model) {
         UserInterview userInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
-        if (userInterview == null) {
+        if (userInterview == null || userInterview.getPassed()) {
             return "redirect:/dashboard";
         }
 
@@ -83,11 +83,17 @@ public class RespondentController extends UserController {
             );
         }
 
-        Type type = new TypeToken<List<Answer>>() { }.getType();
+        Type type = new TypeToken<List<Answer>>() {}.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
-        User user = getUserByPrincipal(principal);
-        userAnswerService.save(user, interview, answers);
+        try {
+            User user = getUserByPrincipal(principal);
+            userAnswerService.save(user, interview, answers);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(
+                    "User send a interview which already has passed.", HttpStatus.BAD_REQUEST
+            );
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

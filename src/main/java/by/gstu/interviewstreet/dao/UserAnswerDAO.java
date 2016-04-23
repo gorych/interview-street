@@ -4,6 +4,6 @@ import by.gstu.interviewstreet.domain.UserAnswer;
 
 public interface UserAnswerDAO {
 
-    void save(UserAnswer userAnswer);
+    void saveOrUpdate(UserAnswer userAnswer);
 
 }

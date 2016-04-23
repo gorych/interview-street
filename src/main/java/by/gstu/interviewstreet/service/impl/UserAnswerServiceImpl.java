@@ -42,11 +42,11 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             List<Answer> existAnswers = question.getAnswers();
 
             if (existAnswers.contains(answer)) {
-                userAnswerDAO.save(new UserAnswer(user, question, interview, answer, answer.getText(), DateUtils.getToday()));
+                userAnswerDAO.saveOrUpdate(new UserAnswer(user, question, interview, answer, answer.getText(), DateUtils.getToday()));
 
                 /*Set flag that user passed interview*/
                 userInterview.setPassed(true);
-                userInterviewDAO.saveOrUpdate(userInterview);
+                userInterviewDAO.save(userInterview);
             }
         }
     }

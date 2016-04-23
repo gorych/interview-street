@@ -17,6 +17,7 @@ public class UserInterview implements Serializable {
     private int id;
 
     @Expose
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
     private Interview interview;

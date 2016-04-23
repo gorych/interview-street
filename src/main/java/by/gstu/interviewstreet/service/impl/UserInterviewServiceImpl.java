@@ -28,7 +28,7 @@ public class UserInterviewServiceImpl implements UserInterviewService {
         UserInterview userInterview;
         for (User user : users) {
             userInterview = new UserInterview(interview, user);
-            userInterviewDAO.saveOrUpdate(userInterview);
+            userInterviewDAO.save(userInterview);
         }
     }
 

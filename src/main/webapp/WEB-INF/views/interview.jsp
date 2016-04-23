@@ -97,13 +97,15 @@
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
         <div class="container teal-text">
-            <strong>Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
+            <strong>
+                Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
             </strong>
         </div>
     </div>
 </footer>
 
 <%@include file="fragments/general-js.jsp" %>
+<%@include file="fragments/thanks-for-passing-modal.jsp" %>
 <script src="<c:url value="/resources/js/interview.js"/>"></script>
 
 </body>

@@ -29,8 +29,8 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements UserInterview
     }
 
     @Override
-    public void saveOrUpdate(UserInterview userInterview) {
-        getSession().saveOrUpdate(userInterview);
+    public void save(UserInterview userInterview) {
+        getSession().save(userInterview);
     }
 
     @Override

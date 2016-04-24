@@ -22,7 +22,7 @@
 
     <div class="row">
         <c:if test="${empty questions}">
-            <h5 class="red-text">Извините, в данной анкете пока нет ни одного вопроса.</h5>
+            <h6 class="red-text">Извините, в данной анкете пока нет ни одного вопроса.</h6>
         </c:if>
 
         <c:forEach var="question" items="${questions}" varStatus="current">

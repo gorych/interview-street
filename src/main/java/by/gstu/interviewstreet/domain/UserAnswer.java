@@ -4,20 +4,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "user_answers")
-public class UserAnswer implements Serializable {
+public class UserAnswer implements Serializable, Comparable<UserAnswer> {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
 
-    /*if interview type is anonymous user will be null*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -124,5 +122,26 @@ public class UserAnswer implements Serializable {
                 ", answerText='" + answerText + '\'' +
                 ", replyDate=" + replyDate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserAnswer that = (UserAnswer) o;
+
+        return getAnswerText() != null ? getAnswerText().equals(that.getAnswerText()) : that.getAnswerText() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getAnswerText() != null ? getAnswerText().hashCode() : 0;
+    }
+
+    @Override
+    public int compareTo(UserAnswer ua) {
+        return ua.getAnswerText().compareTo(ua.getAnswerText());
     }
 }

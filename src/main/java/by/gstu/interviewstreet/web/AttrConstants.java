@@ -4,6 +4,7 @@ public final class AttrConstants {
 
     public static final String CHIP = "chip";
     public static final String EDIT_MODE = "edit_mode";
+    public static final String AUTH_ERROR = "auth_error";
     public static final String USER_INITIALS = "user_initials";
 
 

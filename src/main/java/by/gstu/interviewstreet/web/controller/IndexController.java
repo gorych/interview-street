@@ -2,6 +2,8 @@ package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,7 +34,7 @@ public class IndexController {
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public String goToLogin(@RequestParam(value = "auth_error", required = false) String error, Model model) {
         if (error != null) {
-            model.addAttribute("auth_error", "Пользователь с такими паспортными данными не найден.");
+            model.addAttribute(AttrConstants.AUTH_ERROR, WebConstants.USER_NOT_FOUND_MSG);
         }
         return "login";
     }

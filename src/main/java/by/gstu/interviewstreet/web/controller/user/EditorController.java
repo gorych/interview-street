@@ -5,6 +5,7 @@ import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
@@ -88,7 +89,7 @@ public class EditorController extends UserController {
             return "error/404";
         }
 
-        response.addCookie(new Cookie("hash", hash));
+        response.addCookie(new Cookie(WebConstants.HASH, hash));
 
         List<Question> questions = questionService.getAllOrderByNumber(hash);
 

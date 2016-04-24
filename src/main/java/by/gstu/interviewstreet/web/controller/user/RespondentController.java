@@ -6,6 +6,7 @@ import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.UserAnswerService;
 import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
@@ -84,27 +88,22 @@ public class RespondentController extends UserController {
     public ResponseEntity<String> sendInterview(String hash, String data, Principal principal) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
-            return new ResponseEntity<>(
-                    "User tries to send a interview with the wrong hash =" + hash, HttpStatus.BAD_REQUEST
-            );
+            return new ResponseEntity<>(WebConstants.USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
         }
 
         if (interview.getHide()) {
-            return new ResponseEntity<>(
-                    "User tries to send a interview which was closed =" + hash, HttpStatus.NOT_ACCEPTABLE
-            );
+            return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() { }.getType();
+        Type type = new TypeToken<List<Answer>>() {
+        }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         try {
             User user = getUserByPrincipal(principal);
             userAnswerService.save(user, interview, answers);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(
-                    "User send a interview which already has passed.", HttpStatus.BAD_REQUEST
-            );
+            return new ResponseEntity<>(WebConstants.USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -71,7 +71,6 @@ public class RespondentController extends UserController {
 
     @RequestMapping(value = "interview/{hash}/anonymous", method = RequestMethod.GET)
     public String showDashboard(@PathVariable String hash, Model model, HttpServletRequest request) {
-
         Interview interview = interviewService.get(hash);
         List<Question> questions = interview.getQuestions();
 
@@ -95,8 +94,7 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Answer>>() { }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         try {

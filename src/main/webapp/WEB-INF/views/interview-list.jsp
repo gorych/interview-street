@@ -64,7 +64,7 @@
                             <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список респондентов">supervisor_account</i>
                             </a>
-                            <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                            <a href="<c:url value="/viewer/${interview.hash}/statistics"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Анализ результатов">equalizer</i>
                             </a>
                         </div>

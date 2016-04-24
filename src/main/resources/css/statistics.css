@@ -1,0 +1,30 @@
+.mobile {
+    padding: 5px;
+}
+
+.mobile-cell {
+    min-width: 20%;
+}
+
+.collapsible-header-fix {
+    min-height: 1px;
+    padding: 0.5rem;
+    line-height: 1.2;
+}
+
+.collapsible-row {
+    margin: 10px 0 5px;
+}
+
+.mobile-row {
+    margin-bottom: -10px;
+    margin-top: 5px;
+}
+
+.custom-answer {
+    display: inline-block;
+    margin: 5px;
+    padding: 2px;
+    border: 1px solid black;
+    border-radius: 3px;
+}

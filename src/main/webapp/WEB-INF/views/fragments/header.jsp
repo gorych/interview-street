@@ -13,7 +13,7 @@
             <li><a href="<c:url value="/respondent/dashboard"/>">Мои анкеты</a></li>
             <sec:authorize access="hasRole('ROLE_EDITOR')">
                 <li><a href="<c:url value="/editor/interview-list"/>">Список анкет</a></li>
-                <li><a href="<c:url value="/statistics"/>">Статистика</a></li>
+                <li><a href="<c:url value="/viewer/statistics"/>">Статистика</a></li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <a href="<c:url value="/j_spring_security_logout"/>" class="waves-effect waves-light btn">Выход</a>

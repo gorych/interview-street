@@ -6,6 +6,7 @@ public final class AttrConstants {
     public static final String EDIT_MODE = "edit_mode";
     public static final String AUTH_ERROR = "auth_error";
     public static final String USER_INITIALS = "user_initials";
+    public static final String INTERVIEW_NAME = "interview_name";
 
 
     public static final String PAGE_COUNT = "page_count";
@@ -23,6 +24,7 @@ public final class AttrConstants {
     public static final String POSTS = "posts";
     public static final String QUESTIONS = "questions";
     public static final String INTERVIEWS = "interviews";
+    public static final String STATISTICS = "statistics";
     public static final String SUBDIVISIONS = "subdivisions";
     public static final String USER_INTERVIEWS = "user_interviews";
 

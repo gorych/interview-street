@@ -176,7 +176,6 @@
     <label>
         <input type="text" class="interview-url" value="/test/url/place/here2d"/>
     </label>
-    </div>
 </main>
 
 <%@include file="fragments/footer.jsp" %>

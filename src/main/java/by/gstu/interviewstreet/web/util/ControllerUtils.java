@@ -3,6 +3,7 @@ package by.gstu.interviewstreet.web.util;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.UserInterview;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,10 @@ public final class ControllerUtils {
 
     public static int getPageCount(int allInterviewSize, double cardsOnPage) {
         return (int) Math.ceil(allInterviewSize / cardsOnPage);
+    }
+
+    public static String getPercent(int count, double total) {
+        return new DecimalFormat("#0.0").format(count * 100 / total);
     }
 
     /*Used for building pagination*/

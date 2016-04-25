@@ -99,6 +99,11 @@ public class QuestionType implements Serializable {
         this.answerType = answerType;
     }
 
+    public boolean isRateType() {
+        final String ratingQuestionName = "rating";
+        return ratingQuestionName.equals(name);
+    }
+
     @Override
     public String toString() {
         return "QuestionType{" +

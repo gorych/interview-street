@@ -28,66 +28,64 @@
         <div class="col l12 m12">
             <ul class="collapsible" data-collapsible="accordion">
                 <c:forEach var="statistic" items="${statistics}" varStatus="cur">
-                    <c:set var="key" value="${statistic.key}"/>
+                    <c:set var="questType" value="${statistic.questionType}"/>
                     <li>
                         <div class="collapsible-header collapsible-header-fix active">
-                                ${cur.index + 1}.&nbsp;${key.text}
+                                ${cur.index + 1}.&nbsp;${statistic.questionText}
                         </div>
                         <div class="collapsible-body">
-                            <c:if test="${key.type ne 'text'}">
+                            <c:if test="${questType ne 'text'}">
                                 <div class="row mobile-row center-align hide-on-large-only">
-                                    <a class="btn-floating" style="margin-bottom: 5px"><i
-                                            class="material-icons">list</i></a>
-                                    <a class="btn-floating" style="margin-bottom: 5px"><i
-                                            class="material-icons">album</i></a>
-                                    <a class="btn-floating" style="margin-bottom: 5px"><i
-                                            class="material-icons">assessment</i></a>
+                                    <a class="btn-floating table-btn"><i class="material-icons">list</i></a>
+                                    <a class="btn-floating col-chart-btn"><i class="material-icons">album</i></a>
+                                    <a class="btn-floating pie-chart-btn"><i class="material-icons">assessment</i></a>
                                 </div>
                             </c:if>
                             <div class="row collapsible-row valign-wrapper">
                                 <div class="col offset-l1 offset-m1 l10 m10 s12">
                                     <c:choose>
-                                        <c:when test="${key.type ne 'text'}">
-                                            <table class="centered hide-on-small-only">
-                                                <c:if test="${key.type eq 'rating'}">
-                                                    <caption class="left-align teal-text">
-                                                        Максимально допустимая оценка: ${statistic.value[0].total}
-                                                    </caption>
-                                                </c:if>
+                                        <c:when test="${questType ne 'text'}">
+                                            <table class="centered">
                                                 <thead>
-                                                <tr>
-                                                    <th>Оценка респондента</th>
-                                                    <th>Ответило %, (чел.)</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Оценка респондента</th>
+                                                        <th>Ответило %, (чел.)</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach var="data" items="${statistic.value}">
+                                                    <c:forEach var="data" items="${statistic.answerData}">
                                                         <tr>
-                                                            <th class="center-align">${data.answer}</th>
-                                                            <td>${data.percent}% (${data.count} чел.)</td>
+                                                            <th class="center-align">${data.key}</th>
+                                                            <td>${data.value[1]}% (${data.value[0]} чел.)</td>
                                                         </tr>
                                                     </c:forEach>
+
+                                                    <c:if test="${questType eq 'rating'}">
+                                                        <tr class="not-underline-row">
+                                                            <th class="center-align teal-text">
+                                                                Максимально допустимая оценка: ${statistic.maxEstimate}
+                                                            </th>
+                                                            <th class="center-align teal-text">Ответило человек: ${statistic.total}</th>
+                                                        </tr>
+                                                     </c:if>
                                                 </tbody>
                                             </table>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:forEach var="data" items="${statistic.value}">
+                                        <c:set var="dataSize" value="${statistic.answerData.size()}"/>
+                                            <c:forEach var="data" items="${statistic.answerData}">
                                                 <div class="custom-answer">
-                                                        ${data.answer} (x${data.count})
+                                                     ${data.key} (x${dataSize})
                                                 </div>
                                             </c:forEach>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
-
-                                <c:if test="${key.type ne 'text'}">
+                                <c:if test="${questType ne 'text'}">
                                     <div class="col l1 valign hide-on-med-and-down">
-                                        <a class="btn-floating" style="margin-bottom: 5px"><i
-                                                class="material-icons">toc</i></a>
-                                        <a class="btn-floating" style="margin-bottom: 5px"><i
-                                                class="material-icons">album</i></a>
-                                        <a class="btn-floating" style="margin-bottom: 5px"><i
-                                                class="material-icons">assessment</i></a>
+                                        <a class="btn-floating table-btn"><i class="material-icons">list</i></a>
+                                        <a class="btn-floating col-chart-btn"><i class="material-icons">album</i></a>
+                                        <a class="btn-floating pie-chart-btn"><i class="material-icons">assessment</i></a>
                                     </div>
                                 </c:if>
                             </div>
@@ -102,6 +100,14 @@
 <%@include file="fragments/footer.jsp" %>
 
 <%@include file="fragments/general-js.jsp" %>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+    $(".col-chart-btn").click(function(){
+    });
+</script>
 
 </body>
 </html>

@@ -116,6 +116,10 @@ public class Question implements Serializable, Comparable<Question> {
         this.userAnswers = userAnswers;
     }
 
+    public boolean isRateType(){
+        return getType().isRateType();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -125,6 +129,11 @@ public class Question implements Serializable, Comparable<Question> {
 
         return getId() == question.getId();
 
+    }
+
+    @Override
+    public int compareTo(Question q) {
+        return getNumber() - q.getNumber();
     }
 
     @Override
@@ -143,8 +152,4 @@ public class Question implements Serializable, Comparable<Question> {
                 '}';
     }
 
-    @Override
-    public int compareTo(Question q) {
-        return getNumber() - q.getNumber();
-    }
 }

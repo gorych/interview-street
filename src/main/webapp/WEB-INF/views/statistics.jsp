@@ -45,6 +45,45 @@
                                 <div class="col offset-l1 offset-m1 l10 m10 s12">
                                     <c:choose>
                                         <c:when test="${questType ne 'text'}">
+                                            <div class="container" style="margin: 0 auto"></div>
+
+                                            <table id="datatable hide">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Jane</th>
+                                                        <th>John</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Apples</th>
+                                                        <td>3</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Pears</th>
+                                                        <td>2</td>
+                                                        <td>0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Plums</th>
+                                                        <td>5</td>
+                                                        <td>11</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Bananas</th>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Oranges</th>
+                                                        <td>2</td>
+                                                        <td>4</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
                                             <table class="centered">
                                                 <thead>
                                                     <tr>
@@ -105,7 +144,36 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <script>
-    $(".col-chart-btn").click(function(){
+    $(".col-chart-btn, .pie-chart-btn").click(function(){
+        $(this).parents(".collapsible-body").find("table").addClass("hide");
+
+        $(this).parents(".collapsible-body").find(".container").highcharts({
+            data: {
+                table: 'datatable'
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            yAxis: {
+                allowDecimals: false,
+                title: {
+                    text: 'Units'
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.point.y + ' ' + this.point.name.toLowerCase();
+                }
+            }
+        });
+    });
+
+    $(".table-btn").click(function(){
+        $(this).parents(".collapsible-body").find("table").removeClass("hide");
     });
 </script>
 

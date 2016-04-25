@@ -1,29 +1,55 @@
 package by.gstu.interviewstreet.bean;
 
+import by.gstu.interviewstreet.domain.Question;
+
 import java.io.Serializable;
-import java.text.DecimalFormat;
+import java.util.Map;
 
 public class StatisticData implements Serializable {
 
-    private double count;
+    private String questionText;
+    private String questionType;
+
+    private Map<Object, Object[]> answerData;
+
     private int total;
-    private String answer;
 
-    public StatisticData(int count, int total, String answer) {
-        this.count = count;
+    /*Use on jsp for rating questions*/
+    private int maxEstimate;
+
+    public StatisticData(Question question, Map<Object, Object[]> answerData, int maxEstimate, int total) {
+        this.questionText = question.getText();
+        this.questionType = question.getType().getName();
+        this.answerData = answerData;
+        this.maxEstimate = maxEstimate;
         this.total = total;
-        this.answer = answer;
     }
 
-    public double getCount() {
-        return count;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
-    public double getTotal() {
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
+    }
+
+    public Map<Object, Object[]> getAnswerData() {
+        return answerData;
+    }
+
+    public void setAnswerData(Map<Object, Object[]> answerData) {
+        this.answerData = answerData;
+    }
+
+    public int getTotal() {
         return total;
     }
 
@@ -31,24 +57,21 @@ public class StatisticData implements Serializable {
         this.total = total;
     }
 
-    public String getAnswer() {
-        return answer;
+    public int getMaxEstimate() {
+        return maxEstimate;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public String getPercent() {
-        return new DecimalFormat("#0.00").format(count * 100 / total);
+    public void setMaxEstimate(int maxEstimate) {
+        this.maxEstimate = maxEstimate;
     }
 
     @Override
     public String toString() {
         return "StatisticData{" +
-                "count=" + count +
+                "questionText='" + questionText + '\'' +
+                ", questionType='" + questionType + '\'' +
+                ", answerData=" + answerData +
                 ", total=" + total +
-                ", answer='" + answer + '\'' +
                 '}';
     }
 }

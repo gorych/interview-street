@@ -185,6 +185,11 @@ public class Interview implements Serializable, Comparable<Interview> {
         return questions;
     }
 
+    public List<Question> getSortedQuestions() {
+        Collections.sort(questions);
+        return questions;
+    }
+
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }

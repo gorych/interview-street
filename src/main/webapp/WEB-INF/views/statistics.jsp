@@ -37,84 +37,70 @@
                             <c:if test="${questType ne 'text'}">
                                 <div class="row mobile-row center-align hide-on-large-only">
                                     <a class="btn-floating table-btn"><i class="material-icons">list</i></a>
-                                    <a class="btn-floating col-chart-btn"><i class="material-icons">album</i></a>
-                                    <a class="btn-floating pie-chart-btn"><i class="material-icons">assessment</i></a>
+                                    <a class="btn-floating pie-chart-btn"><i class="material-icons">album</i></a>
+                                    <a class="btn-floating col-chart-btn"><i
+                                            class="material-icons">assessment</i></a>
                                 </div>
                             </c:if>
                             <div class="row collapsible-row valign-wrapper">
                                 <div class="col offset-l1 offset-m1 l10 m10 s12">
                                     <c:choose>
                                         <c:when test="${questType ne 'text'}">
-                                            <div class="container" style="margin: 0 auto"></div>
 
-                                            <table id="datatable hide">
+                                            <!--Container for chart-->
+                                            <div class="chart-container"></div>
+
+
+                                            <table id="datatable" class="centered">
                                                 <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Jane</th>
-                                                        <th>John</th>
-                                                    </tr>
+                                                <tr>
+                                                    <th>Оценка респондента</th>
+                                                    <th>Ответило, чел</th>
+                                                    <th>Ответило, %</th>
+                                                </tr>
                                                 </thead>
                                                 <tbody>
+                                                <c:forEach var="data" items="${statistic.answerData}">
                                                     <tr>
-                                                        <th>Apples</th>
-                                                        <td>3</td>
-                                                        <td>4</td>
+                                                        <th class="center-align">${data.key}</th>
+                                                        <td>${data.value[0]}</td>
+                                                        <td>${data.value[1]}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Pears</th>
-                                                        <td>2</td>
-                                                        <td>0</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Plums</th>
-                                                        <td>5</td>
-                                                        <td>11</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Bananas</th>
-                                                        <td>1</td>
-                                                        <td>1</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Oranges</th>
-                                                        <td>2</td>
-                                                        <td>4</td>
-                                                    </tr>
+                                                </c:forEach>
                                                 </tbody>
                                             </table>
-
-                                            <table class="centered">
+<!--
+                                            <table id="datatable" class="centered">
                                                 <thead>
-                                                    <tr>
-                                                        <th>Оценка респондента</th>
-                                                        <th>Ответило %, (чел.)</th>
-                                                    </tr>
+                                                <tr>
+                                                    <th>Оценка респондента</th>
+                                                    <th>Ответило, чел</th>
+                                                    <th>Ответило, %</th>
+                                                </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach var="data" items="${statistic.answerData}">
-                                                        <tr>
-                                                            <th class="center-align">${data.key}</th>
-                                                            <td>${data.value[1]}% (${data.value[0]} чел.)</td>
-                                                        </tr>
-                                                    </c:forEach>
-
-                                                    <c:if test="${questType eq 'rating'}">
-                                                        <tr class="not-underline-row">
-                                                            <th class="center-align teal-text">
-                                                                Максимально допустимая оценка: ${statistic.maxEstimate}
-                                                            </th>
-                                                            <th class="center-align teal-text">Ответило человек: ${statistic.total}</th>
-                                                        </tr>
-                                                     </c:if>
+                                                <c:forEach var="data" items="${statistic.answerData}">
+                                                    <tr>
+                                                        <th class="center-align">${data.key}</th>
+                                                        <td>${data.value[0]}</td>
+                                                        <td>${data.value[1]}</td>
+                                                    </tr>
+                                                </c:forEach>
                                                 </tbody>
-                                            </table>
+                                            </table>-->
+                                            <c:if test="${questType eq 'rating'}">
+                                                <span class="center-align teal-text left-align">
+                                                    <b>
+                                                        Максимально допустимая оценка: ${statistic.maxEstimate}<br/>
+                                                        Ответило человек: ${statistic.total}
+                                                    </b>
+                                                </span>
+                                            </c:if>
                                         </c:when>
                                         <c:otherwise>
-                                        <c:set var="dataSize" value="${statistic.answerData.size()}"/>
                                             <c:forEach var="data" items="${statistic.answerData}">
                                                 <div class="custom-answer">
-                                                     ${data.key} (x${dataSize})
+                                                        ${data.key} (x${data.value[0]})
                                                 </div>
                                             </c:forEach>
                                         </c:otherwise>
@@ -123,8 +109,9 @@
                                 <c:if test="${questType ne 'text'}">
                                     <div class="col l1 valign hide-on-med-and-down">
                                         <a class="btn-floating table-btn"><i class="material-icons">list</i></a>
-                                        <a class="btn-floating col-chart-btn"><i class="material-icons">album</i></a>
-                                        <a class="btn-floating pie-chart-btn"><i class="material-icons">assessment</i></a>
+                                        <a class="btn-floating pie-chart-btn"><i class="material-icons">album</i></a>
+                                        <a class="btn-floating col-chart-btn"><i
+                                                class="material-icons">assessment</i></a>
                                     </div>
                                 </c:if>
                             </div>
@@ -142,40 +129,7 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
-
-<script>
-    $(".col-chart-btn, .pie-chart-btn").click(function(){
-        $(this).parents(".collapsible-body").find("table").addClass("hide");
-
-        $(this).parents(".collapsible-body").find(".container").highcharts({
-            data: {
-                table: 'datatable'
-            },
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: ''
-            },
-            yAxis: {
-                allowDecimals: false,
-                title: {
-                    text: 'Units'
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br/>' +
-                        this.point.y + ' ' + this.point.name.toLowerCase();
-                }
-            }
-        });
-    });
-
-    $(".table-btn").click(function(){
-        $(this).parents(".collapsible-body").find("table").removeClass("hide");
-    });
-</script>
+<script src="<c:url value="/resources/js/statistics.js"/>"></script>
 
 </body>
 </html>

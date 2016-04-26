@@ -35,19 +35,28 @@
 
                         <c:choose>
                             <c:when test="${interview.isNew}">
-                                <i class="large-i material-icons circle green lighten-1" title="Анкета добавлена сегодня">schedule</i>
-                                <span class="title"><a class="green-text" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
+                                <i class="large-i material-icons circle green lighten-1"
+                                   title="Анкета добавлена сегодня">schedule</i>
+                                <span class="title"><a class="green-text"
+                                                       href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:when>
                             <c:when test="${interview.isDeadline}">
-                                <i class="large-i material-icons circle red lighten-1" title="Сегодня последний день для прохождения анкеты">watch_later</i>
-                                <span class="title"><a class="red-text" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
+                                <i class="large-i material-icons circle red lighten-1"
+                                   title="Сегодня последний день для прохождения анкеты">watch_later</i>
+                                <span class="title"><a class="red-text"
+                                                       href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:when>
                             <c:otherwise>
-                                <i class="large-i material-icons circle brown lighten-1" title="Ещё есть время для прохождения">timelapse</i>
-                                <span class="title"><a class="brown-text text-darken-4" href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
+                                <i class="large-i material-icons circle brown lighten-1"
+                                   title="Ещё есть время для прохождения">timelapse</i>
+                                <span class="title"><a class="brown-text text-darken-4"
+                                                       href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:otherwise>
                         </c:choose>
 
+                        <c:if test="${interview.secondPassage}">
+                            <p class="blue-grey-text">Разрешено многократное прохождение</p>
+                        </c:if>
                         <p class="publication-date">${interview.formatPlacementDate}</p>
                         <p class="end-date">${interview.formatEndDate}</p>
                         <a href="<c:url value="/respondent/${interview.hash}/interview"/>"

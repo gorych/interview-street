@@ -22,6 +22,10 @@
     height: 100%
 }
 
+collapsible-header:hover {
+    background-color: #b2dfdb;
+}
+
 .table-btn, .col-chart-btn, .pie-chart-btn {
     margin-bottom: 5px;
 }

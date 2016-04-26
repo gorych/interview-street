@@ -53,7 +53,12 @@
                                             <table id="datatable" class="centered">
                                                 <thead>
                                                 <tr>
-                                                    <th>Оценка респондента</th>
+                                                    <c:if test="${questType eq 'rating'}">
+                                                        <th>Оценка респондента</th>
+                                                    </c:if>
+                                                    <c:if test="${questType ne 'rating'}">
+                                                        <th>Ответ респондента</th>
+                                                    </c:if>
                                                     <th>Ответило, чел</th>
                                                     <th>Ответило, %</th>
                                                 </tr>

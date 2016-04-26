@@ -274,7 +274,6 @@
         var value = $(that).val();
         var length = parseInt(value);
         if (!value || (length < 3 || length > 10)) {
-            $(that.val(3));
             length = 3;
         }
 

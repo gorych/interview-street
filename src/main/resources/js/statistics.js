@@ -10,7 +10,6 @@ $(document).ready(function () {
             contextButtonTitle: 'Контекстное меню'
         },
         chart: {
-            type: 'column',
             backgroundColor: '#f5f5f5'
         },
         credits: {
@@ -33,48 +32,71 @@ $(document).ready(function () {
                 enabled: false
             }
         },
-
-        tooltip: {
-            formatter: function () {
-                return '<b>' + "Оценка: " + this.series.name + '</b><br/>' +
-                    "Ответило человек: " + this.point.y;
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                },
+                showInLegend: true
             }
         }
     };
+
+    function collectData() {
+        var data = [];
+
+        $("#datatable").find("tbody>tr").each(function() {
+            var answer = $(this).find('th:first').text();
+            var peopleCount = $(this).find('td:nth-child(2)').text();
+
+            data.push({
+                "name": answer,
+                "y": parseFloat(peopleCount)
+            });
+        });
+
+        return data;
+    }
 
     $(".col-chart-btn, .pie-chart-btn").click(function () {
         var $body = $(this).parents(".collapsible-body");
         $body.find("table").addClass("hide");
         $body.find(".chart-container").removeClass("hide");
 
-        chartOptions.data = {
-            table: 'datatable',
-            endColumn: 1,
-            endRow: $(this).parents(".collapsible-body").find("table>tbody>tr").length
-        };
-
         if ($(this).hasClass("pie-chart-btn")) {
             chartOptions.chart.type = "pie";
-            chartOptions.data.switchRowsAndColumns = false;
 
-            chartOptions.plotOptions = {
-                pie: {
-                    allowPointSelect: true,
-                    dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
-                },
-                tooltip: {
-                    formatter: function () {
-                        return '<b>' + "Оценка: " +  this.series.name + '</b><br/>' +
-                            "Ответило человек: " + this.point.y;
-                    }
-                }
+            delete chartOptions['data'];
+
+            chartOptions.series =  [{
+              name: 'Ответило',
+              colorByPoint: true,
+              data: collectData()
+            }];
+
+            chartOptions.tooltip = {
+                pointFormat: '{series.name}: <b>[{point.percentage:.1f}%, {point.y} чел]</b>'
             };
         } else {
             chartOptions.chart.type = "column";
-            chartOptions.data.switchRowsAndColumns = true;
+
+            delete chartOptions['series'];
+
+            chartOptions.data = {
+                table: 'datatable',
+                endColumn: 1,
+                endRow: $(this).parents(".collapsible-body").find("table>tbody>tr").length,
+                switchRowsAndColumns: true
+            };
+
+            chartOptions.tooltip = {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        "Ответило человек: " + this.point.y;
+                }
+            };
         }
 
         $body.find(".chart-container").highcharts(chartOptions);

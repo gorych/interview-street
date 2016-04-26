@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.Collection;
 
 @Controller
@@ -32,10 +33,16 @@ public class IndexController {
     }
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
-    public String goToLogin(@RequestParam(value = "auth_error", required = false) String error, Model model) {
+    public String goToLogin(
+            @RequestParam(value = "auth_error", required = false) String error, Model model, Principal principal) {
+        if (principal != null) {
+            return "redirect:/gateway";
+        }
+
         if (error != null) {
             model.addAttribute(AttrConstants.AUTH_ERROR, WebConstants.USER_NOT_FOUND_MSG);
         }
+
         return "login";
     }
 

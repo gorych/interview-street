@@ -45,3 +45,7 @@ input[type=text].invalid.invalid-select, input[type=text].valid.valid-select {
 input[type=text].valid.valid-select {
     box-shadow: 0 2px 0 0 #4CAF50;
 }
+
+.row .second-passage-col {
+    padding-top: 20px;
+}

@@ -27,11 +27,12 @@
                     <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
                     <a href="/viewer/${interview.hash}/statistics">
                         <i class="small material-icons green-text text-accent-4"
-                           title="Анализ результатов">equalizer
-                        </i>
+                           title="Анализ результатов">equalizer</i>
                     </a>
-                    <a href=""><i class="small material-icons blue-grey-text text-lighten-2"
-                                  title="Предварительный просмотр">pageview</i></a>
+                    <a href="/editor/${interview.hash}/preview">
+                        <i class="small material-icons blue-grey-text text-lighten-2"
+                           title="Предварительный просмотр">pageview</i>
+                    </a>
                     <i class="hide small material-icons brown-text text-lighten-1" title="Распечатать анкету">print</i>
                 </div>
             </div>

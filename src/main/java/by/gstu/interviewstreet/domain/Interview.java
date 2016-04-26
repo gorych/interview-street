@@ -59,6 +59,10 @@ public class Interview implements Serializable, Comparable<Interview> {
     @Column(name = "hide")
     private boolean hide;
 
+    @Expose
+    @Column(name = "second_passage")
+    private boolean secondPassage;
+
     @Generated(GenerationTime.ALWAYS)
     @Column(name = "placement_date")
     private Date placementDate;
@@ -162,6 +166,14 @@ public class Interview implements Serializable, Comparable<Interview> {
         this.hide = hide;
     }
 
+    public boolean isSecondPassage() {
+        return secondPassage;
+    }
+
+    public void setSecondPassage(boolean secondPassage) {
+        this.secondPassage = secondPassage;
+    }
+
     public Date getPlacementDate() {
         return placementDate;
     }
@@ -237,6 +249,7 @@ public class Interview implements Serializable, Comparable<Interview> {
                 ", goal='" + goal + '\'' +
                 ", audience='" + audience + '\'' +
                 ", hide=" + hide +
+                ", secondPassage=" + secondPassage +
                 ", placementDate=" + placementDate +
                 ", endDate=" + endDate +
                 ", hash='" + hash + '\'' +

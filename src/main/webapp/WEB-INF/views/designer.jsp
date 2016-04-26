@@ -25,8 +25,13 @@
                     <i id="clipboard-btn" class="small material-icons light-blue-text text-accent-3"
                        data-clipboard-target=".interview-url" title="Копировать адрес ссылки">settings_ethernet</i>
                     <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
-                    <i class="small material-icons green-text text-accent-4" title="Анализ результатов">equalizer</i>
-                    <i class="small material-icons blue-grey-text text-lighten-2" title="Предварительный просмотр">pageview</i>
+                    <a href="/viewer/${interview.hash}/statistics">
+                        <i class="small material-icons green-text text-accent-4"
+                           title="Анализ результатов">equalizer
+                        </i>
+                    </a>
+                    <a href=""><i class="small material-icons blue-grey-text text-lighten-2"
+                                  title="Предварительный просмотр">pageview</i></a>
                     <i class="hide small material-icons brown-text text-lighten-1" title="Распечатать анкету">print</i>
                 </div>
             </div>

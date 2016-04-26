@@ -20,11 +20,11 @@
         </div>
     </div>
 
-    <c:if test="${empty statistics}">
+    <c:if test="${not_answers}">
         <h6 class="red-text">По данной анкете пока не собрано ни одного ответа.</h6>
     </c:if>
 
-    <c:if test="${not empty statistics}">
+    <c:if test="${not not_answers}">
         <div class="col l12 m12">
             <ul class="collapsible" data-collapsible="accordion">
                 <c:forEach var="statistic" items="${statistics}" varStatus="cur">

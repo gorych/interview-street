@@ -30,8 +30,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         for (UserAnswer userAnswer : notDuplicateAnswers) {
             int count = Collections.frequency(allAnswers, userAnswer);
-            String percent = ControllerUtils.getPercent(count, total);
-            answerData.put(userAnswer.getAnswerText(), new Object[]{count, percent});
+            if (count > 0) {
+                String percent = ControllerUtils.getPercent(count, total);
+                answerData.put(userAnswer.getAnswerText(), new Object[]{count, percent});
+            }
         }
 
         return answerData;
@@ -51,7 +53,9 @@ public class StatisticsServiceImpl implements StatisticsService {
             int maxEstimate = getMaxEstimate(question);
             Map<Object, Object[]> answerData = getAnswerDataMap(allAnswers, notDuplicateAnswers, total);
 
-            statistics.add(new StatisticData(question, answerData, maxEstimate, total));
+            if (!answerData.isEmpty()) {
+                statistics.add(new StatisticData(question, answerData, maxEstimate, total));
+            }
         }
 
         return statistics;

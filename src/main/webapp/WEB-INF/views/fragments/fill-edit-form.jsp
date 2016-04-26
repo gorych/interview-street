@@ -84,7 +84,7 @@
         </div>
 
         <div class="col s12 m12 l12 second-passage-col left-align">
-            <c:if test="${interview.secondPassage}">
+            <c:if test="${interview.secondPassage eq true}">
                 <input type="checkbox" class="filled-in" id="second-passage" checked="checked"/>
             </c:if>
             <c:if test="${interview.secondPassage ne true}">

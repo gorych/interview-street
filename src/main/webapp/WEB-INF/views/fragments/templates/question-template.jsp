@@ -46,7 +46,7 @@
                 {{if ~getId() > 0}}
                     {{:~printOptionalAnswer()}}
                 {{/if}}
-            {{else type.name=== "rating" }}
+            {{else type.name == "rating" }}
                 {{include tmpl="rateAnswTmpl"/}}
             {{else}}
                 {{include tmpl="textAnswTmpl"/}}

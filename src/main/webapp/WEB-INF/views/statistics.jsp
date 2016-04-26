@@ -50,7 +50,6 @@
                                             <!--Container for chart-->
                                             <div class="chart-container"></div>
 
-
                                             <table id="datatable" class="centered">
                                                 <thead>
                                                 <tr>
@@ -69,25 +68,7 @@
                                                 </c:forEach>
                                                 </tbody>
                                             </table>
-<!--
-                                            <table id="datatable" class="centered">
-                                                <thead>
-                                                <tr>
-                                                    <th>Оценка респондента</th>
-                                                    <th>Ответило, чел</th>
-                                                    <th>Ответило, %</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:forEach var="data" items="${statistic.answerData}">
-                                                    <tr>
-                                                        <th class="center-align">${data.key}</th>
-                                                        <td>${data.value[0]}</td>
-                                                        <td>${data.value[1]}</td>
-                                                    </tr>
-                                                </c:forEach>
-                                                </tbody>
-                                            </table>-->
+
                                             <c:if test="${questType eq 'rating'}">
                                                 <span class="center-align teal-text left-align">
                                                     <b>

@@ -8,6 +8,10 @@ var global = global || {};
             Materialize.toast("Ошибка при выполнении операции", 2000);
             console.log(xhr.responseText);
         }
+
+        if(xhr.status === "500") {
+            console.log("Unknown error from server.")
+        }
     };
 
     global.rewriteUrl = function (relativeUrl) {

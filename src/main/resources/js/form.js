@@ -8,6 +8,7 @@
         this.audience = $("#audience").val();
         this.goal = $("#goal").val();
         this.hide = true;
+        this.secondPassage = $("#second-passage").is(":checked");
         this.type = {
             id: $("[name='type']").val()
         };

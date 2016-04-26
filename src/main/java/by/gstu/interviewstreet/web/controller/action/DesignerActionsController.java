@@ -51,7 +51,7 @@ public class DesignerActionsController {
         if (interview == null || questionType == null) {
             return new ResponseEntity<>(
                     "Error getting interview or question type. " +
-                    "Interview hash = " + hash + ". Question type id = " + questTypeId,
+                            "Interview hash = " + hash + ". Question type id = " + questTypeId,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -68,8 +68,12 @@ public class DesignerActionsController {
     @ResponseBody
     @RequestMapping(value = {"/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> removeQuestion(String hash, int id) {
-        Question question = questionService.get(hash, id);
-        questionService.remove(question);
+        try {
+            Question question = questionService.get(hash, id);
+            questionService.remove(question);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,12 +1,12 @@
 package by.gstu.interviewstreet.web.util;
 
 import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class ControllerUtils {
 
@@ -16,10 +16,22 @@ public final class ControllerUtils {
     }
 
     public static List<UserInterview> getAvailableInterviews(List<UserInterview> interviews) {
-        return interviews
-                .stream()
-                .filter(ui -> !ui.getInterview().getHide() && !ui.getPassed() && !ui.getInterview().getIsDeadline())
-                .collect(Collectors.toCollection(ArrayList::new));
+        List<UserInterview> availableInterviews = new ArrayList<>();
+
+        for (UserInterview uInterview : interviews) {
+            Interview interview = uInterview.getInterview();
+            if (interview.getHide() || interview.getIsDeadline()) {
+                continue;
+            }
+
+            if (!interview.isSecondPassage() && uInterview.getPassed()) {
+                continue;
+            }
+
+            availableInterviews.add(uInterview);
+        }
+
+        return availableInterviews;
     }
 
     public static boolean notExistTextAnswer(List<Answer> answers) {

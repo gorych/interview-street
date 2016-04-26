@@ -136,7 +136,7 @@
                                      data-answer="${question.answers[0].id}">
                                     <input class="rating" type="number" min="3" max="10"
                                            value="${question.answers[0].text}" title="Минимум 3 - Максимум 10"/>
-                                    <label class="active">Количество звезд</label>
+                                    <label class="active">Количество звезд [3, 10]</label>
                                 </div>
                                 <div class="col col l12 m12 s12 rating center">
                                     <c:forEach begin="1" end="${question.answers[0].text}">

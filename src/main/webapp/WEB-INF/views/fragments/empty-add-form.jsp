@@ -58,6 +58,11 @@
                    length="70"/>
             <label class="active">Описание</label>
         </div>
+
+        <div class="col s12 m12 l12 second-passage-col left-align">
+            <input type="checkbox" class="filled-in" id="second-passage"/>
+            <label for="second-passage">Разрешить повторное прохождение</label>
+        </div>
     </div>
 
     <div class="row valign-wrapper">
@@ -65,7 +70,7 @@
             <a id="go-back" href="<c:url value="/interview/form"/>"><i
                     class="medium material-icons brown-text text-lighten-1" title="Назад">reply</i></a>
         </div>
-        <div class="col s11 right-align">
+        <div class="col l12 m12 right-align">
             <a href="<c:url value="/editor/interview-list"/>" class="waves-effect waves-light btn-large red accent-2">Отмена</a>
             <a id="submit" class="waves-effect waves-light btn-large accent-2"><i
                     class="material-icons right">send</i>Продолжить</a>

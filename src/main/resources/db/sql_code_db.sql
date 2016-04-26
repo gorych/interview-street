@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`interviews` (
   `placement_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` DATE NOT NULL,
   `hide` TINYINT(1) NULL DEFAULT '0',
+  `second_passage` TINYINT(1) NULL DEFAULT '0',
   `question_count` INT(11) NULL DEFAULT '0',
   `hash` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),

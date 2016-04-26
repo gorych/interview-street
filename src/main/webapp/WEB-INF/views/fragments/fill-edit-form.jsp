@@ -82,6 +82,16 @@
                    length="70"/>
             <label class="active">Описание</label>
         </div>
+
+        <div class="col s12 m12 l12 second-passage-col left-align">
+            <c:if test="${interview.secondPassage}">
+                <input type="checkbox" class="filled-in" id="second-passage" checked="checked"/>
+            </c:if>
+            <c:if test="${interview.secondPassage ne true}">
+                <input type="checkbox" class="filled-in" id="second-passage"/>
+            </c:if>
+            <label for="second-passage">Разрешить повторное прохождение</label>
+        </div>
     </div>
 
     <div class="row valign-wrapper">

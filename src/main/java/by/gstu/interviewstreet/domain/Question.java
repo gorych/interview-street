@@ -39,10 +39,10 @@ public class Question implements Serializable, Comparable<Question> {
     private int number;
 
     @Expose
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<UserAnswer> userAnswers = new ArrayList<>();
 
     public Question() {

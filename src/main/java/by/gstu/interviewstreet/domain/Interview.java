@@ -91,6 +91,9 @@ public class Interview implements Serializable, Comparable<Interview> {
     @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
+    private List<UserInterview> userInterviews = new ArrayList<>();
+
     public Interview() { }
 
     public boolean getIsNew() {
@@ -236,6 +239,14 @@ public class Interview implements Serializable, Comparable<Interview> {
 
     public void setIntroductoryText(String introductoryText) {
         this.introductoryText = introductoryText;
+    }
+
+    public List<UserInterview> getUserInterviews() {
+        return userInterviews;
+    }
+
+    public void setUserInterviews(List<UserInterview> userInterviews) {
+        this.userInterviews = userInterviews;
     }
 
     //endregion

@@ -37,6 +37,15 @@ public class ViewerController {
     @RequestMapping(value = {"/{hash}/statistics"}, method = RequestMethod.GET)
     public String showInterviewStatistics(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
+
+        int userAnswerCount = interview.getUserInterviews().size();
+        int questionCount = interview.getQuestions().size();
+
+        if (userAnswerCount < 1 || questionCount < 1) {
+            model.addAttribute(AttrConstants.NOT_ANSWERS, true);
+            return "statistics";
+        }
+
         List<StatisticData> statistics = statisticsService.getInterviewStatistics(interview);
 
         model.addAttribute(AttrConstants.INTERVIEW_NAME, interview.getName());

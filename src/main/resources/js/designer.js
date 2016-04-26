@@ -77,6 +77,9 @@
                 $section.remove();
                 updateQuestionNumbers();
                 Materialize.toast("Вопрос успешно удален", 2000);
+            })
+            .fail(function () {
+                Materialize.toast("Ошибка при удалении вопроса", 2000);
             });
     });
 
@@ -164,7 +167,7 @@
             });
     });
 
-    /*Del answer from question*/
+    /*Delete answer from question*/
     _questionContainer.on('click', ".del-answer, .del-text-answer", function () {
         var $row = $(this).parents("[data-answer]");
         var $section = $(this).parents(".section");

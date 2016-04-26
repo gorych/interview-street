@@ -4,6 +4,9 @@ public final class WebConstants {
 
     public static final String HASH = "hash";
 
+    public static final String TEXT_ANSWER_NAME = "text";
+    public static final int ANSWER_COUNT_WITH_TEXT_ANSWER = 3;
+    public static final int ANSWER_COUNT_WITHOUT_TEXT_ANSWER = 2;
 
     public static final String USER_NOT_FOUND_MSG = "Пользователь с такими паспортными данными не найден.";
     public static final String USER_SEND_WRONG_HASH_MSG = "User tries to send a interview with the wrong hash =";

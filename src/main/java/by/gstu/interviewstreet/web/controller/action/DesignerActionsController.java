@@ -5,6 +5,7 @@ import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
+import by.gstu.interviewstreet.web.WebConstants;
 import by.gstu.interviewstreet.web.util.AnswerValidator;
 import by.gstu.interviewstreet.web.util.ControllerUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
@@ -25,10 +26,6 @@ import java.util.List;
 @RequestMapping("/designer")
 @Secured(UserRoleConstants.EDITOR)
 public class DesignerActionsController {
-
-    private static final int ANSWER_COUNT_WITHOUT_TEXT_ANSWER = 2;
-    private static final int ANSWER_COUNT_WITH_TEXT_ANSWER = 3;
-    private static final String TEXT_ANSWER_NAME = "text";
 
     @Autowired
     AnswerValidator validator;
@@ -153,9 +150,11 @@ public class DesignerActionsController {
         List<Answer> answers = question.getAnswers();
 
         boolean textAnswerExists = !ControllerUtils.notExistTextAnswer(answers);
-        boolean isTextAnswer = TEXT_ANSWER_NAME.equals(answer.getType().getName());
+        boolean isTextAnswer = WebConstants.TEXT_ANSWER_NAME.equals(answer.getType().getName());
 
-        int minAnswerCount = textAnswerExists ? ANSWER_COUNT_WITH_TEXT_ANSWER : ANSWER_COUNT_WITHOUT_TEXT_ANSWER;
+        int minAnswerCount = textAnswerExists
+                ? WebConstants.ANSWER_COUNT_WITH_TEXT_ANSWER
+                : WebConstants.ANSWER_COUNT_WITHOUT_TEXT_ANSWER;
 
         if (answers.size() <= minAnswerCount && !isTextAnswer) {
             return new ResponseEntity<>(

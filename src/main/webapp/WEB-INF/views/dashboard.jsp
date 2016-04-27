@@ -55,7 +55,7 @@
                         </c:choose>
 
                         <c:if test="${interview.secondPassage}">
-                            <p class="blue-grey-text">Разрешено многократное прохождение</p>
+                            <p class="blue-grey-text">Доступно многократное прохождение</p>
                         </c:if>
                         <p class="publication-date">${interview.formatPlacementDate}</p>
                         <p class="end-date">${interview.formatEndDate}</p>

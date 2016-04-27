@@ -7,7 +7,7 @@ import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
 import by.gstu.interviewstreet.web.WebConstants;
 import by.gstu.interviewstreet.web.util.AnswerValidator;
-import by.gstu.interviewstreet.web.util.ControllerUtils;
+import by.gstu.interviewstreet.web.util.WebUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -130,7 +130,7 @@ public class DesignerActionsController {
         }
 
         Answer answer;
-        if (textType && ControllerUtils.notExistTextAnswer(answers)) {
+        if (textType && WebUtils.notExistTextAnswer(answers)) {
             answer = answerService.addDefaultTextAnswer(question);
         } else {
             answer = answerService.addDefaultAnswer(answerType, question);
@@ -149,7 +149,7 @@ public class DesignerActionsController {
 
         List<Answer> answers = question.getAnswers();
 
-        boolean textAnswerExists = !ControllerUtils.notExistTextAnswer(answers);
+        boolean textAnswerExists = !WebUtils.notExistTextAnswer(answers);
         boolean isTextAnswer = WebConstants.TEXT_ANSWER_NAME.equals(answer.getType().getName());
 
         int minAnswerCount = textAnswerExists

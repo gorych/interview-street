@@ -1,14 +1,18 @@
 package by.gstu.interviewstreet.web.controller.user;
 
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.User;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.UserAnswerService;
 import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
-import by.gstu.interviewstreet.web.util.ControllerUtils;
+import by.gstu.interviewstreet.web.util.DateUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
+import by.gstu.interviewstreet.web.util.WebUtils;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Type;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -44,7 +49,7 @@ public class RespondentController extends UserController {
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
-        List<UserInterview> availableInterviews = ControllerUtils.getAvailableInterviews(user.getInterviewsForPassing());
+        List<UserInterview> availableInterviews = WebUtils.getAvailableInterviews(user.getInterviewsForPassing());
 
         model.addAttribute(AttrConstants.USER_INTERVIEWS, availableInterviews);
 
@@ -52,39 +57,36 @@ public class RespondentController extends UserController {
     }
 
     @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
-    public String showDashboard(@PathVariable String hash, Principal principal, Model model) {
+    public String showInterview(@PathVariable String hash, Principal principal, Model model) {
         UserInterview uInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
         if (uInterview == null || (!uInterview.getInterview().isSecondPassage() && uInterview.getPassed())) {
             return "redirect:/dashboard";
         }
 
         Interview interview = uInterview.getInterview();
-        List<Question> questions = interview.getQuestions();
-
-        Collections.sort(questions);
-
-        model.addAttribute(AttrConstants.INTERVIEW, interview);
-        model.addAttribute(AttrConstants.QUESTIONS, questions);
+        WebUtils.buildModelForDashboard(model, interview);
 
         return "interview";
     }
 
     @RequestMapping(value = "interview/{hash}/anonymous", method = RequestMethod.GET)
-    public String showDashboard(@PathVariable String hash, Model model, HttpServletRequest request) {
+    public String showInterview(@PathVariable String hash, Model model, HttpServletRequest request) {
         Interview interview = interviewService.get(hash);
-        List<Question> questions = interview.getQuestions();
+        if (!interview.isClosedType()) {
+            return "error/404";
+        }
 
-        Collections.sort(questions);
+        request.getCookies();
 
-        model.addAttribute(AttrConstants.INTERVIEW, interview);
-        model.addAttribute(AttrConstants.QUESTIONS, questions);
+        WebUtils.buildModelForDashboard(model, interview);
 
         return "interview";
     }
 
     @ResponseBody
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> sendInterview(String hash, String data, Principal principal) {
+    public ResponseEntity<String> sendInterview(String hash, String data,
+                                                Principal principal, HttpServletResponse response) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
             return new ResponseEntity<>(WebConstants.USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
@@ -94,12 +96,24 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Answer>>() { }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
+        User user = interview.isOpenType() ? getUserByPrincipal(principal) : null;
+        if (user == null) {
+            Cookie interviewHash = new Cookie(WebConstants.HASH, hash);
+            Cookie isPassed = new Cookie(WebConstants.IS_PASSED, WebConstants.IS_PASSED_VAL);
+
+            int maxAge = DateUtils.secondsBetweenDays(interview.getEndDate());
+
+            interviewHash.setMaxAge(maxAge);
+            isPassed.setMaxAge(maxAge);
+
+            response.addCookie(interviewHash);
+            response.addCookie(isPassed);
+        }
+
         try {
-            User user = getUserByPrincipal(principal);
             userAnswerService.save(user, interview, answers);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(WebConstants.USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);

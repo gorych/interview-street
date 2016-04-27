@@ -1,5 +1,8 @@
 package by.gstu.interviewstreet.web.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,13 +12,14 @@ public final class DateUtils {
     public static final SimpleDateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
     public static final SimpleDateFormat YYYY = new SimpleDateFormat("yyyy");
 
-    private DateUtils() { }
+    private DateUtils() {
+    }
 
     public static Date getToday() {
         return Calendar.getInstance().getTime();
     }
 
-    public static Date getTomorrow(){
+    public static Date getTomorrow() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.get(Calendar.YEAR);
@@ -25,8 +29,16 @@ public final class DateUtils {
     public static boolean isToday(Date date) {
         String today = YYYY_MM_DD.format(getToday());
         String someday = YYYY_MM_DD.format(date);
-
         return today.equals(someday);
+    }
+
+    public static int secondsBetweenDays(Date endDate) {
+        String today = YYYY_MM_DD.format(getToday());
+        String someday = YYYY_MM_DD.format(endDate);
+
+        int days = Days.daysBetween(new DateTime(someday), new DateTime(today)).getDays();
+
+        return days * 24 * 60 * 60;
     }
 
     public static boolean isMoreThanToday(Date date) {

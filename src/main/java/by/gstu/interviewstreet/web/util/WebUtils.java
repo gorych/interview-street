@@ -2,17 +2,30 @@ package by.gstu.interviewstreet.web.util;
 
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.web.AttrConstants;
+import org.springframework.ui.Model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public final class ControllerUtils {
+public final class WebUtils {
 
     public static final String TEXT_ANSWER_NAME = "text";
 
-    private ControllerUtils() {
+    private WebUtils() {
+    }
+
+    public static void buildModelForDashboard(Model model, Interview interview) {
+        List<Question> questions = interview.getQuestions();
+
+        Collections.sort(questions);
+
+        model.addAttribute(AttrConstants.INTERVIEW, interview);
+        model.addAttribute(AttrConstants.QUESTIONS, questions);
     }
 
     public static List<UserInterview> getAvailableInterviews(List<UserInterview> interviews) {

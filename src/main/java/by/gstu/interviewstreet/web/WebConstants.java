@@ -3,6 +3,8 @@ package by.gstu.interviewstreet.web;
 public final class WebConstants {
 
     public static final String HASH = "hash";
+    public static final String IS_PASSED = "is_passed";
+    public static final String IS_PASSED_VAL = "true";
 
     public static final String TEXT_ANSWER_NAME = "text";
     public static final int ANSWER_COUNT_WITH_TEXT_ANSWER = 3;

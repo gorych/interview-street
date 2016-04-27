@@ -25,11 +25,11 @@
                     <i id="clipboard-btn" class="small material-icons light-blue-text text-accent-3"
                        data-clipboard-target=".interview-url" title="Копировать адрес ссылки">settings_ethernet</i>
                     <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
-                    <a href="/viewer/${interview.hash}/statistics">
+                    <a href="<c:url value="/viewer/${interview.hash}/statistics"/>">
                         <i class="small material-icons green-text text-accent-4"
                            title="Анализ результатов">equalizer</i>
                     </a>
-                    <a href="/editor/${interview.hash}/preview">
+                    <a href="<c:url value="/editor/${interview.hash}/preview"/>">
                         <i class="small material-icons blue-grey-text text-lighten-2"
                            title="Предварительный просмотр">pageview</i>
                     </a>
@@ -180,7 +180,12 @@
 
     <!--Hidden input for clipboard-->
     <label>
-        <input type="text" class="interview-url" value="/test/url/place/here2d"/>
+        <c:if test="${interview.type.name eq 'open'}">
+            <input type="text" class="interview-url" value="<c:url value="/respondent/${interview.hash}/interview"/>"/>
+        </c:if>
+        <c:if test="${interview.type.name ne 'open'}">
+            <input type="text" class="interview-url" value="<c:url value="/respondent/interview/${interview.hash}/anonymous"/>"/>
+        </c:if>
     </label>
 </main>
 

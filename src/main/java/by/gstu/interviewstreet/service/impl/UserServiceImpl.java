@@ -19,10 +19,10 @@ import java.util.*;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     @Autowired
-    InterviewDAO interviewDAO;
+    private InterviewDAO interviewDAO;
 
     //TODO REMAKE
     @Transactional

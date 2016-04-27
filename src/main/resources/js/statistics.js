@@ -44,10 +44,10 @@ $(document).ready(function () {
         }
     };
 
-    function collectData() {
+    function collectData(table) {
         var data = [];
 
-        $("#datatable").find("tbody>tr").each(function() {
+        $(table).find("tbody>tr").each(function() {
             var answer = $(this).find('th:first').text();
             var peopleCount = $(this).find('td:nth-child(2)').text();
 
@@ -62,7 +62,9 @@ $(document).ready(function () {
 
     $(".col-chart-btn, .pie-chart-btn").click(function () {
         var $body = $(this).parents(".collapsible-body");
-        $body.find("table").addClass("hide");
+        var $table = $body.find("table");
+
+        $table.addClass("hide");
         $body.find(".chart-container").removeClass("hide");
 
         if ($(this).hasClass("pie-chart-btn")) {
@@ -73,7 +75,7 @@ $(document).ready(function () {
             chartOptions.series =  [{
               name: 'Ответило',
               colorByPoint: true,
-              data: collectData()
+              data: collectData($table)
             }];
 
             chartOptions.tooltip = {
@@ -85,7 +87,7 @@ $(document).ready(function () {
             delete chartOptions['series'];
 
             chartOptions.data = {
-                table: 'datatable',
+                table: $table.attr("id"),
                 endColumn: 1,
                 endRow: $(this).parents(".collapsible-body").find("table>tbody>tr").length,
                 switchRowsAndColumns: true

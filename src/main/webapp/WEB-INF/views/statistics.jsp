@@ -50,7 +50,7 @@
                                             <!--Container for chart-->
                                             <div class="chart-container"></div>
 
-                                            <table id="datatable" class="centered">
+                                            <table id="'datatable'+${cur.index}" class="centered">
                                                 <thead>
                                                 <tr>
                                                     <c:if test="${questType eq 'rating'}">

@@ -34,7 +34,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/respondent")
-@Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.EDITOR})
 public class RespondentController extends UserController {
 
     @Autowired
@@ -46,6 +45,16 @@ public class RespondentController extends UserController {
     @Autowired
     UserInterviewService userInterviewService;
 
+    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @RequestMapping("/{hash}/success")
+    public String showSuccessPage(@PathVariable String hash, Model model) {
+        Interview interview = interviewService.get(hash);
+        model.addAttribute(AttrConstants.SHOW_LINK, !interview.isClosedType());
+
+        return "success";
+    }
+
+    @Secured({UserRoleConstants.RESPONDENT})
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
@@ -56,6 +65,7 @@ public class RespondentController extends UserController {
         return "dashboard";
     }
 
+    @Secured({UserRoleConstants.RESPONDENT})
     @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
     public String showInterview(@PathVariable String hash, Principal principal, Model model) {
         UserInterview uInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
@@ -69,14 +79,13 @@ public class RespondentController extends UserController {
         return "interview";
     }
 
+    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = "interview/{hash}/anonymous", method = RequestMethod.GET)
     public String showInterview(@PathVariable String hash, Model model, HttpServletRequest request) {
         Interview interview = interviewService.get(hash);
-        if (!interview.isClosedType()) {
+        if (!interview.isClosedType() || interview.getHide() || interview.getIsDeadline()) {
             return "error/404";
         }
-
-        request.getCookies();
 
         WebUtils.buildModelForDashboard(model, interview);
 
@@ -84,6 +93,7 @@ public class RespondentController extends UserController {
     }
 
     @ResponseBody
+    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> sendInterview(String hash, String data,
                                                 Principal principal, HttpServletResponse response) {
@@ -96,7 +106,8 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() { }.getType();
+        Type type = new TypeToken<List<Answer>>() {
+        }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         User user = interview.isOpenType() ? getUserByPrincipal(principal) : null;

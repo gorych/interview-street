@@ -74,7 +74,7 @@
                 $('#thanks-modal').openModal();
             })
             .fail(function () {
-                alert("fail");
+                Materialize.toast("Ошибка при отправлении анкеты",2000);
             });
     });
 

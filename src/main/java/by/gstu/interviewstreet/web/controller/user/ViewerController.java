@@ -36,10 +36,9 @@ public class ViewerController {
     public String showInterviewStatistics(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
 
-        int userAnswerCount = interview.getUserInterviews().size();
         int questionCount = interview.getQuestions().size();
 
-        if (userAnswerCount < 1 || questionCount < 1) {
+        if (questionCount < 1) {
             model.addAttribute(AttrConstants.NOT_ANSWERS, true);
             return "statistics";
         }

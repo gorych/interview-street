@@ -23,12 +23,14 @@ public final class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.get(Calendar.YEAR);
+
         return calendar.getTime();
     }
 
     public static boolean isToday(Date date) {
         String today = YYYY_MM_DD.format(getToday());
         String someday = YYYY_MM_DD.format(date);
+
         return today.equals(someday);
     }
 

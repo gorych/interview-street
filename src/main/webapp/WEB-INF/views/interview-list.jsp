@@ -7,6 +7,7 @@
     <%@include file="fragments/meta.html" %>
     <%@include file="fragments/general-css.jsp" %>
     <link href="<c:url value="/resources/css/interview-list.css"/>" rel="stylesheet" type="text/css">
+
     <title>Interview Street - Список анкет</title>
 </head>
 <body>
@@ -41,7 +42,7 @@
                         <span class="card-title"><i class="material-icons right">close</i></span>
                         <c:if test="${interview.type.name == 'close'}">
                             <p class="goal">${interview.goal}</p>
-                            <p class="audience">${interview.description}</p>
+                            <p class="audience">${interview.audience}</p>
                         </c:if>
                         <p class="description">${interview.description}</p>
                     </div>

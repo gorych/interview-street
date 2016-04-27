@@ -18,6 +18,9 @@
     <div class="row">
         <h5 class="header teal-text">${interview.name}</h5>
         <h6>${interview.introductoryText}</h6>
+        <c:if test="${interview.type.closed}">
+            <p class="blue-text">Данная анкета является анонимной.</p>
+        </c:if>
     </div>
 
     <div class="row">

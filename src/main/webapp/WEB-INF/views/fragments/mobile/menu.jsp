@@ -5,7 +5,9 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 
 <ul class="side-nav" id="mobile-menu">
-    <li><a href="<c:url value="/respondent/dashboard"/>">Мои анкеты</a></li>
+    <sec:authorize access="hasAnyRole('ROLE_EDITOR','ROLE_RESPONDENT')">
+        <li><a href="<c:url value="/respondent/dashboard"/>">Мои анкеты</a></li>
+    </sec:authorize>
     <sec:authorize access="hasRole('ROLE_EDITOR')">
         <li><a href="<c:url value="/editor/interview-list"/>">Список анкет</a></li>
         <li><a href="<c:url value="/viewer/statistics"/>">Статистика</a></li>

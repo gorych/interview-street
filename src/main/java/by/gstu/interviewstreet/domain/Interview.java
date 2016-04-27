@@ -94,7 +94,16 @@ public class Interview implements Serializable, Comparable<Interview> {
     @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
     private List<UserInterview> userInterviews = new ArrayList<>();
 
-    public Interview() { }
+    public Interview() {
+    }
+
+    public boolean isOpenType() {
+        return type.isOpen();
+    }
+
+    public boolean isClosedType() {
+        return type.isClosed();
+    }
 
     public boolean getIsNew() {
         return DateUtils.isToday(placementDate);
@@ -200,13 +209,13 @@ public class Interview implements Serializable, Comparable<Interview> {
         return questions;
     }
 
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
     public List<Question> getSortedQuestions() {
         Collections.sort(questions);
         return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
     }
 
     public User getCreator() {
@@ -271,6 +280,6 @@ public class Interview implements Serializable, Comparable<Interview> {
 
     @Override
     public int compareTo(Interview i) {
-        return this.getPlacementDate().compareTo(i.getPlacementDate());
+        return i.getPlacementDate().compareTo(this.getPlacementDate());
     }
 }

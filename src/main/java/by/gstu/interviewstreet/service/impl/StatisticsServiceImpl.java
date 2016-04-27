@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.UserAnswer;
 import by.gstu.interviewstreet.service.StatisticsService;
-import by.gstu.interviewstreet.web.util.ControllerUtils;
+import by.gstu.interviewstreet.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         for (UserAnswer userAnswer : notDuplicateAnswers) {
             int count = Collections.frequency(allAnswers, userAnswer);
             if (count > 0) {
-                String percent = ControllerUtils.getPercent(count, total);
+                String percent = WebUtils.getPercent(count, total);
                 answerData.put(userAnswer.getAnswerText(), new Object[]{count, percent});
             }
         }

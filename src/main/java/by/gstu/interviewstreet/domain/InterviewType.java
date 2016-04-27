@@ -1,9 +1,9 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -12,6 +12,7 @@ public class InterviewType implements Serializable {
 
     private static final int OPEN_TYPE_ID = 1;
     private static final String OPEN_TYPE_NAME = "open";
+    private static final String CLOSED_TYPE_NAME = "close";
 
     @Id
     @Expose
@@ -20,6 +21,7 @@ public class InterviewType implements Serializable {
     private int id;
 
     @Expose
+    @NotNull
     @Column(name = "name")
     private String name;
 
@@ -58,6 +60,10 @@ public class InterviewType implements Serializable {
 
     public boolean isOpen() {
         return OPEN_TYPE_NAME.equals(name) || OPEN_TYPE_ID == id;
+    }
+
+    public boolean isClosed() {
+        return CLOSED_TYPE_NAME.equals(name);
     }
 
     public String getTitle() {

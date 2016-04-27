@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
-import by.gstu.interviewstreet.web.util.ControllerUtils;
+import by.gstu.interviewstreet.web.util.WebUtils;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -55,13 +55,13 @@ public class EditorController extends UserController {
         List<Interview> allInterviews = user.getCreatedInterviews();
 
         int size = allInterviews.size();
-        int pageCount = ControllerUtils.getPageCount(size, CARD_COUNT_PER_PAGE);
+        int pageCount = WebUtils.getPageCount(size, CARD_COUNT_PER_PAGE);
 
         if (pageNumber == null || pageNumber > pageCount || pageNumber < 0) {
             pageNumber = START_PAGE_NUMBER;
         }
 
-        int[] bounds = ControllerUtils.getPaginationBounds(pageNumber, pageCount,
+        int[] bounds = WebUtils.getPaginationBounds(pageNumber, pageCount,
                 CARD_COUNT_PER_PAGE, START_PAGE_NUMBER);
 
         int fromIndex = CARD_COUNT_PER_PAGE * (pageNumber - 1);
@@ -111,7 +111,7 @@ public class EditorController extends UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 

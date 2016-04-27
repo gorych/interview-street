@@ -24,10 +24,14 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     @Transactional
     public void save(User user, Interview interview, List<Answer> answers) {
         List<Question> existQuestions = interview.getQuestions();
-        UserInterview userInterview = userInterviewDAO.getByUserAndInterview(user.getPassportData(), interview.getHash());
 
-        if(!interview.isSecondPassage() && userInterview.getPassed()){
-            throw new IllegalArgumentException("User already passed this interview.");
+        UserInterview userInterview = null;
+        if (user != null) {
+            userInterview = userInterviewDAO.getByUserAndInterview(user.getPassportData(), interview.getHash());
+
+            if (!interview.isSecondPassage() && userInterview.getPassed()) {
+                throw new IllegalArgumentException("User already passed this interview.");
+            }
         }
 
         for (Answer answer : answers) {
@@ -44,9 +48,10 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             if (existAnswers.contains(answer)) {
                 userAnswerDAO.saveOrUpdate(new UserAnswer(user, question, interview, answer, answer.getText(), DateUtils.getToday()));
 
-                /*Set flag that user passed interview*/
-                userInterview.setPassed(true);
-                userInterviewDAO.save(userInterview);
+                if (userInterview != null) {
+                    userInterview.setPassed(true);
+                    userInterviewDAO.save(userInterview);
+                }
             }
         }
     }

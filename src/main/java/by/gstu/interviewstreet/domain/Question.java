@@ -133,7 +133,7 @@ public class Question implements Serializable, Comparable<Question> {
 
     @Override
     public int compareTo(Question q) {
-        return getNumber() - q.getNumber();
+        return this.getNumber() - q.getNumber();
     }
 
     @Override

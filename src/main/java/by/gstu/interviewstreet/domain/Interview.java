@@ -271,6 +271,6 @@ public class Interview implements Serializable, Comparable<Interview> {
 
     @Override
     public int compareTo(Interview i) {
-        return i.getPlacementDate().compareTo(getPlacementDate());
+        return this.getPlacementDate().compareTo(i.getPlacementDate());
     }
 }

@@ -75,6 +75,6 @@ public class AnswerType implements Serializable, Comparable<AnswerType> {
 
     @Override
     public int compareTo(AnswerType a) {
-        return  a.getName().compareTo(getName());
+        return this.getName().compareTo(a.getName());
     }
 }

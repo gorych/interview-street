@@ -142,6 +142,6 @@ public class UserAnswer implements Serializable, Comparable<UserAnswer> {
 
     @Override
     public int compareTo(UserAnswer ua) {
-        return ua.getAnswerText().compareTo(ua.getAnswerText());
+        return this.getAnswerText().compareTo(ua.getAnswerText());
     }
 }

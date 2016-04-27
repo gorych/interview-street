@@ -20,7 +20,6 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
-@Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
 public class UserController {
 
     @Autowired
@@ -33,12 +32,13 @@ public class UserController {
 
     @ModelAttribute(AttrConstants.USER_INITIALS)
     public String addUserInitials(Principal principal) {
-        return getUserByPrincipal(principal)
-                .getEmployee()
-                .getInitials();
+        return principal != null
+                ? getUserByPrincipal(principal).getEmployee().getInitials()
+                : null;
     }
 
     @ResponseBody
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
     @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
     public ResponseEntity<String> hideChip(HttpSession session) {
         session.setAttribute(AttrConstants.CHIP, false);

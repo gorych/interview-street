@@ -39,5 +39,9 @@
         $('.modal-trigger').leanModal({
             dismissible: false
         });
+
+        $(document).ready(function(){
+            $('.parallax').parallax();
+        });
     });
 })(jQuery);

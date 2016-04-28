@@ -108,7 +108,6 @@
 </footer>
 
 <%@include file="fragments/general-js.jsp" %>
-<%@include file="fragments/thanks-for-passing-modal.jsp" %>
 <script src="<c:url value="/resources/js/interview.js"/>"></script>
 
 </body>

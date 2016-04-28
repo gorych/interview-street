@@ -72,7 +72,6 @@
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
             .done(function () {
                 window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
-                //$('#thanks-modal').openModal();
             })
             .fail(function () {
                 Materialize.toast("Ошибка при отправлении анкеты", 2000);

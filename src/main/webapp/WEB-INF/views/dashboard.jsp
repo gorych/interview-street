@@ -47,9 +47,9 @@
                                                        href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:when>
                             <c:otherwise>
-                                <i class="large-i material-icons circle brown lighten-1"
+                                <i class="large-i material-icons circle blue-grey"
                                    title="Ещё есть время для прохождения">timelapse</i>
-                                <span class="title"><a class="brown-text text-darken-4"
+                                <span class="title"><a class="blue-grey-text text-darken-4"
                                                        href="<c:url value="/respondent/${interview.hash}/interview"/>">${interview.name}</a></span>
                             </c:otherwise>
                         </c:choose>

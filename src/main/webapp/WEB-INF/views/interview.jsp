@@ -29,7 +29,7 @@
         </c:if>
 
         <c:forEach var="question" items="${questions}" varStatus="current">
-            <div data-quest="${question.id}" class="question col s12">
+            <div data-quest="${question.id}" class="question offset-l1 offset-m1 col l10 m10 s12">
                 <div class="number teal">${current.index + 1}</div>
                 <h5 class="question-text">${question.text}</h5>
 
@@ -87,13 +87,15 @@
             </div>
         </c:forEach>
 
-        <c:if test="${not empty questions}">
-            <a id="send-form-btn"
-               class="waves-effect waves-light btn-large teal lighten-1 right">
-                <i class="material-icons right">send</i>Отправить анкету
-            </a>
-            <input id="hash" type="hidden" value="${interview.hash}"/>
-        </c:if>
+        <div class="col btn-col offset-l1 offset-m1 l10 m10 s12">
+            <c:if test="${not empty questions}">
+                <a id="send-form-btn"
+                   class="waves-effect waves-light btn-large teal lighten-1 right">
+                    <i class="material-icons right">send</i>Отправить анкету
+                </a>
+                <input id="hash" type="hidden" value="${interview.hash}"/>
+            </c:if>
+        </div>
     </div>
 </main>
 

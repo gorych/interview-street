@@ -4,7 +4,7 @@ footer.page-footer {
 }
 
 .question {
-    border: 2px solid #a1887f;
+    border: 2px solid #90a4ae;
     border-radius: 5px;
     padding: 0 10px 10px;
     margin-bottom: 50px;
@@ -79,6 +79,10 @@ footer.page-footer {
 .row .col .special-col,
 .row .col .optional-col {
     margin-left: 0;
+}
+
+.row .btn-col {
+    padding: 0;
 }
 
 .row .col .optional-col {

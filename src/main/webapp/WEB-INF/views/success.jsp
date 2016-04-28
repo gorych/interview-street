@@ -8,6 +8,10 @@
     <%@include file="fragments/general-css.jsp" %>
 
     <title>Interview Street - Успешное прохождение</title>
+
+    <style>
+        background-color: #e0e0e0;
+    </style>
 </head>
 <body>
 
@@ -27,12 +31,12 @@
                 <div class="row center">
                     <h5 class="header col s12 white-text light">Нам важен каждый Ваш ответ!</h5>
                 </div>
-                <div class="row center">
                     <c:if test="${show_link}">
-                        <a href="<c:url value="/gateway"/>" id="download-button"
-                           class="btn-large waves-effect waves-light teal lighten-1">На главную</a>
+                        <div class="row center">
+                            <a href="<c:url value="/gateway"/>" id="download-button"
+                            class="btn-large waves-effect waves-light teal lighten-1">На главную</a>
+                        </div>
                     </c:if>
-                </div>
                 <div class="row center">
                     <p class="header col s12 light white-text">&copy;Interview
                         Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>

@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
+    @Secured({UserRoleConstants.VIEWER, UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
     @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
     public ResponseEntity<String> hideChip(HttpSession session) {
         session.setAttribute(AttrConstants.CHIP, false);

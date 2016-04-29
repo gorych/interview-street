@@ -62,10 +62,12 @@
                                class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список вопросов">subject</i>
                             </a>
-                            <a href="#" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
-                                <i class="material-icons black-text" title="Список респондентов">supervisor_account</i>
-                            </a>
-                            <a href="<c:url value="/viewer/${interview.hash}/statistics"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                            <c:if test="${interview.type.name eq 'open'}">
+                                <a href="<c:url value="/viewer/${interview.hash}/respondents"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                                    <i class="material-icons black-text" title="Список респондентов">supervisor_account</i>
+                                </a>
+                            </c:if>
+                            <a href="<c:url value="/statistics/${interview.hash}"/>" class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Анализ результатов">equalizer</i>
                             </a>
                         </div>

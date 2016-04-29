@@ -1,7 +1,6 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.UserInterviewDAO;
-import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
 import org.springframework.stereotype.Repository;
 
@@ -12,10 +11,19 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements UserInterview
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<UserInterview> getByInterviewId(int interviewId) {
+    public List<UserInterview> getByInterviewAndGroupByPost(int interviewId) {
         return getSession()
                 .createQuery("FROM UserInterview WHERE interview.id =:interviewId GROUP BY user.employee.post.id")
                 .setInteger("interviewId", interviewId)
+                .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<UserInterview> getByInterviewHash(String hash) {
+        return getSession()
+                .createQuery("FROM UserInterview WHERE interview.hash =:hash")
+                .setString("hash", hash)
                 .list();
     }
 

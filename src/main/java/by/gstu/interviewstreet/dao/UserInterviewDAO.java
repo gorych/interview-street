@@ -1,14 +1,14 @@
 package by.gstu.interviewstreet.dao;
 
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.util.List;
 
 public interface UserInterviewDAO {
 
-    List<UserInterview> getByInterviewId(int interviewId);
+    List<UserInterview> getByInterviewAndGroupByPost(int interviewId);
+
+    List<UserInterview> getByInterviewHash(String hash);
 
     UserInterview getByUserAndInterview(String username, String hash);
 

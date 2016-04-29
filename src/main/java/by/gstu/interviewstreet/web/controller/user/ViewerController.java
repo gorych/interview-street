@@ -1,10 +1,9 @@
 package by.gstu.interviewstreet.web.controller.user;
 
-import by.gstu.interviewstreet.bean.StatisticData;
-import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
-import by.gstu.interviewstreet.service.InterviewService;
-import by.gstu.interviewstreet.service.StatisticsService;
+import by.gstu.interviewstreet.service.SortType;
+import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -13,43 +12,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/viewer")
-@Secured({UserRoleConstants.VIEWER, UserRoleConstants.EDITOR})
+@Secured({UserRoleConstants.VIEWER})
 public class ViewerController {
 
     @Autowired
-    InterviewService interviewService;
+    UserInterviewService userInterviewService;
 
-    @Autowired
-    StatisticsService statisticsService;
+    @RequestMapping(value = {"/{hash}/respondents"}, method = RequestMethod.GET)
+    public String showRespondents(@PathVariable String hash, @RequestParam SortType sortType, Model model) {
+        List<UserInterview> userInterviews = userInterviewService.getByInterviewHash(hash);
 
-    @RequestMapping(value = {"/statistics"}, method = RequestMethod.GET)
-    public String showStatistics(Model model) {
-        return "statistics";
+        model.addAttribute(AttrConstants.USER_INTERVIEWS, userInterviews);
+
+        return "respondents";
     }
 
-    @RequestMapping(value = {"/{hash}/statistics"}, method = RequestMethod.GET)
-    public String showInterviewStatistics(@PathVariable String hash, Model model) {
-        Interview interview = interviewService.get(hash);
 
-        int questionCount = interview.getQuestions().size();
-
-        if (questionCount < 1) {
-            model.addAttribute(AttrConstants.NOT_ANSWERS, true);
-            return "statistics";
-        }
-
-        List<StatisticData> statistics = statisticsService.getInterviewStatistics(interview);
-
-        model.addAttribute(AttrConstants.INTERVIEW_NAME, interview.getName());
-        model.addAttribute(AttrConstants.STATISTICS, statistics);
-
-        return "statistics";
-    }
 
 }
 

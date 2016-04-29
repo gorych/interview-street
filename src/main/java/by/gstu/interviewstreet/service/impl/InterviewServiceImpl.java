@@ -46,7 +46,7 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public Map<String, Object> getModelMapForEditForm(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
-        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interviewId);
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewAndGroupByPost(interviewId);
 
         List<Post> activePosts = new ArrayList<>();
         List<Integer> activeSubIds = new ArrayList<>();
@@ -137,7 +137,7 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     private void removeAllUserInterviews(Interview interview) {
-        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewId(interview.getId());
+        List<UserInterview> userInterviews = userInterviewDAO.getByInterviewAndGroupByPost(interview.getId());
         for (UserInterview ui : userInterviews) {
             userInterviewDAO.remove(ui);
         }

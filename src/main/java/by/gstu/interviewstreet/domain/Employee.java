@@ -85,6 +85,10 @@ public class Employee implements Serializable {
         return WordUtils.capitalize((firstname + " " + secondname).toLowerCase());
     }
 
+    public String getFullName() {
+        return WordUtils.capitalize((lastname + " " + firstname + " " + secondname).toLowerCase());
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

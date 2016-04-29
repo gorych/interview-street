@@ -18,7 +18,7 @@
                 <h3 class="white-text">Список респондентов</h1>
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_list</i>Настроить фильтры</div>
+                        <div class="collapsible-header"><i class="material-icons">filter_list</i>Сортировка</div>
                         <div class="collapsible-body white">
                             <div class = "row">
                                 <form style="padding: 0 1rem">
@@ -62,18 +62,22 @@
         <div class="row container">
             <div class="col l12 m12 s12">
                 <h5 class="teal-text">${user_interviews[0].interview.name}</h4>
-                <table class="highlight bordered">
+                <table class="highlight bordered responsive-table">
                     <thead>
                         <tr>
-                            <th data-field="id">ФИО</th>
-                            <th data-field="name">Статус</th>
-                            <th data-field="price">Дата прохождения</th>
+                            <th data-field="fullname">№</th>
+                            <th data-field="fullname">Ф.И.О</th>
+                            <th data-field="subdivision">Подразделение</th>
+                            <th data-field="status">Статус</th>
+                            <th data-field="passing-date">Дата прохождения</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="uInterview" items="${user_interviews}">
+                    <c:forEach var="uInterview" items="${user_interviews}" varStatus = "item">
                         <tr>
+                            <th style="text-align:left">${item.index + 1}</th>
                             <td>${uInterview.user.employee.fullName}</td>
+                            <td>${uInterview.user.employee.subdivision.name}</td>
                             <c:choose>
                                 <c:when test="${uInterview.passed}">
                                     <td>Пройдена</td>

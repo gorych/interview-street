@@ -25,7 +25,8 @@ public class ViewerController {
     UserInterviewService userInterviewService;
 
     @RequestMapping(value = {"/{hash}/respondents"}, method = RequestMethod.GET)
-    public String showRespondents(@PathVariable String hash, @RequestParam SortType sortType, Model model) {
+    public String showRespondents(@PathVariable String hash,
+                                  @RequestParam(required = false) SortType sortType, Model model) {
         List<UserInterview> userInterviews = userInterviewService.getByInterviewHash(hash);
 
         model.addAttribute(AttrConstants.USER_INTERVIEWS, userInterviews);

@@ -13,10 +13,4 @@ public interface UserInterviewService {
 
     List<UserInterview> getByInterviewHash(String hash);
 
-    List<UserInterview> sortByEmployeeLastname(List<UserInterview> userInterviews, SortType sortType);
-
-    List<UserInterview> sortByDate(List<UserInterview> userInterviews, SortType sortType);
-
-    List<UserInterview> sortByStatus(List<UserInterview> userInterviews, SortType sortType);
-
 }

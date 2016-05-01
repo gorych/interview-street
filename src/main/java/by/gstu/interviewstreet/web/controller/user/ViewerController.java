@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.web.controller.user;
 
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
-import by.gstu.interviewstreet.service.SortType;
 import by.gstu.interviewstreet.service.UserInterviewService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ public class ViewerController {
     UserInterviewService userInterviewService;
 
     @RequestMapping(value = {"/{hash}/respondents"}, method = RequestMethod.GET)
-    public String showRespondents(@PathVariable String hash,
-                                  @RequestParam(required = false) SortType sortType, Model model) {
+    public String showRespondents(@PathVariable String hash, Model model) {
         List<UserInterview> userInterviews = userInterviewService.getByInterviewHash(hash);
 
         model.addAttribute(AttrConstants.USER_INTERVIEWS, userInterviews);

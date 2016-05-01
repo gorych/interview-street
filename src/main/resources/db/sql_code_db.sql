@@ -311,6 +311,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_interviews` (
   `interview_id` INT(11) NOT NULL,
   `user_id` INT(11) NOT NULL,
   `isPassed` TINYINT(1) NULL DEFAULT NULL,
+  `passing_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_user_interviews_interviews1_idx` (`interview_id` ASC),
   INDEX `fk_user_interviews_users1_idx` (`user_id` ASC),

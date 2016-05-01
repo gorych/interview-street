@@ -1,0 +1,11 @@
+.answers-count:before {
+    content: 'Ответило, чел: ';
+}
+
+thead>tr>th:hover {
+    background-color: #eeeeee;
+}
+
+thead>tr>th {
+    vertical-align: middle;
+}

@@ -17,44 +17,6 @@
         <div class="container">
             <div class="col l12 m12 s12">
                 <h3 class="white-text">Список респондентов</h3>
-                <!-- <ul class="collapsible" data-collapsible="accordion">
-                     <li>
-                         <div class="collapsible-header"><i class="material-icons">filter_list</i>Сортировка</div>
-                         <div class="collapsible-body white">
-                             <div class="row">
-                                 <form style="padding: 0 1rem">
-                                     <div class="col l4 m6 s12">
-                                         <fieldset>
-                                             <legend>По фамилии</legend>
-                                             <input name="surname" type="radio" id="surname-up"/>
-                                             <label for="surname-up">От А до Я</label><br/>
-                                             <input name="surname" type="radio" id="surname-down"/>
-                                             <label for="surname-down">От Я до А</label>
-                                         </fieldset>
-                                     </div>
-                                     <div class="col l4 m6 s12">
-                                         <fieldset>
-                                             <legend>По дате</legend>
-                                             <input name="date" type="radio" id="date-up"/>
-                                             <label for="date-up">По убыванию</label><br/>
-                                             <input name="date" type="radio" id="date-down"/>
-                                             <label for="date-down">По возрастанию</label>
-                                         </fieldset>
-                                     </div>
-                                     <div class="col l4 m6 s12">
-                                         <fieldset>
-                                             <legend>По статусу</legend>
-                                             <input name="status" type="radio" id="passed"/>
-                                             <label for="passed">Сначала пройденные</label>
-                                             <input name="status" type="radio" id="not-passed"/>
-                                             <label for="not-passed">Сначала не пройденные</label>
-                                         </fieldset>
-                                     </div>
-                                 </form>
-                             </div>
-                         </div>
-                     </li>
-                 </ul>-->
             </div>
         </div>
     </div>

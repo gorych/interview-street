@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.service;
 
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.Subdivision;
 import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.util.List;

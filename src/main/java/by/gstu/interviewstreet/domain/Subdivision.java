@@ -15,6 +15,7 @@ public class Subdivision implements Serializable, Comparable<Subdivision> {
     @GeneratedValue
     private int id;
 
+    @Expose
     @Column(name = "name")
     private String name;
 

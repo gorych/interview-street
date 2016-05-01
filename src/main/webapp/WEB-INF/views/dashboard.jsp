@@ -59,7 +59,7 @@
                         <p class="publication-date">${interview.formatPlacementDate}</p>
                         <p class="end-date">${interview.formatEndDate}</p>
                         <a href="<c:url value="/respondent/${interview.hash}/interview"/>"
-                           class="secondary-content"><i class="material-icons">send</i></a>
+                           class="secondary-content hide-on-small-only"><i class="material-icons">send</i></a>
                     </div>
                 </c:forEach>
             </div>

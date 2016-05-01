@@ -20,6 +20,15 @@ public class UserInterviewDAOImpl extends AbstractDbDAO implements UserInterview
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<UserInterview> getByInterviewAndGroupBySubdivision(String hash) {
+        return getSession()
+                .createQuery("FROM UserInterview WHERE interview.hash =:hash GROUP BY user.employee.subdivision")
+                .setString("hash", hash)
+                .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<UserInterview> getByInterviewHash(String hash) {
         return getSession()
                 .createQuery("FROM UserInterview WHERE interview.hash =:hash")

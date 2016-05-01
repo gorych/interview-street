@@ -8,6 +8,8 @@ public interface UserInterviewDAO {
 
     List<UserInterview> getByInterviewAndGroupByPost(int interviewId);
 
+    List<UserInterview> getByInterviewAndGroupBySubdivision(String hash);
+
     List<UserInterview> getByInterviewHash(String hash);
 
     UserInterview getByUserAndInterview(String username, String hash);

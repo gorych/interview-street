@@ -1,5 +1,31 @@
 $(document).ready(function () {
 
+    var $subs = $("#subs");
+
+    $(document).ready(function () {
+        if ($("#interviews").val()) {
+            $subs.removeAttr("disabled").val(0);
+        } else {
+            $subs.attr("disabled");
+        }
+
+        $subs.material_select();
+    });
+
+    $("#interviews").change(function () {
+        $("#subs")
+            .removeAttr("disabled")
+            .val(0) //All accessible subdivisions for interview
+            .material_select();
+        $("#interview-name")
+            .html($(this).find(":selected:last").text())
+            .next().addClass("hide");
+    });
+
+    $subs.change(function () {
+        alert("s");
+    });
+
     var chartOptions = {
         lang: {
             printChart: 'Распечатать график',
@@ -47,7 +73,7 @@ $(document).ready(function () {
     function collectData(table) {
         var data = [];
 
-        $(table).find("tbody>tr").each(function() {
+        $(table).find("tbody>tr").each(function () {
             var answer = $(this).find('th:first').text();
             var peopleCount = $(this).find('td:nth-child(2)').text();
 
@@ -72,10 +98,10 @@ $(document).ready(function () {
 
             delete chartOptions['data'];
 
-            chartOptions.series =  [{
-              name: 'Ответило',
-              colorByPoint: true,
-              data: collectData($table)
+            chartOptions.series = [{
+                name: 'Ответило',
+                colorByPoint: true,
+                data: collectData($table)
             }];
 
             chartOptions.tooltip = {
@@ -110,4 +136,5 @@ $(document).ready(function () {
         $body.find(".chart-container").addClass("hide");
         Materialize.fadeInImage($body.find("table").removeClass("hide"));
     });
+
 });

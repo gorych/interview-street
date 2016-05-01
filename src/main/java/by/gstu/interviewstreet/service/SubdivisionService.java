@@ -8,4 +8,6 @@ public interface SubdivisionService {
 
     List<Subdivision> getAll();
 
+    List<Subdivision> getSubdivisionsByInterview(String hash);
+
 }

@@ -1,10 +1,14 @@
 package by.gstu.interviewstreet.domain;
 
+import by.gstu.interviewstreet.web.util.DateUtils;
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -29,6 +33,10 @@ public class UserInterview implements Serializable {
 
     @Column(name = "isPassed")
     private boolean isPassed;
+
+    @Generated(GenerationTime.ALWAYS)
+    @Column(name = "passing_date")
+    private Date passingDate;
 
     public UserInterview(){  }
 
@@ -69,12 +77,26 @@ public class UserInterview implements Serializable {
         this.isPassed = isPassed;
     }
 
+    public Date getPassingDate() {
+        return passingDate;
+    }
+
+    public String getFormatPassingDate() {
+        return DateUtils.YYYY_MM_DD_HH_MM_SS.format(passingDate);
+    }
+
+    public void setPassingDate(Date passingDate) {
+        this.passingDate = passingDate;
+    }
+
     @Override
     public String toString() {
         return "UserInterview{" +
                 "id=" + id +
                 ", interview=" + interview +
                 ", user=" + user +
+                ", isPassed=" + isPassed +
+                ", passingDate=" + passingDate +
                 '}';
     }
 }

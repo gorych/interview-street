@@ -23,6 +23,12 @@ public class SubdivisionServiceImpl implements SubdivisionService {
 
     @Override
     @Transactional
+    public Subdivision getById(Integer id) {
+        return subdivisionDAO.getById(id);
+    }
+
+    @Override
+    @Transactional
     public List<Subdivision> getAll() {
         return subdivisionDAO.getAll();
     }

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface SubdivisionService {
 
+    Subdivision getById(Integer id);
+
     List<Subdivision> getAll();
 
     List<Subdivision> getSubdivisionsByInterview(String hash);

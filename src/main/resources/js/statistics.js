@@ -2,6 +2,10 @@ $(document).ready(function () {
 
     var $subs = $("#subs");
 
+    $.templates({
+        statisticsTmpl: "#statistics-template"
+    });
+
     $(document).ready(function () {
         if ($("#interviews").val()) {
             $subs.removeAttr("disabled").val(0);
@@ -15,16 +19,55 @@ $(document).ready(function () {
     $("#interviews").change(function () {
         $("#subs")
             .removeAttr("disabled")
-            .val(0) //All accessible subdivisions for interview
-            .material_select();
+            .val(0); //All accessible subdivisions for interview
+
         $("#interview-name")
             .html($(this).find(":selected:last").text())
             .next().addClass("hide");
+
+        $subs.find("option[value!='0']").remove();
+        $subs.material_select();
+        $subs.trigger('change');
     });
 
-    $subs.change(function () {
-        alert("s");
+    $subs.on('change', function () {
+        var data = {
+            hash: $("#interviews").val(),
+            subId: $subs.val()
+        };
+
+        $.get(global.rewriteUrl("/statistics/load-data"), data, global.ajaxCallback)
+            .done(function (response) {
+                var data = JSON.parse(response);
+
+                var $statistics = $("#statistics-container");
+                $statistics.empty();
+
+                if (data.statistics.length > 0) {
+                    $statistics
+                        .removeClass("hide")
+                        .append($.render.statisticsTmpl(data));
+
+                    fillSubSelect(data.subdivisions || {});
+
+                    $statistics.collapsible();
+                } else {
+                    $statistics.addClass("hide");
+                    Materialize.toast("По выбранным критериям не найдено ответов.", 3000);
+                }
+            });
     });
+
+    function fillSubSelect(subs) {
+        $.each(subs, function (i, sub) {
+            $subs.append($('<option>', {
+                value: sub.id,
+                text: sub.name
+            }));
+        });
+
+        $subs.material_select();
+    }
 
     var chartOptions = {
         lang: {
@@ -63,7 +106,7 @@ $(document).ready(function () {
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: false,
+                    enabled: false
                 },
                 showInLegend: true
             }
@@ -86,7 +129,7 @@ $(document).ready(function () {
         return data;
     }
 
-    $(".col-chart-btn, .pie-chart-btn").click(function () {
+    $(document).on('click', '.col-chart-btn, .pie-chart-btn', function () {
         var $body = $(this).parents(".collapsible-body");
         var $table = $body.find("table");
 
@@ -130,7 +173,7 @@ $(document).ready(function () {
         $body.find(".chart-container").highcharts(chartOptions);
     });
 
-    $(".table-btn").click(function () {
+    $(document).on('click', '.table-btn', function () {
         var $body = $(this).parents(".collapsible-body");
 
         $body.find(".chart-container").addClass("hide");

@@ -5,8 +5,11 @@ import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +20,16 @@ public final class WebUtils {
     public static final String TEXT_ANSWER_NAME = "text";
 
     private WebUtils() {
+    }
+
+    public static boolean isFilledCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (WebConstants.IS_PASSED.equals(cookie.getName()) || WebConstants.HASH.equals(cookie.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void buildModelForDashboard(Model model, Interview interview) {

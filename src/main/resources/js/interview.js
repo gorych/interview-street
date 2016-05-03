@@ -70,8 +70,14 @@
             data: JSON.stringify(answers)
         };
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
-            .done(function () {
-                window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
+            .done(function (response) {
+                var data = JSON.parse(response);
+                if (data) {
+                    $.cookie("hash", data.hash, {expires: data.max_age});
+                    $.cookie("is_passed", data.is_passed, {expires: data.max_age});
+                }
+
+                //window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
             })
             .fail(function () {
                 Materialize.toast("Ошибка при отправлении анкеты", 2000);

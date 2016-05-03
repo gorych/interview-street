@@ -8,7 +8,7 @@ public final class AttrConstants {
     public static final String AUTH_ERROR = "auth_error";
     public static final String NOT_ANSWERS = "not_answers";
     public static final String USER_INITIALS = "user_initials";
-    public static final String INTERVIEW_NAME = "interview_name";
+    public static final String ALREADY_PASSED = "already_passed";
 
 
     public static final String PAGE_COUNT = "page_count";

@@ -39,7 +39,7 @@ public final class DateUtils {
         String today = YYYY_MM_DD.format(getToday());
         String someday = YYYY_MM_DD.format(endDate);
 
-        int days = Days.daysBetween(new DateTime(someday), new DateTime(today)).getDays();
+        int days = Days.daysBetween(new DateTime(today), new DateTime(someday)).getDays();
 
         return days * 24 * 60 * 60;
     }

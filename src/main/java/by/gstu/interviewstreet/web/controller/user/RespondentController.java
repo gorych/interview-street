@@ -25,12 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Type;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/respondent")
@@ -81,9 +82,13 @@ public class RespondentController extends UserController {
 
     @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = "interview/{hash}/anonymous", method = RequestMethod.GET)
-    public String showInterview(@PathVariable String hash, Model model, HttpServletRequest request) {
+    public String showInterview(@PathVariable String hash, HttpServletRequest request, Model model) {
         Interview interview = interviewService.get(hash);
         if (!interview.isClosedType() || interview.getHide() || interview.getIsDeadline()) {
+            return "error/404";
+        }
+
+        if (WebUtils.isFilledCookie(request)) {
             return "error/404";
         }
 
@@ -95,8 +100,7 @@ public class RespondentController extends UserController {
     @ResponseBody
     @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> sendInterview(String hash, String data,
-                                                Principal principal, HttpServletResponse response) {
+    public ResponseEntity<String> sendInterview(String hash, String data, Principal principal) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
             return new ResponseEntity<>(WebConstants.USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
@@ -106,21 +110,18 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() { }.getType();
+        Type type = new TypeToken<List<Answer>>() {
+        }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         User user = interview.isOpenType() ? getUserByPrincipal(principal) : null;
+        Map<String, Object> cookies = new HashMap<>();
         if (user == null) {
-            Cookie interviewHash = new Cookie(WebConstants.HASH, hash);
-            Cookie isPassed = new Cookie(WebConstants.IS_PASSED, WebConstants.IS_PASSED_VAL);
-
             int maxAge = DateUtils.secondsBetweenDays(interview.getEndDate());
 
-            interviewHash.setMaxAge(maxAge);
-            isPassed.setMaxAge(maxAge);
-
-            response.addCookie(interviewHash);
-            response.addCookie(isPassed);
+            cookies.put(WebConstants.HASH, hash);
+            cookies.put(WebConstants.MAX_AGE, maxAge);
+            cookies.put(WebConstants.IS_PASSED, WebConstants.IS_PASSED_VAL);
         }
 
         try {
@@ -129,7 +130,9 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(WebConstants.USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        String jsonData = JSONParser.convertObjectToJsonString(cookies);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }
 
 }

@@ -38,7 +38,7 @@
                         </div>
                     </c:if>
                 <div class="row center">
-                    <p class="header col s12 light white-text">&copy;Interview
+                    <p class="header col s12 light white-text">Interview
                         Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
                     </p>
                 </div>

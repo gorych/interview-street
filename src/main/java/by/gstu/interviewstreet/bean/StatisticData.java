@@ -1,23 +1,29 @@
 package by.gstu.interviewstreet.bean;
 
 import by.gstu.interviewstreet.domain.Question;
+import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.Map;
 
 public class StatisticData implements Serializable {
 
+    @Expose
     private String questionText;
+
+    @Expose
     private String questionType;
 
-    private Map<Object, Object[]> answerData;
+    @Expose
+    private Map<String, Object[]> answerData;
 
+    @Expose
     private int total;
 
-    /*Use on jsp for rating questions*/
-    private int maxEstimate;
+    @Expose
+    private int maxEstimate; //Use on jsp for rating questions
 
-    public StatisticData(Question question, Map<Object, Object[]> answerData, int maxEstimate, int total) {
+    public StatisticData(Question question, Map<String, Object[]> answerData, int maxEstimate, int total) {
         this.questionText = question.getText();
         this.questionType = question.getType().getName();
         this.answerData = answerData;
@@ -41,11 +47,11 @@ public class StatisticData implements Serializable {
         this.questionType = questionType;
     }
 
-    public Map<Object, Object[]> getAnswerData() {
+    public Map<String, Object[]> getAnswerData() {
         return answerData;
     }
 
-    public void setAnswerData(Map<Object, Object[]> answerData) {
+    public void setAnswerData(Map<String, Object[]> answerData) {
         this.answerData = answerData;
     }
 

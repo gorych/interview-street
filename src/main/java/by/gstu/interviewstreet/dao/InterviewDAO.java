@@ -17,7 +17,7 @@ public interface InterviewDAO {
 
     Interview getByHash(String hash);
 
-    void save(Interview interview);
+    void saveOrUpdate(Interview interview);
 
     void remove(Interview interview);
 

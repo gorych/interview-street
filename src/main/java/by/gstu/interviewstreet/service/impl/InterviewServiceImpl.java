@@ -108,7 +108,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (existed == null) {
             byte[] bytes = (interview.getName()+ System.currentTimeMillis()).getBytes();
             interview.setHash(DigestUtils.md5DigestAsHex(bytes));
-            interviewDAO.save(interview);
+            interviewDAO.saveOrUpdate(interview);
 
             return interview;
         }
@@ -126,14 +126,14 @@ public class InterviewServiceImpl implements InterviewService {
 
         existed.setHide(true);
 
-        interviewDAO.save(existed);
+        interviewDAO.saveOrUpdate(existed);
         return existed;
     }
 
     @Override
     @Transactional
     public void update(Interview interview) {
-        interviewDAO.save(interview);
+        interviewDAO.saveOrUpdate(interview);
     }
 
     private void removeAllUserInterviews(Interview interview) {
@@ -147,6 +147,16 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public void remove(Interview interview) {
         interviewDAO.remove(interview);
+    }
+
+    @Override
+    @Transactional
+    public void hideExpiredInterviews() {
+        List<Interview> interviews = interviewDAO.getAll();
+        interviews.stream().filter(Interview::getIsDeadline).forEach(interview -> {
+            interview.setHide(true);
+            interviewDAO.saveOrUpdate(interview);
+        });
     }
 
     @Override

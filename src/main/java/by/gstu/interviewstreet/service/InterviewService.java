@@ -25,4 +25,6 @@ public interface InterviewService {
     void lockOrUnlock(int id);
 
     void remove(Interview interview);
+
+    void hideExpiredInterviews();
 }

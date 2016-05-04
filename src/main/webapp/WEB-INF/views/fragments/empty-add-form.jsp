@@ -72,7 +72,7 @@
         </div>
         <div class="col l12 m12 right-align">
             <a href="<c:url value="/editor/interview-list"/>" class="waves-effect waves-light btn-large red accent-2">Отмена</a>
-            <a id="submit" class="waves-effect waves-light btn-large accent-2"><i
+            <a class="submit waves-effect waves-light btn-large accent-2"><i
                     class="material-icons right">send</i>Продолжить</a>
         </div>
     </div>

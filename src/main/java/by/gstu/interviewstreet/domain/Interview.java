@@ -10,7 +10,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "interviews")
@@ -110,7 +113,7 @@ public class Interview implements Serializable, Comparable<Interview> {
     }
 
     public boolean getIsDeadline() {
-        return DateUtils.isToday(endDate);
+        return DateUtils.isToday(endDate) || DateUtils.isMoreThanToday(endDate);
     }
 
     public String getLockIcon() {

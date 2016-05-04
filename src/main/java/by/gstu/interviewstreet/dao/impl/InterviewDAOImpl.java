@@ -46,7 +46,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
     }
 
     @Override
-    public void save(Interview interview) {
+    public void saveOrUpdate(Interview interview) {
         getSession().saveOrUpdate(interview);
     }
 

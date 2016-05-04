@@ -25,7 +25,7 @@ public final class WebUtils {
     public static boolean isFilledCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
-            if (WebConstants.IS_PASSED.equals(cookie.getName()) || WebConstants.HASH.equals(cookie.getName())) {
+            if (WebConstants.IS_PASSED.equals(cookie.getName()) /*|| WebConstants.HASH.equals(cookie.getName())*/) {
                 return true;
             }
         }

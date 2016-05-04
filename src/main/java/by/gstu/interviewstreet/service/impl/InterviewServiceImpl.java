@@ -112,7 +112,7 @@ public class InterviewServiceImpl implements InterviewService {
 
             return interview;
         }
-        //TODO WHAT???
+
         removeAllUserInterviews(existed);
 
         existed.setName(interview.getName());
@@ -122,8 +122,8 @@ public class InterviewServiceImpl implements InterviewService {
         existed.setAudience(interview.getAudience());
         existed.setPlacementDate(DateUtils.getToday());
         existed.setDescription(interview.getDescription());
+        existed.setSecondPassage(interview.isSecondPassage());
 
-        //TODO WHAT???
         existed.setHide(true);
 
         interviewDAO.save(existed);

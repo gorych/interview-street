@@ -32,11 +32,6 @@ i {
     margin-top: 1rem;
 }
 
-label .interview-url {
-    width: 1px;
-    height: 1px;
-}
-
 .interview-type:before {
     content: "Тип анкеты: ";
 }

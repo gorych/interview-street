@@ -9,13 +9,17 @@ var global = global || {};
             console.log(xhr.responseText);
         }
 
-        if(xhr.status === "500") {
+        if (xhr.status === "500") {
             console.log("Unknown error from server.")
         }
     };
 
     global.rewriteUrl = function (relativeUrl) {
         return global.contextPath + relativeUrl;
+    };
+
+    global.domain = function () {
+        return location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
     };
 
     global.urlParam = function (name) {

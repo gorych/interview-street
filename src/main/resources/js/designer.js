@@ -27,6 +27,13 @@
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
+    /*Build full url for interview*/
+    $(document).ready(function () {
+        $(".interview-url").each(function () {
+            $(this).val(global.domain() + $(this).val());
+        });
+    });
+
     /*Reset focused input to save its value*/
     $(window).on("beforeunload", function () {
         $("input:focus, textarea:focus").blur();

@@ -34,7 +34,7 @@
                            title="Анализ результатов">equalizer</i>
                     </a>
 
-                    <a href="<c:url value="/editor/${interview.hash}/preview"/>">
+                    <a class="hide" href="<c:url value="/editor/${interview.hash}/preview"/>">
                         <i class="small material-icons blue-grey-text text-lighten-2"
                            title="Предварительный просмотр">pageview</i>
                     </a>

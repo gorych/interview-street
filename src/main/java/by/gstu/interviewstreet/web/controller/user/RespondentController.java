@@ -89,7 +89,7 @@ public class RespondentController extends UserController {
         }
 
         if (WebUtils.isFilledCookie(request)) {
-            return "error/404";
+            return "error/403";
         }
 
         WebUtils.buildModelForDashboard(model, interview);

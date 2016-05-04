@@ -50,7 +50,7 @@
     });
 
 
-    $("#submit").click(function () {
+    $(".submit").click(function () {
         if (!validator.isValidFields()) {
             return;
         }

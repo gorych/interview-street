@@ -77,7 +77,7 @@
                     $.cookie("is_passed", data.is_passed, {expires: data.max_age});
                 }
 
-                //window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
+                window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
             })
             .fail(function () {
                 Materialize.toast("Ошибка при отправлении анкеты", 2000);

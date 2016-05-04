@@ -12,7 +12,7 @@
                 <ul>
                     <li><a class="white-text" href="https://www.gstu.by">Сайт университета</a></li>
                     <li><a class="white-text" href="http://www.edu.gstu.by/">Учебный портал</a></li>
-                    <li><a class="white-text" href="#!">GitHub</a></li>
+                    <li><a class="white-text" href="https://github.com/gorych/Interview-Street">GitHub</a></li>
                 </ul>
             </div>
         </div>

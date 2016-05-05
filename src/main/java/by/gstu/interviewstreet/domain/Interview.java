@@ -113,7 +113,7 @@ public class Interview implements Serializable, Comparable<Interview> {
     }
 
     public boolean getIsDeadline() {
-        return DateUtils.isToday(endDate) || DateUtils.isMoreThanToday(endDate);
+        return DateUtils.isToday(endDate);
     }
 
     public String getLockIcon() {

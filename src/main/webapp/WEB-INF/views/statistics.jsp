@@ -33,10 +33,10 @@
                                                 <c:forEach var="item" items="${interviews}">
                                                     <c:choose>
                                                         <c:when test="${interview.id eq item.id}">
-                                                            <option selected value="${item.hash}">${item.name}</option>
+                                                            <option data-type="${interview.type.name}" selected value="${item.hash}">${item.name}</option>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <option value="${item.hash}">${item.name}</option>
+                                                            <option data-type="${interview.type.name}" value="${item.hash}">${item.name}</option>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:forEach>

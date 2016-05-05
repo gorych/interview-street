@@ -29,7 +29,7 @@ public class IndexController {
         boolean isEditor = roles.contains(new SimpleGrantedAuthority(UserRoleConstants.EDITOR));
         return isEditor ?
                 "redirect:/editor/interview-list" :
-                "redirect:/interviews";
+                "redirect:/dashboard";
     }
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)

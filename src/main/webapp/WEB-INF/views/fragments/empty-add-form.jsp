@@ -66,14 +66,20 @@
     </div>
 
     <div class="row valign-wrapper">
-        <div class="col s1 left-align hide-on-small-only">
-            <a id="go-back" href="<c:url value="/interview/form"/>"><i
-                    class="medium material-icons brown-text text-lighten-1" title="Назад">reply</i></a>
+        <div class="col m1 l1 left-align hide-on-small-only">
+            <a href="<c:url value="/gateway"/>"><i
+                    class="medium material-icons brown-text text-lighten-2" title="Назад">reply</i></a>
         </div>
-        <div class="col l12 m12 right-align">
+        <div class="col m11 l11 right-align hide-on-small-only">
             <a href="<c:url value="/editor/interview-list"/>" class="waves-effect waves-light btn-large red accent-2">Отмена</a>
             <a class="submit waves-effect waves-light btn-large accent-2"><i
                     class="material-icons right">send</i>Продолжить</a>
         </div>
+
+        <a href="<c:url value="/editor/interview-list"/>"
+           class="col s12 hide-on-med-and-up waves-effect waves-light btn-large red accent-2">Отмена</a>
+        &nbsp;
+        <a class="submit col s12 hide-on-med-and-up waves-effect waves-light btn-large accent-2"><i
+                class="material-icons right">send</i>Далее</a>
     </div>
 </form>

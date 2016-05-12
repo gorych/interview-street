@@ -6,7 +6,7 @@
 
     <div class="row valign-wrapper">
         <div class="col l9 m9 s9 left-align">
-            <h5 id="title">Редактирование анкеты</h5>
+            <h4 id="title">Редактирование анкеты</h4>
         </div>
         <div class="col l3 m3 s3">
             <i class="interview-icon medium material-icons teal-text right">${interview.type.visibilityIcon}</i>
@@ -36,7 +36,7 @@
                         </c:choose>
                     </c:forEach>
                 </select>
-                <label for="subdivisions">Подразделение</label>
+                <label for="subdivisions">Подразделения</label>
             </div>
 
             <div class="input-field col s12 m6 l6">
@@ -97,7 +97,7 @@
     <div class="row valign-wrapper">
         <div class="col m1 l1 left-align hide-on-small-only">
             <a href="<c:url value="/gateway"/>"><i
-                    class="medium material-icons brown-text text-lighten-2" title="На гланую">home</i></a>
+                    class="medium material-icons brown-text text-lighten-2" title="На главную">home</i></a>
         </div>
         <div class="col m11 l11 right-align hide-on-small-only">
             <a href="<c:url value="/editor/interview-list"/>" class="waves-effect waves-light btn-large red accent-2">Отмена</a>

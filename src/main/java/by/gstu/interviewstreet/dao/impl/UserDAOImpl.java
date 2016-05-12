@@ -19,6 +19,13 @@ public class UserDAOImpl extends AbstractDbDAO implements UserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<User> getAll() {
+        return getSession()
+                .createQuery("FROM User").list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<User> getByPosts(Integer[] postIds, Integer[] subIds) {
         return getSession()
                 .createQuery("FROM User WHERE employee.subdivision.id IN (:subs) AND employee.post.id IN (:posts) GROUP BY employee.id")

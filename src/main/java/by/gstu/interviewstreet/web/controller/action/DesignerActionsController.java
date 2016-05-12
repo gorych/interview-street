@@ -48,7 +48,7 @@ public class DesignerActionsController {
         if (interview == null || questionType == null) {
             return new ResponseEntity<>(
                     "Error getting interview or question type. " +
-                            "Interview hash = " + hash + ". Question type id = " + questTypeId,
+                    "Interview hash = " + hash + ". Question type id = " + questTypeId,
                     HttpStatus.BAD_REQUEST
             );
         }

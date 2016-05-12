@@ -3,7 +3,6 @@ package by.gstu.interviewstreet.service.impl;
 import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.dao.UserInterviewDAO;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.Subdivision;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.service.UserInterviewService;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,7 +24,13 @@ public class UserInterviewServiceImpl implements UserInterviewService {
     @Override
     @Transactional
     public void addInterviewToUserByPost(Interview interview, Integer[] postIds, Integer[] subIds) {
-        List<User> users = userDAO.getByPosts(postIds, subIds);
+        List<User> users;
+        if (subIds == null || subIds.length < 1 || postIds == null || postIds.length < 1) {
+            users = userDAO.getAll();
+        } else {
+            users = userDAO.getByPosts(postIds, subIds);
+        }
+
         UserInterview userInterview;
         for (User user : users) {
             userInterview = new UserInterview(interview, user);

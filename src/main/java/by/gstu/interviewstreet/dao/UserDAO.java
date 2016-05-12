@@ -10,6 +10,8 @@ public interface UserDAO {
 
     User getByPassportData(String passportData);
 
+    List<User> getAll();
+
     List<User> getByPosts(Integer[] postIds, Integer[] subIds);
 
 }

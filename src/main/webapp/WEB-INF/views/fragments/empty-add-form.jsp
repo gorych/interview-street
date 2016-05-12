@@ -22,7 +22,7 @@
 
         <div class="hide input-field col s12 m6 l6">
             <select id="subdivisions" name="subdivisions" class="validate" multiple>
-                <option value="-1" disabled selected>Выберите подразделения</option>
+                <option value="0" selected disabled>Все подразделения предприятия</option>
                 <c:forEach var="sub" items="${subdivisions}">
                     <option value="${sub.id}">${sub.name}</option>
                 </c:forEach>
@@ -32,7 +32,7 @@
 
         <div class="hide input-field col s12 m6 l6">
             <select id="posts" class="validate" multiple>
-                <option value="-1" disabled selected>Сначала выберите подразделения</option>
+                <option value="0" selected disabled>Сотрудники всех должностей</option>
             </select>
             <label for="posts">Должности</label>
         </div>

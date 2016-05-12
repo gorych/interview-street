@@ -58,8 +58,8 @@
         var id = $(".edit-mode").val();
         var data = [
             new Interview((id && id > 0) ? id : null),
-            $postSelect.val(),
-            $("#subdivisions").val()
+            $postSelect.val() || [],
+            $("#subdivisions").val() || []
         ];
 
         console.log(JSON.stringify(data));
@@ -74,18 +74,18 @@
     });
 
     $("#subdivisions").change(function () {
+        if ($(this).val().length < 1) {
+            addOptionsToPostSelect([{post: {id: 0, name: "Сотрудники всех должностей"}}]);
+        }
+
         $.post(global.rewriteUrl("/editor/load-posts"), JSON.stringify($(this).val()))
             .done(function (response) {
                 var data = JSON.parse(response);
+                console.log(data);
                 if (response.length > 0) {
                     addOptionsToPostSelect(data);
                 }
             })
-    });
-
-    /*Check correct fields or not*/
-    $("select").change(function () {
-        validator.toggleSelectValidateClass($(this));
     });
 
     function addOptionsToPostSelect(data) {
@@ -100,6 +100,7 @@
                 }
                 option.setAttribute("value", post.id);
                 option.textContent = post.name;
+                option.selected = true;
 
                 $postSelect.append(option);
             });

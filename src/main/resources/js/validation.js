@@ -6,7 +6,7 @@ var validator = validator || {};
         var hiddenInput = $(selector).prevAll("input.select-dropdown");
         var value = $(selector).val();
 
-        if (!value || value.length < 1) {
+        if (value.length < 1) {
             $(hiddenInput)
                 .removeClass("valid valid-select")
                 .addClass("invalid invalid-select");
@@ -43,9 +43,7 @@ var validator = validator || {};
         var $form = $("#add-interview-form");
 
         $form.find("[required]").each(function (i, elem) {
-            if ($(elem).is("select")) {
-                validator.toggleSelectValidateClass(elem);
-            } else {
+            if ($(elem).not("select")) {
                 validator.toggleInputValidateClass(elem);
             }
         });

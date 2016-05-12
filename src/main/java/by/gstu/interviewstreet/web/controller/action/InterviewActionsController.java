@@ -4,10 +4,7 @@ import by.gstu.interviewstreet.dao.InterviewTypeDAO;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.security.UserRoleConstants;
-import by.gstu.interviewstreet.service.InterviewService;
-import by.gstu.interviewstreet.service.SubdivisionService;
-import by.gstu.interviewstreet.service.UserInterviewService;
-import by.gstu.interviewstreet.service.UserService;
+import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
 import com.google.gson.JsonArray;
@@ -32,19 +29,22 @@ public class InterviewActionsController {
     private static final int SUB_IDS_INDEX = 2;
 
     @Autowired
-    public UserService userService;
+    private PostService postService;
 
     @Autowired
-    public InterviewService interviewService;
+    private UserService userService;
 
     @Autowired
-    public SubdivisionService subdivisionService;
+    private InterviewTypeDAO interviewTypeDAO;
 
     @Autowired
-    public UserInterviewService userInterviewService;
+    private InterviewService interviewService;
 
     @Autowired
-    InterviewTypeDAO interviewTypeDAO;
+    private SubdivisionService subdivisionService;
+
+    @Autowired
+    private UserInterviewService userInterviewService;
 
     @RequestMapping(value = {"/form"}, method = RequestMethod.GET)
     public String showForm(@RequestParam(required = false) Integer id, ModelMap model) {
@@ -55,6 +55,7 @@ public class InterviewActionsController {
         }
 
         model.addAttribute(AttrConstants.INTERVIEW, new Interview());
+        model.addAttribute(AttrConstants.POSTS, postService.getAll());
         model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getAll());
 
         model.addAttribute(AttrConstants.OPEN_TYPE, interviewTypeDAO.getByName("open"));
@@ -76,7 +77,7 @@ public class InterviewActionsController {
 
         interview = interviewService.saveOrUpdate(interview);
 
-        if (interview.getType().isOpen()) {
+        if (interview.isOpenType()) {
             JsonArray postIdsArray = jsonArray.get(POST_IDS_INDEX).getAsJsonArray();
             JsonArray subIdsArray = jsonArray.get(SUB_IDS_INDEX).getAsJsonArray();
 

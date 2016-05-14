@@ -13,6 +13,7 @@ public class InterviewType implements Serializable {
     private static final int OPEN_TYPE_ID = 1;
     private static final String OPEN_TYPE_NAME = "open";
     private static final String CLOSED_TYPE_NAME = "close";
+    private static final String EXPERT_TYPE_NAME = "expert";
 
     @Id
     @Expose
@@ -64,6 +65,10 @@ public class InterviewType implements Serializable {
 
     public boolean isClosed() {
         return CLOSED_TYPE_NAME.equals(name);
+    }
+
+    public boolean isExpert() {
+        return EXPERT_TYPE_NAME.equals(name);
     }
 
     public String getTitle() {

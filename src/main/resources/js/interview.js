@@ -67,17 +67,20 @@
 
         var data = {
             hash: $("#hash").val(),
-            data: JSON.stringify(answers)
+            data: JSON.stringify(answers),
+            firstname: $("#firstname").val() || {},
+            lastname: $("#lastname").val() || {}
         };
+
         $.post(global.rewriteUrl("/respondent/send/interview"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
-                if (data) {
-                    $.cookie("hash", data.hash, {expires: data.max_age});
-                    $.cookie("is_passed", data.is_passed, {expires: data.max_age});
-                }
+                /*if (data) {
+                 $.cookie("hash", data.hash, {expires: data.max_age});
+                 $.cookie("is_passed", data.is_passed, {expires: data.max_age});
+                 }*/
 
-                window.location = global.rewriteUrl("/respondent/" + $("#hash").val() + "/success");
+                window.location.replace(global.rewriteUrl("/respondent/" + $("#hash").val() + "/success"));
             })
             .fail(function () {
                 Materialize.toast("Ошибка при отправлении анкеты", 2000);

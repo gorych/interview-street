@@ -23,6 +23,20 @@
         </c:if>
     </div>
 
+    <c:if test="${interview.type.name eq 'expert'}">
+        <div class="row">
+            <h6 class="orange-text">Пожалуйста, введите свои инициалы.</h6>
+            <div class="input-field col l6">
+                <input id="firstname" type="text" class="validate">
+                <label for="firstname">Имя</label>
+            </div>
+            <div class="input-field col l6">
+                <input id="lastname" type="text" class="validate">
+                <label for="lastname">Фамилия</label>
+            </div>
+        </div>
+    </c:if>
+
     <div class="row">
         <c:if test="${empty questions}">
             <h6 class="red-text">Извините, в данной анкете пока нет ни одного вопроса.</h6>

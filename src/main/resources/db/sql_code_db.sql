@@ -260,6 +260,27 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`answers` (
 
 
 -- -----------------------------------------------------
+-- Table `interview_db`.`expert_interviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `interview_db`.`expert_interviews` ;
+
+CREATE TABLE IF NOT EXISTS `interview_db`.`expert_interviews` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `firstname` VARCHAR(45) NOT NULL COMMENT '',
+  `lastname` VARCHAR(45) NOT NULL COMMENT '',
+  `interview_id` INT(11) NOT NULL COMMENT '',
+  PRIMARY KEY (`id`)  COMMENT '',
+  INDEX `fk_expert_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',
+  CONSTRAINT `fk_expert_interviews_interviews1`
+  FOREIGN KEY (`interview_id`)
+  REFERENCES `interview_db`.`interviews` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+  ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `interview_db`.`user_answers`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `interview_db`.`user_answers` ;
@@ -330,18 +351,17 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_interviews` (
 
 
 -- -----------------------------------------------------
--- Table `interview_db`.`expert_interviews`
+-- Table `interview_db`.`published_interviews`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `interview_db`.`expert_interviews` ;
+DROP TABLE IF EXISTS `interview_db`.`published_interviews` ;
 
-CREATE TABLE IF NOT EXISTS `interview_db`.`expert_interviews` (
+CREATE TABLE IF NOT EXISTS `interview_db`.`published_interviews` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '',
-  `firstname` VARCHAR(45) NOT NULL COMMENT '',
-  `lastname` VARCHAR(45) NOT NULL COMMENT '',
-  `interview_id` INT NOT NULL COMMENT '',
-  PRIMARY KEY (`id`)  COMMENT '',
-  INDEX `fk_expert_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',
-  CONSTRAINT `fk_expert_interviews_interviews1`
+  `date` DATETIME NOT NULL COMMENT '',
+  `interview_id` INT(11) NOT NULL COMMENT '',
+  PRIMARY KEY (`id`, `interview_id`)  COMMENT '',
+  INDEX `fk_published_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',
+  CONSTRAINT `fk_published_interviews_interviews1`
   FOREIGN KEY (`interview_id`)
   REFERENCES `interview_db`.`interviews` (`id`)
     ON DELETE CASCADE

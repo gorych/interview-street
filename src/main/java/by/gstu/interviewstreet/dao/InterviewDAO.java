@@ -1,8 +1,7 @@
 package by.gstu.interviewstreet.dao;
 
+import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.util.List;
 
@@ -18,6 +17,8 @@ public interface InterviewDAO {
     Interview getByHash(String hash);
 
     void saveOrUpdate(Interview interview);
+
+    void saveExpertInterview(ExpertInterview expertInterview);
 
     void remove(Interview interview);
 

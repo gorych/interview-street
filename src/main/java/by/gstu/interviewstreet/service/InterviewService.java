@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.service;
 
+import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
 import org.springframework.ui.ModelMap;
 
@@ -19,6 +20,8 @@ public interface InterviewService {
     Map<String, Object> getModelMapForEditForm(int interviewId);
 
     Interview saveOrUpdate(Interview interview);
+
+    void saveExpertInterview(ExpertInterview expertInterview);
 
     void update(Interview interview);
 

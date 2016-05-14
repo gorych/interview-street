@@ -132,6 +132,12 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
+    public void saveExpertInterview(ExpertInterview expertInterview) {
+        interviewDAO.saveExpertInterview(expertInterview);
+    }
+
+    @Override
+    @Transactional
     public void update(Interview interview) {
         interviewDAO.saveOrUpdate(interview);
     }

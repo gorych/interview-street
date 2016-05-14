@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "expert_interviews")
-public class ExpertInterviews {
+public class ExpertInterview {
 
     @Id
     @GeneratedValue
@@ -26,6 +26,12 @@ public class ExpertInterviews {
     @NotEmpty
     @Column(name = "lastname")
     private String lastname;
+
+    public ExpertInterview(Interview interview, String firstname, String lastname) {
+        this.interview = interview;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 
     public int getId() {
         return id;
@@ -61,7 +67,7 @@ public class ExpertInterviews {
 
     @Override
     public String toString() {
-        return "ExpertInterviews{" +
+        return "ExpertInterview{" +
                 "id=" + id +
                 ", interview=" + interview +
                 ", firstname='" + firstname + '\'' +

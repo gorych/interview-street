@@ -32,7 +32,7 @@ public final class WebUtils {
         return false;
     }
 
-    public static void buildModelForDashboard(Model model, Interview interview) {
+    public static void buildInterviewModel(Model model, Interview interview) {
         List<Question> questions = interview.getQuestions();
 
         Collections.sort(questions);

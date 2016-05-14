@@ -25,9 +25,11 @@
                     <i id="clipboard-btn" class="small material-icons light-blue-text text-accent-3"
                        data-clipboard-target=".interview-url" title="Копировать адрес ссылки">link</i>
 
-                    <a href="<c:url value="/viewer/${interview.hash}/respondents"/>">
-                        <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
-                    </a>
+                    <c:if test="${interview.type.name eq 'open'}">
+                        <a href="<c:url value="/viewer/${interview.hash}/respondents"/>">
+                            <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
+                        </a>
+                    </c:if>
 
                     <a href="<c:url value="/statistics/${interview.hash}"/>">
                         <i class="small material-icons green-text text-accent-4"
@@ -186,12 +188,20 @@
 
     <!--Hidden input for clipboard-->
     <label>
-        <c:if test="${interview.type.name eq 'open'}">
-            <input type="text" class="interview-url" value="<c:url value="/respondent/${interview.hash}/interview"/>"/>
-        </c:if>
-        <c:if test="${interview.type.name ne 'open'}">
-            <input type="text" class="interview-url" value="<c:url value="/respondent/interview/${interview.hash}/anonymous"/>"/>
-        </c:if>
+        <c:choose>
+            <c:when test="${interview.type.name eq 'open'}">
+                <input type="text" class="interview-url"
+                       value="<c:url value="/respondent/${interview.hash}/interview"/>"/>
+            </c:when>
+            <c:when test="${interview.type.name eq 'close'}">
+                <input type="text" class="interview-url"
+                       value="<c:url value="/respondent/interview/${interview.hash}/anonymous"/>"/>
+            </c:when>
+            <c:otherwise>
+                <input type="text" class="interview-url"
+                       value="<c:url value="/respondent/interview/${interview.hash}/expert"/>"/>
+            </c:otherwise>
+        </c:choose>
     </label>
 </main>
 

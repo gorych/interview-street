@@ -108,6 +108,10 @@ public class Interview implements Serializable, Comparable<Interview> {
         return type.isClosed();
     }
 
+    public boolean isExpertType() {
+        return type.isExpert();
+    }
+
     public boolean getIsNew() {
         return DateUtils.isToday(placementDate);
     }

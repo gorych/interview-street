@@ -33,10 +33,12 @@
                                                 <c:forEach var="item" items="${interviews}">
                                                     <c:choose>
                                                         <c:when test="${interview.id eq item.id}">
-                                                            <option data-type="${interview.type.name}" selected value="${item.hash}">${item.name}</option>
+                                                            <option data-type="${interview.type.name}" selected
+                                                                    value="${item.hash}">${item.name}</option>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <option data-type="${interview.type.name}" value="${item.hash}">${item.name}</option>
+                                                            <option data-type="${interview.type.name}"
+                                                                    value="${item.hash}">${item.name}</option>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:forEach>
@@ -63,11 +65,13 @@
                                         <fieldset>
                                             <legend>Фильтрация по дате публикования</legend>
                                             <div class="input-field col s12">
-                                                <select disabled id="time">
-                                                    <option value="" disabled selected>Данный фильтр пока не доступен
-                                                    </option>
+                                                <select id="publish-id">
+                                                    <option value="0" disabled selected>За все время</option>
+                                                    <c:forEach var="pInterview" items="${published_interviews}">
+                                                        <option value="${pInterview.id}">${pInterview.formatDate}</option>
+                                                    </c:forEach>
                                                 </select>
-                                                <label for="time">Дата размещения</label>
+                                                <label for="publish-id">Дата размещения</label>
                                             </div>
                                         </fieldset>
                                     </div>

@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.service;
 
 import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.PublishedInterview;
 import org.springframework.ui.ModelMap;
 
 import java.util.List;
@@ -13,7 +14,11 @@ public interface InterviewService {
 
     Interview get(String hash);
 
+    PublishedInterview getPublish(Integer id);
+
     List<Interview> getAll();
+
+    List<PublishedInterview> getPublishedInterviews(Interview interview);
 
     List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential);
 

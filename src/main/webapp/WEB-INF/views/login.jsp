@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <input id="passport-series" placeholder="Серия и номер паспорта(слитно)"
-                                   name="j_username" type="password" pattern="[А-я]{2}[0-9]{7}"
+                                   name="j_username" type="text" pattern="[А-я]{2}[0-9]{7}"
                                    oninput="invalidPassportData(this)"
                                    oninvalid="invalidPassportData(this)"/>
                             <label class="active" for="passport-series">Паспортные данные</label>

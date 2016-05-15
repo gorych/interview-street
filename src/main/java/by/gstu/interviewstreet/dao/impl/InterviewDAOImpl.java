@@ -1,7 +1,10 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.InterviewDAO;
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.domain.ExpertInterview;
+import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.PublishedInterview;
+import by.gstu.interviewstreet.domain.UserInterview;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +23,15 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<PublishedInterview> getPublishedInterviews(Interview interview) {
+        return getSession()
+                .createQuery("FROM PublishedInterview WHERE interview.id=:id")
+                .setInteger("id", interview.getId())
+                .list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Interview> getAllInRange(int from, int howMany, String userCredential) {
         return getSession()
                 .createQuery("FROM Interview WHERE creator.passportData LIKE :userCredential ORDER BY placementDate DESC")
@@ -33,6 +45,14 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
     public Interview getById(int id) {
         return (Interview) getSession()
                 .createQuery("FROM Interview WHERE id = :id")
+                .setInteger("id", id)
+                .uniqueResult();
+    }
+
+    @Override
+    public PublishedInterview getPublishById(int id) {
+        return (PublishedInterview) getSession()
+                .createQuery("FROM PublishedInterview WHERE id = :id")
                 .setInteger("id", id)
                 .uniqueResult();
     }
@@ -80,6 +100,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
         if (interview.getHide()) {
             interview.setHide(false);
+            session.save(new PublishedInterview(interview));
         } else {
             interview.setHide(true);
         }

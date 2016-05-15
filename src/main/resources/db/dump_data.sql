@@ -50,7 +50,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `interview_types` WRITE;
 /*!40000 ALTER TABLE `interview_types` DISABLE KEYS */;
-INSERT INTO `interview_types` VALUES (1,'open','открытая','Открытая акета','visibility'),(2,'close','закрытая','Анонимная анкета','visibility_off'),(3,'expert','для экспертов','Анкета для экспертов','explicit');
+INSERT INTO `interview_types` VALUES (1,'open','открытая','Открытая акета','visibility'),(2,'close','закрытая','Анонимная анкета','visibility_off'),(3,'expert','экспертная','Анкета для экспертов','explicit');
 /*!40000 ALTER TABLE `interview_types` ENABLE KEYS */;
 UNLOCK TABLES;
 

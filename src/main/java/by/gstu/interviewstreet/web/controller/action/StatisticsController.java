@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class StatisticsController {
 
         model.addAttribute(AttrConstants.INTERVIEW, interview);
         model.addAttribute(AttrConstants.INTERVIEWS, interviewService.getAll());
+        model.addAttribute(AttrConstants.PUBLISHED_INTERVIEWS, interviewService.getPublishedInterviews(interview));
         model.addAttribute(AttrConstants.STATISTICS, statisticsService.getInterviewStatistics(interview, null));
         model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getSubdivisionsByInterview(hash));
 
@@ -63,7 +65,8 @@ public class StatisticsController {
     @ResponseBody
     @RequestMapping(value = {"/load-data"}, method = RequestMethod.GET, produces = {"text/plain; charset=UTF-8"})
     public ResponseEntity<String> loadStatistics(@RequestParam String hash,
-                                           @RequestParam(required = false) Integer subId) {
+                                                 @RequestParam(required = false) Integer subId,
+                                                 @RequestParam(required = false) Integer publishId) {
         Interview interview = interviewService.get(hash);
         Subdivision subdivision = subdivisionService.getById(subId);
 

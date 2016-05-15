@@ -17,7 +17,7 @@ $(document).ready(function () {
     });
 
     $("#interviews").change(function () {
-        $("#subs")
+        $("#subs, #publish-date")
             .removeAttr("disabled")
             .val(0); //All accessible subdivisions for interview
 
@@ -25,14 +25,17 @@ $(document).ready(function () {
             .html($(this).find(":selected:last").text())
             .next().addClass("hide");
 
-        $subs.find("option[value!='0']").remove();
+        $("#subs, #publish-date").find("option[value!='0']").remove();
+        //$subs.find("option[value!='0']").remove();
         $subs.material_select();
+        $("#publish-date").material_select();
         $subs.trigger('change');
     });
 
     $subs.on('change', function () {
         var data = {
             hash: $("#interviews").val(),
+            publishId: $("#publish-id").val(),
             subId: $subs.val()
         };
 

@@ -38,6 +38,12 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
+    public List<PublishedInterview> getPublishedInterviews(Interview interview) {
+        return interviewDAO.getPublishedInterviews(interview);
+    }
+
+    @Override
+    @Transactional
     public List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential) {
         return interviewDAO.getAllInRange(from, howMany, userCredential);
     }
@@ -97,6 +103,12 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public Interview get(String hash) {
         return interviewDAO.getByHash(hash);
+    }
+
+    @Override
+    @Transactional
+    public PublishedInterview getPublish(Integer id) {
+        return interviewDAO.getPublishById(id);
     }
 
     @Override

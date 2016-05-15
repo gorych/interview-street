@@ -357,7 +357,7 @@ DROP TABLE IF EXISTS `interview_db`.`published_interviews` ;
 
 CREATE TABLE IF NOT EXISTS `interview_db`.`published_interviews` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '',
-  `date` DATETIME NOT NULL COMMENT '',
+  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
   `interview_id` INT(11) NOT NULL COMMENT '',
   PRIMARY KEY (`id`, `interview_id`)  COMMENT '',
   INDEX `fk_published_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',

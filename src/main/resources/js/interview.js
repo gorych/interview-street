@@ -39,6 +39,11 @@
     });
 
     $("#send-form-btn").click(function () {
+        if (!validator.isValidFields($(".expert-block"))) {
+            Materialize.toast("Инициалы введены некорректно", 3000);
+            return;
+        }
+
         if (!validator.isCorrectForm()) {
             return;
         }

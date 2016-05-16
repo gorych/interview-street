@@ -96,17 +96,6 @@ public class EditorController extends UserController {
         return "designer";
     }
 
-    @RequestMapping(value = {"/{hash}/preview"}, method = RequestMethod.GET)
-    public String showDesigner(@PathVariable String hash, Model model) {
-        Interview interview = interviewService.get(hash);
-        List<Question> questions = questionService.getAllOrderByNumber(hash);
-
-        model.addAttribute(AttrConstants.INTERVIEW, interview);
-        model.addAttribute(AttrConstants.QUESTIONS, questions);
-
-        return "preview";
-    }
-
     @ResponseBody
     @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     public ResponseEntity<String> loadPosts(@RequestBody String data) {

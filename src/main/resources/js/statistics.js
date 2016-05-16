@@ -47,6 +47,7 @@ $(document).ready(function () {
         $.get(global.rewriteUrl("/statistics/load-data"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
+                console.log(data);
 
                 var $statistics = $("#statistics-container");
                 $statistics.empty();

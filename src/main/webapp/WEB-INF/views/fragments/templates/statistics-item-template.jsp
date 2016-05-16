@@ -50,12 +50,12 @@
 
                             {{if questionType === 'rating'}}
                                 <span class="center-align teal-text left-align hide-on-small-only">
-                                    <b>Усредненная оценка: {{:maxEstimate}}<br/></b>
+                                    <b>Усредненная оценка: {{:avg}}<br/></b>
                                     Максимально допустимая оценка: {{:maxEstimate}}<br/>
                                     Ответило человек: {{:total}}
                                 </span>
                                 <div class="center-align teal-text left-align hide-on-med-and-up">
-                                    <b>Усредненная оценка: {{:maxEstimate}}<br/></b>
+                                    <b>Усредненная оценка: {{:avg}}<br/></b>
                                     Максимально допустимая оценка: {{:maxEstimate}}<br/>
                                     Ответило человек: {{:total}}
                                 </div>

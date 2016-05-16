@@ -1,9 +1,6 @@
 package by.gstu.interviewstreet.web.util;
 
-import by.gstu.interviewstreet.domain.Answer;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.Question;
-import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.ui.Model;
@@ -18,6 +15,7 @@ import java.util.List;
 public final class WebUtils {
 
     public static final String TEXT_ANSWER_NAME = "text";
+    public static final String FORMAT_TEMPL = "#0.0";
 
     private WebUtils() {
     }
@@ -70,7 +68,12 @@ public final class WebUtils {
     }
 
     public static String getPercent(int count, double total) {
-        return new DecimalFormat("#0.0").format(count * 100 / total);
+        return new DecimalFormat(FORMAT_TEMPL).format(count * 100 / total);
+    }
+
+    public static String getAvgEstimate(List<UserAnswer> answers) {
+        double sum = answers.stream().mapToInt(a -> Integer.parseInt(a.getAnswerText())).sum();
+        return new DecimalFormat(FORMAT_TEMPL).format(sum / answers.size());
     }
 
     /*Used for building pagination*/

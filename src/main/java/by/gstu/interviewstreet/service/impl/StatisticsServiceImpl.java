@@ -63,12 +63,17 @@ public class StatisticsServiceImpl implements StatisticsService {
             allAnswers = filterUserAnswersBySubdivision(allAnswers, sub);
             notDuplicateAnswers = filterUserAnswersBySubdivision(notDuplicateAnswers, sub);
 
+            String avg = null;
+            if (question.isRateType()) {
+                avg = WebUtils.getAvgEstimate(notDuplicateAnswers);
+            }
+
             int total = allAnswers.size();
             int maxEstimate = getMaxEstimate(question);
             Map<String, Object[]> answerData = getAnswerDataMap(allAnswers, notDuplicateAnswers, total);
 
             if (!answerData.isEmpty()) {
-                statistics.add(new StatisticData(question, answerData, maxEstimate, total));
+                statistics.add(new StatisticData(question, answerData, maxEstimate, total, avg));
             }
         }
 

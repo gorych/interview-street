@@ -18,17 +18,21 @@ public class StatisticData implements Serializable {
     private Map<String, Object[]> answerData;
 
     @Expose
+    private String avg;
+
+    @Expose
     private int total;
 
     @Expose
     private int maxEstimate; //Use on jsp for rating questions
 
-    public StatisticData(Question question, Map<String, Object[]> answerData, int maxEstimate, int total) {
+    public StatisticData(Question question, Map<String, Object[]> answerData, int maxEstimate, int total, String avg) {
         this.questionText = question.getText();
         this.questionType = question.getType().getName();
         this.answerData = answerData;
         this.maxEstimate = maxEstimate;
         this.total = total;
+        this.avg = avg;
     }
 
     public String getQuestionText() {
@@ -71,13 +75,23 @@ public class StatisticData implements Serializable {
         this.maxEstimate = maxEstimate;
     }
 
+    public String getAvg() {
+        return avg;
+    }
+
+    public void setAvg(String avg) {
+        this.avg = avg;
+    }
+
     @Override
     public String toString() {
         return "StatisticData{" +
                 "questionText='" + questionText + '\'' +
                 ", questionType='" + questionType + '\'' +
                 ", answerData=" + answerData +
+                ", avg='" + avg + '\'' +
                 ", total=" + total +
+                ", maxEstimate=" + maxEstimate +
                 '}';
     }
 }

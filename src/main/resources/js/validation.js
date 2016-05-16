@@ -39,9 +39,7 @@ var validator = validator || {};
         }
     };
 
-    validator.isValidFields = function () {
-        var $form = $("#add-interview-form");
-
+    validator.isValidFields = function ($form) {
         $form.find("[required]").each(function (i, elem) {
             if ($(elem).not("select")) {
                 validator.toggleInputValidateClass(elem);

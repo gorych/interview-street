@@ -2,10 +2,7 @@ package by.gstu.interviewstreet.service.impl;
 
 import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.dao.UserAnswerDAO;
-import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.domain.Question;
-import by.gstu.interviewstreet.domain.Subdivision;
-import by.gstu.interviewstreet.domain.UserAnswer;
+import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +38,25 @@ public class StatisticsServiceImpl implements StatisticsService {
         return answerData;
     }
 
-    private List<UserAnswer> filterUserAnswersBySubdivision(List<UserAnswer> answers, Subdivision sub) {
-        if (sub == null) {
-            return answers;
+    private List<UserAnswer> filterUserAnswers(List<UserAnswer> answers, Subdivision sub, PublishedInterview publish) {
+        if (sub != null) {
+            answers = answers.stream()
+                    .filter(a -> a.getUser().getEmployee().getSubdivision().getId() == sub.getId())
+                    .collect(Collectors.toList());
         }
-        return answers.stream()
-                .filter(a -> a.getUser().getEmployee().getSubdivision().getId() == sub.getId())
-                .collect(Collectors.toList());
+
+        if (publish != null) {
+            answers = answers.stream()
+                    .filter(a -> a.getReplyDate().compareTo(publish.getPublishDate()) >= 0)
+                    .collect(Collectors.toList());
+        }
+
+        return answers;
     }
 
     @Override
     @Transactional
-    public List<StatisticData> getInterviewStatistics(Interview interview, Subdivision sub) {
+    public List<StatisticData> getInterviewStatistics(Interview interview, Subdivision sub, PublishedInterview publish) {
         List<Question> questions = interview.getSortedQuestions();
 
         List<StatisticData> statistics = new ArrayList<>();
@@ -60,8 +64,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<UserAnswer> allAnswers = question.getUserAnswers();
             List<UserAnswer> notDuplicateAnswers = userAnswerDAO.getAnswersByQuestion(question);
 
-            allAnswers = filterUserAnswersBySubdivision(allAnswers, sub);
-            notDuplicateAnswers = filterUserAnswersBySubdivision(notDuplicateAnswers, sub);
+            allAnswers = filterUserAnswers(allAnswers, sub, publish);
+            notDuplicateAnswers = filterUserAnswers(notDuplicateAnswers, sub, publish);
 
             String avg = null;
             if (question.isRateType()) {

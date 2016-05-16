@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.web.util;
 
+import by.gstu.interviewstreet.domain.PublishedInterview;
 import com.google.gson.*;
 
 import java.io.UnsupportedEncodingException;
@@ -14,7 +15,8 @@ public class JSONParser {
         final GsonBuilder builder = new GsonBuilder();
         builder
                 .setDateFormat("yyyy-MM-dd")
-                .excludeFieldsWithoutExposeAnnotation();
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(PublishedInterview.class, new PublishedInterviewSerializer());
 
         GSON = builder.create();
     }

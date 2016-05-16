@@ -2,6 +2,7 @@ package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.domain.Interview;
+import by.gstu.interviewstreet.domain.PublishedInterview;
 import by.gstu.interviewstreet.domain.Subdivision;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.InterviewService;
@@ -9,6 +10,7 @@ import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.service.SubdivisionService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class StatisticsController {
         model.addAttribute(AttrConstants.INTERVIEW, interview);
         model.addAttribute(AttrConstants.INTERVIEWS, interviewService.getAll());
         model.addAttribute(AttrConstants.PUBLISHED_INTERVIEWS, interviewService.getPublishedInterviews(interview));
-        model.addAttribute(AttrConstants.STATISTICS, statisticsService.getInterviewStatistics(interview, null));
+        model.addAttribute(AttrConstants.STATISTICS, statisticsService.getInterviewStatistics(interview, null, null));
         model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getSubdivisionsByInterview(hash));
 
         return "statistics";
@@ -68,16 +69,26 @@ public class StatisticsController {
                                                  @RequestParam(required = false) Integer subId,
                                                  @RequestParam(required = false) Integer publishId) {
         Interview interview = interviewService.get(hash);
-        Subdivision subdivision = subdivisionService.getById(subId);
+        if (interview == null) {
+            return new ResponseEntity<>(JSONParser.convertObjectToJsonString(StringUtils.EMPTY),HttpStatus.OK);
+        }
 
-        List<StatisticData> statistics = statisticsService.getInterviewStatistics(interview, subdivision);
+        Subdivision subdivision = subdivisionService.getById(subId);
+        PublishedInterview publish = interviewService.getPublish(publishId);
+
+        List<StatisticData> statistics = statisticsService.getInterviewStatistics(interview, subdivision, publish);
 
         Map<String, Object> data = new HashMap<>();
         data.put(AttrConstants.STATISTICS, statistics);
 
-        if(subdivision == null) {
+        if (subdivision == null) {
             List<Subdivision> subs = subdivisionService.getSubdivisionsByInterview(hash);
             data.put(AttrConstants.SUBDIVISIONS, subs);
+        }
+
+        if (publish == null) {
+            List<PublishedInterview> publishes = interviewService.getPublishedInterviews(interview);
+            data.put(AttrConstants.PUBLISHED_DATES, publishes);
         }
 
         String jsonData = JSONParser.convertObjectToJsonString(data);

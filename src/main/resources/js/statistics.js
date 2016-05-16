@@ -31,10 +31,9 @@ $(document).ready(function () {
             .next().addClass("hide");
 
         $selects.find("option[value!='0']").remove();
-        //$subs.find("option[value!='0']").remove();
 
         $subs.material_select();
-        $("#publish-id").material_select();
+        $publish.material_select();
 
         $subs.trigger('change');
     });
@@ -42,28 +41,35 @@ $(document).ready(function () {
     $subs.on('change', function () {
         var data = {
             hash: $("#interviews").val(),
-            publishId: $("#publish-id").val(),
-            subId: $subs.val()
+            publishId: $publish.val() || 0,
+            subId: $subs.val() || 0
         };
 
         $.get(global.rewriteUrl("/statistics/load-data"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
+                console.log(data);
 
                 var $statistics = $("#statistics-container");
                 $statistics.empty();
 
-                if (data.statistics.length > 0) {
+                if (data.statistics) {
                     $statistics
                         .removeClass("hide")
                         .append($.render.statisticsTmpl(data));
 
                     if (data.subdivisions.length) {
-                        fillSubSelect(data.subdivisions);
+                        fillSelect($subs, data.subdivisions, "id", "name");
                     } else {
-                        $subs
-                            .attr("disabled", "disabled")
-                            .material_select();
+                        $subs.attr("disabled", "disabled");
+                        $subs.material_select();
+                    }
+
+                    if (data.published_dates.length) {
+                        fillSelect($publish, data.published_dates, "id", "format-date");
+                    } else {
+                        $publish.attr("disabled", "disabled");
+                        $publish.material_select();
                     }
 
                     $statistics.collapsible();
@@ -74,11 +80,11 @@ $(document).ready(function () {
             });
     });
 
-    function fillSubSelect(subs) {
-        $.each(subs, function (i, sub) {
-            $subs.append($('<option>', {
-                value: sub.id,
-                text: sub.name
+    function fillSelect(select, data, prop1, prop2) {
+        $.each(data, function (i, val) {
+            $(select).append($('<option>', {
+                value: val[prop1],
+                text: val[prop2]
             }));
         });
 

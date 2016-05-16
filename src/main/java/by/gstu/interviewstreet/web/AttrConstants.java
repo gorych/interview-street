@@ -30,6 +30,7 @@ public final class AttrConstants {
     public static final String SUBDIVISIONS = "subdivisions";
     public static final String USER_INTERVIEWS = "user_interviews";
     public static final String PUBLISHED_INTERVIEWS = "published_interviews";
+    public static final String PUBLISHED_DATES = "published_dates";
 
 
     private AttrConstants() {}

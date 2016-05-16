@@ -14,6 +14,7 @@ import java.util.Date;
 public class PublishedInterview {
 
     @Id
+    @Expose
     @GeneratedValue
     @Column(name = "id")
     private int id;

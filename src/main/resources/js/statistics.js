@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
     var $subs = $("#subs");
+    var $publish = $("#publish-id");
+    var $selects = $("#subs, #publish-id");
 
     $.templates({
         statisticsTmpl: "#statistics-template"
@@ -8,18 +10,18 @@ $(document).ready(function () {
 
     $(document).ready(function () {
         if ($("#interviews").val()) {
-            $subs.removeAttr("disabled").val(0);
+            $selects.removeAttr("disabled").val(0);
         } else {
-            $subs.attr("disabled");
+            $selects.attr("disabled");
         }
 
         $subs.material_select();
+        $publish.material_select();
+
         $subs.trigger('change');
     });
 
     $("#interviews").change(function () {
-        var $selects = $("#subs, #publish-date");
-
         $selects
             .removeAttr("disabled")
             .val(0); //All accessible subdivisions for interview
@@ -32,7 +34,7 @@ $(document).ready(function () {
         //$subs.find("option[value!='0']").remove();
 
         $subs.material_select();
-        $("#publish-date").material_select();
+        $("#publish-id").material_select();
 
         $subs.trigger('change');
     });
@@ -47,7 +49,6 @@ $(document).ready(function () {
         $.get(global.rewriteUrl("/statistics/load-data"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
-                console.log(data);
 
                 var $statistics = $("#statistics-container");
                 $statistics.empty();
@@ -57,7 +58,13 @@ $(document).ready(function () {
                         .removeClass("hide")
                         .append($.render.statisticsTmpl(data));
 
-                    fillSubSelect(data.subdivisions || {});
+                    if (data.subdivisions.length) {
+                        fillSubSelect(data.subdivisions);
+                    } else {
+                        $subs
+                            .attr("disabled", "disabled")
+                            .material_select();
+                    }
 
                     $statistics.collapsible();
                 } else {

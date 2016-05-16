@@ -26,14 +26,14 @@
     <c:if test="${interview.type.name eq 'expert'}">
         <div class="expert-block row white lighten-2 z-depth-1">
             <h6 class="teal-text initials">Пожалуйста, введите свои инициалы.</h6>
-            <div class="input-field col l6">
+            <div class="input-field col l6 m6 s12">
                 <input id="firstname" type="text" class="validate"
                        required
                        placeholder="Не пустое"
                        pattern=".{2,}">
                 <label for="firstname">Имя</label>
             </div>
-            <div class="input-field col l6">
+            <div class="input-field col l6 m6 s12">
                 <input id="lastname" type="text" class="validate"
                        required
                        placeholder="Не пустое"

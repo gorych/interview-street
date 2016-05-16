@@ -51,7 +51,7 @@
 
 
     $(".submit").click(function () {
-        if (!validator.isValidFields()) {
+        if (!validator.isValidFields($("#add-interview-form"))) {
             return;
         }
 

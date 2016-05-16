@@ -46,6 +46,10 @@ footer.page-footer {
     left: 0;
 }
 
+.initials {
+    padding: 10px 0 0 10px;
+}
+
 .rating span {
     display: inline-block;
     font-size: 14pt;
@@ -83,6 +87,11 @@ footer.page-footer {
 
 .row .btn-col {
     padding: 0;
+}
+
+.row .thin-col {
+    padding-left: 0;
+    padding-right: 0.5rem;
 }
 
 .row .col .optional-col {

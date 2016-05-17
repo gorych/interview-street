@@ -5,6 +5,7 @@ import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.PublishedInterview;
 import by.gstu.interviewstreet.domain.UserInterview;
+import by.gstu.interviewstreet.web.util.DateUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -98,13 +99,17 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
             interview = getById(interviewId);
         }
 
+        PublishedInterview publishedInterview;
         if (interview.getHide()) {
             interview.setHide(false);
-            session.save(new PublishedInterview(interview));
+            publishedInterview = new PublishedInterview(interview);
         } else {
             interview.setHide(true);
+            publishedInterview = getPublishById(interview.getId());
+            publishedInterview.setCloseDate(DateUtils.getToday());
         }
 
+        session.save(publishedInterview);
         session.save(interview);
     }
 

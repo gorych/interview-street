@@ -29,11 +29,15 @@ public class PublishedInterview {
     @Column(name = "date")
     private Date publishDate;
 
+    @Column(name = "close_date")
+    private Date closeDate;
+
     public PublishedInterview() {
     }
 
     public PublishedInterview(Interview interview) {
         this.interview = interview;
+        this.closeDate = interview != null ? interview.getEndDate() : DateUtils.getTomorrow();
     }
 
     public int getId() {
@@ -64,12 +68,21 @@ public class PublishedInterview {
         return DateUtils.YYYY_MM_DD_HH_MM_SS.format(publishDate);
     }
 
+    public Date getCloseDate() {
+        return closeDate;
+    }
+
+    public void setCloseDate(Date closeDate) {
+        this.closeDate = closeDate;
+    }
+
     @Override
     public String toString() {
         return "PublishedInterview{" +
                 "id=" + id +
                 ", interview=" + interview +
                 ", publishDate=" + publishDate +
+                ", closeDate=" + closeDate +
                 '}';
     }
 }

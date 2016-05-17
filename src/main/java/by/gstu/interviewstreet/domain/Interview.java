@@ -72,7 +72,6 @@ public class Interview implements Serializable, Comparable<Interview> {
 
     @Expose
     @NotNull
-    @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
     private Date endDate;
 

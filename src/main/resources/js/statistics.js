@@ -35,20 +35,31 @@ $(document).ready(function () {
         $subs.material_select();
         $publish.material_select();
 
-        $subs.trigger('change');
+        $subs.trigger('change', $(this).find(":selected").not(":disabled").attr("data-type"));
     });
 
-    $subs.on('change', function () {
+    $selects.on('change', function (ev, type) {
         var data = {
             hash: $("#interviews").val(),
             publishId: $publish.val() || 0,
             subId: $subs.val() || 0
         };
 
+        function fillSelectFacade(inData, select, prop1, prop2) {
+            if (inData && inData.length) {
+                fillSelect(select, inData, prop1, prop2);
+            } else if (type && type !== "open") {
+                $(select).attr("disabled", "disabled");
+                $(select).material_select();
+            }
+        }
+
         $.get(global.rewriteUrl("/statistics/load-data"), data, global.ajaxCallback)
             .done(function (response) {
                 var data = JSON.parse(response);
-                console.log(data);
+
+                fillSelectFacade(data.subdivisions, $subs, "id", "name");
+                fillSelectFacade(data.published_dates, $publish, "id", "format-date");
 
                 var $statistics = $("#statistics-container");
                 $statistics.empty();
@@ -57,30 +68,16 @@ $(document).ready(function () {
                     $statistics
                         .removeClass("hide")
                         .append($.render.statisticsTmpl(data));
-
-                    if (data.subdivisions.length) {
-                        fillSelect($subs, data.subdivisions, "id", "name");
-                    } else {
-                        $subs.attr("disabled", "disabled");
-                        $subs.material_select();
-                    }
-
-                    if (data.published_dates.length) {
-                        fillSelect($publish, data.published_dates, "id", "format-date");
-                    } else {
-                        $publish.attr("disabled", "disabled");
-                        $publish.material_select();
-                    }
-
                     $statistics.collapsible();
                 } else {
                     $statistics.addClass("hide");
-                    Materialize.toast("По выбранным критериям не найдено ответов.", 3000);
                 }
             });
     });
 
     function fillSelect(select, data, prop1, prop2) {
+        $(select).find("option[value!='0']").remove();
+
         $.each(data, function (i, val) {
             $(select).append($('<option>', {
                 value: val[prop1],
@@ -88,7 +85,7 @@ $(document).ready(function () {
             }));
         });
 
-        $subs.material_select();
+        $(select).material_select();
     }
 
     var chartOptions = {

@@ -34,7 +34,7 @@
                                                     <c:choose>
                                                         <c:when test="${interview.id eq item.id}">
                                                             <option data-type="${interview.type.name}" selected value="${item.hash}">${item.name} (${item.type.rusName})</option>
-                                                        </c:when>
+                                                    </c:when>
                                                         <c:otherwise>
                                                             <option data-type="${interview.type.name}"
                                                                     value="${item.hash}">${item.name} (${item.type.rusName})</option>

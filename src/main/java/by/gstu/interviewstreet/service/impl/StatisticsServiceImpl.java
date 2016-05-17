@@ -47,7 +47,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         if (publish != null) {
             answers = answers.stream()
-                    .filter(a -> a.getReplyDate().compareTo(publish.getPublishDate()) >= 0)
+                    .filter(a -> a.getReplyDate().compareTo(publish.getPublishDate()) >= 0 &&
+                            a.getReplyDate().compareTo(publish.getCloseDate()) <= 0)
                     .collect(Collectors.toList());
         }
 

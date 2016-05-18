@@ -41,7 +41,10 @@
                            title="Предварительный просмотр">pageview</i>
                     </a>
 
-                    <i class="hide small material-icons brown-text text-lighten-1" title="Распечатать анкету">print</i>
+                    <a href="<c:url value="/download/${interview.hash}"/>">
+                        <i class="small material-icons brown-text text-lighten-1"
+                           title="Скачать анкету">file_download</i>
+                    </a>
                 </div>
             </div>
 

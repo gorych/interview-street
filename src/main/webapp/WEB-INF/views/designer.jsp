@@ -41,10 +41,8 @@
                            title="Предварительный просмотр">pageview</i>
                     </a>
 
-                    <a href="<c:url value="/download/${interview.hash}"/>">
-                        <i class="small material-icons brown-text text-lighten-1"
-                           title="Скачать анкету">file_download</i>
-                    </a>
+                    <i id="download" data-hash="${interview.hash}" class="small material-icons brown-text text-lighten-1"
+                       title="Скачать анкету">file_download</i>
                 </div>
             </div>
 
@@ -174,7 +172,7 @@
 
                     </div>
 
-                        <%--Footer--%>
+                    <%--Footer--%>
                     <div class="col s12 divider grey lighten-1"></div>
 
                     <div class="row narrow-row center">

@@ -66,7 +66,7 @@
 
                 <div class="section" data-question="${question.id}">
 
-                        <%--Navigation--%>
+                    <%--Navigation--%>
                     <div class="row">
                         <div class="col l12 m12 s12">
                             <nav>
@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                        <%--Body--%>
+                    <%--Body--%>
                     <div class="row narrow-row">
                         <div class="input-field col l12 m12 s12">
                             <input value="${question.text}" type="text" length="250"

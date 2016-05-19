@@ -25,14 +25,13 @@ public class DownloadWordController {
 
     private static final String CONTENT_DISPOSITION = "Content-Disposition";
     private static final String ATTACHMENT_FILE = "attachment; filename=";
-    private static final String MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private static final String MIME_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
     @Autowired
     InterviewService interviewService;
 
     @RequestMapping(value = {"/word/{hash}"}, method = RequestMethod.GET)
     public void downloadInterview(@PathVariable String hash, HttpServletResponse response) {
-        System.out.println("ya tut");
         Interview interview = interviewService.get(hash);
 
         XWPFDocument document = new XWPFDocument();
@@ -55,7 +54,6 @@ public class DownloadWordController {
 
             ServletOutputStream out = response.getOutputStream();
             out.write(content);
-            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

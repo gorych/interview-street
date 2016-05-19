@@ -6,7 +6,7 @@
                title="Количество звезд"/>
         <label class="active">Количество звезд [3, 10]</label>
     </div>
-    <div class="col offset-l2 col l8 m12 s12 rating center">
+    <div class="col offset-l2 col l12 m12 s12 rating center">
         {^{range start=1 end=answers[0].text}}
             <i class="small material-icons red-text text-lighten-1">star_rate</i>
         {{/range}}

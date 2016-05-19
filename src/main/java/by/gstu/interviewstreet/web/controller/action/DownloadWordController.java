@@ -2,10 +2,9 @@ package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.service.DownloadWordService;
 import by.gstu.interviewstreet.service.InterviewService;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,23 +29,19 @@ public class DownloadWordController {
     @Autowired
     InterviewService interviewService;
 
-    @RequestMapping(value = {"/word/{hash}"}, method = RequestMethod.GET)
+    @Autowired
+    DownloadWordService downloadWordService;
+
+    @RequestMapping(value = {"/word/{hash}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
     public void downloadInterview(@PathVariable String hash, HttpServletResponse response) {
         Interview interview = interviewService.get(hash);
-
-        XWPFDocument document = new XWPFDocument();
-        XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setText("Русски текстAt tutorialspoint.com, we strive hard to " +
-                "provide quality tutorials for self-learning " +
-                "purpose in the domains of Academics, Information " +
-                "Technology, Management and Computer Programming languages.");
+        XWPFDocument document = downloadWordService.exportInterviewToWord(interview);
 
         try (ByteArrayOutputStream byteOut = new ByteArrayOutputStream()) {
             document.write(byteOut);
 
             byte[] content = byteOut.toByteArray();
-            String filename = interview.getName() + ".docx";
+            String filename = interview.getHash() + ".docx";
 
             response.setContentType(MIME_TYPE);
             response.addHeader(CONTENT_DISPOSITION, ATTACHMENT_FILE + filename);
@@ -55,6 +50,7 @@ public class DownloadWordController {
             ServletOutputStream out = response.getOutputStream();
             out.write(content);
         } catch (IOException e) {
+            //TODO add error code to response header
             e.printStackTrace();
         }
     }

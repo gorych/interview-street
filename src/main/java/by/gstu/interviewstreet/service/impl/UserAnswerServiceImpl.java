@@ -50,6 +50,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
                 if (userInterview != null) {
                     userInterview.setPassed(true);
+                    userInterview.setPassingDate(DateUtils.getToday());
                     userInterviewDAO.save(userInterview);
                 }
             }

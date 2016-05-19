@@ -41,8 +41,11 @@
                            title="Предварительный просмотр">pageview</i>
                     </a>
 
-                    <i id="download" data-hash="${interview.hash}" class="small material-icons brown-text text-lighten-1"
-                       title="Скачать анкету">file_download</i>
+                    <a href="<c:url value="/download/word/${interview.hash}"/>">
+                        <i data-hash="${interview.hash}" class="small material-icons brown-text text-lighten-1"
+                           title="Скачать анкету">file_download</i>
+                    </a>
+
                 </div>
             </div>
 

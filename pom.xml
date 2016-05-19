@@ -199,6 +199,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
           <webXml>src\main\webapp\WEB-INF\web.xml</webXml>
+          <outputDirectory>D:\soft\apache-tomcat-7.0.68-windows-x64\apache-tomcat-7.0.68\webapps</outputDirectory>
         </configuration>
       </plugin>
     </plugins>

@@ -27,16 +27,6 @@
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
-    $("#download").click(function () {
-        var hash = $(this).attr("data-hash");
-        alert(hash);
-        $.get(global.rewriteUrl("/download/word/"+hash))
-                .done(function (response) {
-                   alert("done");
-                }).fail(function(){alert("FAIL");});
-    });
-
-
     /*Build full url for interview*/
     $(document).ready(function () {
         $(".interview-url").each(function () {

@@ -15,41 +15,77 @@ import org.springframework.util.DigestUtils;
 
 import java.util.*;
 
+/**
+ * Сервис для выполнения операций с анкетами
+ */
 @Service
 public class InterviewServiceImpl implements InterviewService {
 
+    /**
+     * DAO для работы с сущностью "Employee"
+     */
     @Autowired
     private EmployeeDAO employeeDAO;
 
+    /**
+     * DAO для работы с сущностью "Interview"
+     */
     @Autowired
     private InterviewDAO interviewDAO;
 
+    /**
+     * DAO для работы с сущностью "Subdivision"
+     */
     @Autowired
     private SubdivisionDAO subdivisionDAO;
 
+    /**
+     * DAO для работы с сущностью "UserInterview"
+     */
     @Autowired
     private UserInterviewDAO userInterviewDAO;
 
+    /**
+     * Получает все анкеты из БД
+     * @return список всех анкет
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Interview> getAll() {
         return interviewDAO.getAll();
     }
 
+    /**
+     *  Получает список всех публикаций по анкете
+     * @param interview анкета
+     * @return список все публикаций
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PublishedInterview> getPublishedInterviews(Interview interview) {
         return interviewDAO.getPublishedInterviews(interview);
     }
 
+    /**
+     * Получает список всех анкет в заданном диапозоне
+     * @param from начало диапозона
+     * @param howMany количество получаемых записей
+     * @param userCredential учетные данные пользователя
+     * @return список анкет
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential) {
         return interviewDAO.getAllInRange(from, howMany, userCredential);
     }
 
+    /**
+     * Строит карту для "формы" редактирования анкеты
+     * @param interviewId идентификатор анкеты
+     * @return построенная карта
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Map<String, Object> getModelMapForEditForm(int interviewId) {
         Interview interview = interviewDAO.getById(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewAndGroupByPost(interviewId);
@@ -66,17 +102,15 @@ public class InterviewServiceImpl implements InterviewService {
         Map<Object, String> subdivisions = new TreeMap<>();
         if (activeSubIds.size() > 0) {
 
-            /*List of employees which have such subdivisions*/
+            /*Список сотрудник с заданной должностью*/
             List<Employee> employees = employeeDAO.getBySubdivisionIds(activeSubIds);
 
             for (Employee employee : employees) {
                 Post post = employee.getPost();
 
-                /*Mark post if it was selected. Used on form.jsp*/
                 posts.put(post, activePosts.contains(post) ? "selected" : "not_selected");
             }
 
-            /*List of subs for select, which used on form.jsp*/
             List<Subdivision> subs = subdivisionDAO.getAll();
 
             for (Subdivision sub : subs) {
@@ -93,24 +127,44 @@ public class InterviewServiceImpl implements InterviewService {
         return valueMap;
     }
 
+    /**
+     * Получает анкету по мдентификатору
+     * @param interviewId идентификатор анкеты
+     * @return анкета
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Interview get(int interviewId) {
         return interviewDAO.getById(interviewId);
     }
 
+    /**
+     * Получает анкету по хещ-коду
+     * @param hash хещ-код
+     * @return анкета
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Interview get(String hash) {
         return interviewDAO.getByHash(hash);
     }
 
+    /**
+     * Получает публикацию анкеты по идентификатору
+     * @param id идентификатор
+     * @return публикация
+     */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public PublishedInterview getPublish(Integer id) {
         return interviewDAO.getPublishById(id);
     }
 
+    /**
+     * Сохраняет или обновляет анкету
+     * @param interview анкета для обновления
+     * @return обновленная анкета
+     */
     @Override
     @Transactional
     public Interview saveOrUpdate(Interview interview) {
@@ -142,18 +196,30 @@ public class InterviewServiceImpl implements InterviewService {
         return existed;
     }
 
+    /**
+     * Сохраняет экспертную анкету
+     * @param expertInterview анкета для сохранения
+     */
     @Override
     @Transactional
     public void saveExpertInterview(ExpertInterview expertInterview) {
         interviewDAO.saveExpertInterview(expertInterview);
     }
 
+    /**
+     * Обнавляет анкету
+     * @param interview анкета для обновления
+     */
     @Override
     @Transactional
     public void update(Interview interview) {
         interviewDAO.saveOrUpdate(interview);
     }
 
+    /**
+     * Удаляет все записи пользователя связанные с заданной анкетой
+     * @param interview анкета для удаления
+     */
     private void removeAllUserInterviews(Interview interview) {
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewAndGroupByPost(interview.getId());
         for (UserInterview ui : userInterviews) {
@@ -161,12 +227,19 @@ public class InterviewServiceImpl implements InterviewService {
         }
     }
 
+    /**
+     * Удаляет анкету
+     * @param interview анкета
+     */
     @Override
     @Transactional
     public void remove(Interview interview) {
         interviewDAO.remove(interview);
     }
 
+    /**
+     * Скрывает все истекшие анкеты
+     */
     @Override
     @Transactional
     public void hideExpiredInterviews() {
@@ -177,6 +250,10 @@ public class InterviewServiceImpl implements InterviewService {
         });
     }
 
+    /**
+     * Блокирует и разблокирует анкету по идентификатору
+     * @param id идентификатор
+     */
     @Override
     @Transactional
     public void lockOrUnlock(int id) {

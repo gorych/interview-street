@@ -6,7 +6,16 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
+    <!-- Включает стандартной страницы аутентификации,
+         поддержку аутентификации средствами протокола HTTP
+         и поддержку завершения сеанса работы. -->
     <http auto-config="true" use-expressions="true">
+        <!--
+            login-processing-url - URL по которому доступна форма для аутентификации
+            default-target-url -
+            login-page - страница для логина
+            authentication-failure-url - URL
+        -->
         <form-login login-processing-url="/j_spring_security_check"
                     default-target-url="/gateway"
                     login-page="/login"
@@ -20,6 +29,11 @@
         <csrf disabled="true"/>
         <access-denied-handler error-page="/403"/>
     </http>
+
+    <!-- Сервис для авторизации пользователей. Листинг в Приложении Б-->
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="userService"/>
+    </authentication-manager>
 
     <global-method-security secured-annotations="enabled"/>
 

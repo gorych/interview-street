@@ -6,6 +6,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Валидатор для проверки содержимого ответов
+ */
 @Component
 public class AnswerValidator implements Validator {
 
@@ -20,6 +23,11 @@ public class AnswerValidator implements Validator {
         return Answer.class.isAssignableFrom(clazz);
     }
 
+    /**
+     * Проверяет заполнен объект или нет
+     * @param obj объект для проверки
+     * @param errors обнаруженные ошибки
+     */
     @Override
     public void validate(Object obj, Errors errors) {
         Answer answer = (Answer) obj;

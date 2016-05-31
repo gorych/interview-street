@@ -5,14 +5,8 @@ import by.gstu.interviewstreet.domain.UserAnswer;
 
 import java.util.List;
 
-public interface AnswerDAO {
-
-    Answer getById(int id);
+public interface AnswerDAO extends GenericDAO<Answer, Integer> {
 
     List<Answer> getByIds(List<Integer> ids);
-
-    void saveOrUpdate(Answer answer);
-
-    void remove(Answer answer);
 
 }

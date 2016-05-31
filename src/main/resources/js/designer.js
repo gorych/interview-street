@@ -1,8 +1,15 @@
 ;(function () {
 
+    /**
+     * Скрипт для обработки designer.jsp
+     */
+
     var _questionContainer = $("#question-container");
     var _hash = $.cookie("hash");
 
+    /**
+     * Подключение шаблонов
+     */
     $.templates({
         questTmpl: "#question-template",
         multiAnswTmpl: "#multi-answer-tmpl",
@@ -11,8 +18,14 @@
         rateAnswTmpl: "#rate-answer-tmpl"
     });
 
+    /**
+     * Объект для сохранения ссылки в буфер обмена
+     */
     new Clipboard("#clipboard-btn");
 
+    /**
+     * Обработчик поля для вводного текста анкеты
+     */
     $("#init-tbox")
         .val($("#initial-text").val())
         .blur(function () {
@@ -23,23 +36,32 @@
             $.post(global.rewriteUrl("/interview/update-introductory-text"), data, global.ajaxCallback);
         });
 
+    /**
+     * Обработчик кнопки "Скопировать в буфер обмена"
+     */
     $("#clipboard-btn").click(function () {
         Materialize.toast("Адрес скопирован в буфер обмена", 2000);
     });
 
-    /*Build full url for interview*/
+    /**
+     * Составляет полный путь к анкете
+     */
     $(document).ready(function () {
         $(".interview-url").each(function () {
             $(this).val(global.domain() + $(this).val());
         });
     });
 
-    /*Reset focused input to save its value*/
+    /**
+     * Снимает фокус со всех полей
+     */
     $(window).on("beforeunload", function () {
         $("input:focus, textarea:focus").blur();
     });
 
-    /*Show list of question types*/
+    /**
+     * Показывает список типов анкет
+     */
     _questionContainer.on('click', ".add-quest-btn", function () {
         $(".row.staggered").remove();
         $(this).after($("#stag-list").render());
@@ -47,12 +69,17 @@
         Materialize.showStaggeredList(".staggered");
     });
 
-    /*Select focused input content*/
+    /**
+     * Выделяет содержимое активного поля
+     */
     _questionContainer.on("focus", "input", function () {
         $(this).select();
     });
 
-    /*Save data when input has lost focus*/
+    /**
+     * Отправляет запрос на сохранение данных в БД,
+     * когда поле потеряло фокус
+     */
     _questionContainer.on("blur", "input", function () {
         var data = {
             "questId": $(this).parents("[data-question]").attr("data-question"),
@@ -71,7 +98,9 @@
         }
     });
 
-    /*Del question btn listener*/
+    /**
+     * Обработчик кнопки "удалить вопрос"
+     */
     _questionContainer.on('click', ".del-quest", function () {
         var $section = $(this).parents(".section");
         var data = {
@@ -90,7 +119,9 @@
             });
     });
 
-    /*Move question up or down*/
+    /**
+     * Перемещает вопросы вверх и вниз
+     */
     _questionContainer.on('click', ".move-up, .move-down", function () {
         var $section = $(this).parents(".section");
 
@@ -130,7 +161,9 @@
             });
     });
 
-    /*Duplicate question*/
+    /**
+     * Отправляет запрос на дублирование вопроса
+     */
     _questionContainer.on('click', ".duplicate", function () {
         var $section = $(this).parents(".section");
         $.post(global.rewriteUrl("/designer/duplicate-question"), {"id": $section.attr("data-question")}, global.ajaxCallback)
@@ -142,7 +175,9 @@
             });
     });
 
-    /*Add new answer*/
+    /**
+     * Добавление нового ответа
+     */
     _questionContainer.on('click', ".add-answer, .add-text-answer", function (event) {
         var textType = $(event.target).is(".add-text-answer") ? true : false;
         var $section = $(this).parents(".section");
@@ -174,7 +209,9 @@
             });
     });
 
-    /*Delete answer from question*/
+    /**
+     * Удаление ответа из вопроса
+     */
     _questionContainer.on('click', ".del-answer, .del-text-answer", function () {
         var $row = $(this).parents("[data-answer]");
         var $section = $(this).parents(".section");
@@ -203,11 +240,14 @@
             });
     });
 
+    /**
+     * Перирисовывает звезды в вопросе типа "рейтинг"
+     */
     _questionContainer.on('input', ".rating", function () {
         updateStars($(this));
     });
 
-    /*Listener for question types list. Add new question*/
+    /*Обработчик списка для выбора типа вопроса*/
     $(document).on('click', "input[name=answer-type]", function () {
         var data = {
             "hash": _hash,
@@ -233,7 +273,12 @@
 
     //region Helper functions
 
-    /*Find prev or next number*/
+    /**
+     * Ищет подходяший ответ
+     * @param that элемент, который вызвал событие
+     * @param which тип поиска
+     * @returns {number} найденный номер
+     */
     function findPrevOrNextNumber(that, which) {
         var $section = $(that).parents(".section");
         var $curNumber = $section.find(".number").html();
@@ -250,7 +295,12 @@
         return -1;
     }
 
-    /*Find number of new question*/
+    /**
+     * Поик номера для нового вопроса
+     * @param that элемент, на котором сработало
+     *        событие для добавления вопроса
+     * @returns {number} номер вопроса
+     */
     function findSuitableNumber(that) {
         var intNumber;
 
@@ -269,13 +319,19 @@
         return 1;
     }
 
-    /*Update all question numbers*/
+    /**
+     * Обновляет все номера вопросов
+     */
     function updateQuestionNumbers() {
         $(".number").each(function (index) {
             $(this).html(index + 1);
         });
     }
 
+    /**
+     * Обновляет звездный рейтинг у конкретной формы
+     * @param that элемент для изменения количества звезд
+     */
     function updateStars(that) {
         var starCol = $(that).parent().next().empty();
         var value = $(that).val();

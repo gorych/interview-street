@@ -1,19 +1,20 @@
 package by.gstu.interviewstreet.service;
 
-import by.gstu.interviewstreet.domain.*;
+import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.domain.AnswerType;
+import by.gstu.interviewstreet.domain.Question;
 
 import java.util.List;
-import java.util.Map;
 
 public interface AnswerService {
 
-    Answer get(int id);
+   Answer get(int id);
 
     Answer get(Question question, int id);
 
     List<Answer> get(List<Integer> ids);
 
-    void saveOrUpdate(Answer answer);
+  void saveOrUpdate(Answer answer);
 
     List<Answer> addDefaultAnswers(Question question);
 
@@ -23,7 +24,7 @@ public interface AnswerService {
 
     Answer addDefaultAnswer(AnswerType type, Question question);
 
-    void remove(Answer answer);
+  void remove(Answer answer);
 
 }
 

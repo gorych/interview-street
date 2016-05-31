@@ -22,12 +22,17 @@
             <div class="row icons-row">
                 <div class="col l12 m12 s12">
 
-                    <i id="clipboard-btn" class="small material-icons light-blue-text text-accent-3"
-                       data-clipboard-target=".interview-url" title="Копировать адрес ссылки">link</i>
+                    <i id="clipboard-btn"
+                       class="small material-icons light-blue-text text-accent-3"
+                       data-clipboard-target=".interview-url"
+                       title="Копировать адрес ссылки">link</i>
 
                     <c:if test="${interview.type.name eq 'open'}">
                         <a href="<c:url value="/viewer/${interview.hash}/respondents"/>">
-                            <i class="small material-icons orange-text text-accent-4" title="Список респондентов">supervisor_account</i>
+                            <i
+                                    class="small material-icons orange-text text-accent-4"
+                                    title="Список респондентов">supervisor_account
+                            </i>
                         </a>
                     </c:if>
 
@@ -61,15 +66,17 @@
 
         <!--This is container for forms-->
         <div id="question-container" class="col offset-l1 offset-m1 l10 m10 s12 center">
-            <a class="btn-floating btn-large add-quest-btn first-btn waves-effect waves-light blue-grey lighten-2 hoverable"
-               title="Добавить вопрос"><i class="material-icons">add</i></a>
+            <a
+                    class="btn-floating btn-large add-quest-btn first-btn waves-effect
+                        waves-light blue-grey lighten-2 hoverable"
+                    title="Добавить вопрос"><i class="material-icons">add</i></a>
 
             <c:forEach var="question" items="${questions}" varStatus="sub">
                 <c:set var="questionType" scope="page" value="${question.type}"/>
 
                 <div class="section" data-question="${question.id}">
 
-                    <%--Navigation--%>
+                        <%--Navigation--%>
                     <div class="row">
                         <div class="col l12 m12 s12">
                             <nav>
@@ -77,11 +84,14 @@
                                 <ul>
                                     <li><a><i class="material-icons move-down"
                                               title="Переместить вниз">arrow_downward</i></a></li>
-                                    <li><a><i class="material-icons move-up" title="Переместить вверх">arrow_upward</i></a>
+                                    <li><a><i
+                                            class="material-icons move-up"
+                                            title="Переместить вверх">arrow_upward</i></a>
                                     </li>
                                     <li><a><i class="material-icons duplicate"
                                               title="Дублировать вопрос">control_point_duplicate</i></a></li>
-                                    <li><a><i class="material-icons del-quest" title="Удалить вопрос">delete</i></a>
+                                    <li><a><i class="material-icons del-quest"
+                                              title="Удалить вопрос">delete</i></a>
                                     </li>
                                 </ul>
                                 <i class="right material-icons teal-text text-lighten-2"
@@ -90,7 +100,7 @@
                         </div>
                     </div>
 
-                    <%--Body--%>
+                        <%--Body--%>
                     <div class="row narrow-row">
                         <div class="input-field col l12 m12 s12">
                             <input value="${question.text}" type="text" length="250"
@@ -175,12 +185,13 @@
 
                     </div>
 
-                    <%--Footer--%>
+                        <%--Footer--%>
                     <div class="col s12 divider grey lighten-1"></div>
 
                     <div class="row narrow-row center">
                         <div class="col s12">
-                            <a class="btn-floating btn-large add-quest-btn waves-effect waves-light blue-grey lighten-2 hoverable"
+                            <a class="btn-floating btn-large add-quest-btn waves-effect
+                                      waves-light blue-grey lighten-2 hoverable"
                                title="Добавить вопрос"><i class="material-icons">add</i></a>
                         </div>
                     </div>
@@ -211,6 +222,7 @@
 
 <%@include file="fragments/footer.jsp" %>
 
+<%-- Include templates--%>
 <%@include file="fragments/templates/answers/optional-answer-tamplate.jsp" %>
 <%@include file="fragments/templates/answers/text-answer-tamplate.jsp" %>
 <%@include file="fragments/templates/answers/rate-answer-template.jsp" %>
@@ -219,6 +231,8 @@
 <%@include file="fragments/templates/stag-list-template.jsp" %>
 
 <%@include file="fragments/general-js.jsp" %>
+
+<%-- Include scripts--%>
 <script src="<c:url value="/resources/vendors/clipboard/clipboard.js"/>"></script>
 <script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
 <script src="<c:url value="/resources/js/jsrender.extends.js"/>"></script>

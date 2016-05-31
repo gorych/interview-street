@@ -7,32 +7,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class AnswerDAOImpl extends AbstractDbDAO implements AnswerDAO {
-
-    @Override
-    public Answer getById(int id) {
-        return (Answer) getSession()
-                .createQuery("FROM Answer WHERE id=:id")
-                .setParameter("id", id)
-                .uniqueResult();
-    }
+public class AnswerDAOImpl extends GenericDAOImpl<Answer, Integer> implements AnswerDAO {
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Answer> getByIds(List<Integer> ids) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM Answer WHERE id IN (:ids)")
                 .setParameterList("ids", ids)
                 .list();
     }
 
-    @Override
-    public void saveOrUpdate(Answer answer) {
-        getSession().saveOrUpdate(answer);
-    }
-
-    @Override
-    public void remove(Answer answer) {
-        getSession().delete(answer);
-    }
 }

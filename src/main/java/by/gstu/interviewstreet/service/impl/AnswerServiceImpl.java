@@ -27,15 +27,15 @@ public class AnswerServiceImpl implements AnswerService {
     private AnswerTypeDAO answerTypeDAO;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Answer get(int id) {
-        return answerDAO.getById(id);
+        return answerDAO.find(id);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Answer get(Question question, int id) {
-        Answer answer = answerDAO.getById(id);
+        Answer answer = answerDAO.find(id);
         List<Answer> answers = question.getAnswers();
 
         if (!answers.contains(answer)) {
@@ -46,7 +46,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Answer> get(List<Integer> ids) {
         return answerDAO.getByIds(ids);
     }

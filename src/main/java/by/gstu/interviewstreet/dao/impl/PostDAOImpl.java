@@ -4,15 +4,7 @@ import by.gstu.interviewstreet.dao.PostDAO;
 import by.gstu.interviewstreet.domain.Post;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public class PostDAOImpl extends AbstractDbDAO implements PostDAO {
+public class PostDAOImpl extends GenericDAOImpl<Post, Integer> implements PostDAO {
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Post> getAll() {
-        return getSession()
-                .createQuery("FROM Post").list();
-    }
 }

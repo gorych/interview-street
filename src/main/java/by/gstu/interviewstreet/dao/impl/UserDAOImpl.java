@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl extends AbstractDbDAO implements UserDAO {
+public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDAO {
 
     @Override
-    public User getByPassportData(String passportData) {
-        return (User) getSession()
+    public User getByUsername(String passportData) {
+        return (User) currentSession()
                 .createQuery("FROM User WHERE passportData LIKE :passportData")
                 .setString("passportData", passportData)
                 .uniqueResult();
@@ -19,15 +19,8 @@ public class UserDAOImpl extends AbstractDbDAO implements UserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<User> getAll() {
-        return getSession()
-                .createQuery("FROM User").list();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
     public List<User> getByPosts(Integer[] postIds, Integer[] subIds) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM User WHERE employee.subdivision.id IN (:subs) AND employee.post.id IN (:posts) GROUP BY employee.id")
                 .setParameterList("subs", subIds)
                 .setParameterList("posts", postIds)

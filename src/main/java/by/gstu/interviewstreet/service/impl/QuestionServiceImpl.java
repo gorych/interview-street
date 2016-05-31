@@ -29,14 +29,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public Question get(int id) {
-        return questionDAO.getById(id);
+        return questionDAO.find(id);
     }
 
     @Override
     @Transactional
     public Question get(String hash, int questId) {
         Interview interview = interviewDAO.getByHash(hash);
-        Question question = questionDAO.getById(questId);
+        Question question = questionDAO.find(questId);
 
         List<Question> questions = interview.getQuestions();
         if (questions.contains(question)) {
@@ -50,7 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public QuestionType getType(int typeId) {
-        return questionTypeDAO.getById(typeId);
+        return questionTypeDAO.find(typeId);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public void move(int questId, int number) {
-        Question who = questionDAO.getById(questId);
+        Question who = questionDAO.find(questId);
         Question whom = questionDAO.getByNumber(number);
 
         int whoNumber = who.getNumber();

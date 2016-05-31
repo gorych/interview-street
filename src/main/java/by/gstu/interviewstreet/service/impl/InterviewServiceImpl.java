@@ -47,6 +47,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Получает все анкеты из БД
+     *
      * @return список всех анкет
      */
     @Override
@@ -56,7 +57,8 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     /**
-     *  Получает список всех публикаций по анкете
+     * Получает список всех публикаций по анкете
+     *
      * @param interview анкета
      * @return список все публикаций
      */
@@ -68,8 +70,9 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Получает список всех анкет в заданном диапозоне
-     * @param from начало диапозона
-     * @param howMany количество получаемых записей
+     *
+     * @param from           начало диапозона
+     * @param howMany        количество получаемых записей
      * @param userCredential учетные данные пользователя
      * @return список анкет
      */
@@ -81,13 +84,14 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Строит карту для "формы" редактирования анкеты
+     *
      * @param interviewId идентификатор анкеты
      * @return построенная карта
      */
     @Override
     @Transactional(readOnly = true)
     public Map<String, Object> getModelMapForEditForm(int interviewId) {
-        Interview interview = interviewDAO.getById(interviewId);
+        Interview interview = interviewDAO.find(interviewId);
         List<UserInterview> userInterviews = userInterviewDAO.getByInterviewAndGroupByPost(interviewId);
 
         List<Post> activePosts = new ArrayList<>();
@@ -129,17 +133,19 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Получает анкету по мдентификатору
+     *
      * @param interviewId идентификатор анкеты
      * @return анкета
      */
     @Override
     @Transactional(readOnly = true)
     public Interview get(int interviewId) {
-        return interviewDAO.getById(interviewId);
+        return interviewDAO.find(interviewId);
     }
 
     /**
      * Получает анкету по хещ-коду
+     *
      * @param hash хещ-код
      * @return анкета
      */
@@ -151,6 +157,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Получает публикацию анкеты по идентификатору
+     *
      * @param id идентификатор
      * @return публикация
      */
@@ -162,17 +169,18 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Сохраняет или обновляет анкету
+     *
      * @param interview анкета для обновления
      * @return обновленная анкета
      */
     @Override
     @Transactional
     public Interview saveOrUpdate(Interview interview) {
-        Interview existed = interviewDAO.getById(interview.getId());
+        Interview existed = interviewDAO.find(interview.getId());
 
         /*create new interview*/
         if (existed == null) {
-            byte[] bytes = (interview.getName()+ System.currentTimeMillis()).getBytes();
+            byte[] bytes = (interview.getName() + System.currentTimeMillis()).getBytes();
             interview.setHash(DigestUtils.md5DigestAsHex(bytes));
             interviewDAO.saveOrUpdate(interview);
 
@@ -198,6 +206,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Сохраняет экспертную анкету
+     *
      * @param expertInterview анкета для сохранения
      */
     @Override
@@ -208,6 +217,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Обнавляет анкету
+     *
      * @param interview анкета для обновления
      */
     @Override
@@ -218,6 +228,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Удаляет все записи пользователя связанные с заданной анкетой
+     *
      * @param interview анкета для удаления
      */
     private void removeAllUserInterviews(Interview interview) {
@@ -229,6 +240,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Удаляет анкету
+     *
      * @param interview анкета
      */
     @Override
@@ -252,6 +264,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     /**
      * Блокирует и разблокирует анкету по идентификатору
+     *
      * @param id идентификатор
      */
     @Override

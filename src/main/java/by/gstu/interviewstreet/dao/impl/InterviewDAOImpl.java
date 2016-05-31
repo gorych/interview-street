@@ -9,23 +9,16 @@ import by.gstu.interviewstreet.web.util.DateUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
-public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Interview> getAll() {
-        return getSession()
-                .createQuery("FROM Interview")
-                .list();
-    }
+public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> implements InterviewDAO {
 
     @Override
     @SuppressWarnings("unchecked")
     public List<PublishedInterview> getPublishedInterviews(Interview interview) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM PublishedInterview WHERE interview.id=:id")
                 .setInteger("id", interview.getId())
                 .list();
@@ -34,7 +27,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Interview> getAllInRange(int from, int howMany, String userCredential) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM Interview WHERE creator.passportData LIKE :userCredential ORDER BY placementDate DESC")
                 .setString("userCredential", userCredential)
                 .setFirstResult(from)
@@ -43,16 +36,8 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
     }
 
     @Override
-    public Interview getById(int id) {
-        return (Interview) getSession()
-                .createQuery("FROM Interview WHERE id = :id")
-                .setInteger("id", id)
-                .uniqueResult();
-    }
-
-    @Override
     public PublishedInterview getPublishById(int id) {
-        return (PublishedInterview) getSession()
+        return (PublishedInterview) currentSession()
                 .createQuery("FROM PublishedInterview WHERE id = :id")
                 .setInteger("id", id)
                 .uniqueResult();
@@ -60,30 +45,20 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
 
     @Override
     public Interview getByHash(String hash) {
-        return (Interview) getSession()
+        return (Interview) currentSession()
                 .createQuery("FROM Interview WHERE hash LIKE :hash")
                 .setString("hash", hash)
                 .uniqueResult();
     }
 
     @Override
-    public void saveOrUpdate(Interview interview) {
-        getSession().saveOrUpdate(interview);
-    }
-
-    @Override
     public void saveExpertInterview(ExpertInterview expertInterview) {
-        getSession().saveOrUpdate(expertInterview);
-    }
-
-    @Override
-    public void remove(Interview interview) {
-        getSession().delete(interview);
+        currentSession().saveOrUpdate(expertInterview);
     }
 
     @Override
     public void lockOrUnlock(int interviewId) {
-        Session session = getSession();
+        Session session = currentSession();
 
         UserInterview userInterview = (UserInterview) session
                 .createQuery("FROM UserInterview WHERE interview.id = :id GROUP BY interview.id")
@@ -96,7 +71,7 @@ public class InterviewDAOImpl extends AbstractDbDAO implements InterviewDAO {
             userInterview.setPassed(false);
             session.save(userInterview);
         } else {
-            interview = getById(interviewId);
+            interview = find(interviewId);
         }
 
         PublishedInterview publishedInterview;

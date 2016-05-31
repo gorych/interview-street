@@ -5,9 +5,7 @@ import by.gstu.interviewstreet.domain.UserAnswer;
 
 import java.util.List;
 
-public interface UserAnswerDAO {
-
-    void saveOrUpdate(UserAnswer userAnswer);
+public interface UserAnswerDAO extends GenericDAO<UserAnswer, Integer> {
 
     List<UserAnswer> getAnswersByQuestion(Question question);
 

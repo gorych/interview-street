@@ -7,18 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class SubdivisionDAOImpl extends AbstractDbDAO implements SubdivisionDAO {
-
-    @Override
-    public Subdivision getById(Integer id) {
-        return (Subdivision) getSession()
-                .createQuery("FROM Subdivision WHERE id=:id")
-                .setInteger("id", id).uniqueResult();
-    }
+public class SubdivisionDAOImpl extends GenericDAOImpl<Subdivision, Integer> implements SubdivisionDAO {
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Subdivision> getAll() {
-        return getSession().createQuery("FROM Subdivision ORDER BY name ASC").list();
+        return currentSession().createQuery("FROM Subdivision ORDER BY name ASC").list();
     }
 }

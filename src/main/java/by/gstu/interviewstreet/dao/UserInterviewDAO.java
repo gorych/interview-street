@@ -4,7 +4,7 @@ import by.gstu.interviewstreet.domain.UserInterview;
 
 import java.util.List;
 
-public interface UserInterviewDAO {
+public interface UserInterviewDAO extends GenericDAO<UserInterview, Integer> {
 
     List<UserInterview> getByInterviewAndGroupByPost(int interviewId);
 
@@ -13,9 +13,5 @@ public interface UserInterviewDAO {
     List<UserInterview> getByInterviewHash(String hash);
 
     UserInterview getByUserAndInterview(String username, String hash);
-
-    void save(UserInterview userInterview);
-
-    void remove(UserInterview userInterview);
 
 }

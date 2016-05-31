@@ -24,7 +24,7 @@ public class SubdivisionServiceImpl implements SubdivisionService {
     @Override
     @Transactional
     public Subdivision getById(Integer id) {
-        return subdivisionDAO.getById(id);
+        return subdivisionDAO.find(id);
     }
 
     @Override

@@ -9,18 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class UserAnswerDAOImpl extends AbstractDbDAO implements UserAnswerDAO {
-
-    @Override
-    public void saveOrUpdate(UserAnswer userAnswer) {
-        getSession().saveOrUpdate(userAnswer);
-    }
+public class UserAnswerDAOImpl extends GenericDAOImpl<UserAnswer, Integer> implements UserAnswerDAO {
 
     @Override
     @Transactional
     @SuppressWarnings("unchecked")
     public List<UserAnswer> getAnswersByQuestion(Question question) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM UserAnswer WHERE question =:question GROUP BY answerText")
                 .setEntity("question", question)
                 .list();

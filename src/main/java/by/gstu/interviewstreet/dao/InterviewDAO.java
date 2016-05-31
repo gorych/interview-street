@@ -7,25 +7,17 @@ import by.gstu.interviewstreet.domain.PublishedInterview;
 import java.util.List;
 
 
-public interface InterviewDAO {
-
-    List<Interview> getAll();
+public interface InterviewDAO extends GenericDAO<Interview, Integer> {
 
     List<PublishedInterview> getPublishedInterviews(Interview interview);
 
     List<Interview> getAllInRange(int from, int howMany, String userCredential);
 
-    Interview getById(int id);
-
     PublishedInterview getPublishById(int id);
 
     Interview getByHash(String hash);
 
-    void saveOrUpdate(Interview interview);
-
     void saveExpertInterview(ExpertInterview expertInterview);
-
-    void remove(Interview interview);
 
     void lockOrUnlock(int interviewId);
 

@@ -4,9 +4,7 @@ import by.gstu.interviewstreet.domain.Question;
 
 import java.util.List;
 
-public interface QuestionDAO {
-
-    Question getById(int id);
+public interface QuestionDAO extends GenericDAO<Question, Integer> {
 
     Question getByNumber(int number);
 
@@ -19,9 +17,5 @@ public interface QuestionDAO {
     void incrementNumbers(List<Question> questions);
 
     void decrementNumbers(List<Question> questions);
-
-    void saveOrUpdate(Question question);
-
-    void remove(Question question);
 
 }

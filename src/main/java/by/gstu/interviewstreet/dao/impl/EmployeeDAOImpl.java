@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class EmployeeDAOImpl extends AbstractDbDAO implements EmployeeDAO {
+public class EmployeeDAOImpl extends GenericDAOImpl<Employee, Integer> implements EmployeeDAO {
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Employee> getBySubdivisionIds(Collection subdivisionIds) {
-        return getSession()
+        return currentSession()
                 .createQuery("FROM Employee WHERE subdivision.id IN (:subdivisionIds) GROUP BY post.id ORDER BY post.name ASC")
                 .setParameterList("subdivisionIds", subdivisionIds)
                 .list();

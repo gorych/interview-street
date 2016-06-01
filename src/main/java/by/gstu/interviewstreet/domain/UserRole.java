@@ -1,11 +1,14 @@
 package by.gstu.interviewstreet.domain;
 
+import by.gstu.interviewstreet.security.UserRoleConstants;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "user_roles")
-public class UserRole implements Serializable{
+public class UserRole implements GrantedAuthority, Serializable{
 
     @Id
     @Column(name = "id")
@@ -31,6 +34,15 @@ public class UserRole implements Serializable{
         this.name = name;
     }
 
+    public boolean isEditor(){
+        return UserRoleConstants.EDITOR.equals(name);
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return "Role{" +
@@ -38,5 +50,4 @@ public class UserRole implements Serializable{
                 ", name='" + name + '\'' +
                 '}';
     }
-
 }

@@ -1,11 +1,11 @@
 package by.gstu.interviewstreet.web.controller;
 
 
+import by.gstu.interviewstreet.domain.UserRole;
 import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,10 +26,14 @@ public class IndexController {
         Authentication authentication = securityContext.getAuthentication();
         Collection roles = authentication.getAuthorities();
 
-        boolean isEditor = roles.contains(new SimpleGrantedAuthority(UserRoleConstants.EDITOR));
-        return isEditor ?
-                "redirect:/editor/interview-list" :
-                "redirect:/respondent/dashboard";
+        for (Object role : roles) {
+            UserRole userRole = (UserRole) role;
+            if (UserRoleConstants.EDITOR.equals(userRole.getName())) {
+                return "redirect:/editor/interview-list";
+            }
+        }
+
+        return "redirect:/respondent/dashboard";
     }
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)

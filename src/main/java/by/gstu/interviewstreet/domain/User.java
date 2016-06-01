@@ -1,15 +1,19 @@
 package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue
@@ -21,18 +25,35 @@ public class User implements Serializable{
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private UserRole role;
 
-    @Column(name = "passportData")
-    private String passportData;
+    @Column(name = "username")
+    private String username;
 
-    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(name = "password")
+    private String password;
+
+    /**
+     * Not implemented in DB
+     */
+    @Transient
+    private boolean active = true;
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<Interview> createdInterviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterview> interviewsForPassing = new ArrayList<>();
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public int getId() {
         return id;
@@ -58,12 +79,12 @@ public class User implements Serializable{
         this.role = role;
     }
 
-    public String getPassportData() {
-        return passportData;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setPassportData(String passportData) {
-        this.passportData = passportData;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Interview> getCreatedInterviews() {
@@ -83,12 +104,47 @@ public class User implements Serializable{
     }
 
     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(getRole());
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isActive();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isActive();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isActive();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
+
+    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", employee=" + employee +
                 ", role=" + role +
-                ", passportData='" + passportData + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

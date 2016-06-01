@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface UserService {
 
-    User get(String passportData);
+    User get(String username);
 
 }

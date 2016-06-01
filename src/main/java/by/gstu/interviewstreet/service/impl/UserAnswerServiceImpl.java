@@ -27,7 +27,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
         UserInterview userInterview = null;
         if (user != null) {
-            userInterview = userInterviewDAO.getByUserAndInterview(user.getPassportData(), interview.getHash());
+            userInterview = userInterviewDAO.getByUserAndInterview(user.getUsername(), interview.getHash());
 
             if (!interview.isSecondPassage() && userInterview.getPassed()) {
                 throw new IllegalArgumentException("User already passed this interview.");

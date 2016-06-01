@@ -38,23 +38,18 @@
                 <sf:form class="col s12" action="${loginUrl}" method="POST">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="passport-series" placeholder="Серия и номер паспорта(слитно)"
-                                   name="j_username" type="text" pattern="[А-я]{2}[0-9]{7}"
-                                   oninput="invalidPassportData(this)"
-                                   oninvalid="invalidPassportData(this)"/>
-                            <label class="active" for="passport-series">Паспортные данные</label>
+                            <input id="login" name="j_username" type="text">
+                            <label class="active" for="login">Имя пользователя</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="pass" name="j_password" type="text">
+                            <label class="active" for="pass">Пароль</label>
                         </div>
                         <c:if test="${not empty auth_error}">
                             <div class="red-text error">
                                 <c:out value="${auth_error}"/>
                             </div>
                         </c:if>
-                    </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <input type="checkbox" id="remember_me" name="j_spring_security_remember_me">
-                            <label for="remember_me">Запомнить меня</label>
-                        </div>
                     </div>
                     <div class="divider"></div>
                     <div class="row">

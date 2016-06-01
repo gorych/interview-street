@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserDAO extends GenericDAO<User, Integer> {
 
-    User getByUsername(String passportData);
+    User getByUsername(String username);
 
     List<User> getByPosts(Integer[] postIds, Integer[] subIds);
 

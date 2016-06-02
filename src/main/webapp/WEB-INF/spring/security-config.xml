@@ -1,4 +1,4 @@
-<!--<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns="http://www.springframework.org/schema/security"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -13,7 +13,7 @@
                     login-page="/login"
                     authentication-failure-url="/login?auth_error"
                     username-parameter="j_username"
-                    password-parameter="j_username"/>
+                    password-parameter="j_password"/>
         <logout logout-success-url="/login"
                 logout-url="/j_spring_security_logout"
                 delete-cookies="JSESSIONID"
@@ -25,46 +25,35 @@
     <global-method-security secured-annotations="enabled"/>
 
     <authentication-manager>
-        <authentication-provider ref='ldapAuthProvider'/>
+        <authentication-provider ref="ldapAuthProvider"/>
     </authentication-manager>
 
-    <beans:bean id="contextSource"
-                class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+    <beans:bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+        <beans:constructor-arg>
+            <beans:bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+                <beans:constructor-arg ref="contextSource"/>
+                <beans:property name="userSearch" ref="userSearch"/>
+            </beans:bean>
+        </beans:constructor-arg>
+        <beans:constructor-arg>
+            <beans:bean class="by.gstu.interviewstreet.service.impl.LdapAuthoritiesPopulatorImpl"/>
+        </beans:constructor-arg>
+    </beans:bean>
+
+    <beans:bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
         <beans:constructor-arg value="ldap://localhost:10389"/>
-        <beans:property name="userDn" value="ou=users,ou=system"/>
+        <beans:property name="userDn" value="uid=admin,ou=system"/>
         <beans:property name="password" value="secret"/>
     </beans:bean>
 
-    <beans:bean id="ldapAuthProvider"
-                class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
-        <beans:constructor-arg>
-            <beans:bean
-                    class="org.springframework.security.ldap.authentication.BindAuthenticator">
-                <beans:constructor-arg ref="contextSource"/>
-                <beans:property name="userDnPatterns">
-                    <beans:list>
-                        <beans:value>uid={0}</beans:value>
-                    </beans:list>
-                </beans:property>
-            </beans:bean>
-        </beans:constructor-arg>
-        <beans:constructor-arg>
-            <beans:bean
-                    class="by.gstu.interviewstreet.service.impl.LdapAuthoritiesPopulatorImpl">
-            </beans:bean>
-        </beans:constructor-arg>
+    <beans:bean id="userSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+        <beans:constructor-arg value="ou=users,ou=system"/>
+        <beans:constructor-arg value="(uid={0})"/>
+        <beans:constructor-arg ref="contextSource"/>
     </beans:bean>
 
-        <authentication-manager alias="authenticationManager">
-            <ldap-authentication-provider
-                    user-search-filter="(uid={0})"
-                    user-search-base="ou=users,ou=system"/>
-        </authentication-manager>
-
-        <ldap-server url="ldap://localhost:10389" manager-dn="uid=admin,ou=system" manager-password="secret"/>
-
-</beans:beans>-->
-
+</beans:beans>
+<!--
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns="http://www.springframework.org/schema/security"
@@ -73,16 +62,16 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-<!-- Включает стандартной страницы аутентификации,
+ Включает стандартной страницы аутентификации,
      поддержку аутентификации средствами протокола HTTP
-     и поддержку завершения сеанса работы. -->
+     и поддержку завершения сеанса работы.
 <http auto-config="true" use-expressions="true">
-    <!--
+
         login-processing-url - URL по которому доступна форма для аутентификации
         default-target-url -
         login-page - страница для логина
         authentication-failure-url - URL
-    -->
+
     <form-login login-processing-url="/j_spring_security_check"
                 default-target-url="/gateway"
                 login-page="/login"
@@ -97,7 +86,7 @@
     <access-denied-handler error-page="/403"/>
 </http>
 
-<!-- Сервис для авторизации пользователей. Листинг в Приложении Б-->
+Сервис для авторизации пользователей. Листинг в Приложении Б
 <authentication-manager alias="authenticationManager">
     <authentication-provider user-service-ref="userService"/>
 </authentication-manager>
@@ -106,4 +95,4 @@
 
 <beans:bean id="userService" class="by.gstu.interviewstreet.service.impl.UserServiceImpl"/>
 
-</beans:beans>
+</beans:beans>-->

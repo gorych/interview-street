@@ -20,7 +20,7 @@ public final class WebUtils {
     private WebUtils() {
     }
 
-    public static boolean isFilledCookie(HttpServletRequest request) {
+    /*public static boolean isFilledCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (WebConstants.IS_PASSED.equals(cookie.getName())) {
@@ -28,7 +28,7 @@ public final class WebUtils {
             }
         }
         return false;
-    }
+    }*/
 
     public static void buildInterviewModel(Model model, Interview interview) {
         List<Question> questions = interview.getQuestions();

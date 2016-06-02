@@ -14,4 +14,11 @@ public class SubdivisionDAOImpl extends GenericDAOImpl<Subdivision, Integer> imp
     public List<Subdivision> getAll() {
         return currentSession().createQuery("FROM Subdivision ORDER BY name ASC").list();
     }
+
+    @Override
+    public Subdivision findByName(String name) {
+        return (Subdivision) currentSession().createQuery("FROM Subdivision WHERE name LIKE :name").
+                setString("name", name)
+                .uniqueResult();
+    }
 }

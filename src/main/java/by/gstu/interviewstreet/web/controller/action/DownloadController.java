@@ -5,6 +5,8 @@ import by.gstu.interviewstreet.security.UserRoleConstants;
 import by.gstu.interviewstreet.service.DownloadWordService;
 import by.gstu.interviewstreet.service.InterviewService;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,9 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/download")
 @Secured(UserRoleConstants.EDITOR)
-public class DownloadWordController {
+public class DownloadController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadController.class);
 
     private static final String CONTENT_DISPOSITION = "Content-Disposition";
     private static final String ATTACHMENT_FILE = "attachment; filename=";
@@ -50,9 +54,13 @@ public class DownloadWordController {
             ServletOutputStream out = response.getOutputStream();
             out.write(content);
         } catch (IOException e) {
-            //TODO add error code to response header
-            e.printStackTrace();
+            LOG.warn("Error when downloading interview with hash = " + hash);
         }
+    }
+
+    @RequestMapping(value = {"/excel/{hash}"}, method = RequestMethod.GET, produces = "text/plain; charset=UTF-8")
+    public void exportStatisticsToExcel(@PathVariable String hash, HttpServletResponse response) {
+
     }
 
 }

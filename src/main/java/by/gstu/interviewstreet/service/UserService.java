@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface UserService {
 
+    void save(User user);
+
     User get(String username);
 
 }

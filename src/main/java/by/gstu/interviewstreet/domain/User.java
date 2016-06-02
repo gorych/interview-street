@@ -47,6 +47,16 @@ public class User implements UserDetails, Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterview> interviewsForPassing = new ArrayList<>();
 
+    public User() {
+    }
+
+    public User(Employee employee, UserRole role, String username, String password) {
+        this.employee = employee;
+        this.role = role;
+        this.username = username;
+        this.password = password;
+    }
+
     public boolean isActive() {
         return active;
     }

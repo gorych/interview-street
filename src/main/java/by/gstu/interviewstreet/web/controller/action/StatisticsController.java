@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Controller()
 @RequestMapping("/statistics")
-@Secured({UserRoleConstants.VIEWER})
+@Secured({UserRoleConstants.EDITOR})
 public class StatisticsController {
 
     @Autowired

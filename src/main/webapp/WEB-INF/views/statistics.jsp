@@ -17,8 +17,30 @@
 <main>
     <div class="row teal">
         <div class="container">
-            <div class="col l12 m12 s12">
+            <div class="col l9 m9 s9">
                 <h3 class="white-text">Статистика</h3>
+            </div>
+            <div class="col l3 m3 s3">
+                <div class="fixed-action-btn click-to-toggle export-btn">
+                    <a class="btn-floating red accent-1 tooltipped" data-position="left" data-tooltip="Экспорт в Excel">
+                        <i class="large material-icons">file_download</i>
+                    </a>
+                    <ul class="fixed-btn-item">
+                        <li><a href="<c:url value="/download/excel/${interview.hash}"/>"
+                               class="btn-floating green accent-4" title="Отдельно по каждому респонденту">
+                            <i class="material-icons">person</i>
+                        </a>
+                        </li>
+                        <li>
+                            <a href="<c:url value="/download/excel/${interview.hash}?exportType=all"/>"
+                               class="btn-floating orange lighten-1" title="Общая статистика">
+                                <i class="material-icons">group</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col l12 m12 s12">
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons">filter_list</i>Настройка фильтров
@@ -33,11 +55,14 @@
                                                 <c:forEach var="item" items="${interviews}">
                                                     <c:choose>
                                                         <c:when test="${interview.id eq item.id}">
-                                                            <option data-type="${interview.type.name}" selected value="${item.hash}">${item.name} (${item.type.rusName})</option>
-                                                    </c:when>
+                                                            <option data-type="${interview.type.name}" selected
+                                                                    value="${item.hash}">${item.name}&nbsp;(${item.type.rusName})
+                                                            </option>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <option data-type="${interview.type.name}"
-                                                                    value="${item.hash}">${item.name} (${item.type.rusName})</option>
+                                                                    value="${item.hash}">${item.name}&nbsp;(${item.type.rusName})
+                                                            </option>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:forEach>
@@ -103,9 +128,9 @@
 <%@include file="fragments/templates/statistics-item-template.jsp" %>
 
 <%@include file="fragments/general-js.jsp" %>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="<c:url value="/resources/vendors/highchart/highcharts.js"/>"></script>
+<script src="<c:url value="/resources/vendors/highchart/data.js"/>"></script>
+<script src="<c:url value="/resources/vendors/highchart/exporting.js"/>"></script>
 <script src="<c:url value="/resources/vendors/js-render/jsrender.js"/>"></script>
 <script src="<c:url value="/resources/js/statistics.js"/>"></script>
 

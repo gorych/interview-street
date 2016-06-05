@@ -3,7 +3,7 @@ package by.gstu.interviewstreet.service.impl;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
-import by.gstu.interviewstreet.service.DownloadWordService;
+import by.gstu.interviewstreet.service.ExportToWordService;
 import by.gstu.interviewstreet.web.util.DateUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DownloadWordServiceImpl implements DownloadWordService {
+class ExportToWordServiceImpl implements ExportToWordService {
 
     private final static String FONT_STYLE = "Times New Roman";
     private final static int HEADER_FONT_SIZE = 14;
@@ -135,3 +135,4 @@ public class DownloadWordServiceImpl implements DownloadWordService {
         headerRun.setText(interview.getName() + " (" + interview.getType().getRusName() + ")");
     }
 }
+

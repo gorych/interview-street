@@ -10,10 +10,10 @@ import java.util.List;
 public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDAO {
 
     @Override
-    public User getByUsername(String passportData) {
+    public User getByUsername(String username) {
         return (User) currentSession()
-                .createQuery("FROM User WHERE passportData LIKE :passportData")
-                .setString("passportData", passportData)
+                .createQuery("FROM User WHERE username LIKE :username")
+                .setString("username", username)
                 .uniqueResult();
     }
 

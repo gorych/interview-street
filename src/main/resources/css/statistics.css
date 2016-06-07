@@ -51,3 +51,13 @@ table tr:first-of-type {
     border-top: none;
 }
 
+.fixed-btn-item {
+    top: 65px;
+}
+
+.export-btn {
+    right: 0;
+    top: .7rem;
+    position: relative;
+    float: right;
+}

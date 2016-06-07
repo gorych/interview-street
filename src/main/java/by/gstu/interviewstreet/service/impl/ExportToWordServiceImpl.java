@@ -3,7 +3,7 @@ package by.gstu.interviewstreet.service.impl;
 import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
-import by.gstu.interviewstreet.service.DownloadWordService;
+import by.gstu.interviewstreet.service.ExportToWordService;
 import by.gstu.interviewstreet.web.util.DateUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DownloadWordServiceImpl implements DownloadWordService {
+class ExportToWordServiceImpl implements ExportToWordService {
 
     private final static String FONT_STYLE = "Times New Roman";
     private final static int HEADER_FONT_SIZE = 14;
@@ -32,21 +32,13 @@ public class DownloadWordServiceImpl implements DownloadWordService {
         List<Question> questions = interview.getSortedQuestions();
         for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
-
-            XWPFParagraph main = document.createParagraph();
-            XWPFRun mainRun = main.createRun();
-            mainRun.setFontSize(MAIN_FONT_SIZE);
-            mainRun.setFontFamily(FONT_STYLE);
-
+            XWPFRun mainRun = createParagraph(document);
 
             int questionNumber = i + 1;
             mainRun.setText(questionNumber + ". " + question.getText());
 
             if (question.getType().getName().equals("radio")) {
-                XWPFParagraph p = document.createParagraph();
-                XWPFRun p1 = p.createRun();
-                p1.setFontSize(MAIN_FONT_SIZE);
-                p1.setFontFamily(FONT_STYLE);
+                XWPFRun p1 = createParagraph(document);
 
                 p1.addTab();
                 p1.setItalic(true);
@@ -54,10 +46,7 @@ public class DownloadWordServiceImpl implements DownloadWordService {
             }
 
             if (question.getType().getName().equals("checkbox")) {
-                XWPFParagraph p = document.createParagraph();
-                XWPFRun p1 = p.createRun();
-                p1.setFontSize(MAIN_FONT_SIZE);
-                p1.setFontFamily(FONT_STYLE);
+                XWPFRun p1 = createParagraph(document);
 
                 p1.addTab();
                 p1.setItalic(true);
@@ -90,7 +79,6 @@ public class DownloadWordServiceImpl implements DownloadWordService {
                     continue;
                 }
 
-
                 int answerNumber = j + 1;
                 answersParagraphRun.setText(answerNumber + ") " + answer.getText());
                 if (answer.getType().getName().equals("text")) {
@@ -100,10 +88,7 @@ public class DownloadWordServiceImpl implements DownloadWordService {
             }
         }
 
-        XWPFParagraph footer = document.createParagraph();
-        XWPFRun footerRun = footer.createRun();
-        footerRun.setFontSize(MAIN_FONT_SIZE);
-        footerRun.setFontFamily(FONT_STYLE);
+        XWPFRun footerRun = createParagraph(document);
         footerRun.setItalic(true);
         footerRun.setBold(true);
         footerRun.setText("Спасибо за прохождение анкеты.");
@@ -114,11 +99,16 @@ public class DownloadWordServiceImpl implements DownloadWordService {
         return document;
     }
 
+    private XWPFRun createParagraph(XWPFDocument document) {
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setFontSize(MAIN_FONT_SIZE);
+        run.setFontFamily(FONT_STYLE);
+        return run;
+    }
+
     private void addRespondentData(XWPFDocument document) {
-        XWPFParagraph respondentData = document.createParagraph();
-        XWPFRun respondentDataRun = respondentData.createRun();
-        respondentDataRun.setFontSize(MAIN_FONT_SIZE);
-        respondentDataRun.setFontFamily(FONT_STYLE);
+        XWPFRun respondentDataRun = createParagraph(document);
 
         respondentDataRun.addBreak();
 
@@ -132,22 +122,17 @@ public class DownloadWordServiceImpl implements DownloadWordService {
     }
 
     private void addSubHeader(Interview interview, XWPFDocument document) {
-        XWPFParagraph subHeader = document.createParagraph();
-        XWPFRun subHeaderRun = subHeader.createRun();
-        subHeaderRun.setFontSize(MAIN_FONT_SIZE);
-        subHeaderRun.setFontFamily(FONT_STYLE);
+        XWPFRun subHeaderRun = createParagraph(document);
         subHeaderRun.addTab();
         subHeaderRun.setText(interview.getIntroductoryText());
     }
 
     private void addHeader(Interview interview, XWPFDocument document) {
-        XWPFParagraph header = document.createParagraph();
-        XWPFRun headerRun = header.createRun();
+        XWPFRun headerRun = createParagraph(document);
         headerRun.setFontSize(HEADER_FONT_SIZE);
-        headerRun.setFontFamily(FONT_STYLE);
-
         headerRun.setBold(true);
         headerRun.addTab();
         headerRun.setText(interview.getName() + " (" + interview.getType().getRusName() + ")");
     }
 }
+

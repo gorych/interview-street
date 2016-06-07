@@ -39,7 +39,7 @@ public class UserInterviewDAOImpl extends GenericDAOImpl<UserInterview, Integer>
     @Override
     public UserInterview getByUserAndInterview(String username, String hash) {
         return (UserInterview) currentSession()
-                .createQuery("FROM UserInterview WHERE user.passportData =:username AND interview.hash =:hash")
+                .createQuery("FROM UserInterview WHERE user.username =:username AND interview.hash =:hash")
                 .setString("username", username)
                 .setString("hash", hash)
                 .uniqueResult();

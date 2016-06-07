@@ -28,7 +28,7 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
     @SuppressWarnings("unchecked")
     public List<Interview> getAllInRange(int from, int howMany, String userCredential) {
         return currentSession()
-                .createQuery("FROM Interview WHERE creator.passportData LIKE :userCredential ORDER BY placementDate DESC")
+                .createQuery("FROM Interview WHERE creator.username LIKE :userCredential ORDER BY placementDate DESC")
                 .setString("userCredential", userCredential)
                 .setFirstResult(from)
                 .setMaxResults(howMany)

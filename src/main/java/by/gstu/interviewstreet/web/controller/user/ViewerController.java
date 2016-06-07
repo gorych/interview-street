@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/viewer")
-@Secured({UserRoleConstants.VIEWER})
+@Secured({UserRoleConstants.EDITOR})
 public class ViewerController {
 
     @Autowired

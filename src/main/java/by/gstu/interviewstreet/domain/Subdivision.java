@@ -19,6 +19,13 @@ public class Subdivision implements Serializable, Comparable<Subdivision> {
     @Column(name = "name")
     private String name;
 
+    public Subdivision() {
+    }
+
+    public Subdivision(String name) {
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

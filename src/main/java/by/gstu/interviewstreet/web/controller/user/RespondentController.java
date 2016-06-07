@@ -39,7 +39,7 @@ public class RespondentController extends UserController {
     @Autowired
     UserInterviewService userInterviewService;
 
-    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping("/{hash}/success")
     public String showSuccessPage(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
@@ -48,7 +48,7 @@ public class RespondentController extends UserController {
         return "success";
     }
 
-    @Secured({UserRoleConstants.RESPONDENT})
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
@@ -59,7 +59,7 @@ public class RespondentController extends UserController {
         return "dashboard";
     }
 
-    @Secured({UserRoleConstants.RESPONDENT})
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
     @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
     public String showInterview(@PathVariable String hash, Principal principal, Model model) {
         UserInterview uInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
@@ -77,7 +77,7 @@ public class RespondentController extends UserController {
         return "interview";
     }
 
-    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = {"interview/{hash}/anonymous", "interview/{hash}/expert"}, method = RequestMethod.GET)
     public String showAnonymousInterview(@PathVariable String hash, HttpServletRequest request, Model model) {
         Interview interview = interviewService.get(hash);
@@ -85,9 +85,9 @@ public class RespondentController extends UserController {
             return "error/404";
         }
 
-        if (WebUtils.isFilledCookie(request)) {
+        /*if (WebUtils.isFilledCookie(request)) {
             return "error/403";
-        }
+        }*/
 
         WebUtils.buildInterviewModel(model, interview);
 
@@ -95,7 +95,7 @@ public class RespondentController extends UserController {
     }
 
     @ResponseBody
-    @Secured({UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> sendInterview(String hash, String data, Principal principal,
                                                 @RequestParam(required = false) String firstname,

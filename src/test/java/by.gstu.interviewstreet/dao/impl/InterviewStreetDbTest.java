@@ -1,34 +1,32 @@
 package by.gstu.interviewstreet.dao.impl;
 
-import by.gstu.interviewstreet.dao.AnswerTypeDAO;
-import by.gstu.interviewstreet.domain.AnswerType;
+import by.gstu.interviewstreet.domain.Answer;
+import by.gstu.interviewstreet.service.AnswerService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
-
-import java.util.List;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * Тест для проверки БД
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "file:src/main/webapp/WEB-INF/spring/application-context.xml"
+        "classpath:application-context.xml"
 })
+@WebAppConfiguration
 public class InterviewStreetDbTest {
 
     @Autowired
-    private AnswerTypeDAO answerTypeDAO;
+    private AnswerService answerService;
 
     @Test
     public void test() {
-        List<AnswerType> types = answerTypeDAO.getAll();
-
-        Assert.isTrue(types.isEmpty(), "Types are empty");
-        Assert.isNull(types, "Types are null");
+        Answer answer = answerService.get(50000);
+        Assert.assertNotNull("Answer is null", answer);
     }
 
 }

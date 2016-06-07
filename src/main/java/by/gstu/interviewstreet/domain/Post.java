@@ -23,8 +23,8 @@ public class Post implements Serializable {
 
     public Post(){ }
 
-    public Post(int id) {
-        this.id = id;
+    public Post(String name) {
+        this.name = name;
     }
 
     public int getId() {

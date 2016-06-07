@@ -33,6 +33,17 @@ public class Employee implements Serializable {
     @JoinColumn(name = "subdivision_id")
     private Subdivision subdivision;
 
+    public Employee() {
+    }
+
+    public Employee(String firstname, String secondname, String lastname, Post post, Subdivision subdivision) {
+        this.firstname = firstname;
+        this.secondname = secondname;
+        this.lastname = lastname;
+        this.post = post;
+        this.subdivision = subdivision;
+    }
+
     public int getId() {
         return id;
     }

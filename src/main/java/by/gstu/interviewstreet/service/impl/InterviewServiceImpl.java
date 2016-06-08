@@ -69,20 +69,6 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     /**
-     * Получает список всех анкет в заданном диапозоне
-     *
-     * @param from           начало диапозона
-     * @param howMany        количество получаемых записей
-     * @param userCredential учетные данные пользователя
-     * @return список анкет
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential) {
-        return interviewDAO.getAllInRange(from, howMany, userCredential);
-    }
-
-    /**
      * Строит карту для "формы" редактирования анкеты
      *
      * @param interviewId идентификатор анкеты
@@ -247,19 +233,6 @@ public class InterviewServiceImpl implements InterviewService {
     @Transactional
     public void remove(Interview interview) {
         interviewDAO.remove(interview);
-    }
-
-    /**
-     * Скрывает все истекшие анкеты
-     */
-    @Override
-    @Transactional
-    public void hideExpiredInterviews() {
-        List<Interview> interviews = interviewDAO.getAll();
-        interviews.stream().filter(Interview::getIsDeadline).forEach(interview -> {
-            interview.setHide(true);
-            interviewDAO.saveOrUpdate(interview);
-        });
     }
 
     /**

@@ -20,8 +20,6 @@ public interface InterviewService {
 
     List<PublishedInterview> getPublishedInterviews(Interview interview);
 
-    List<Interview> getAllInRangeByUser(int from, int howMany, String userCredential);
-
     Map<String, Object> getModelMapForEditForm(int interviewId);
 
     Interview saveOrUpdate(Interview interview);
@@ -33,6 +31,4 @@ public interface InterviewService {
     void lockOrUnlock(int id);
 
     void remove(Interview interview);
-
-    void hideExpiredInterviews();
 }

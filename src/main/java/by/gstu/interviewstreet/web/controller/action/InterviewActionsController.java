@@ -3,7 +3,7 @@ package by.gstu.interviewstreet.web.controller.action;
 import by.gstu.interviewstreet.dao.InterviewTypeDAO;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.util.JSONParser;
@@ -21,7 +21,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/interview")
-@Secured(UserRoleConstants.EDITOR)
+@Secured(SecurityConstants.EDITOR)
 public class InterviewActionsController {
 
     private static final int INTERVIEW_INDEX = 0;

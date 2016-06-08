@@ -1,7 +1,7 @@
 package by.gstu.interviewstreet.web.controller.user;
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.UserAnswerService;
 import by.gstu.interviewstreet.service.UserInterviewService;
@@ -39,7 +39,7 @@ public class RespondentController extends UserController {
     @Autowired
     UserInterviewService userInterviewService;
 
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
     @RequestMapping("/{hash}/success")
     public String showSuccessPage(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
@@ -48,7 +48,7 @@ public class RespondentController extends UserController {
         return "success";
     }
 
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
@@ -59,7 +59,7 @@ public class RespondentController extends UserController {
         return "dashboard";
     }
 
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
     @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
     public String showInterview(@PathVariable String hash, Principal principal, Model model) {
         UserInterview uInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
@@ -77,7 +77,7 @@ public class RespondentController extends UserController {
         return "interview";
     }
 
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
     @RequestMapping(value = {"interview/{hash}/anonymous", "interview/{hash}/expert"}, method = RequestMethod.GET)
     public String showAnonymousInterview(@PathVariable String hash, HttpServletRequest request, Model model) {
         Interview interview = interviewService.get(hash);
@@ -95,7 +95,7 @@ public class RespondentController extends UserController {
     }
 
     @ResponseBody
-    @Secured({UserRoleConstants.EDITOR, UserRoleConstants.RESPONDENT, UserRoleConstants.ANONYMOUS})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> sendInterview(String hash, String data, Principal principal,
                                                 @RequestParam(required = false) String firstname,

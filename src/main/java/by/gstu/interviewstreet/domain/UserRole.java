@@ -1,6 +1,6 @@
 package by.gstu.interviewstreet.domain;
 
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -35,7 +35,7 @@ public class UserRole implements GrantedAuthority, Serializable{
     }
 
     public boolean isEditor(){
-        return UserRoleConstants.EDITOR.equals(name);
+        return SecurityConstants.EDITOR.equals(name);
     }
 
     @Override

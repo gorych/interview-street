@@ -2,7 +2,7 @@ package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.domain.UserRole;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.security.core.Authentication;
@@ -28,7 +28,7 @@ public class IndexController {
 
         for (Object role : roles) {
             UserRole userRole = (UserRole) role;
-            if (UserRoleConstants.EDITOR.equals(userRole.getName())) {
+            if (SecurityConstants.EDITOR.equals(userRole.getName())) {
                 return "redirect:/editor/interview-list";
             }
         }

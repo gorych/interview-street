@@ -1,7 +1,7 @@
 package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/designer")
-@Secured(UserRoleConstants.EDITOR)
+@Secured(SecurityConstants.EDITOR)
 public class DesignerActionsController {
 
     /**

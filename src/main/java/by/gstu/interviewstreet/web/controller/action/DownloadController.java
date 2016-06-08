@@ -2,7 +2,7 @@ package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.domain.Interview;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.ExportToWordService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.StatisticsService;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/download")
-@Secured(UserRoleConstants.EDITOR)
+@Secured(SecurityConstants.EDITOR)
 public class DownloadController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadController.class);

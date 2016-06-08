@@ -2,7 +2,7 @@ package by.gstu.interviewstreet.web.controller.user;
 
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.security.UserRoleConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.WebConstants;
@@ -27,7 +27,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/editor")
-@Secured(UserRoleConstants.EDITOR)
+@Secured(SecurityConstants.EDITOR)
 public class EditorController extends UserController {
 
     private static final int START_PAGE_NUMBER = 1;

@@ -53,46 +53,50 @@
     </beans:bean>
 
 </beans:beans>
-<!--
-<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns="http://www.springframework.org/schema/security"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-    http://www.springframework.org/schema/security
-    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
- Включает стандартной страницы аутентификации,
-     поддержку аутентификации средствами протокола HTTP
-     и поддержку завершения сеанса работы.
-<http auto-config="true" use-expressions="true">
+<!-- If you want use DB auth, then uncomment it
 
-        login-processing-url - URL по которому доступна форма для аутентификации
-        default-target-url -
-        login-page - страница для логина
-        authentication-failure-url - URL
+    <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns="http://www.springframework.org/schema/security"
+                 xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
-    <form-login login-processing-url="/j_spring_security_check"
-                default-target-url="/gateway"
-                login-page="/login"
-                authentication-failure-url="/login?auth_error"
-                username-parameter="j_username"
-                password-parameter="j_password"/>
-    <logout logout-success-url="/login"
-            logout-url="/j_spring_security_logout"
-            delete-cookies="JSESSIONID"
-            invalidate-session="true"/>
-    <csrf disabled="true"/>
-    <access-denied-handler error-page="/403"/>
-</http>
+     Включает стандартной страницы аутентификации,
+         поддержку аутентификации средствами протокола HTTP
+         и поддержку завершения сеанса работы.
+    <http auto-config="true" use-expressions="true">
 
-Сервис для авторизации пользователей. Листинг в Приложении Б
-<authentication-manager alias="authenticationManager">
-    <authentication-provider user-service-ref="userService"/>
-</authentication-manager>
+            login-processing-url - URL по которому доступна форма для аутентификации
+            default-target-url -
+            login-page - страница для логина
+            authentication-failure-url - URL
 
-<global-method-security secured-annotations="enabled"/>
+        <form-login login-processing-url="/j_spring_security_check"
+                    default-target-url="/gateway"
+                    login-page="/login"
+                    authentication-failure-url="/login?auth_error"
+                    username-parameter="j_username"
+                    password-parameter="j_password"/>
+        <logout logout-success-url="/login"
+                logout-url="/j_spring_security_logout"
+                delete-cookies="JSESSIONID"
+                invalidate-session="true"/>
+        <csrf disabled="true"/>
+        <access-denied-handler error-page="/403"/>
+    </http>
 
-<beans:bean id="userService" class="by.gstu.interviewstreet.service.impl.UserServiceImpl"/>
+    Сервис для авторизации пользователей. Листинг в Приложении Б
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="userService"/>
+    </authentication-manager>
 
-</beans:beans>-->
+    <global-method-security secured-annotations="enabled"/>
+
+    <beans:bean id="userService" class="by.gstu.interviewstreet.service.impl.UserServiceImpl"/>
+
+    </beans:beans>
+
+-->

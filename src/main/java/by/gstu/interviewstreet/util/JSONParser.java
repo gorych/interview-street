@@ -2,6 +2,8 @@ package by.gstu.interviewstreet.util;
 
 import by.gstu.interviewstreet.domain.PublishedInterview;
 import com.google.gson.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -11,6 +13,7 @@ import java.net.URLDecoder;
  * Парсер объектов в JSON формат и обратно
  */
 public class JSONParser {
+    private static Logger LOG = LoggerFactory.getLogger(JSONParser.class);
 
     private static Gson GSON;
 
@@ -32,9 +35,10 @@ public class JSONParser {
 
     /**
      * Преобразует строку JSON к объекту заданного класса
-     * @param data входня строка
+     *
+     * @param data  входня строка
      * @param clazz класс, к кторому преобразуем
-     * @param <T> тип класса
+     * @param <T>   тип класса
      * @return объект класса Т
      */
     public static <T> T convertJsonStringToObject(String data, Class<T> clazz) {
@@ -44,9 +48,10 @@ public class JSONParser {
 
     /**
      * Преобразует JSON элемент к объекту заданного класса
+     *
      * @param jsonElement элемент для преобразования
-     * @param clazz класс, к кторому преобразуем
-     * @param <T> тип класса
+     * @param clazz       класс, к кторому преобразуем
+     * @param <T>         тип класса
      * @return объект класса Т
      */
     public static <T> T convertJsonElementToObject(JsonElement jsonElement, Class<T> clazz) {
@@ -56,6 +61,7 @@ public class JSONParser {
 
     /**
      * Преобразует JSON строку к объекту заданного типа
+     *
      * @param data входная строка
      * @param type тип объекта
      * @return объект типа Т
@@ -67,8 +73,9 @@ public class JSONParser {
 
     /**
      * Преобразует JSON элемент к объекту заданного типа
+     *
      * @param jsonElement элемент для преобразования
-     * @param type тип объекта
+     * @param type        тип объекта
      * @return объект типа Т
      */
     public static <T> T convertJsonElementToObject(JsonElement jsonElement, Type type) {
@@ -78,6 +85,7 @@ public class JSONParser {
 
     /**
      * Преобразует JSON строку в JSON массив
+     *
      * @param data входная строка
      * @return JSON массив
      */
@@ -88,6 +96,7 @@ public class JSONParser {
 
     /**
      * Преобразует объект в JSON строку
+     *
      * @param object объект для преобразования
      * @return JSON строка
      */
@@ -97,14 +106,17 @@ public class JSONParser {
 
     /**
      * Подготавливает данные для преобразования (удаляет некорректные символы)
+     *
      * @param rawData исходные данные
      * @return корректная строка
      */
-     private static String prepareRawJsonDataString(String rawData) {
+    private static String prepareRawJsonDataString(String rawData) {
+        final String ERROR_MSG = "Data can't be converted to UTF-8";
         try {
             rawData = URLDecoder.decode(rawData, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException("Data can't be converted to UTF-8", e);
+            LOG.error(ERROR_MSG, e);
+            throw new IllegalArgumentException(ERROR_MSG, e);
         }
 
         int index = rawData.lastIndexOf("=");

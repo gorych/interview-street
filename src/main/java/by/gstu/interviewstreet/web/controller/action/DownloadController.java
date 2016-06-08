@@ -28,7 +28,6 @@ import java.io.IOException;
 @RequestMapping("/download")
 @Secured(SecurityConstants.EDITOR)
 public class DownloadController {
-
     private static final Logger LOG = LoggerFactory.getLogger(DownloadController.class);
 
     private static final String CONTENT_DISPOSITION = "Content-Disposition";
@@ -95,6 +94,4 @@ public class DownloadController {
         out.write(content);
         out.flush();
     }
-
-
 }

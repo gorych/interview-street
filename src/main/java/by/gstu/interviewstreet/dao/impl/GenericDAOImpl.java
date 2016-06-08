@@ -25,13 +25,7 @@ public abstract class GenericDAOImpl<E, K extends Serializable> implements Gener
     @Autowired
     private SessionFactory sessionFactory;
 
-    /**
-     * By defining this class as abstract, we prevent Spring from creating
-     * instance of this class If not defined as abstract,
-     * getClass().getGenericSuperClass() would return Object. There would be
-     * exception because Object class does not have a constructor with parameters.
-     */
-    public GenericDAOImpl() {
+        public GenericDAOImpl() {
         Type t = getClass().getGenericSuperclass();
         ParameterizedType pt = (ParameterizedType) t;
         daoType = (Class) pt.getActualTypeArguments()[0];

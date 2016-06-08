@@ -4,7 +4,6 @@ import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.service.ExportToExcelService;
 import by.gstu.interviewstreet.service.StatisticsService;
-import by.gstu.interviewstreet.util.DateUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -21,8 +20,14 @@ import java.util.Map;
 
 @Service
 public class ExportToExcelServiceImpl implements ExportToExcelService {
-
     private static final Logger LOG = LoggerFactory.getLogger(ExportToExcelServiceImpl.class);
+
+    public static final String SHEET_NAME = "Статистика за весь период";
+    private static final String HEADER_PREFIX = "Статистика по анкете ";
+    private static final String QUESTION_PREFIX = "Вопрос: ";
+    private static final String ANSWER_CELL_HEADER = "Ответы";
+    private static final String PEOPLE_COUNT_HEADER = "Ответило, чел";
+    private static final String PERCENT_HEADER = "Ответило, %";
 
     @Autowired
     StatisticsService statisticsService;
@@ -32,13 +37,13 @@ public class ExportToExcelServiceImpl implements ExportToExcelService {
          /*NULL is correct value*/
         List<StatisticData> statistics = statisticsService.getInterviewStatistics(interview, null, null);
         try (XSSFWorkbook book = new XSSFWorkbook()) {
-            XSSFSheet sheet = book.createSheet(DateUtils.YYYY_MM_DD_HH_MM_SS.format(DateUtils.getToday()));
+            XSSFSheet sheet = book.createSheet(SHEET_NAME);
             int rowNumber = 0;
 
             XSSFRow mainHeader = sheet.createRow(rowNumber++);
             XSSFCell cell = mainHeader.createCell(0);
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            cell.setCellValue("Статистика по анкете \"" + interview.getName() + "\"");
+            cell.setCellValue(HEADER_PREFIX + "\"" + interview.getName() + "\"");
             makeCellAutosizeAndBold(book, mainHeader);
 
             rowNumber++;
@@ -48,7 +53,7 @@ public class ExportToExcelServiceImpl implements ExportToExcelService {
                 XSSFRow row = sheet.createRow(rowNumber++);
                 XSSFCell questionText = row.createCell(0);
                 questionText.setCellType(Cell.CELL_TYPE_STRING);
-                questionText.setCellValue("Вопрос: " + statistic.getQuestionText());
+                questionText.setCellValue(QUESTION_PREFIX + statistic.getQuestionText());
 
                 XSSFRow tableHeader = sheet.createRow(rowNumber++);
                 XSSFCell c1 = tableHeader.createCell(0);
@@ -59,9 +64,9 @@ public class ExportToExcelServiceImpl implements ExportToExcelService {
                 c2.setCellType(Cell.CELL_TYPE_NUMERIC);
                 c3.setCellType(Cell.CELL_TYPE_NUMERIC);
 
-                c1.setCellValue("Ответы");
-                c2.setCellValue("Ответило, чел");
-                c3.setCellValue("Ответило, %");
+                c1.setCellValue(ANSWER_CELL_HEADER);
+                c2.setCellValue(PEOPLE_COUNT_HEADER);
+                c3.setCellValue(PERCENT_HEADER);
 
                 makeCellAutosizeAndBold(book, tableHeader);
 

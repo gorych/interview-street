@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.web.AttrConstants;
-import by.gstu.interviewstreet.web.util.JSONParser;
+import by.gstu.interviewstreet.util.JSONParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;

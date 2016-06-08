@@ -5,11 +5,10 @@ import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.PublishedInterview;
 import by.gstu.interviewstreet.domain.UserInterview;
-import by.gstu.interviewstreet.web.util.DateUtils;
+import by.gstu.interviewstreet.util.DateUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository

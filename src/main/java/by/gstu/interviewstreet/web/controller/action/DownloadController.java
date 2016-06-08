@@ -6,7 +6,7 @@ import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.ExportToWordService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.StatisticsService;
-import by.gstu.interviewstreet.web.util.DateUtils;
+import by.gstu.interviewstreet.util.DateUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;

@@ -4,7 +4,7 @@ import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.dao.UserAnswerDAO;
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.service.StatisticsService;
-import by.gstu.interviewstreet.web.util.WebUtils;
+import by.gstu.interviewstreet.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

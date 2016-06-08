@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.util;
+package by.gstu.interviewstreet.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;

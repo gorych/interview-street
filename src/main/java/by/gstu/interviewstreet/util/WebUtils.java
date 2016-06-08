@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.util;
+package by.gstu.interviewstreet.util;
 
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.web.AttrConstants;
@@ -19,16 +19,6 @@ public final class WebUtils {
 
     private WebUtils() {
     }
-
-    /*public static boolean isFilledCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (WebConstants.IS_PASSED.equals(cookie.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     public static void buildInterviewModel(Model model, Interview interview) {
         List<Question> questions = interview.getQuestions();

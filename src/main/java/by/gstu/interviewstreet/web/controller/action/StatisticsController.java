@@ -9,7 +9,7 @@ import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.service.SubdivisionService;
 import by.gstu.interviewstreet.web.AttrConstants;
-import by.gstu.interviewstreet.web.util.JSONParser;
+import by.gstu.interviewstreet.util.JSONParser;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

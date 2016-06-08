@@ -1,4 +1,4 @@
-package by.gstu.interviewstreet.web.util;
+package by.gstu.interviewstreet.util;
 
 import by.gstu.interviewstreet.domain.PublishedInterview;
 import com.google.gson.JsonElement;

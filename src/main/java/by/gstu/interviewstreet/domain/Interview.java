@@ -1,6 +1,6 @@
 package by.gstu.interviewstreet.domain;
 
-import by.gstu.interviewstreet.web.util.DateUtils;
+import by.gstu.interviewstreet.util.DateUtils;
 import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;

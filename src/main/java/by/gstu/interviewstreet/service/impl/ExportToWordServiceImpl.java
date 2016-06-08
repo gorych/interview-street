@@ -4,7 +4,7 @@ import by.gstu.interviewstreet.domain.Answer;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.service.ExportToWordService;
-import by.gstu.interviewstreet.web.util.DateUtils;
+import by.gstu.interviewstreet.util.DateUtils;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;

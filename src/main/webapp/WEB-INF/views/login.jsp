@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/vendors/materialize/materialize.min.css"/>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="<c:url value="/resources/css/login.css"/>" rel="stylesheet" type="text/css">
-
 </head>
 <body class="valign-wrapper">
 
@@ -42,7 +41,7 @@
                             <label class="active" for="login">Имя пользователя</label>
                         </div>
                         <div class="input-field col s12">
-                            <input id="pass" name="j_password" type="text">
+                            <input id="pass" name="j_password" type="password">
                             <label class="active" for="pass">Пароль</label>
                         </div>
                         <c:if test="${not empty auth_error}">

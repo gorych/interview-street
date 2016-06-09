@@ -23,7 +23,7 @@ import java.security.Principal;
 public class UserController {
 
     @Autowired
-    public UserService userService;
+    private  UserService userService;
 
     protected User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @Secured({SecurityConstants.VIEWER, SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
+    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
     @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
     public ResponseEntity<String> hideChip(HttpSession session) {
         session.setAttribute(AttrConstants.CHIP, false);

@@ -20,7 +20,7 @@ import java.util.List;
 public class ViewerController {
 
     @Autowired
-    UserInterviewService userInterviewService;
+    private UserInterviewService userInterviewService;
 
     @RequestMapping(value = {"/{hash}/respondents"}, method = RequestMethod.GET)
     public String showRespondents(@PathVariable String hash, Model model) {

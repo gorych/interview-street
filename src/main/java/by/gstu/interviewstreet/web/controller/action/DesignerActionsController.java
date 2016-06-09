@@ -35,25 +35,25 @@ public class DesignerActionsController {
      * Валидатор для проверки заполнения вопроса
      */
     @Autowired
-    AnswerValidator validator;
+    private AnswerValidator validator;
 
     /**
      * Сервис для выполнения операций с ответами
      */
     @Autowired
-    AnswerService answerService;
+    private AnswerService answerService;
 
     /**
      * Сервис для выполнения операций с вопросами
      */
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
 
     /**
      * Сервис для выполнения операций с анкетами
      */
     @Autowired
-    InterviewService interviewService;
+    private InterviewService interviewService;
 
     /**
      * Добавляет новый вопрос

@@ -30,7 +30,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             userInterview = userInterviewDAO.getByUserAndInterview(user.getUsername(), interview.getHash());
 
             if (!interview.isSecondPassage() && userInterview.getPassed()) {
-                throw new IllegalArgumentException("User already passed this interview.");
+                throw new IllegalArgumentException("User already passed this interview. Hash is " + interview.getHash());
             }
         }
 

@@ -2,14 +2,19 @@ package by.gstu.interviewstreet.web.controller.user;
 
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.web.SecurityConstants;
-import by.gstu.interviewstreet.service.*;
-import by.gstu.interviewstreet.web.AttrConstants;
-import by.gstu.interviewstreet.web.WebConstants;
-import by.gstu.interviewstreet.util.WebUtils;
+import by.gstu.interviewstreet.service.EmployeeService;
+import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.service.QuestionService;
+import by.gstu.interviewstreet.service.SubdivisionService;
 import by.gstu.interviewstreet.util.JSONParser;
+import by.gstu.interviewstreet.util.WebUtils;
+import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,25 +30,28 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
+import static by.gstu.interviewstreet.web.WebConstants.ENCODING_PRODUCE;
+
 @Controller
 @RequestMapping("/editor")
 @Secured(SecurityConstants.EDITOR)
 public class EditorController extends UserController {
+    private static final Logger LOG = LoggerFactory.getLogger(EditorController.class);
 
     private static final int START_PAGE_NUMBER = 1;
     private static final int CARD_COUNT_PER_PAGE = 6;
 
     @Autowired
-    public EmployeeService employeeService;
+    private  EmployeeService employeeService;
 
     @Autowired
-    public QuestionService questionService;
+    private  QuestionService questionService;
 
     @Autowired
-    public InterviewService interviewService;
+    private  InterviewService interviewService;
 
     @Autowired
-    public SubdivisionService subdivisionService;
+    private  SubdivisionService subdivisionService;
 
     @RequestMapping(value = {"/interview-list"}, method = RequestMethod.GET)
     public String showInterviewList(@RequestParam(required = false) Integer pageNumber, Model model, Principal principal) {
@@ -83,6 +91,7 @@ public class EditorController extends UserController {
     public String showDesigner(@PathVariable String hash, HttpServletResponse response, Model model) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
+            LOG.warn("User try change non-existent interview. Hash is " + hash);
             return "error/404";
         }
 
@@ -97,7 +106,7 @@ public class EditorController extends UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
+    @RequestMapping(value = {"/load-posts"}, method = RequestMethod.POST, produces = {ENCODING_PRODUCE})
     public ResponseEntity<String> loadPosts(@RequestBody String data) {
         JsonArray jsonArray = JSONParser.convertJsonStringToJsonArray(data);
 

@@ -2,6 +2,8 @@ package by.gstu.interviewstreet.web;
 
 public final class WebConstants {
 
+    public static final String ENCODING_PRODUCE = "text/plain; charset=UTF-8";
+
     public static final String HASH = "hash";
     public static final String MAX_AGE = "max_age";
     public static final String IS_PASSED = "is_passed";

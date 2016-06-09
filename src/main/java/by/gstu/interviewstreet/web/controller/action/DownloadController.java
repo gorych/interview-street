@@ -4,7 +4,6 @@ import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.service.ExportToExcelService;
 import by.gstu.interviewstreet.service.ExportToWordService;
 import by.gstu.interviewstreet.service.InterviewService;
-import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.util.DateUtils;
 import by.gstu.interviewstreet.web.SecurityConstants;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -38,16 +37,13 @@ public class DownloadController {
     private static final String SEPARATOR = "_";
 
     @Autowired
-    InterviewService interviewService;
+    private InterviewService interviewService;
 
     @Autowired
-    StatisticsService statisticsService;
+    private ExportToWordService exportToWordService;
 
     @Autowired
-    ExportToWordService exportToWordService;
-
-    @Autowired
-    ExportToExcelService exportToExcelService;
+    private ExportToExcelService exportToExcelService;
 
     @RequestMapping(value = {"/word/{hash}"}, method = RequestMethod.GET)
     public void downloadInterview(@PathVariable String hash, HttpServletResponse response) {

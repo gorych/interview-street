@@ -2,6 +2,8 @@ package by.gstu.interviewstreet.domain;
 
 import com.google.gson.annotations.Expose;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -98,6 +100,36 @@ public class Employee implements Serializable {
 
     public String getFullName() {
         return WordUtils.capitalize((lastname + " " + firstname + " " + secondname).toLowerCase());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Employee)) return false;
+
+        Employee employee = (Employee) o;
+
+        return new EqualsBuilder()
+                .append(getId(), employee.getId())
+                .append(getFirstname(), employee.getFirstname())
+                .append(getSecondname(), employee.getSecondname())
+                .append(getLastname(), employee.getLastname())
+                .append(getPost(), employee.getPost())
+                .append(getSubdivision(), employee.getSubdivision())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getId())
+                .append(getFirstname())
+                .append(getSecondname())
+                .append(getLastname())
+                .append(getPost())
+                .append(getSubdivision())
+                .toHashCode();
     }
 
     @Override

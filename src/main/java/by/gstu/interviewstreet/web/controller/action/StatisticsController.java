@@ -4,12 +4,12 @@ import by.gstu.interviewstreet.bean.StatisticData;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.PublishedInterview;
 import by.gstu.interviewstreet.domain.Subdivision;
-import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.service.SubdivisionService;
-import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.util.JSONParser;
+import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +29,13 @@ import java.util.Map;
 public class StatisticsController {
 
     @Autowired
-    InterviewService interviewService;
+    private InterviewService interviewService;
 
     @Autowired
-    StatisticsService statisticsService;
+    private StatisticsService statisticsService;
 
     @Autowired
-    SubdivisionService subdivisionService;
+    private SubdivisionService subdivisionService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String showStatistics(Model model) {
@@ -57,6 +57,7 @@ public class StatisticsController {
         model.addAttribute(AttrConstants.INTERVIEW, interview);
         model.addAttribute(AttrConstants.INTERVIEWS, interviewService.getAll());
         model.addAttribute(AttrConstants.PUBLISHED_INTERVIEWS, interviewService.getPublishedInterviews(interview));
+        /*NULL is correct value*/
         model.addAttribute(AttrConstants.STATISTICS, statisticsService.getInterviewStatistics(interview, null, null));
         model.addAttribute(AttrConstants.SUBDIVISIONS, subdivisionService.getSubdivisionsByInterview(hash));
 

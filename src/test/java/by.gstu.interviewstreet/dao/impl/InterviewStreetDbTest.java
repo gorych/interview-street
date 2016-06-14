@@ -1,7 +1,8 @@
 package by.gstu.interviewstreet.dao.impl;
 
+import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.QuestionType;
-import by.gstu.interviewstreet.service.InterviewService;
+import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.QuestionService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Тест для проверки БД
@@ -25,20 +27,25 @@ public class InterviewStreetDbTest {
     private QuestionService questionService;
 
     @Autowired
-    private InterviewService interviewService;
+    private AnswerService answerService;
 
     @Test
     public void test() {
         final int TEST_ID = 1;
 
-        /***
-         * Получаем записи из БД
-         */
-        QuestionType questionType= questionService.getType(TEST_ID);
+        //Получаем записи из БД
+        QuestionType questionType = questionService.getType(TEST_ID);
+        Question question = questionService.get(TEST_ID);
 
-        /***
-         * Если результат равен NULL или пустой, будет показано сообщение
-         */
+        //Если результат равен NULL или пустой, будет показано сообщение
         Assert.assertNotNull("Question type should not be null", questionType);
+
+        if (question != null) {
+            answerService.addDefaultAnswers(question);
+            Assert.assertNotNull("Question answers should not be null", question.getAnswers());
+            Assert.assertTrue("List of answers should not be empty",
+                               CollectionUtils.isEmpty(question.getAnswers()));
+        }
+
     }
 }

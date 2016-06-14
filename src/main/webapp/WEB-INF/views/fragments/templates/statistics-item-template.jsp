@@ -27,10 +27,10 @@
                                     <thead>
                                     <tr>
                                         {{if questionType === 'rating'}}
-                                            <th>Оценка респондента</th>
+                                            <th class='user-answer'>Оценка респондента</th>
                                         {{/if}}
                                         {{if questionType !== 'rating'}}
-                                            <th>Ответ респондента</th>
+                                            <th class='user-answer'>Ответ респондента</th>
                                         {{/if}}
                                         <th>Ответило, чел</th>
                                         <th>Ответило, %</th>
@@ -39,7 +39,7 @@
                                     <tbody>
                                     {{props answerData}}
                                         <tr>
-                                            <th class="center-align">{{>key}}</th>
+                                            <th class="center-align user-answer">{{>key}}</th>
                                             <td>{{>prop[0]}}</td>
                                             <td>{{>prop[1]}}</td>
                                         </tr>
@@ -64,7 +64,7 @@
                         {{if questionType === 'text'}}
                             {{props answerData}}
                                 <div class="custom-answer">
-                                        {{>key}} (x{{>prop[0]}})
+                                        <span class='user-answer'>{{>key}}</span> (x{{>prop[0]}})
                                 </div>
                             {{/props}}
                         {{/if}}

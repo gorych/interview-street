@@ -7,6 +7,7 @@ import by.gstu.interviewstreet.domain.Subdivision;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.StatisticsService;
 import by.gstu.interviewstreet.service.SubdivisionService;
+import by.gstu.interviewstreet.service.UserAnswerService;
 import by.gstu.interviewstreet.util.JSONParser;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.SecurityConstants;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static by.gstu.interviewstreet.web.WebConstants.ENCODING_PRODUCE;
+
 @Controller()
 @RequestMapping("/statistics")
 @Secured({SecurityConstants.EDITOR})
@@ -36,6 +39,9 @@ public class StatisticsController {
 
     @Autowired
     private SubdivisionService subdivisionService;
+
+    @Autowired
+    private UserAnswerService userAnswerService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String showStatistics(Model model) {
@@ -65,13 +71,13 @@ public class StatisticsController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/load-data"}, method = RequestMethod.GET, produces = {"text/plain; charset=UTF-8"})
+    @RequestMapping(value = {"/load-data"}, method = RequestMethod.GET, produces = {ENCODING_PRODUCE})
     public ResponseEntity<String> loadStatistics(@RequestParam String hash,
                                                  @RequestParam(required = false) Integer subId,
                                                  @RequestParam(required = false) Integer publishId) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
-            return new ResponseEntity<>(JSONParser.convertObjectToJsonString(StringUtils.EMPTY),HttpStatus.OK);
+            return new ResponseEntity<>(JSONParser.convertObjectToJsonString(StringUtils.EMPTY), HttpStatus.OK);
         }
 
         Subdivision subdivision = subdivisionService.getById(subId);
@@ -93,6 +99,15 @@ public class StatisticsController {
         }
 
         String jsonData = JSONParser.convertObjectToJsonString(data);
+
+        return new ResponseEntity<>(jsonData, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = {"/load-respondents"}, method = RequestMethod.GET, produces = {ENCODING_PRODUCE})
+    public ResponseEntity<String> getRespondentList(String hash, String answerText) {
+        List<String> respondentList = userAnswerService.getRespondentList(hash, answerText);
+        String jsonData = JSONParser.convertObjectToJsonString(respondentList);
 
         return new ResponseEntity<>(jsonData, HttpStatus.OK);
     }

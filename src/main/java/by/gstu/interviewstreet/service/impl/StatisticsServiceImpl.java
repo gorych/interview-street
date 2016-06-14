@@ -63,6 +63,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<StatisticData> statistics = new ArrayList<>();
         for (Question question : questions) {
             List<UserAnswer> allAnswers = question.getUserAnswers();
+
             List<UserAnswer> notDuplicateAnswers = userAnswerDAO.getAnswersByQuestion(question);
 
             allAnswers = filterUserAnswers(allAnswers, sub, publish);

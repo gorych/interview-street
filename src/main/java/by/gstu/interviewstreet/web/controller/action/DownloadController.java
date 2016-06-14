@@ -75,7 +75,7 @@ public class DownloadController {
             byte[] content = out.toByteArray();
 
             exportAction(content, fileName, EXCEL_MIME_TYPE, response);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.warn("Error when exporting interview to excel.");
         }
     }

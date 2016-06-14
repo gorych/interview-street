@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserAnswerServiceImpl implements UserAnswerService {
+
+    private static final String RESPONDENT_LIST_ROW_PATTERN = "%d. %s (%s)";
 
     @Autowired
     UserAnswerDAO userAnswerDAO;
@@ -55,5 +58,25 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                 }
             }
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getRespondentList(String hash, String text) {
+        List<UserAnswer> userAnswers = userAnswerDAO.getAnswersByInterviewHashAndText(hash, text);
+        ArrayList<String> respondentList = new ArrayList<>();
+
+        for (int i = 0; i < userAnswers.size(); i++) {
+            UserAnswer userAnswer = userAnswers.get(i);
+
+            User user = userAnswer.getUser();
+            if (user == null) {
+                continue;
+            }
+            Employee employee = user.getEmployee();
+            respondentList.add(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), employee.getFullName(), employee.getSubdivision().getName()));
+        }
+
+        return respondentList;
     }
 }

@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
   `role_id` INT(11) NOT NULL COMMENT '',
   `employee_id` INT(11) NOT NULL COMMENT '',
-  `username` VARCHAR(9) NOT NULL COMMENT '',
+  `username` VARCHAR(255) NOT NULL COMMENT '',
   `password` VARCHAR(255) NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '',
   INDEX `fk_users_employees1_idx` (`employee_id` ASC)  COMMENT '',

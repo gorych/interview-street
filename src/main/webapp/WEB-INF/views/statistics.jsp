@@ -122,6 +122,16 @@
             <ul id="statistics-container" class="collapsible hide" data-collapsible="accordion"></ul>
         </div>
     </div>
+
+    <div id="respondent-list" class="modal bottom-sheet">
+        <div class="modal-content">
+            <h4>Ответившие на вопрос</h4>
+            <p class="list-body"></p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
+        </div>
+    </div>
 </main>
 
 <%@include file="fragments/footer.jsp" %>

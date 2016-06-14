@@ -21,6 +21,28 @@ $(document).ready(function () {
         $subs.trigger('change');
     });
 
+    $(document).on('click', ".user-answer", function () {
+        var that = this;
+        var data = {
+            hash: $("#interviews").val(),
+            answerText: $(this).html()
+        };
+        $.get(global.rewriteUrl("/statistics/load-respondents"), data, global.ajaxCallback)
+            .done(function (response) {
+                var resultList = JSON.parse(response);
+                console.log(resultList);
+
+                var formatResult = "";
+                $.each(resultList, function (index, val) {
+                    formatResult += val + "<br/>";
+                });
+
+                var $respondentList = $('#respondent-list');
+                $respondentList.find('.list-body').html(formatResult);
+                $respondentList.openModal();
+            });
+    });
+
     $("#interviews").change(function () {
         $selects
             .removeAttr("disabled")

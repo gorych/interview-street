@@ -61,3 +61,8 @@ table tr:first-of-type {
     position: relative;
     float: right;
 }
+
+.custom-answer:hover, .user-answer:hover {
+    cursor: pointer;
+    background-color: #a1ded8;
+}

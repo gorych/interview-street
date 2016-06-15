@@ -106,7 +106,16 @@ public class StatisticsController {
     @ResponseBody
     @RequestMapping(value = {"/load-respondents"}, method = RequestMethod.GET, produces = {ENCODING_PRODUCE})
     public ResponseEntity<String> getRespondentList(String hash, String answerText) {
-        List<String> respondentList = userAnswerService.getRespondentList(hash, answerText);
+        Interview interview = interviewService.get(hash);
+        if (interview == null) {
+            return new ResponseEntity<>("User try getting information about nonexistent interview.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (interview.isClosedType()) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        List<String> respondentList = userAnswerService.getRespondentList(interview, answerText);
         String jsonData = JSONParser.convertObjectToJsonString(respondentList);
 
         return new ResponseEntity<>(jsonData, HttpStatus.OK);

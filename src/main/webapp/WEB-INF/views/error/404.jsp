@@ -2,15 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <%@include file="../fragments/meta.html" %>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" media="screen" href="<c:url value="/resources/css/error-page.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/vendors/materialize/materialize.min.css"/>">
 
     <title>Interview Street - Доступ запрещен</title>
 </head>
 <body class="valign-wrapper">
 <div class="container valign">
     <div class="row">
-        <div class="col s12 m12 l 12">
+        <div class="col s12 m12 l12">
             <h1>404</h1>
 
             <p><strong>Ресурс не найден</strong></p>

@@ -16,6 +16,8 @@ import java.util.List;
 public class UserAnswerServiceImpl implements UserAnswerService {
 
     private static final String RESPONDENT_LIST_ROW_PATTERN = "%d. %s (%s)";
+    private static final String DEFAULT_SUBDIVISION = "Отдел не определен";
+    private static final String DEFAULT_NAME = "Аноним";
 
     @Autowired
     UserAnswerDAO userAnswerDAO;
@@ -25,7 +27,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     @Transactional
-    public void save(User user, Interview interview, List<Answer> answers) {
+    public void save(ExpertInterview expert, User user, Interview interview, List<Answer> answers) {
         List<Question> existQuestions = interview.getQuestions();
 
         UserInterview userInterview = null;
@@ -49,7 +51,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
             List<Answer> existAnswers = question.getAnswers();
 
             if (existAnswers.contains(answer)) {
-                userAnswerDAO.saveOrUpdate(new UserAnswer(user, question, interview, answer, answer.getText(), DateUtils.getToday()));
+                userAnswerDAO.saveOrUpdate(new UserAnswer(user, expert, question, interview, answer, answer.getText(), DateUtils.getToday()));
 
                 if (userInterview != null) {
                     userInterview.setPassed(true);
@@ -62,21 +64,56 @@ public class UserAnswerServiceImpl implements UserAnswerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> getRespondentList(String hash, String text) {
-        List<UserAnswer> userAnswers = userAnswerDAO.getAnswersByInterviewHashAndText(hash, text);
+    public List<String> getRespondentList(Interview interview, String text) {
+        List<UserAnswer> userAnswers = userAnswerDAO.getAnswersByInterviewHashAndText(interview, text);
         ArrayList<String> respondentList = new ArrayList<>();
 
         for (int i = 0; i < userAnswers.size(); i++) {
             UserAnswer userAnswer = userAnswers.get(i);
 
             User user = userAnswer.getUser();
-            if (user == null) {
-                continue;
-            }
-            Employee employee = user.getEmployee();
-            respondentList.add(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), employee.getFullName(), employee.getSubdivision().getName()));
-        }
+            String fullName = DEFAULT_NAME;
+            String subdivision = DEFAULT_SUBDIVISION;
 
+            if (user == null && interview.isExpertType()) {
+                fullName = userAnswer.getExpert().getFullName();
+            } else if (user != null) {
+                Employee employee = user.getEmployee();
+                fullName = employee.getFullName();
+                subdivision = employee.getSubdivision().getName();
+            }
+
+            respondentList.add(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), fullName, subdivision));
+        }
         return respondentList;
+    }
+
+    @Override
+    @Transactional
+    public String getRespondentListHowLine(Interview interview, String text) {
+        List<UserAnswer> userAnswers = userAnswerDAO.getAnswersByInterviewHashAndText(interview, text);
+        StringBuilder respondentList = new StringBuilder();
+
+        for (int i = 0; i < userAnswers.size(); i++) {
+            UserAnswer userAnswer = userAnswers.get(i);
+
+            User user = userAnswer.getUser();
+            String fullName = DEFAULT_NAME;
+            String subdivision = DEFAULT_SUBDIVISION;
+
+            if (user == null && interview.isExpertType()) {
+                fullName = userAnswer.getExpert().getFullName();
+            } else if (user != null) {
+                Employee employee = user.getEmployee();
+                fullName = employee.getFullName();
+                subdivision = employee.getSubdivision().getName();
+            }
+
+            String returnCarriage = Character.toString((char)13) + Character.toString((char)10);
+            respondentList
+                    .append(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), fullName, subdivision))
+                    .append(returnCarriage);
+        }
+        return respondentList.toString();
     }
 }

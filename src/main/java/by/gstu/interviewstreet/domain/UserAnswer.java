@@ -35,6 +35,10 @@ public class UserAnswer implements Serializable, Comparable<UserAnswer> {
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "expert_id")
+    private ExpertInterview expert;
+
     /*It's necessary for text answers, which user inputs himself*/
     @NotEmpty
     @Column(name = "answer")
@@ -46,8 +50,9 @@ public class UserAnswer implements Serializable, Comparable<UserAnswer> {
     public UserAnswer() {
     }
 
-    public UserAnswer(User user, Question question, Interview interview, Answer answer, String answerText, Date replayDate) {
+    public UserAnswer(User user, ExpertInterview expert, Question question, Interview interview, Answer answer, String answerText, Date replayDate) {
         this.user = user;
+        this.expert = expert;
         this.question = question;
         this.interview = interview;
         this.answer = answer;
@@ -93,6 +98,14 @@ public class UserAnswer implements Serializable, Comparable<UserAnswer> {
 
     public void setAnswer(Answer answer) {
         this.answer = answer;
+    }
+
+    public ExpertInterview getExpert() {
+        return expert;
+    }
+
+    public void setExpert(ExpertInterview expert) {
+        this.expert = expert;
     }
 
     public String getAnswerText() {

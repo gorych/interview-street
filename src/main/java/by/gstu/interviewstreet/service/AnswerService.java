@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface AnswerService {
 
-   Answer get(int id);
+    Answer get(int id);
 
     Answer get(Question question, int id);
 
     List<Answer> get(List<Integer> ids);
 
-  void saveOrUpdate(Answer answer);
+    void saveOrUpdate(Answer answer);
 
     List<Answer> addDefaultAnswers(Question question);
 
@@ -24,7 +24,7 @@ public interface AnswerService {
 
     Answer addDefaultAnswer(AnswerType type, Question question);
 
-  void remove(Answer answer);
+    void remove(Answer answer);
 
 }
 

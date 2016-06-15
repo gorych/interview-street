@@ -30,7 +30,9 @@
             <div class="col l12 m12 s12">
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_list</i>Настройка фильтров
+                        <div class="collapsible-header">
+                            <i class="material-icons">filter_list</i>
+                            Настройка фильтров
                         </div>
                         <div class="collapsible-body white">
                             <div class="row">

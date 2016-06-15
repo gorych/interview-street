@@ -24,17 +24,6 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Interview> getAllInRange(int from, int howMany, String userCredential) {
-        return currentSession()
-                .createQuery("FROM Interview WHERE creator.username LIKE :userCredential ORDER BY placementDate DESC")
-                .setString("userCredential", userCredential)
-                .setFirstResult(from)
-                .setMaxResults(howMany)
-                .list();
-    }
-
-    @Override
     public PublishedInterview getPublishedById(int id) {
         return (PublishedInterview) currentSession()
                 .createQuery("FROM PublishedInterview WHERE id = :id")

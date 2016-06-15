@@ -52,6 +52,9 @@ public class StatisticsController {
     @RequestMapping(value = {"/{hash}"}, method = RequestMethod.GET)
     public String showInterviewStatistics(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
+        if (interview == null) {
+            return "error/404";
+        }
 
         int questionCount = interview.getQuestions().size();
 

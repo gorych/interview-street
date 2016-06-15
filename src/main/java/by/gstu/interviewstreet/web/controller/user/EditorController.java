@@ -41,6 +41,9 @@ public class EditorController extends UserController {
     private static final int START_PAGE_NUMBER = 1;
     private static final int CARD_COUNT_PER_PAGE = 6;
 
+    private static final int LEFT_BOUND_INDEX = 0;
+    private static final int RIGHT_BOUND_INDEX = 1;
+
     @Autowired
     private  EmployeeService employeeService;
 
@@ -77,8 +80,8 @@ public class EditorController extends UserController {
         Collections.sort(interviewsForPage);
 
         model.addAttribute(AttrConstants.PAGE_COUNT, pageCount);
-        model.addAttribute(AttrConstants.START_PAGE_NUMBER, bounds[0]);
-        model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, bounds[1]);
+        model.addAttribute(AttrConstants.START_PAGE_NUMBER, bounds[LEFT_BOUND_INDEX]);
+        model.addAttribute(AttrConstants.LAST_PAGE_NUMBER, bounds[RIGHT_BOUND_INDEX]);
         model.addAttribute(AttrConstants.ACTIVE_PAGE_NUMBER, pageNumber);
 
         model.addAttribute(AttrConstants.INTERVIEWS, interviewsForPage);

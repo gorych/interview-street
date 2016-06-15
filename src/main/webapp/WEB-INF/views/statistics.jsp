@@ -22,8 +22,7 @@
             </div>
             <div class="col l3 m3 s3">
                 <div class="fixed-action-btn click-to-toggle export-btn">
-                    <a href="<c:url value="/download/excel/${interview.hash}?exportType=all"/>"
-                       class="btn-floating red accent-1" title="Экспорт в эксель">
+                    <a href="#" class="download-excel btn-floating red accent-1" title="Экспорт в эксель">
                         <i class="large material-icons">file_download</i>
                     </a>
                 </div>

@@ -219,4 +219,13 @@ $(document).ready(function () {
         Materialize.fadeInImage($body.find("table").removeClass("hide"));
     });
 
+    $(".download-excel").click(function () {
+        var interview = $("#interviews").val();
+        if (!interview) {
+            Materialize.toast("Анкета не выбрана", 2000);
+        } else {
+            window.location = global.rewriteUrl("/download/excel/" + interview);
+        }
+    });
+
 });

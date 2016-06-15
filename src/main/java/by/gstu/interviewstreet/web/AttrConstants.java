@@ -3,12 +3,11 @@ package by.gstu.interviewstreet.web;
 public final class AttrConstants {
 
     public static final String CHIP = "chip";
+    public static final String USER = "user";
     public static final String EDIT_MODE = "edit_mode";
     public static final String SHOW_LINK = "show_link";
     public static final String AUTH_ERROR = "auth_error";
     public static final String NOT_ANSWERS = "not_answers";
-    public static final String USER_INITIALS = "user_initials";
-    public static final String ALREADY_PASSED = "already_passed";
 
 
     public static final String PAGE_COUNT = "page_count";

@@ -30,10 +30,10 @@ public class UserController {
         return userService.get(username);
     }
 
-    @ModelAttribute(AttrConstants.USER_INITIALS)
-    public String addUserInitials(Principal principal) {
+    @ModelAttribute(AttrConstants.USER)
+    public User addUserInitials(Principal principal) {
         return principal != null
-                ? getUserByPrincipal(principal).getEmployee().getInitials()
+                ? getUserByPrincipal(principal)
                 : null;
     }
 

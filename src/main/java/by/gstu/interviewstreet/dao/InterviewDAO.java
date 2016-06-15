@@ -13,7 +13,7 @@ public interface InterviewDAO extends GenericDAO<Interview, Integer> {
 
     List<Interview> getAllInRange(int from, int howMany, String userCredential);
 
-    PublishedInterview getPublishById(int id);
+    PublishedInterview getPublishedById(int id);
 
     Interview getByHash(String hash);
 

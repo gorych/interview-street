@@ -150,7 +150,7 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional(readOnly = true)
     public PublishedInterview getPublish(Integer id) {
-        return interviewDAO.getPublishById(id);
+        return interviewDAO.getPublishedById(id);
     }
 
     /**

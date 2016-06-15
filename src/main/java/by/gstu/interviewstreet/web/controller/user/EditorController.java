@@ -91,7 +91,7 @@ public class EditorController extends UserController {
     public String showDesigner(@PathVariable String hash, HttpServletResponse response, Model model) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
-            LOG.warn("User try change non-existent interview. Hash is " + hash);
+            LOG.warn("User try change nonexistent interview. Hash is " + hash);
             return "error/404";
         }
 

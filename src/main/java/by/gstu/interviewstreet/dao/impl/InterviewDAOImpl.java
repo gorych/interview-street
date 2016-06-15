@@ -35,7 +35,7 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
     }
 
     @Override
-    public PublishedInterview getPublishById(int id) {
+    public PublishedInterview getPublishedById(int id) {
         return (PublishedInterview) currentSession()
                 .createQuery("FROM PublishedInterview WHERE id = :id")
                 .setInteger("id", id)
@@ -52,7 +52,7 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
 
     @Override
     public void saveExpertInterview(ExpertInterview expertInterview) {
-        currentSession().saveOrUpdate(expertInterview);
+        currentSession().save(expertInterview);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
             publishedInterview = new PublishedInterview(interview);
         } else {
             interview.setHide(true);
-            publishedInterview = getPublishById(interview.getId());
+            publishedInterview = getPublishedById(interview.getId());
             publishedInterview.setCloseDate(DateUtils.getToday());
         }
 

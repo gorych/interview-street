@@ -106,7 +106,7 @@ public class RespondentController extends UserController {
                                                 @RequestParam(required = false) String lastname) {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
-            LOG.warn("User try send non-existent interview. Hash is " + hash);
+            LOG.warn("User try send nonexistent interview. Hash is " + hash);
             return new ResponseEntity<>(WebConstants.USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
         }
 
@@ -130,10 +130,13 @@ public class RespondentController extends UserController {
         }
 
         try {
-            userAnswerService.save(user, interview, answers);
+            /*If interview type not expert when link to expert is null*/
+            ExpertInterview expert = null;
             if (interview.isExpertType()) {
-                interviewService.saveExpertInterview(new ExpertInterview(interview, firstname, lastname));
+                expert = new ExpertInterview(interview, firstname, lastname);
+                interviewService.saveExpertInterview(expert);
             }
+            userAnswerService.save(expert, user, interview, answers);
         } catch (IllegalArgumentException e) {
             LOG.warn(e.getMessage());
             return new ResponseEntity<>(WebConstants.USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);

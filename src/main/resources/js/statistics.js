@@ -22,7 +22,6 @@ $(document).ready(function () {
     });
 
     $(document).on('click', ".user-answer", function () {
-        var that = this;
         var data = {
             hash: $("#interviews").val(),
             answerText: $(this).html()
@@ -30,7 +29,6 @@ $(document).ready(function () {
         $.get(global.rewriteUrl("/statistics/load-respondents"), data, global.ajaxCallback)
             .done(function (response) {
                 var resultList = JSON.parse(response);
-                console.log(resultList);
 
                 var formatResult = "";
                 $.each(resultList, function (index, val) {

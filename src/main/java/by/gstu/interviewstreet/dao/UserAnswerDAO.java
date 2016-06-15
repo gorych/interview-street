@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.dao;
 
+import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.UserAnswer;
 
@@ -9,6 +10,6 @@ public interface UserAnswerDAO extends GenericDAO<UserAnswer, Integer> {
 
     List<UserAnswer> getAnswersByQuestion(Question question);
 
-    List<UserAnswer> getAnswersByInterviewHashAndText(String hash, String text);
+    List<UserAnswer> getAnswersByInterviewHashAndText(Interview interview, String text);
 
 }

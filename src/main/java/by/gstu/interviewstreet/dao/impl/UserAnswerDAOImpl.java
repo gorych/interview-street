@@ -1,6 +1,7 @@
 package by.gstu.interviewstreet.dao.impl;
 
 import by.gstu.interviewstreet.dao.UserAnswerDAO;
+import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.Question;
 import by.gstu.interviewstreet.domain.UserAnswer;
 import org.springframework.stereotype.Repository;
@@ -21,10 +22,13 @@ public class UserAnswerDAOImpl extends GenericDAOImpl<UserAnswer, Integer> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<UserAnswer> getAnswersByInterviewHashAndText(String hash, String text) {
+    public List<UserAnswer> getAnswersByInterviewHashAndText(Interview interview, String text) {
+        final String SQL_STATEMENT =
+                "FROM UserAnswer WHERE interview.hash LIKE :hash AND answerText LIKE :text GROUP BY "
+                + (interview.isExpertType() ? "expert.id" : "user.id");
         return currentSession()
-                .createQuery("FROM UserAnswer WHERE interview.hash LIKE :hash AND answerText LIKE :text GROUP BY user.id")
-                .setString("hash", hash)
+                .createQuery(SQL_STATEMENT)
+                .setString("hash", interview.getHash())
                 .setString("text", text)
                 .list();
     }

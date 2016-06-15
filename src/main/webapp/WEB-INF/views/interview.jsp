@@ -17,10 +17,13 @@
 
     <div class="row">
         <h5 class="header teal-text">${interview.name}</h5>
-        <h6>${interview.introductoryText}</h6>
         <c:if test="${interview.type.closed}">
-            <p class="green-text">Данная анкета является анонимной.</p>
+            <div class="chip white-text blue-grey lighten-1">
+                Данная анкета является анонимной
+                <i class="material-icons" id="hide-chip-btn">close</i>
+            </div>
         </c:if>
+        <h6>${interview.introductoryText}</h6>
     </div>
 
     <c:if test="${interview.type.name eq 'expert'}">
@@ -120,7 +123,7 @@
 
 <footer class="page-footer grey lighten-4">
     <div class="footer-copyright">
-        <div class="container teal-text">
+        <div class="container blue-grey-text">
             <strong>
                 Interview Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>
             </strong>

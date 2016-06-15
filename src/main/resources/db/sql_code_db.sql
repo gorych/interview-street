@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`users` (
   `role_id` INT(11) NOT NULL COMMENT '',
   `employee_id` INT(11) NOT NULL COMMENT '',
   `username` VARCHAR(255) NOT NULL COMMENT '',
-  `password` VARCHAR(255) NULL COMMENT '',
+  `password` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '',
   INDEX `fk_users_employees1_idx` (`employee_id` ASC)  COMMENT '',
   INDEX `fk_users_user_roles1_idx` (`role_id` ASC)  COMMENT '',
@@ -282,6 +282,27 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`expert_interviews` (
 
 
 -- -----------------------------------------------------
+-- Table `interview_db`.`published_interviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `interview_db`.`published_interviews` ;
+
+CREATE TABLE IF NOT EXISTS `interview_db`.`published_interviews` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
+  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
+  `close_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
+  `interview_id` INT(11) NOT NULL COMMENT '',
+  PRIMARY KEY (`id`, `interview_id`)  COMMENT '',
+  INDEX `fk_published_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',
+  CONSTRAINT `fk_published_interviews_interviews1`
+  FOREIGN KEY (`interview_id`)
+  REFERENCES `interview_db`.`interviews` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+  ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `interview_db`.`user_answers`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `interview_db`.`user_answers` ;
@@ -291,6 +312,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_answers` (
   `user_id` INT(11) NULL DEFAULT NULL COMMENT '',
   `question_id` INT(11) NOT NULL COMMENT '',
   `interview_id` INT(11) NOT NULL COMMENT '',
+  `expert_id` INT NULL COMMENT '',
   `reply_date` DATETIME NOT NULL COMMENT '',
   `answer_id` INT(11) NOT NULL COMMENT '',
   `answer` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
@@ -299,6 +321,7 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_answers` (
   INDEX `fk_user_answers_users1_idx` (`user_id` ASC)  COMMENT '',
   INDEX `fk_user_answers_interviews1_idx` (`interview_id` ASC)  COMMENT '',
   INDEX `fk_user_answers_answers1_idx` (`answer_id` ASC)  COMMENT '',
+  INDEX `fk_user_answers_expert_interviews1_idx` (`expert_id` ASC)  COMMENT '',
   CONSTRAINT `fk_user_answers_answers1`
   FOREIGN KEY (`answer_id`)
   REFERENCES `interview_db`.`answers` (`id`)
@@ -317,6 +340,11 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_answers` (
   CONSTRAINT `fk_user_answers_users1`
   FOREIGN KEY (`user_id`)
   REFERENCES `interview_db`.`users` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_user_answers_expert_interviews1`
+  FOREIGN KEY (`expert_id`)
+  REFERENCES `interview_db`.`expert_interviews` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB
@@ -349,26 +377,6 @@ CREATE TABLE IF NOT EXISTS `interview_db`.`user_interviews` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `interview_db`.`published_interviews`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `interview_db`.`published_interviews` ;
-
-CREATE TABLE IF NOT EXISTS `interview_db`.`published_interviews` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT '',
-  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
-  `close_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
-  `interview_id` INT(11) NOT NULL COMMENT '',
-  PRIMARY KEY (`id`, `interview_id`)  COMMENT '',
-  INDEX `fk_published_interviews_interviews1_idx` (`interview_id` ASC)  COMMENT '',
-  CONSTRAINT `fk_published_interviews_interviews1`
-  FOREIGN KEY (`interview_id`)
-  REFERENCES `interview_db`.`interviews` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-  ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

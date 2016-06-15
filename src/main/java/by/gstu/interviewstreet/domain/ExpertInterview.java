@@ -1,5 +1,6 @@
 package by.gstu.interviewstreet.domain;
 
+import org.apache.commons.lang.WordUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -26,6 +27,9 @@ public class ExpertInterview {
     @NotEmpty
     @Column(name = "lastname")
     private String lastname;
+
+    public ExpertInterview() {
+    }
 
     public ExpertInterview(Interview interview, String firstname, String lastname) {
         this.interview = interview;
@@ -63,6 +67,10 @@ public class ExpertInterview {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getFullName() {
+        return WordUtils.capitalize((lastname + " " + firstname).toLowerCase());
     }
 
     @Override

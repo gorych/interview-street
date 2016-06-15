@@ -22,22 +22,10 @@
             </div>
             <div class="col l3 m3 s3">
                 <div class="fixed-action-btn click-to-toggle export-btn">
-                    <a class="btn-floating red accent-1 tooltipped" data-position="left" data-tooltip="Экспорт в Excel">
+                    <a href="<c:url value="/download/excel/${interview.hash}?exportType=all"/>"
+                       class="btn-floating red accent-1" data-position="left" data-tooltip="Экспорт в Excel">
                         <i class="large material-icons">file_download</i>
                     </a>
-                    <ul class="fixed-btn-item">
-                        <li><a href="<c:url value="/download/excel/${interview.hash}"/>"
-                               class="btn-floating green accent-4" title="Отдельно по каждому респонденту">
-                            <i class="material-icons">person</i>
-                        </a>
-                        </li>
-                        <li>
-                            <a href="<c:url value="/download/excel/${interview.hash}?exportType=all"/>"
-                               class="btn-floating orange lighten-1" title="Общая статистика">
-                                <i class="material-icons">group</i>
-                            </a>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div class="col l12 m12 s12">

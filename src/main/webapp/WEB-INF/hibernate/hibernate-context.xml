@@ -14,18 +14,19 @@
           p:dataSource-ref="dataSource"
           p:packagesToScan="by.gstu.interviewstreet.domain"
           p:configLocation="/WEB-INF/hibernate/hibernate.cfg.xml">
-            <property name="hibernateProperties">
-                <props>
-                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                </props>
-            </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+            </props>
+        </property>
     </bean>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
           p:driverClassName="com.mysql.jdbc.Driver"
           p:url="jdbc:mysql://localhost/interview_db?useEncoding=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"
           p:username="interview_admin"
           p:password="admin"
+          p:testOnBorrow="true"
           p:initialSize="5"
           p:maxActive="20"/>
 

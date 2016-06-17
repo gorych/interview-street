@@ -3,6 +3,7 @@ package by.gstu.interviewstreet.service.impl;
 import by.gstu.interviewstreet.dao.UserDAO;
 import by.gstu.interviewstreet.domain.User;
 import by.gstu.interviewstreet.service.UserService;
+import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         User user = userDAO.getByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Пользователь с такими учетными данными не найден.");
+            throw new UsernameNotFoundException(WebConstants.USER_NOT_FOUND_MSG);
         }
 
         return user;

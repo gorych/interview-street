@@ -1,14 +1,13 @@
 package by.gstu.interviewstreet.web.controller.action;
 
 import by.gstu.interviewstreet.domain.*;
-import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.AnswerService;
 import by.gstu.interviewstreet.service.InterviewService;
 import by.gstu.interviewstreet.service.QuestionService;
-import by.gstu.interviewstreet.web.WebConstants;
 import by.gstu.interviewstreet.util.AnswerValidator;
 import by.gstu.interviewstreet.util.JSONParser;
 import by.gstu.interviewstreet.util.WebUtils;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+
+import static by.gstu.interviewstreet.web.WebConstants.*;
 
 /**
  * Контроллер для выполнения операций
@@ -64,7 +65,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с созданным вопросом в формате JSON и кодом состояния
      */
     @ResponseBody
-    @RequestMapping(value = {"/add-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/add-question"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> addQuestion(String hash, int questTypeId, int number) {
         QuestionType questionType = questionService.getType(questTypeId);
         Interview interview = interviewService.get(hash);
@@ -72,7 +73,7 @@ public class DesignerActionsController {
         if (interview == null || questionType == null) {
             return new ResponseEntity<>(
                     "Error getting interview or question type. " +
-                            "Interview hash = " + hash + ". Question type id = " + questTypeId,
+                    "Interview hash = " + hash + ". Question type id = " + questTypeId,
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -94,7 +95,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/del-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/del-question"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> removeQuestion(String hash, int id) {
         try {
             Question question = questionService.get(hash, id);
@@ -114,7 +115,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/move-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/move-question"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> moveQuestion(int id, int number) {
         questionService.move(id, number);
 
@@ -128,7 +129,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с дублированным вопросом в формате JSON и кодом состояния
      */
     @ResponseBody
-    @RequestMapping(value = {"/duplicate-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/duplicate-question"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> duplicateQuestion(int id) {
         Question question = questionService.get(id);
 
@@ -154,7 +155,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/save-question"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/save-question"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> saveQuestion(String hash, int questId, String text) {
         Question question = questionService.get(hash, questId);
 
@@ -173,7 +174,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/add-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/add-answer"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> addAnswer(String hash, int questId, @RequestParam(required = false) boolean textType) {
         Interview interview = interviewService.get(hash);
         Question question = questionService.get(questId);
@@ -210,7 +211,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/del-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/del-answer"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> removeAnswer(String hash, int questId, int answerId) {
         Question question = questionService.get(hash, questId);
         Answer answer = answerService.get(question, answerId);
@@ -218,11 +219,11 @@ public class DesignerActionsController {
         List<Answer> answers = question.getAnswers();
 
         boolean textAnswerExists = !WebUtils.notExistTextAnswer(answers);
-        boolean isTextAnswer = WebConstants.TEXT_ANSWER_NAME.equals(answer.getType().getName());
+        boolean isTextAnswer = TEXT_ANSWER_NAME.equals(answer.getType().getName());
 
         int minAnswerCount = textAnswerExists
-                ? WebConstants.ANSWER_COUNT_WITH_TEXT_ANSWER
-                : WebConstants.ANSWER_COUNT_WITHOUT_TEXT_ANSWER;
+                ? ANSWER_COUNT_WITH_TEXT_ANSWER
+                : ANSWER_COUNT_WITHOUT_TEXT_ANSWER;
 
         if (answers.size() <= minAnswerCount && !isTextAnswer) {
             return new ResponseEntity<>(
@@ -245,7 +246,7 @@ public class DesignerActionsController {
      * @return ResponseEntity с кодом состояния HTTP
      */
     @ResponseBody
-    @RequestMapping(value = {"/save-answer"}, method = RequestMethod.POST, produces = "text/plain; charset=UTF-8")
+    @RequestMapping(value = {"/save-answer"}, method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> saveAnswer(int questId, int answerId, String text) {
         Question question = questionService.get(questId);
         Answer answer = answerService.get(question, answerId);

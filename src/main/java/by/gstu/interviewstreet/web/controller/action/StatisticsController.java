@@ -26,7 +26,7 @@ import java.util.Map;
 
 import static by.gstu.interviewstreet.web.WebConstants.ENCODING_PRODUCE;
 
-@Controller()
+@Controller
 @RequestMapping("/statistics")
 @Secured({SecurityConstants.EDITOR})
 public class StatisticsController {

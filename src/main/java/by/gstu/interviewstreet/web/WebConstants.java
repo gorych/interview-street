@@ -5,9 +5,8 @@ public final class WebConstants {
     public static final String ENCODING_PRODUCE = "text/plain; charset=UTF-8";
 
     public static final String HASH = "hash";
+    public static final String SURVEY = "survey";
     public static final String MAX_AGE = "max_age";
-    public static final String IS_PASSED = "is_passed";
-    public static final String IS_PASSED_VAL = "true";
 
 
     public static final String TEXT_ANSWER_NAME = "text";

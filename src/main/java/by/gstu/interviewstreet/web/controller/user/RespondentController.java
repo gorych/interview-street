@@ -9,7 +9,6 @@ import by.gstu.interviewstreet.util.JSONParser;
 import by.gstu.interviewstreet.util.WebUtils;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.SecurityConstants;
-import by.gstu.interviewstreet.web.WebConstants;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static by.gstu.interviewstreet.web.WebConstants.ENCODING_PRODUCE;
+import static by.gstu.interviewstreet.web.WebConstants.*;
 
 @Controller
 @RequestMapping("/respondent")
@@ -45,11 +43,8 @@ public class RespondentController extends UserController {
     private UserInterviewService userInterviewService;
 
     @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
-    @RequestMapping("/{hash}/success")
-    public String showSuccessPage(@PathVariable String hash, Model model) {
-        Interview interview = interviewService.get(hash);
-        model.addAttribute(AttrConstants.SHOW_LINK, interview.isOpenType());
-
+    @RequestMapping("/success")
+    public String showSuccessPage() {
         return "success";
     }
 
@@ -86,7 +81,7 @@ public class RespondentController extends UserController {
 
     @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
     @RequestMapping(value = {"interview/{hash}/anonymous", "interview/{hash}/expert"}, method = RequestMethod.GET)
-    public String showAnonymousInterview(@PathVariable String hash, HttpServletRequest request, Model model) {
+    public String showAnonymousInterview(@PathVariable String hash, Model model) {
         Interview interview = interviewService.get(hash);
         if (interview.getHide() || interview.getIsDeadline()) {
             LOG.warn("Interview is hidden or elapsed time to survey. Hash is " + hash);
@@ -107,15 +102,16 @@ public class RespondentController extends UserController {
         Interview interview = interviewService.get(hash);
         if (interview == null) {
             LOG.warn("User try send nonexistent interview. Hash is " + hash);
-            return new ResponseEntity<>(WebConstants.USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(USER_SEND_WRONG_HASH_MSG + hash, HttpStatus.BAD_REQUEST);
         }
 
         if (interview.getHide()) {
             LOG.warn("User try send hidden interview. Hash is " + hash);
-            return new ResponseEntity<>(WebConstants.USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() { }.getType();
+        Type type = new TypeToken<List<Answer>>() {
+        }.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         /*If interview type is open, then data about user will not save*/
@@ -123,10 +119,8 @@ public class RespondentController extends UserController {
         Map<String, Object> cookies = new HashMap<>();
         if (user == null) {
             int maxAge = DateUtils.secondsBetweenDays(interview.getEndDate());
-
-            cookies.put(WebConstants.HASH, hash);
-            cookies.put(WebConstants.MAX_AGE, maxAge);
-            cookies.put(WebConstants.IS_PASSED, WebConstants.IS_PASSED_VAL);
+            cookies.put(SURVEY, hash);
+            cookies.put(MAX_AGE, maxAge);
         }
 
         try {
@@ -139,7 +133,7 @@ public class RespondentController extends UserController {
             userAnswerService.save(expert, user, interview, answers);
         } catch (IllegalArgumentException e) {
             LOG.warn(e.getMessage());
-            return new ResponseEntity<>(WebConstants.USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(USER_SEND_PASSED_INTERVIEW_MSG, HttpStatus.BAD_REQUEST);
         }
 
         String jsonData = JSONParser.convertObjectToJsonString(cookies);

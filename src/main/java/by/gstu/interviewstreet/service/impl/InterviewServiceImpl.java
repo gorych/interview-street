@@ -118,7 +118,7 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     /**
-     * Получает анкету по мдентификатору
+     * Получает анкету по идентификатору
      *
      * @param interviewId идентификатор анкеты
      * @return анкета

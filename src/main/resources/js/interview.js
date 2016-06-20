@@ -39,6 +39,11 @@
     });
 
     $("#send-form-btn").click(function () {
+        if(isPrivateMode()){
+            Materialize.toast("Для прохожденния анкеты , пожалуйста, <br/>выйдите из режима инкогнито.", 3000);
+            return;
+        }
+
         if (!validator.isValidFields($(".expert-block"))) {
             Materialize.toast("Инициалы введены некорректно", 3000);
             return;
@@ -90,5 +95,14 @@
                 Materialize.toast("Ошибка при отправлении анкеты", 2000);
             });
     });
+
+    function isPrivateMode() {
+        try {
+            localStorage.test = 2;
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
 
 }());

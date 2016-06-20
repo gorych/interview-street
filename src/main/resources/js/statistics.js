@@ -124,7 +124,7 @@ $(document).ready(function () {
             enabled: false
         },
         title: {
-            text: undefined
+            text: ""
         },
         yAxis: {
             allowDecimals: false,
@@ -169,11 +169,13 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '.col-chart-btn, .pie-chart-btn', function () {
+        var $header = $(this).parents(".collapsible-body").prev();
         var $body = $(this).parents(".collapsible-body");
         var $table = $body.find("table");
 
         $table.addClass("hide");
         $body.find(".chart-container").removeClass("hide");
+        chartOptions.title.text = $header.text();
 
         if ($(this).hasClass("pie-chart-btn")) {
             chartOptions.chart.type = "pie";

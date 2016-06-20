@@ -26,6 +26,10 @@
     background-color: #eee;
 }
 
+.highcharts-title {
+    display: none;
+}
+
 .table-btn, .col-chart-btn, .pie-chart-btn {
     margin-bottom: 5px;
 }

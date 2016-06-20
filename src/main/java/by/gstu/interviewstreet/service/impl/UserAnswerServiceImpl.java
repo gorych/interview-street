@@ -97,9 +97,41 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         for (int i = 0; i < userAnswers.size(); i++) {
             UserAnswer userAnswer = userAnswers.get(i);
 
+            RespondentData respondentData = new RespondentData(interview, userAnswer).invoke();
+            String fullName = respondentData.getFullName();
+            String subdivision = respondentData.getSubdivision();
+
+            String returnCarriage = Character.toString((char)13) + Character.toString((char)10);
+            respondentList
+                    .append(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), fullName, subdivision))
+                    .append(returnCarriage);
+        }
+        return respondentList.toString();
+    }
+
+    private class RespondentData {
+        private Interview interview;
+        private UserAnswer userAnswer;
+        private String fullName;
+        private String subdivision;
+
+        public RespondentData(Interview interview, UserAnswer userAnswer) {
+            this.interview = interview;
+            this.userAnswer = userAnswer;
+        }
+
+        public String getFullName() {
+            return fullName;
+        }
+
+        public String getSubdivision() {
+            return subdivision;
+        }
+
+        public RespondentData invoke() {
             User user = userAnswer.getUser();
-            String fullName = DEFAULT_NAME;
-            String subdivision = DEFAULT_SUBDIVISION;
+            fullName = DEFAULT_NAME;
+            subdivision = DEFAULT_SUBDIVISION;
 
             if (user == null && interview.isExpertType()) {
                 fullName = userAnswer.getExpert().getFullName();
@@ -108,12 +140,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
                 fullName = employee.getFullName();
                 subdivision = employee.getSubdivision().getName();
             }
-
-            String returnCarriage = Character.toString((char)13) + Character.toString((char)10);
-            respondentList
-                    .append(String.format(RESPONDENT_LIST_ROW_PATTERN, (i + 1), fullName, subdivision))
-                    .append(returnCarriage);
+            return this;
         }
-        return respondentList.toString();
     }
 }

@@ -8,6 +8,7 @@ import by.gstu.interviewstreet.domain.UserInterview;
 import by.gstu.interviewstreet.util.DateUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -45,35 +46,50 @@ public class InterviewDAOImpl extends GenericDAOImpl<Interview, Integer> impleme
     }
 
     @Override
-    public void lockOrUnlock(int interviewId) {
+    public Interview lockOrUnlock(int interviewId) {
         Session session = currentSession();
 
-        UserInterview userInterview = (UserInterview) session
+        UserInterview creatorInterview = (UserInterview) session
                 .createQuery("FROM UserInterview WHERE interview.id = :id GROUP BY interview.id")
                 .setInteger("id", interviewId)
                 .uniqueResult();
 
         Interview interview;
-        if (userInterview != null) {
-            interview = userInterview.getInterview();
-            userInterview.setPassed(false);
-            session.save(userInterview);
+        if (creatorInterview != null) {
+            interview = creatorInterview.getInterview();
+            creatorInterview.setPassed(false);
+            session.save(creatorInterview);
         } else {
             interview = find(interviewId);
         }
 
-        PublishedInterview publishedInterview;
         if (interview.getHide()) {
             interview.setHide(false);
-            publishedInterview = new PublishedInterview(interview);
+            session.save(new PublishedInterview(interview));
         } else {
-            interview.setHide(true);
-            publishedInterview = getPublishedById(interview.getId());
-            publishedInterview.setCloseDate(DateUtils.getToday());
-        }
+            /*Generate new hash for interview*/
+            byte[] bytes = (interview.getHash() + System.currentTimeMillis()).getBytes();
 
-        session.save(publishedInterview);
+            interview.setHash(DigestUtils.md5DigestAsHex(bytes));
+            interview.setHide(true);
+
+            List<PublishedInterview> publishes = getPublishedByInterviewId(interview.getId());
+            for (PublishedInterview publish : publishes) {
+                publish.setCloseDate(DateUtils.getToday());
+                session.save(publish);
+            }
+        }
         session.save(interview);
+
+        return interview;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<PublishedInterview> getPublishedByInterviewId(int id) {
+        return currentSession()
+                .createQuery("FROM PublishedInterview WHERE interview.id = :id")
+                .setInteger("id", id)
+                .list();
     }
 
 }

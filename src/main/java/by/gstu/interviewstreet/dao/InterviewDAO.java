@@ -17,6 +17,6 @@ public interface InterviewDAO extends GenericDAO<Interview, Integer> {
 
     void saveExpertInterview(ExpertInterview expertInterview);
 
-    void lockOrUnlock(int interviewId);
+    Interview lockOrUnlock(int interviewId);
 
 }

@@ -36,7 +36,7 @@
     $(document).on("click", ".lock-btn", function () {
         var that = $(this);
         $.get(global.rewriteUrl("/interview/lock/" + $(this).attr("data-interview-id")), global.ajaxCallback)
-            .done(function () {
+            .done(function (response) {
                 var $icon = $(that).find("i");
                 var lock = ($icon.html() == "lock");
 
@@ -47,6 +47,11 @@
                 } else {
                     $icon.html("lock");
                     msg = "Анкета закрыта для прохождения";
+
+                    var data = JSON.parse(response);
+                    $(that).parent().next()
+                        .find(".question-list")
+                        .attr("href", global.rewriteUrl("/editor/" + data.hash + "/designer"));
                 }
 
                 $icon.attr("title", msg);

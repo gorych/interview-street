@@ -6,7 +6,7 @@
 
 <nav class="white">
     <div class="nav-wrapper container">
-        <a href=""><img class="brand-logo brand-logo-color-fix responsive-img"
+        <a href="<c:url value="/gateway"/>"><img class="brand-logo brand-logo-color-fix responsive-img"
                         src="<c:url value="/resources/img/logo.png"/>"></a>
         <a href="#" data-activates="mobile-menu" class="teal-text button-collapse"><i
                 class="material-icons">menu</i></a>

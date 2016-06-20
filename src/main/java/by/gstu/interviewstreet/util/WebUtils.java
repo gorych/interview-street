@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.util;
 
 import by.gstu.interviewstreet.domain.*;
 import by.gstu.interviewstreet.web.AttrConstants;
-import by.gstu.interviewstreet.web.WebConstants;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
@@ -11,6 +10,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static by.gstu.interviewstreet.web.WebConstants.SURVEY;
 
 public final class WebUtils {
 
@@ -102,6 +103,20 @@ public final class WebUtils {
         }
 
         return new int[]{leftBorder, rightBorder};
+    }
+
+    public static boolean checkCookies(String hash, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String cookieName = cookie.getName();
+                if (SURVEY.equals(cookieName) && hash.equals(cookie.getValue())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

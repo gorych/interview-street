@@ -17,7 +17,7 @@
 
 <nav class="white">
     <div class="nav-wrapper container">
-        <a href=""><img class="brand-logo brand-logo-color-fix responsive-img"
+        <a href="<c:url value="/gateway"/>"><img class="brand-logo brand-logo-color-fix responsive-img"
                         src="<c:url value="/resources/img/logo.png"/>"></a>
     </div>
 </nav>
@@ -31,12 +31,6 @@
                 <div class="row center">
                     <h5 class="header col s12 white-text light">Нам важен каждый Ваш ответ!</h5>
                 </div>
-                    <c:if test="${show_link}">
-                        <div class="row center">
-                            <a href="<c:url value="/gateway"/>" id="download-button"
-                            class="btn-large waves-effect waves-light teal lighten-1">На главную</a>
-                        </div>
-                    </c:if>
                 <div class="row center">
                     <p class="header col s12 light white-text">Interview
                         Street, <%=DateUtils.YYYY.format(DateUtils.getToday())%>

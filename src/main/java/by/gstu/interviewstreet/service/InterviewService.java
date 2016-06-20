@@ -3,7 +3,6 @@ package by.gstu.interviewstreet.service;
 import by.gstu.interviewstreet.domain.ExpertInterview;
 import by.gstu.interviewstreet.domain.Interview;
 import by.gstu.interviewstreet.domain.PublishedInterview;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public interface InterviewService {
 
     void update(Interview interview);
 
-    void lockOrUnlock(int id);
+    Interview lockOrUnlock(int id);
 
     void remove(Interview interview);
 }

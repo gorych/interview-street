@@ -44,7 +44,7 @@ public class InterviewStreetDbTest {
             answerService.addDefaultAnswers(question);
             Assert.assertNotNull("Question answers should not be null", question.getAnswers());
             Assert.assertTrue("List of answers should not be empty",
-                               CollectionUtils.isEmpty(question.getAnswers()));
+                               !CollectionUtils.isEmpty(question.getAnswers()));
         }
 
     }

@@ -242,7 +242,7 @@ public class InterviewServiceImpl implements InterviewService {
      */
     @Override
     @Transactional
-    public void lockOrUnlock(int id) {
-        interviewDAO.lockOrUnlock(id);
+    public Interview lockOrUnlock(int id) {
+        return interviewDAO.lockOrUnlock(id);
     }
 }

@@ -59,7 +59,7 @@
 
                         <div class="right-block">
                             <a href="<c:url value="/editor/${interview.hash}/designer"/>"
-                               class="btn-floating float-btn-wrapper waves-effect grey lighten-4">
+                               class="question-list btn-floating float-btn-wrapper waves-effect grey lighten-4">
                                 <i class="material-icons black-text" title="Список вопросов">subject</i>
                             </a>
                             <c:if test="${interview.type.name eq 'open'}">

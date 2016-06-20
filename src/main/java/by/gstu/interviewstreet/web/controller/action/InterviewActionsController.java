@@ -7,6 +7,7 @@ import by.gstu.interviewstreet.service.*;
 import by.gstu.interviewstreet.util.JSONParser;
 import by.gstu.interviewstreet.web.AttrConstants;
 import by.gstu.interviewstreet.web.SecurityConstants;
+import by.gstu.interviewstreet.web.WebConstants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/interview")
@@ -101,9 +104,13 @@ public class InterviewActionsController {
     @ResponseBody
     @RequestMapping(value = {"/lock/{interviewId}"}, method = {RequestMethod.GET})
     public ResponseEntity<String> lockOrUnlockInterview(@PathVariable int interviewId) {
-        interviewService.lockOrUnlock(interviewId);
+        Interview interview = interviewService.lockOrUnlock(interviewId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        Map<String, String> map = new HashMap<>();
+        map.put(WebConstants.HASH, interview.getHash());
+        String json = JSONParser.convertObjectToJsonString(map);
+
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
     @ResponseBody

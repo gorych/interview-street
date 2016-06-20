@@ -2,11 +2,9 @@ package by.gstu.interviewstreet.web.controller;
 
 
 import by.gstu.interviewstreet.domain.UserRole;
-import by.gstu.interviewstreet.service.MailService;
-import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.web.AttrConstants;
+import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.web.WebConstants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +28,10 @@ public class IndexController {
 
         for (Object role : roles) {
             UserRole userRole = (UserRole) role;
+            if (userRole == null) {
+                return "redirect:/login";
+            }
+
             if (SecurityConstants.EDITOR.equals(userRole.getName())) {
                 return "redirect:/editor/interview-list";
             }

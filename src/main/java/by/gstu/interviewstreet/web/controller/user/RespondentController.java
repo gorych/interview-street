@@ -8,7 +8,6 @@ import by.gstu.interviewstreet.util.DateUtils;
 import by.gstu.interviewstreet.util.JSONParser;
 import by.gstu.interviewstreet.util.WebUtils;
 import by.gstu.interviewstreet.web.AttrConstants;
-import by.gstu.interviewstreet.web.SecurityConstants;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +19,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static by.gstu.interviewstreet.web.SecurityConstants.*;
 import static by.gstu.interviewstreet.web.WebConstants.*;
 
 @Controller
@@ -42,13 +43,13 @@ public class RespondentController extends UserController {
     @Autowired
     private UserInterviewService userInterviewService;
 
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
+    @Secured({EDITOR, RESPONDENT, ANONYMOUS})
     @RequestMapping("/success")
     public String showSuccessPage() {
         return "success";
     }
 
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
+    @Secured({EDITOR, RESPONDENT})
     @RequestMapping("/dashboard")
     public String showDashboard(Principal principal, Model model) {
         User user = getUserByPrincipal(principal);
@@ -59,7 +60,7 @@ public class RespondentController extends UserController {
         return "dashboard";
     }
 
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
+    @Secured({EDITOR, RESPONDENT})
     @RequestMapping(value = "/{hash}/interview", method = RequestMethod.GET)
     public String showInterview(@PathVariable String hash, Principal principal, Model model) {
         UserInterview uInterview = userInterviewService.getByUserAndInterview(principal.getName(), hash);
@@ -69,7 +70,7 @@ public class RespondentController extends UserController {
         }
 
         Interview interview = uInterview.getInterview();
-        if (interview.getHide() || interview.getIsDeadline()) {
+        if (interview == null || interview.getHide() || interview.getIsDeadline()) {
             LOG.warn("Interview is hidden or elapsed time to survey. Hash is " + hash);
             return "error/404";
         }
@@ -79,22 +80,29 @@ public class RespondentController extends UserController {
         return "interview";
     }
 
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
+    @Secured({EDITOR, RESPONDENT, ANONYMOUS})
     @RequestMapping(value = {"interview/{hash}/anonymous", "interview/{hash}/expert"}, method = RequestMethod.GET)
-    public String showAnonymousInterview(@PathVariable String hash, Model model) {
+    public String showAnonymousInterview(@PathVariable String hash, Model model, HttpServletRequest request) {
         Interview interview = interviewService.get(hash);
-        if (interview.getHide() || interview.getIsDeadline()) {
+        if (interview == null || interview.getHide() || interview.getIsDeadline()) {
             LOG.warn("Interview is hidden or elapsed time to survey. Hash is " + hash);
             return "error/404";
+        }
+
+        if (WebUtils.checkCookies(hash, request)) {
+            LOG.warn("User try send passed interview. Hash is " + hash);
+            return "error/403";
         }
 
         WebUtils.buildInterviewModel(model, interview);
 
         return "interview";
     }
+
+
 
     @ResponseBody
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT, SecurityConstants.ANONYMOUS})
+    @Secured({EDITOR, RESPONDENT, ANONYMOUS})
     @RequestMapping(value = "/send/interview", method = RequestMethod.POST, produces = ENCODING_PRODUCE)
     public ResponseEntity<String> sendInterview(String hash, String data, Principal principal,
                                                 @RequestParam(required = false) String firstname,
@@ -110,14 +118,15 @@ public class RespondentController extends UserController {
             return new ResponseEntity<>(USER_SEND_CLOSED_INTERVIEW_MSG, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        Type type = new TypeToken<List<Answer>>() {
-        }.getType();
+        Type type = new TypeToken<List<Answer>>() {}.getType();
         List<Answer> answers = JSONParser.convertJsonStringToObject(data, type);
 
         /*If interview type is open, then data about user will not save*/
         User user = interview.isOpenType() ? getUserByPrincipal(principal) : null;
         Map<String, Object> cookies = new HashMap<>();
-        if (user == null) {
+
+        /*If second passage was ban, then add info to cookie about interview*/
+        if (user == null && !interview.isSecondPassage()) {
             int maxAge = DateUtils.secondsBetweenDays(interview.getEndDate());
             cookies.put(SURVEY, hash);
             cookies.put(MAX_AGE, maxAge);

@@ -39,7 +39,7 @@
     });
 
     $("#send-form-btn").click(function () {
-        if(isPrivateMode()){
+        if (isPrivateMode()) {
             Materialize.toast("Для прохожденния анкеты , пожалуйста, <br/>выйдите из режима инкогнито.", 3000);
             return;
         }
@@ -97,12 +97,8 @@
     });
 
     function isPrivateMode() {
-        try {
-            localStorage.test = 2;
-            return true;
-        } catch (e) {
-            return false;
-        }
+        /*it's not implemented*/
+        return false;
     }
 
 }());

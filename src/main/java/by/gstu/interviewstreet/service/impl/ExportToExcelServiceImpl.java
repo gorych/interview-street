@@ -30,6 +30,7 @@ public class ExportToExcelServiceImpl implements ExportToExcelService {
     private static final String ANSWER_CELL_HEADER = "Ответы";
     private static final String PEOPLE_COUNT_HEADER = "Ответило, чел";
     private static final String PERCENT_HEADER = "Ответило, %";
+    private static final String RESPONDENTS_HEADER = "Ответившие респонденты";
 
     @Autowired
     StatisticsService statisticsService;
@@ -73,7 +74,7 @@ public class ExportToExcelServiceImpl implements ExportToExcelService {
                 c1.setCellValue(ANSWER_CELL_HEADER);
                 c2.setCellValue(PEOPLE_COUNT_HEADER);
                 c3.setCellValue(PERCENT_HEADER);
-                c4.setCellValue("Ответившие респонденты");
+                c4.setCellValue(RESPONDENTS_HEADER);
 
                 makeCellAutosizeAndBold(book, tableHeader);
 

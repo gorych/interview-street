@@ -49,9 +49,11 @@
                     msg = "Анкета закрыта для прохождения";
 
                     var data = JSON.parse(response);
-                    $(that).parent().next()
-                        .find(".question-list")
+                    var $btnHolder = $(that).parent().next();
+                    $btnHolder.find(".question-list")
                         .attr("href", global.rewriteUrl("/editor/" + data.hash + "/designer"));
+                    $btnHolder.find(".statistics-btn")
+                        .attr("href", global.rewriteUrl("/statistics/" + data.hash));
                 }
 
                 $icon.attr("title", msg);

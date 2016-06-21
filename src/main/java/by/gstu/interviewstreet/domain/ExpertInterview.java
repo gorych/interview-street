@@ -21,11 +21,11 @@ public class ExpertInterview {
     private Interview interview;
 
     @NotEmpty
-    @Column(name = "firstname")
+    @Column(name = "firstname", length = 45)
     private String firstname;
 
     @NotEmpty
-    @Column(name = "lastname")
+    @Column(name = "lastname", length = 45)
     private String lastname;
 
     public ExpertInterview() {

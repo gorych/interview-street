@@ -23,7 +23,7 @@ public class InterviewType implements Serializable {
 
     @Expose
     @NotNull
-    @Column(name = "name")
+    @Column(name = "name", length = 10)
     private String name;
 
     @Column(name = "rus_name")

@@ -17,13 +17,13 @@ public class Employee implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "firstname")
+    @Column(name = "firstname", length = 10)
     private String firstname;
 
-    @Column(name = "secondname")
+    @Column(name = "secondname", length = 20)
     private String secondname;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname", length = 25)
     private String lastname;
 
     @Expose

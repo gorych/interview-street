@@ -29,10 +29,10 @@ public class User implements UserDetails, Serializable {
     @JoinColumn(name = "role_id")
     private UserRole role;
 
-    @Column(name = "username")
+    @Column(name = "username", length = 255)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 255)
     private String password;
 
     /**

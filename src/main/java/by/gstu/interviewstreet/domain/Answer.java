@@ -19,7 +19,7 @@ public class Answer implements Serializable, Comparable<Answer> {
 
     @Expose
     @NotEmpty
-    @Column(name = "text")
+    @Column(name = "text", length = 255)
     private String text;
 
     @Expose

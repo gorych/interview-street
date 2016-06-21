@@ -15,7 +15,7 @@ public class UserRole implements GrantedAuthority, Serializable{
     @GeneratedValue
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 45)
     private String name;
 
     public int getId() {

@@ -19,11 +19,11 @@ public class AnswerType implements Serializable, Comparable<AnswerType> {
 
     @Expose
     @NotEmpty
-    @Column(name = "name")
+    @Column(name = "name", length = 20)
     private String name;
 
     @Expose
-    @Column(name = "default_value")
+    @Column(name = "default_value", length = 255)
     private String defaultValue;
 
     @NotNull

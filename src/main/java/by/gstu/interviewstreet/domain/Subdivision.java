@@ -16,7 +16,7 @@ public class Subdivision implements Serializable, Comparable<Subdivision> {
     private int id;
 
     @Expose
-    @Column(name = "name")
+    @Column(name = "name", length = 150)
     private String name;
 
     public Subdivision() {

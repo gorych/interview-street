@@ -2,7 +2,6 @@ package by.gstu.interviewstreet.web.controller.user;
 
 
 import by.gstu.interviewstreet.domain.User;
-import by.gstu.interviewstreet.web.SecurityConstants;
 import by.gstu.interviewstreet.service.UserService;
 import by.gstu.interviewstreet.web.AttrConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+
+import static by.gstu.interviewstreet.web.SecurityConstants.EDITOR;
+import static by.gstu.interviewstreet.web.SecurityConstants.RESPONDENT;
 
 @Controller
 @RequestMapping("/user")
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @Secured({SecurityConstants.EDITOR, SecurityConstants.RESPONDENT})
+    @Secured({EDITOR, RESPONDENT})
     @RequestMapping(value = {"/hide-chip"}, method = RequestMethod.GET)
     public ResponseEntity<String> hideChip(HttpSession session) {
         session.setAttribute(AttrConstants.CHIP, false);
